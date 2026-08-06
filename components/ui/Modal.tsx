@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 
 interface ModalProps {
@@ -34,7 +35,12 @@ export default function Modal({ isOpen, onClose, title, children, footer, size =
 
   if (!isOpen) return null;
 
-  return (
+  // Portaled straight to <body> — a modal rendered in place can end up nested inside an ancestor
+  // that has a filter/backdrop-filter/transform (e.g. Topbar's backdrop-blur-md header), which per
+  // spec creates a new containing block for `fixed` descendants. That silently breaks `fixed
+  // inset-0` centering, pinning the modal near that ancestor instead of the viewport. A portal
+  // sidesteps the problem entirely regardless of where this component is rendered from.
+  return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/40" onClick={onClose} />
       <div
@@ -52,6 +58,7 @@ export default function Modal({ isOpen, onClose, title, children, footer, size =
         <div className="max-h-[calc(85vh-104px)] overflow-y-auto px-4 py-4">{children}</div>
         {footer && <div className="flex justify-end gap-2 border-t border-surface-border px-4 py-3">{footer}</div>}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

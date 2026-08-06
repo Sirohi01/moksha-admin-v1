@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import QRCode from "qrcode";
-import { ShieldCheck, Eye, EyeOff, FolderKanban, HeartHandshake, HandHeart, Lock, Copy, Check } from "lucide-react";
+import { ShieldCheck, Eye, EyeOff, Lock, Copy, Check, AlertTriangle, KeyRound, CheckCircle2, Mail, MailCheck } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setCredentials } from "@/store/slices/authSlice";
 import { authApi } from "@/lib/authApi";
@@ -11,13 +11,7 @@ import { ApiRequestError } from "@/lib/api";
 import { Input } from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 
-const FEATURES = [
-  { icon: FolderKanban, label: "Track every case from intake to closure" },
-  { icon: HandHeart, label: "Coordinate volunteers in real time" },
-  { icon: HeartHandshake, label: "Manage donations and 80G receipts" },
-];
-
-type Step = "credentials" | "totp" | "2fa-setup" | "backup-codes";
+type Step = "credentials" | "totp" | "2fa-setup" | "backup-codes" | "forgot-password" | "forgot-password-sent";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -32,7 +26,6 @@ export default function LoginPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
 
-  // 2FA enrollment state — set once login reports twoFactorSetupRequired.
   const [secret, setSecret] = useState("");
   const [provisioningUri, setProvisioningUri] = useState("");
   const [qrDataUrl, setQrDataUrl] = useState("");
@@ -40,8 +33,8 @@ export default function LoginPage() {
   const [backupCodes, setBackupCodes] = useState<string[]>([]);
   const [copied, setCopied] = useState(false);
 
-  // Rendered entirely client-side (the "qrcode" package) — the TOTP secret never leaves the
-  // browser to reach a third-party QR image service, unlike e.g. api.qrserver.com.
+  const [forgotEmail, setForgotEmail] = useState("");
+
   useEffect(() => {
     if (!provisioningUri) {
       setQrDataUrl("");
@@ -54,9 +47,6 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (!hydrated || !admin || step !== "credentials") return;
-    // A stored session might still have 2FA enrollment pending (e.g. the account was created
-    // before this flow existed) — check before bouncing to "/", which would otherwise just
-    // redirect straight back here via RequireAdminAuth's own same check.
     authApi
       .getMe()
       .then(async (me) => {
@@ -70,7 +60,7 @@ export default function LoginPage() {
         setStep("2fa-setup");
       })
       .catch(() => {
-        /* stale/invalid session — stay on the credentials form */
+        /* stale/invalid session */
       });
   }, [hydrated, admin, router, step]);
 
@@ -84,8 +74,6 @@ export default function LoginPage() {
         setError("This portal is for Moksha Sewa staff accounts only.");
         return;
       }
-      // Session established even if 2FA enrollment is still pending — the 2FA setup/confirm
-      // endpoints are requireAuth-only (not authorize-gated), reachable exactly for this reason.
       dispatch(setCredentials({ admin: result.user, accessToken: result.accessToken, refreshToken: result.refreshToken }));
 
       if (result.twoFactorSetupRequired) {
@@ -132,66 +120,68 @@ export default function LoginPage() {
     });
   };
 
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setIsSubmitting(true);
+    try {
+      // The backend responds identically whether or not this email matches an account (avoids
+      // leaking which admin emails exist), so there's nothing to branch on here either way.
+      await authApi.forgotPassword(forgotEmail);
+      setStep("forgot-password-sent");
+    } catch (err) {
+      setError(err instanceof ApiRequestError ? err.message : "Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
-    <div className="flex min-h-screen">
-      {/* -------- Left: branded panel (hidden on small screens) -------- */}
-      <div className="relative hidden w-[44%] shrink-0 overflow-hidden bg-sidebar-bg lg:flex lg:flex-col lg:justify-between lg:p-10">
-        <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute -left-24 -top-24 h-80 w-80 rounded-full bg-sidebar-accent/[0.08] blur-3xl" />
-          <div className="absolute -bottom-32 -right-16 h-96 w-96 rounded-full bg-sidebar-accent/[0.06] blur-3xl" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(201,165,116,0.12)_1px,transparent_0)] bg-[length:28px_28px]" />
+    <div className="relative flex min-h-screen flex-col justify-center overflow-hidden bg-slate-50 py-12 sm:px-6 lg:px-8">
+      {/* Premium Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-[20%] -left-[10%] h-[50%] w-[50%] rounded-full bg-orange-400/10 blur-[120px]" />
+        <div className="absolute top-[20%] -right-[10%] h-[60%] w-[50%] rounded-full bg-blue-500/10 blur-[120px]" />
+        <div className="absolute -bottom-[20%] left-[20%] h-[50%] w-[50%] rounded-full bg-teal-400/10 blur-[100px]" />
+        {/* Subtle grid pattern for texture */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+      </div>
+
+      {/* Top Header Logos (Left & Right) */}
+      <div className="absolute top-0 left-0 w-full p-6 sm:p-12 flex items-start justify-between z-20 pointer-events-none">
+        {/* Left Logo: Namo Gange */}
+        <div className="pointer-events-auto flex flex-col items-start gap-2">
+          <span className="text-xs font-black uppercase tracking-[0.2em] text-slate-500">An Initiative By</span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.webp" alt="Namo Gange Trust" className="h-24 sm:h-32 w-auto object-contain drop-shadow-md" />
         </div>
 
-        <div className="relative flex items-center gap-2.5">
-          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-sidebar-accent text-sidebar-bg">
-            <ShieldCheck className="h-5 w-5" />
-          </span>
-          <span className="text-sm font-semibold text-white">Moksha Sewa</span>
+        {/* Right Logo: Moksha Sewa */}
+        <div className="pointer-events-auto">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="https://mokshasewa.org/logo.png" alt="Moksha Sewa" className="h-20 sm:h-28 w-auto object-contain drop-shadow-md mt-4" />
         </div>
+      </div>
 
-        <div className="relative">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-sidebar-accent">Admin Console</p>
-          <h1 className="mt-3 max-w-sm font-serif text-[32px] leading-[1.15] text-white">
-            Every family you help, <span className="italic text-sidebar-accent">organised in one place.</span>
-          </h1>
+      <div className="relative sm:mx-auto sm:w-full sm:max-w-md z-10 pt-5">
 
-          <div className="mt-8 space-y-3.5">
-            {FEATURES.map(({ icon: Icon, label }) => (
-              <div key={label} className="flex items-center gap-3">
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/[0.06] text-sidebar-accent">
-                  <Icon className="h-4 w-4" />
-                </span>
-                <span className="text-sm text-sidebar-text">{label}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <p className="relative text-[11px] text-sidebar-text/70">
-          &copy; {new Date().getFullYear()} Moksha Sewa. Restricted access — authorized staff only.
+        <h2 className="text-center text-3xl font-extrabold tracking-tight text-slate-900">
+          Admin Panel
+        </h2>
+        <p className="mt-2 text-center text-sm font-medium text-slate-500">
+          Sign in to manage Moksha Sewa operations
         </p>
       </div>
 
-      {/* -------- Right: login form -------- */}
-      <div className="flex flex-1 items-center justify-center bg-surface-bg px-4 py-12">
-        <div className="w-full max-w-sm">
-          <div className="mb-8 flex flex-col items-center text-center lg:hidden">
-            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent text-white">
-              <ShieldCheck className="h-5 w-5" />
-            </span>
-            <h1 className="mt-3 text-base font-semibold text-text-primary">Moksha Sewa Admin</h1>
-          </div>
+      <div className="relative mt-8 sm:mx-auto sm:w-full sm:max-w-md z-10">
+        <div className="overflow-hidden rounded-3xl border border-white/50 bg-white/20 px-4 py-8 shadow-[0_8px_30px_rgb(0,0,0,0.12)] backdrop-blur-2xl sm:px-10">
+
+          {/* Subtle gradient line at the top of the card */}
+          <div className="absolute left-0 top-0 h-1 w-full bg-gradient-to-r from-orange-400 via-blue-500 to-teal-400 opacity-80"></div>
 
           {step === "credentials" && (
-            <div className="mb-6 hidden lg:block">
-              <h2 className="text-xl font-semibold text-text-primary">Welcome back</h2>
-              <p className="mt-1 text-sm text-text-muted">Sign in to your admin account to continue.</p>
-            </div>
-          )}
-
-          {step === "credentials" && (
-            <form onSubmit={handleSubmit} className="rounded-2xl border border-surface-border bg-surface-card p-6 shadow-[0_8px_30px_rgba(33,22,17,0.06)]">
-              <div className="space-y-4">
+            <form onSubmit={handleSubmit} className="relative space-y-6">
+              <div className="space-y-5">
                 <Input
                   label="Email Address"
                   type="email"
@@ -202,8 +192,21 @@ export default function LoginPage() {
                   placeholder="admin@mokshasewa.com"
                 />
                 <div className="relative">
+                  <div className="mb-1 flex items-center justify-between">
+                    <label className="text-[11px] font-semibold uppercase tracking-wide text-text-secondary">Password</label>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setForgotEmail(email);
+                        setError("");
+                        setStep("forgot-password");
+                      }}
+                      className="text-[11px] font-semibold text-blue-600 hover:text-blue-700"
+                    >
+                      Forgot password?
+                    </button>
+                  </div>
                   <Input
-                    label="Password"
                     type={showPassword ? "text" : "password"}
                     required
                     value={password}
@@ -214,9 +217,8 @@ export default function LoginPage() {
                   <button
                     type="button"
                     onClick={() => setShowPassword((v) => !v)}
-                    className="absolute right-3 top-[30px] text-text-muted transition-colors hover:text-text-secondary"
+                    className="absolute right-3 top-[30px] flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 focus:outline-none"
                     tabIndex={-1}
-                    aria-label={showPassword ? "Hide password" : "Show password"}
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
@@ -224,26 +226,101 @@ export default function LoginPage() {
               </div>
 
               {error && (
-                <div className="mt-4 rounded-lg border border-red-200 bg-red-50 p-2.5 text-xs font-medium text-red-700">{error}</div>
+                <div className="flex items-start gap-3 rounded-xl border border-red-100 bg-red-50/80 p-3.5 text-sm text-red-700">
+                  <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-600" />
+                  <span className="font-medium">{error}</span>
+                </div>
               )}
 
-              <Button type="submit" loading={isSubmitting} className="mt-5 w-full">
-                Sign In
+              <Button type="submit" loading={isSubmitting} className="h-12 w-full text-[15px] shadow-sm">
+                Sign in securely
               </Button>
-
-              <div className="mt-4 flex items-center justify-center gap-1.5 text-[11px] text-text-muted">
-                <Lock className="h-3 w-3" />
-                Every session is permission-checked on the server, not just the login screen.
-              </div>
             </form>
           )}
 
-          {step === "totp" && (
-            <form onSubmit={handleSubmit} className="rounded-2xl border border-surface-border bg-surface-card p-6 shadow-[0_8px_30px_rgba(33,22,17,0.06)]">
-              <h2 className="text-lg font-semibold text-text-primary">Two-Factor Code</h2>
-              <p className="mt-1 text-sm text-text-muted">Enter the 6-digit code from your authenticator app.</p>
+          {step === "forgot-password" && (
+            <form onSubmit={handleForgotPassword} className="space-y-6">
+              <div className="text-center">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 shadow-sm ring-1 ring-blue-100">
+                  <Mail className="h-7 w-7" />
+                </div>
+                <h3 className="mt-5 text-xl font-bold text-slate-900">Reset your password</h3>
+                <p className="mt-2 text-sm text-slate-500">
+                  Enter your admin account email and we&apos;ll send you a link to choose a new password.
+                </p>
+              </div>
 
-              <div className="mt-4">
+              <Input
+                label="Email Address"
+                type="email"
+                required
+                autoFocus
+                value={forgotEmail}
+                onChange={(e) => setForgotEmail(e.target.value)}
+                placeholder="admin@mokshasewa.com"
+              />
+
+              {error && (
+                <div className="flex items-start gap-3 rounded-xl border border-red-100 bg-red-50/80 p-3.5 text-sm text-red-700">
+                  <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-600" />
+                  <span className="font-medium">{error}</span>
+                </div>
+              )}
+
+              <Button type="submit" loading={isSubmitting} className="h-12 w-full text-[15px] shadow-sm">
+                Send Reset Link
+              </Button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setStep("credentials");
+                  setError("");
+                }}
+                className="flex w-full items-center justify-center gap-2 text-sm font-medium text-slate-500 transition-colors hover:text-slate-800"
+              >
+                ← Back to Sign In
+              </button>
+            </form>
+          )}
+
+          {step === "forgot-password-sent" && (
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 shadow-sm ring-1 ring-emerald-100">
+                  <MailCheck className="h-7 w-7" />
+                </div>
+                <h3 className="mt-5 text-xl font-bold text-slate-900">Check your inbox</h3>
+                <p className="mt-2 text-sm text-slate-500">
+                  If an account exists for <span className="font-semibold text-slate-700">{forgotEmail}</span>, a
+                  password reset link is on its way. The link expires in 30 minutes.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setStep("credentials");
+                  setError("");
+                }}
+                className="flex w-full items-center justify-center gap-2 text-sm font-medium text-slate-500 transition-colors hover:text-slate-800"
+              >
+                ← Back to Sign In
+              </button>
+            </div>
+          )}
+
+          {step === "totp" && (
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="text-center">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 shadow-sm ring-1 ring-blue-100">
+                  <ShieldCheck className="h-7 w-7" />
+                </div>
+                <h3 className="mt-5 text-xl font-bold text-slate-900">Two-Step Verification</h3>
+                <p className="mt-2 text-sm text-slate-500">Enter the 6-digit code from your authenticator app.</p>
+              </div>
+
+              <div>
                 <Input
                   label="Authentication Code"
                   required
@@ -253,15 +330,19 @@ export default function LoginPage() {
                   value={totpCode}
                   onChange={(e) => setTotpCode(e.target.value.replace(/\D/g, ""))}
                   placeholder="123456"
+                  className="h-14 text-center font-mono text-2xl tracking-[0.25em] shadow-sm"
                 />
               </div>
 
               {error && (
-                <div className="mt-4 rounded-lg border border-red-200 bg-red-50 p-2.5 text-xs font-medium text-red-700">{error}</div>
+                <div className="flex items-start gap-3 rounded-xl border border-red-100 bg-red-50/80 p-3.5 text-sm text-red-700">
+                  <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-600" />
+                  <span className="font-medium">{error}</span>
+                </div>
               )}
 
-              <Button type="submit" loading={isSubmitting} className="mt-5 w-full">
-                Verify & Sign In
+              <Button type="submit" loading={isSubmitting} className="h-12 w-full text-[15px] shadow-sm">
+                Verify Code
               </Button>
 
               <button
@@ -271,50 +352,49 @@ export default function LoginPage() {
                   setTotpCode("");
                   setError("");
                 }}
-                className="mt-3 w-full text-center text-[11px] text-text-muted hover:text-text-secondary"
+                className="flex w-full items-center justify-center gap-2 text-sm font-medium text-slate-500 transition-colors hover:text-slate-800"
               >
-                ← Back
+                ← Back to Sign In
               </button>
             </form>
           )}
 
           {step === "2fa-setup" && (
-            <form
-              onSubmit={handleConfirmSetup}
-              className="rounded-2xl border border-surface-border bg-surface-card p-6 shadow-[0_8px_30px_rgba(33,22,17,0.06)]"
-            >
-              <h2 className="text-lg font-semibold text-text-primary">Set Up Two-Factor Authentication</h2>
-              <p className="mt-1 text-sm text-text-muted">
-                This account requires two-factor authentication. Scan the QR code below with an authenticator app (Google
-                Authenticator, Authy, etc.) — or enter the setup key manually if you can&apos;t scan.
-              </p>
+            <form onSubmit={handleConfirmSetup} className="space-y-6">
+              <div className="text-center">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 shadow-sm ring-1 ring-blue-100">
+                  <KeyRound className="h-7 w-7" />
+                </div>
+                <h3 className="mt-5 text-xl font-bold text-slate-900">Secure Your Account</h3>
+                <p className="mt-2 text-sm text-slate-500">
+                  Scan the QR code below with an authenticator app (e.g. Google Authenticator).
+                </p>
+              </div>
 
               {qrDataUrl && (
-                <div className="mt-4 flex justify-center">
-                  {/* eslint-disable-next-line @next/next/no-img-element -- a data: URL generated
-                      entirely client-side, not an image next/image would optimize anyway */}
-                  <img src={qrDataUrl} alt="Scan this QR code with your authenticator app" className="h-[180px] w-[180px] rounded-lg border border-surface-border" />
+                <div className="flex justify-center">
+                  <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={qrDataUrl} alt="QR Code" className="h-40 w-40" />
+                  </div>
                 </div>
               )}
 
-              <div className="mt-4 space-y-1">
-                <p className="text-[11px] font-semibold uppercase tracking-wide text-text-muted">Account</p>
-                <p className="text-sm text-text-primary">{email}</p>
-              </div>
-
-              <div className="mt-3 space-y-1">
-                <p className="text-[11px] font-semibold uppercase tracking-wide text-text-muted">Can&apos;t scan? Enter this key manually</p>
-                <div className="flex items-center gap-2 rounded-lg border border-surface-border bg-surface-sunken px-3 py-2 font-mono text-sm">
-                  <span className="flex-1 select-all break-all">{secret}</span>
-                  <button type="button" onClick={copySecret} className="shrink-0 text-text-muted hover:text-text-primary">
-                    {copied ? <Check className="h-3.5 w-3.5 text-green-600" /> : <Copy className="h-3.5 w-3.5" />}
+              <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50/50">
+                <div className="border-b border-slate-200 bg-slate-100/50 p-2.5 text-center">
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Can&apos;t scan? Manual Key</p>
+                </div>
+                <div className="flex items-center justify-between p-3 pl-4">
+                  <code className="text-sm font-semibold tracking-wide text-slate-800">{secret}</code>
+                  <button type="button" onClick={copySecret} className="flex h-8 w-8 items-center justify-center rounded-lg bg-white shadow-sm transition-colors hover:bg-slate-50">
+                    {copied ? <Check className="h-4 w-4 text-emerald-600" /> : <Copy className="h-4 w-4 text-slate-400" />}
                   </button>
                 </div>
               </div>
 
-              <div className="mt-4">
+              <div>
                 <Input
-                  label="Enter the 6-digit code from your app to confirm"
+                  label="Confirm with 6-digit code"
                   required
                   autoFocus
                   inputMode="numeric"
@@ -322,42 +402,55 @@ export default function LoginPage() {
                   value={setupCode}
                   onChange={(e) => setSetupCode(e.target.value.replace(/\D/g, ""))}
                   placeholder="123456"
+                  className="h-14 text-center font-mono text-2xl tracking-[0.25em] shadow-sm"
                 />
               </div>
 
               {error && (
-                <div className="mt-4 rounded-lg border border-red-200 bg-red-50 p-2.5 text-xs font-medium text-red-700">{error}</div>
+                <div className="flex items-start gap-3 rounded-xl border border-red-100 bg-red-50/80 p-3.5 text-sm text-red-700">
+                  <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-600" />
+                  <span className="font-medium">{error}</span>
+                </div>
               )}
 
-              <Button type="submit" loading={isSubmitting} className="mt-5 w-full">
-                Verify & Enable
+              <Button type="submit" loading={isSubmitting} className="h-12 w-full text-[15px] shadow-sm">
+                Enable 2FA
               </Button>
             </form>
           )}
 
           {step === "backup-codes" && (
-            <div className="rounded-2xl border border-surface-border bg-surface-card p-6 shadow-[0_8px_30px_rgba(33,22,17,0.06)]">
-              <h2 className="text-lg font-semibold text-text-primary">Two-Factor Authentication Enabled</h2>
-              <p className="mt-1 text-sm text-text-muted">
-                Save these backup codes somewhere safe — each one can be used once to sign in if you lose access to your
-                authenticator app. They will not be shown again.
-              </p>
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 shadow-sm ring-1 ring-emerald-100">
+                  <CheckCircle2 className="h-7 w-7" />
+                </div>
+                <h3 className="mt-5 text-xl font-bold text-slate-900">2FA Enabled</h3>
+                <p className="mt-2 text-sm text-slate-500">
+                  Save these emergency backup codes. They will not be shown again.
+                </p>
+              </div>
 
-              <div className="mt-4 grid grid-cols-2 gap-2 rounded-lg border border-surface-border bg-surface-sunken p-3 font-mono text-xs">
+              <div className="grid grid-cols-2 gap-3 rounded-2xl border border-slate-200 bg-slate-50/50 p-5">
                 {backupCodes.map((code) => (
-                  <span key={code} className="select-all">
+                  <span key={code} className="select-all rounded-lg bg-white py-2 text-center font-mono text-sm font-medium tracking-wider text-slate-800 shadow-sm border border-slate-100">
                     {code}
                   </span>
                 ))}
               </div>
 
-              <Button onClick={() => router.push("/")} className="mt-5 w-full">
-                I&apos;ve Saved These — Continue
+              <Button onClick={() => router.push("/")} className="h-12 w-full text-[15px] shadow-sm">
+                I&apos;ve Saved These
               </Button>
             </div>
           )}
+        </div>
 
-          <p className="mt-5 text-center text-[11px] text-text-muted">Restricted access — for authorized Moksha Sewa staff only.</p>
+        <div className="mt-8 flex items-center justify-center gap-2.5 text-[13px] font-medium text-slate-500">
+          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-200/60">
+            <Lock className="h-3.5 w-3.5 text-slate-600" />
+          </div>
+          <span>Secured with enterprise-grade encryption</span>
         </div>
       </div>
     </div>

@@ -11,9 +11,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   return (
     <RequireAdminAuth>
-      <div className="flex h-screen overflow-hidden bg-surface-bg">
+      <div className="flex h-screen overflow-hidden relative bg-slate-50">
+        {/* Premium Background Elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute -top-[20%] -left-[10%] h-[50%] w-[50%] rounded-full bg-orange-400/10 blur-[120px]" />
+          <div className="absolute top-[20%] -right-[10%] h-[60%] w-[50%] rounded-full bg-blue-500/10 blur-[120px]" />
+          <div className="absolute -bottom-[20%] left-[20%] h-[50%] w-[50%] rounded-full bg-teal-400/10 blur-[100px]" />
+          {/* Subtle grid pattern for texture */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+        </div>
+
         {/* Desktop sidebar */}
-        <div className="hidden lg:block">
+        <div className="hidden lg:block relative z-10">
           <Sidebar />
         </div>
 
@@ -27,7 +36,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
         )}
 
-        <div className="flex min-w-0 flex-1 flex-col">
+        <div className="flex min-w-0 flex-1 flex-col relative z-10">
           <Topbar onMenuClick={() => setMobileNavOpen(true)} />
           <main className="flex-1 overflow-y-auto px-4 pb-4 pt-3 lg:px-5 lg:pb-5 lg:pt-3">{children}</main>
           <AdminFooter />

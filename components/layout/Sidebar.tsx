@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronDown } from "lucide-react";
-import Image from "next/image";
 import { NAV_SECTIONS } from "./navigation";
 
 function isActive(pathname: string, href: string): boolean {
@@ -23,9 +22,10 @@ export default function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   };
 
   return (
-    <aside className="flex h-full w-64 shrink-0 flex-col bg-sidebar-bg">
-      <div className="flex w-full shrink-0 items-center justify-center border-b border-sidebar-border px-2 py-4">
-        <img src="/logo.webp" alt="Moksha Sewa Admin" className="w-full object-contain" />
+    <aside className="flex h-full w-64 shrink-0 flex-col bg-white/10 backdrop-blur-md border-r border-white/20 shadow-sm overflow-hidden">
+      <div className="flex w-full shrink-0 items-center justify-center border-b border-white/40 px-2 py-4">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/logo.webp" alt="Moksha Sewa Admin" className="w-full object-contain mix-blend-multiply" />
       </div>
 
       <nav className="flex-1 overflow-y-auto px-2.5 py-3">
@@ -36,7 +36,7 @@ export default function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
               <button
                 type="button"
                 onClick={() => toggleSection(section.title)}
-                className="flex w-full items-center justify-between px-2 py-1.5 text-[10.5px] font-bold uppercase tracking-wider text-sidebar-accent/80 hover:text-sidebar-accent"
+                className="flex w-full items-center justify-between px-2 py-1.5 text-[10.5px] font-bold uppercase tracking-wider text-slate-500 hover:text-slate-800 transition-colors"
               >
                 {section.title}
                 <ChevronDown className={`h-3 w-3 transition-transform ${isCollapsed ? "-rotate-90" : ""}`} />
@@ -52,12 +52,12 @@ export default function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
                         href={item.href}
                         onClick={onNavigate}
                         className={`relative flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13px] font-semibold transition-colors ${active
-                            ? "bg-sidebar-accent/15 text-sidebar-text-active"
-                            : "text-sidebar-text hover:bg-white/5 hover:text-sidebar-text-active"
+                            ? "bg-white/70 text-slate-900 shadow-sm border border-white/50"
+                            : "text-slate-600 hover:bg-white/40 hover:text-slate-900"
                           }`}
                       >
-                        {active && <span className="absolute -left-2.5 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-r-full bg-sidebar-accent" />}
-                        <Icon className={`h-4 w-4 shrink-0 ${active ? "text-sidebar-accent" : "text-sidebar-text/70"}`} />
+                        {active && <span className="absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-r-full bg-accent" />}
+                        <Icon className={`h-4 w-4 shrink-0 ${active ? "text-accent" : "text-slate-500"}`} />
                         {item.label}
                       </Link>
                     );
@@ -69,11 +69,11 @@ export default function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
         })}
       </nav>
 
-      <div className="shrink-0 border-t border-sidebar-border px-4 py-3">
-        <p className="text-[10px] leading-relaxed text-sidebar-text/50">
+      <div className="shrink-0 border-t border-white/40 px-4 py-3">
+        <p className="text-[10px] leading-relaxed text-slate-500 font-medium">
           &copy; {new Date().getFullYear()} Moksha Sewa
           <br />
-          Every session is permission-checked server-side.
+          Secured session.
         </p>
       </div>
     </aside>
