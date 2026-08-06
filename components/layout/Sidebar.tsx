@@ -70,11 +70,8 @@ export default function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
       </nav>
 
       <div className="shrink-0 border-t border-white/40 px-4 py-3">
-        <p className="text-[10px] leading-relaxed text-slate-500 font-medium">
-          &copy; {new Date().getFullYear()} Moksha Sewa
-          <br />
-          Secured session.
-        </p>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/encodency-logo.jpg" alt="enCodency" className="w-full rounded-md object-contain" />
       </div>
     </aside>
   );
