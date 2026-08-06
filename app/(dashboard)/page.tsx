@@ -21,10 +21,12 @@ import {
   Receipt,
   Trophy,
 } from "lucide-react";
-import { Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import StatCard from "@/components/ui/StatCard";
 import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
+import { MagnitudeBarChart, MagnitudeDatum } from "@/components/charts/MagnitudeBarChart";
+import { DonutChart, DonutDatum } from "@/components/charts/DonutChart";
+import { CAUSE_LABELS, CAUSE_COLORS, CAUSE_COLOR_FALLBACK, KPI_COLORS, PIPELINE_COLORS } from "@/lib/chartColors";
 import { reportsApi, ReportsOverview } from "@/lib/reportsApi";
 import { enquiriesApi } from "@/lib/enquiriesApi";
 import { auditApi } from "@/lib/auditApi";
@@ -53,51 +55,6 @@ const STATUS_ORDER: CaseStatus[] = [
   "DOCS_UPLOADED",
 ];
 
-const CAUSE_LABELS: Record<string, string> = {
-  general: "General Sewa",
-  cremation: "Cremation",
-  ambulance: "Ambulance",
-  annadan: "Annadan",
-};
-
-// Fixed categorical order, validated for CVD-safe separation (dataviz skill's palette validator —
-// distinct hues rather than tints of the single magnitude accent, since this chart's job is
-// composition-of-a-total across causes, not a single-hue magnitude comparison.
-const CAUSE_COLORS: Record<string, string> = {
-  general: "#A6752E",
-  cremation: "#C1502E",
-  ambulance: "#0891A8",
-  annadan: "#6B4FA0",
-};
-const CAUSE_COLOR_FALLBACK = "#8A8578";
-
-// Same validated 4-hue set as CAUSE_COLORS, reused for the KPI tiles so the dashboard draws from
-// one consistent palette rather than inventing new colors per section.
-const KPI_COLORS = {
-  cases: "#A6752E",
-  requests: "#0891A8",
-  volunteers: "#C1502E",
-  donations: "#6B4FA0",
-};
-
-// Single-hue ordinal ramp (light -> dark = earlier -> later pipeline stage), validated with the
-// dataviz skill's palette validator in --ordinal mode (monotone lightness, >=0.06 OKLCH step gaps,
-// light-end contrast >=2:1 against the card surface) — a stage's place in the pipeline is order,
-// not identity, so this stays one hue rather than switching to distinct categorical colors.
-const PIPELINE_COLORS: Record<CaseStatus, string> = {
-  NEW: "#c99245",
-  UNDER_VERIFICATION: "#b47e2e",
-  APPROVED: "#9f6b13",
-  VOLUNTEER_ASSIGNED: "#8b5700",
-  TRANSPORT_ARRANGED: "#774500",
-  CREMATION_IN_PROGRESS: "#633200",
-  CREMATION_COMPLETED: "#502000",
-  DOCS_UPLOADED: "#3d0e00",
-  CLOSED: "#3d0e00",
-  REJECTED: "#8A8578",
-  CANCELLED: "#8A8578",
-};
-
 const QUICK_ACTIONS = [
   { label: "New Requests", href: "/requests", icon: ClipboardList },
   { label: "Record Donation", href: "/donations", icon: HeartHandshake },
@@ -106,145 +63,6 @@ const QUICK_ACTIONS = [
   { label: "Add Vehicle", href: "/vehicles", icon: Truck },
   { label: "Review Expenses", href: "/cases", icon: Receipt },
 ];
-
-interface MagnitudeDatum {
-  label: string;
-  value: number;
-}
-
-function ChartTooltip({
-  active,
-  payload,
-  valueFormatter,
-}: {
-  active?: boolean;
-  payload?: ReadonlyArray<{ payload?: { label: string; value: number } }>;
-  valueFormatter?: (value: number) => string;
-}) {
-  const datum = payload?.[0]?.payload;
-  if (!active || !datum) return null;
-  const { label, value } = datum;
-  return (
-    <div className="rounded-lg border border-surface-border bg-surface-card px-2.5 py-1.5 text-xs shadow-lg">
-      <p className="font-semibold text-text-primary">{label}</p>
-      <p className="text-text-secondary">{valueFormatter ? valueFormatter(value) : value}</p>
-    </div>
-  );
-}
-
-// A few placeholder rows so the empty state reserves the exact same footprint a populated chart
-// would take — never real numbers, just enough rows to show the frame at true size.
-const EMPTY_PLACEHOLDER_ROWS: MagnitudeDatum[] = [{ label: "", value: 0 }, { label: "", value: 0 }, { label: "", value: 0 }];
-
-/** A single hue for magnitude-by-category — these bars compare size within one measure (case
- * counts, donation totals), not distinct identities that need their own hues (dataviz skill:
- * sequential/magnitude gets one hue, not a categorical palette). */
-function MagnitudeBarChart({
-  data,
-  valueFormatter,
-  emptyLabel,
-}: {
-  data: MagnitudeDatum[];
-  valueFormatter?: (value: number) => string;
-  emptyLabel: string;
-}) {
-  const isEmpty = data.length === 0;
-  const rows = isEmpty ? EMPTY_PLACEHOLDER_ROWS : data;
-
-  return (
-    <div className="relative">
-      <ResponsiveContainer width="100%" height={Math.max(140, rows.length * 34)}>
-        <BarChart data={rows} layout="vertical" margin={{ top: 0, right: 12, bottom: 0, left: 0 }} barCategoryGap={12}>
-          <CartesianGrid horizontal={false} stroke="var(--surface-border)" />
-          <XAxis type="number" hide domain={isEmpty ? [0, 1] : undefined} />
-          <YAxis
-            type="category"
-            dataKey="label"
-            width={112}
-            tickLine={false}
-            axisLine={false}
-            tick={{ fill: "var(--text-secondary)", fontSize: 11 }}
-          />
-          {!isEmpty && (
-            <Tooltip content={<ChartTooltip valueFormatter={valueFormatter} />} cursor={{ fill: "var(--surface-sunken)" }} />
-          )}
-          <Bar
-            dataKey="value"
-            fill={isEmpty ? "var(--surface-sunken)" : "var(--accent)"}
-            radius={[0, 4, 4, 0]}
-            maxBarSize={16}
-            isAnimationActive={!isEmpty}
-          />
-        </BarChart>
-      </ResponsiveContainer>
-      {isEmpty && (
-        <p className="pointer-events-none absolute inset-0 flex items-center justify-center text-sm text-text-muted">
-          {emptyLabel}
-        </p>
-      )}
-    </div>
-  );
-}
-
-interface DonutDatum {
-  key: string;
-  label: string;
-  value: number;
-}
-
-/** Composition-of-a-total (this slice vs. the whole) — a genuinely different job from the
- * bar charts on this page, so it earns a different form rather than reusing the bar treatment
- * purely for visual variety. Shared by both donut cards; only the color lookup differs. */
-function DonutChart({
-  data,
-  colorFor,
-  valueFormatter,
-  emptyLabel,
-}: {
-  data: DonutDatum[];
-  colorFor: (key: string) => string;
-  valueFormatter?: (value: number) => string;
-  emptyLabel: string;
-}) {
-  const isEmpty = data.length === 0;
-  const total = data.reduce((sum, d) => sum + d.value, 0);
-
-  if (isEmpty) {
-    return (
-      <div className="flex h-[168px] items-center justify-center">
-        <div className="relative flex h-28 w-28 items-center justify-center rounded-full border-[14px] border-dashed border-surface-border">
-          <p className="px-2 text-center text-xs text-text-muted">{emptyLabel}</p>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div>
-      <ResponsiveContainer width="100%" height={168}>
-        <PieChart>
-          <Pie data={data} dataKey="value" nameKey="label" innerRadius="58%" outerRadius="85%" paddingAngle={3} strokeWidth={0}>
-            {data.map((entry) => (
-              <Cell key={entry.key} fill={colorFor(entry.key)} />
-            ))}
-          </Pie>
-          <Tooltip content={(props) => <ChartTooltip {...props} valueFormatter={valueFormatter} />} />
-        </PieChart>
-      </ResponsiveContainer>
-      <div className="mt-1 grid grid-cols-2 gap-x-3 gap-y-1.5">
-        {data.map((entry) => (
-          <div key={entry.key} className="flex items-center gap-1.5 text-[11px]">
-            <span className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: colorFor(entry.key) }} />
-            <span className="truncate text-text-secondary">{entry.label}</span>
-            <span className="ml-auto shrink-0 font-semibold text-text-primary">
-              {total > 0 ? Math.round((entry.value / total) * 100) : 0}%
-            </span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
 
 export default function DashboardPage() {
   const admin = useAppSelector((state) => state.auth.admin);
