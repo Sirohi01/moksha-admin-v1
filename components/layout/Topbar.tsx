@@ -73,11 +73,11 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
     .toUpperCase();
 
   return (
-    <header className="relative z-30 flex h-14 shrink-0 items-center justify-between border-b border-white/20 bg-white/10 backdrop-blur-md px-4 shadow-sm">
+    <header className="relative z-30 flex h-14 shrink-0 items-center justify-between border-b border-white/80 bg-white/75 backdrop-blur-xl px-4 shadow-md">
       <div className="flex items-center gap-3">
         <button
           onClick={onMenuClick}
-          className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-600 hover:bg-white/50 lg:hidden"
+          className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-900/5 lg:hidden"
         >
           <Menu className="h-[18px] w-[18px]" />
         </button>
@@ -88,7 +88,7 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
         <div className="relative">
           <button
             onClick={() => setNotifOpen((v) => !v)}
-            className="relative flex h-8 w-8 items-center justify-center rounded-lg text-slate-600 hover:bg-white/50"
+            className="relative flex h-8 w-8 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-900/5"
             aria-label="SLA breach notifications"
           >
             <Bell className="h-4 w-4" />
@@ -115,7 +115,7 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
                           setNotifOpen(false);
                           router.push(`/cases/${b._id}`);
                         }}
-                        className="flex w-full items-start gap-2 px-3 py-2.5 text-left text-xs hover:bg-white/50 transition-colors"
+                        className="flex w-full items-start gap-2 px-3 py-2.5 text-left text-xs hover:bg-slate-900/5 transition-colors"
                       >
                         <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-500" />
                         <span>
@@ -134,7 +134,7 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
         <div className="relative">
           <button
             onClick={() => setMenuOpen((v) => !v)}
-            className="flex items-center gap-2.5 rounded-lg px-2 py-1.5 text-sm hover:bg-white/50 transition-colors"
+            className="flex items-center gap-2.5 rounded-lg px-2 py-1.5 text-sm hover:bg-slate-900/5 transition-colors"
           >
             <span className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white text-[11px] font-bold text-accent border border-white/60 shadow-sm">
               {admin?.avatarUrl ? (
@@ -165,7 +165,7 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
                     setPasswordError("");
                     setPasswordModalOpen(true);
                   }}
-                  className="flex w-full items-center gap-2.5 px-3 py-2.5 text-left text-xs font-bold text-slate-600 hover:bg-white/50 hover:text-slate-900 transition-colors"
+                  className="flex w-full items-center gap-2.5 px-3 py-2.5 text-left text-xs font-bold text-slate-600 hover:bg-slate-900/5 hover:text-slate-900 transition-colors"
                 >
                   <KeyRound className="h-4 w-4" />
                   Change Password

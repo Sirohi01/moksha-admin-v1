@@ -22,8 +22,8 @@ export default function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   };
 
   return (
-    <aside className="flex h-full w-64 shrink-0 flex-col bg-white/10 backdrop-blur-md border-r border-white/20 shadow-sm overflow-hidden">
-      <div className="flex w-full shrink-0 items-center justify-center border-b border-white/40 px-2 py-4">
+    <aside className="flex h-full w-64 shrink-0 flex-col bg-white/75 backdrop-blur-xl border-r border-white/80 shadow-md overflow-hidden">
+      <div className="flex w-full shrink-0 items-center justify-center border-b border-slate-200/70 px-2 py-4">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/logo.webp" alt="Moksha Sewa Admin" className="w-full object-contain mix-blend-multiply" />
       </div>
@@ -52,8 +52,8 @@ export default function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
                         href={item.href}
                         onClick={onNavigate}
                         className={`relative flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13px] font-semibold transition-colors ${active
-                            ? "bg-white/70 text-slate-900 shadow-sm border border-white/50"
-                            : "text-slate-600 hover:bg-white/40 hover:text-slate-900"
+                            ? "bg-accent-soft text-accent shadow-sm border border-accent/20"
+                            : "text-slate-600 hover:bg-slate-900/5 hover:text-slate-900"
                           }`}
                       >
                         {active && <span className="absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-r-full bg-accent" />}
@@ -69,7 +69,7 @@ export default function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
         })}
       </nav>
 
-      <div className="shrink-0 border-t border-white/40 px-4 py-3">
+      <div className="shrink-0 border-t border-slate-200/70 px-4 py-3">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/encodency-logo.jpg" alt="enCodency" className="w-full rounded-md object-contain" />
       </div>
