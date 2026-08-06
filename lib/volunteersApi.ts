@@ -1,0 +1,17 @@
+import { api } from "./api";
+import { VolunteerSummary, VolunteerStatus, CaseVolunteerAssignment, AssignmentRole } from "./types";
+
+export const volunteersApi = {
+  list: (filters?: { status?: VolunteerStatus; city?: string }) => {
+    const params = new URLSearchParams();
+    if (filters?.status) params.set("status", filters.status);
+    if (filters?.city) params.set("city", filters.city);
+    const query = params.toString();
+    return api.get<VolunteerSummary[]>(`/volunteers/admin${query ? `?${query}` : ""}`);
+  },
+  getById: (id: string) => api.get<VolunteerSummary>(`/volunteers/admin/${id}`),
+  updateStatus: (id: string, status: VolunteerStatus) =>
+    api.patch<VolunteerSummary>(`/volunteers/admin/${id}/status`, { status }),
+  assignToCase: (caseId: string, volunteerId: string, role: AssignmentRole, note?: string) =>
+    api.post<CaseVolunteerAssignment>(`/cases/admin/${caseId}/volunteers`, { volunteerId, role, note }),
+};

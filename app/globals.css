@@ -1,26 +1,103 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Neutral surface scale — warm gray, ties back to the brand without competing with it */
+  --surface-bg: #f6f5f3;
+  --surface-card: #ffffff;
+  --surface-sunken: #f0efeb;
+  --surface-border: #e7e4de;
+
+  /* Text */
+  --text-primary: #211611;
+  --text-secondary: #6b645c;
+  /* Was #9a9288 (2.9:1 on white — fails WCAG AA for small text, read as barely-visible on every
+   * label/hint that uses it). Darkened to clear 4.5:1 while still reading lighter than secondary. */
+  --text-muted: #766d61;
+
+  /* Brand accent — same gold-brown as the customer site */
+  --accent: #8b6a3e;
+  --accent-hover: #73532f;
+  --accent-soft: #f3ead9;
+
+  /* Sidebar/topbar/footer chrome — a rich espresso brown (not near-black, not washed-out) with a
+   * vivid gold accent for pop, and higher-contrast text so labels read with actual weight. */
+  --sidebar-bg: #33231a;
+  --sidebar-bg-active: #4a3324;
+  --sidebar-text: #e7dac8;
+  --sidebar-text-active: #ffffff;
+  --sidebar-accent: #f0b357;
+  --sidebar-accent-soft: #4a3324;
+  --sidebar-border: #4a3324;
+
+  /* Status colors used across badges (bookings, payments, donations) */
+  --status-pending-bg: #fef3c7;
+  --status-pending-text: #92400e;
+  --status-confirmed-bg: #dbeafe;
+  --status-confirmed-text: #1e40af;
+  --status-progress-bg: #ede9fe;
+  --status-progress-text: #5b21b6;
+  --status-success-bg: #dcfce7;
+  --status-success-text: #166534;
+  --status-danger-bg: #fee2e2;
+  --status-danger-text: #991b1b;
+  --status-neutral-bg: #f1f0ed;
+  --status-neutral-text: #57534e;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-surface-bg: var(--surface-bg);
+  --color-surface-card: var(--surface-card);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-surface-border: var(--surface-border);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-soft: var(--accent-soft);
+
+  --color-sidebar-bg: var(--sidebar-bg);
+  --color-sidebar-bg-active: var(--sidebar-bg-active);
+  --color-sidebar-text: var(--sidebar-text);
+  --color-sidebar-text-active: var(--sidebar-text-active);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-soft: var(--sidebar-accent-soft);
+  --color-sidebar-border: var(--sidebar-border);
+
+  --color-status-pending-bg: var(--status-pending-bg);
+  --color-status-pending-text: var(--status-pending-text);
+  --color-status-confirmed-bg: var(--status-confirmed-bg);
+  --color-status-confirmed-text: var(--status-confirmed-text);
+  --color-status-progress-bg: var(--status-progress-bg);
+  --color-status-progress-text: var(--status-progress-text);
+  --color-status-success-bg: var(--status-success-bg);
+  --color-status-success-text: var(--status-success-text);
+  --color-status-danger-bg: var(--status-danger-bg);
+  --color-status-danger-text: var(--status-danger-text);
+  --color-status-neutral-bg: var(--status-neutral-bg);
+  --color-status-neutral-text: var(--status-neutral-text);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+body {
+  background: var(--surface-bg);
+  color: var(--text-primary);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Compact scrollbars fit the dense, data-heavy layout better than the OS default. */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--surface-border);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
 }
