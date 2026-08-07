@@ -1,4 +1,4 @@
-import { EnquiryStatus, CaseStatus, AssistanceRequestStatus, CasePriority, ExpenseStatus, VolunteerStatus, AssignmentStatus, NewDonationStatus, CampaignStatus } from "./types";
+import { EnquiryStatus, CaseStatus, AssistanceRequestStatus, CasePriority, ExpenseStatus, VolunteerStatus, VolunteerAvailability, AssignmentStatus, NewDonationStatus, CampaignStatus } from "./types";
 
 // Booking/payment status meta were the paid-booking model and no longer apply.
 
@@ -58,6 +58,12 @@ export const VOLUNTEER_STATUS_META: Record<VolunteerStatus, { label: string; ton
   ACTIVE: { label: "Active", tone: "success" },
   INACTIVE: { label: "Inactive", tone: "neutral" },
   BLACKLISTED: { label: "Blacklisted", tone: "danger" },
+};
+
+export const VOLUNTEER_AVAILABILITY_META: Record<VolunteerAvailability, { label: string; tone: Tone }> = {
+  AVAILABLE: { label: "Available", tone: "success" },
+  BUSY: { label: "Busy", tone: "pending" },
+  UNAVAILABLE: { label: "Unavailable", tone: "neutral" },
 };
 
 export const ASSIGNMENT_STATUS_META: Record<AssignmentStatus, { label: string; tone: Tone }> = {

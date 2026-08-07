@@ -2,7 +2,8 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { ArrowLeft, Loader2, FileCheck2, Receipt, History, ShieldCheck, HandHeart } from "lucide-react";
+import { ArrowLeft, Loader2, FileCheck2, Receipt, History, ShieldCheck, HandHeart, Navigation } from "lucide-react";
+import { directionsUrl } from "@/lib/maps";
 import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
@@ -317,6 +318,14 @@ export default function CaseDetailPage() {
                     {request.location.address}, {request.location.city}, {request.location.state} -{" "}
                     {request.location.pincode}
                   </p>
+                  <a
+                    href={directionsUrl(request.location.address, request.location.city, request.location.state, request.location.pincode)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-1 inline-flex items-center gap-1.5 text-xs font-semibold text-accent hover:underline"
+                  >
+                    <Navigation className="h-3 w-3" /> Get Directions
+                  </a>
                 </div>
                 {request.notes && (
                   <div className="sm:col-span-2">

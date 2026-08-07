@@ -7,7 +7,7 @@ import Modal from "@/components/ui/Modal";
 import { Select } from "@/components/ui/Input";
 import { volunteersApi } from "@/lib/volunteersApi";
 import { VolunteerSummary, VolunteerStatus } from "@/lib/types";
-import { VOLUNTEER_STATUS_META, formatDate, formatDateTime } from "@/lib/statusMeta";
+import { VOLUNTEER_STATUS_META, VOLUNTEER_AVAILABILITY_META, formatDate, formatDateTime } from "@/lib/statusMeta";
 import { ApiRequestError } from "@/lib/api";
 
 const TABS: { key: VolunteerStatus | ""; label: string }[] = [
@@ -60,7 +60,9 @@ export default function VolunteersPage() {
     {
       key: "availability",
       header: "Availability",
-      render: (v) => <span className="text-xs text-text-secondary">{v.availability.replace(/_/g, " ")}</span>,
+      render: (v) => (
+        <Badge tone={VOLUNTEER_AVAILABILITY_META[v.availability].tone}>{VOLUNTEER_AVAILABILITY_META[v.availability].label}</Badge>
+      ),
     },
     { key: "totalAssignments", header: "Assignments", align: "center", render: (v) => v.totalAssignments },
     {
@@ -122,6 +124,12 @@ export default function VolunteersPage() {
       <Modal isOpen={!!selected} onClose={() => setSelected(null)} title={selected?.name ?? "Volunteer"} size="lg">
         {selected && (
           <div className="space-y-3 text-sm">
+            <div className="flex items-center gap-2">
+              <Badge tone={VOLUNTEER_STATUS_META[selected.status].tone}>{VOLUNTEER_STATUS_META[selected.status].label}</Badge>
+              <Badge tone={VOLUNTEER_AVAILABILITY_META[selected.availability].tone}>
+                {VOLUNTEER_AVAILABILITY_META[selected.availability].label}
+              </Badge>
+            </div>
             <div className="grid grid-cols-2 gap-3 text-xs sm:grid-cols-3">
               <Field label="Phone" value={selected.phone} />
               <Field label="Email" value={selected.email} />
