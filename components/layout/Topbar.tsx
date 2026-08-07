@@ -2,16 +2,33 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { Menu, LogOut, ChevronDown, KeyRound, Bell, AlertTriangle } from "lucide-react";
+import { Menu, LogOut, ChevronDown, KeyRound, Bell, AlertTriangle, HeartHandshake, Mail, FolderKanban, HandHeart, CheckCheck } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { logout } from "@/store/slices/authSlice";
 import { authApi } from "@/lib/authApi";
 import { casesApi, SlaBreach } from "@/lib/casesApi";
+import { adminNotificationsApi, AdminNotificationItem, AdminNotificationType } from "@/lib/adminNotificationsApi";
 import { ApiRequestError } from "@/lib/api";
 import { NAV_SECTIONS } from "./navigation";
 import Modal from "@/components/ui/Modal";
 import Button from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+
+const NOTIFICATION_ICONS: Record<AdminNotificationType, typeof HeartHandshake> = {
+  DONATION: HeartHandshake,
+  ENQUIRY: Mail,
+  CASE: FolderKanban,
+  VOLUNTEER: HandHeart,
+};
+
+function timeAgo(iso: string): string {
+  const minutes = Math.floor((Date.now() - new Date(iso).getTime()) / 60000);
+  if (minutes < 1) return "just now";
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  return `${Math.floor(hours / 24)}d ago`;
+}
 
 function currentPageTitle(pathname: string): string {
   for (const section of NAV_SECTIONS) {
@@ -33,6 +50,8 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
   const [breaches, setBreaches] = useState<SlaBreach[]>([]);
+  const [notifications, setNotifications] = useState<AdminNotificationItem[]>([]);
+  const [unreadCount, setUnreadCount] = useState(0);
   const [passwordModalOpen, setPasswordModalOpen] = useState(false);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -41,8 +60,45 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
 
   useEffect(() => {
     if (!admin || admin.userType !== "INTERNAL") return;
-    casesApi.slaBreaches().then(setBreaches).catch(() => setBreaches([]));
+
+    const load = () => {
+      casesApi.slaBreaches().then(setBreaches).catch(() => setBreaches([]));
+      adminNotificationsApi
+        .list()
+        .then(({ notifications, unreadCount }) => {
+          setNotifications(notifications);
+          setUnreadCount(unreadCount);
+        })
+        .catch(() => {
+          setNotifications([]);
+          setUnreadCount(0);
+        });
+    };
+
+    load();
+    // No websockets/SSE in this stack yet — a minute-ish poll is the cheap, honest way to keep
+    // "new donation came in" from sitting unseen for a whole admin session.
+    const interval = setInterval(load, 60_000);
+    return () => clearInterval(interval);
   }, [admin]);
+
+  const handleNotificationClick = async (n: AdminNotificationItem) => {
+    setNotifOpen(false);
+    if (!n.isRead) {
+      setNotifications((prev) => prev.map((x) => (x._id === n._id ? { ...x, isRead: true } : x)));
+      setUnreadCount((prev) => Math.max(0, prev - 1));
+      adminNotificationsApi.markRead(n._id).catch(() => {});
+    }
+    if (n.link) router.push(n.link);
+  };
+
+  const handleMarkAllRead = async () => {
+    setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
+    setUnreadCount(0);
+    adminNotificationsApi.markAllRead().catch(() => {});
+  };
+
+  const bellBadgeCount = breaches.length + unreadCount;
 
   const handleLogout = async () => {
     if (refreshToken) await authApi.logout(refreshToken);
@@ -89,12 +145,12 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
           <button
             onClick={() => setNotifOpen((v) => !v)}
             className="relative flex h-8 w-8 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-900/5"
-            aria-label="SLA breach notifications"
+            aria-label="Notifications"
           >
             <Bell className="h-4 w-4" />
-            {breaches.length > 0 && (
+            {bellBadgeCount > 0 && (
               <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-status-danger-text px-1 text-[9px] font-bold text-white shadow-sm border border-white">
-                {breaches.length > 9 ? "9+" : breaches.length}
+                {bellBadgeCount > 9 ? "9+" : bellBadgeCount}
               </span>
             )}
           </button>
@@ -102,30 +158,68 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
           {notifOpen && (
             <>
               <div className="fixed inset-0 z-10" onClick={() => setNotifOpen(false)} />
-              <div className="absolute right-0 top-full z-20 mt-2 w-72 rounded-2xl border border-white/60 bg-white/80 backdrop-blur-xl py-1.5 shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
-                <p className="px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-slate-500">SLA Breaches</p>
-                {breaches.length === 0 ? (
-                  <p className="px-3 py-3 text-xs font-medium text-slate-600">Nothing breaching SLA right now.</p>
-                ) : (
-                  <div className="max-h-64 overflow-y-auto">
-                    {breaches.map((b) => (
+              <div className="absolute right-0 top-full z-20 mt-2 w-80 rounded-2xl border border-white/60 bg-white/80 backdrop-blur-xl py-1.5 shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
+                <div className="max-h-[28rem] overflow-y-auto">
+                  {breaches.length > 0 && (
+                    <div className="border-b border-slate-200/70 pb-1">
+                      <p className="px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-slate-500">SLA Breaches</p>
+                      {breaches.map((b) => (
+                        <button
+                          key={`${b._id}-${b.breachReason}`}
+                          onClick={() => {
+                            setNotifOpen(false);
+                            router.push(`/cases/${b._id}`);
+                          }}
+                          className="flex w-full items-start gap-2 px-3 py-2.5 text-left text-xs hover:bg-slate-900/5 transition-colors"
+                        >
+                          <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-500" />
+                          <span>
+                            <span className="font-bold text-slate-900">{b.caseId}</span>
+                            <span className="block text-[11px] font-medium text-slate-500 mt-0.5">{b.breachReason}</span>
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="flex items-center justify-between px-3 py-2">
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Activity</p>
+                    {unreadCount > 0 && (
                       <button
-                        key={`${b._id}-${b.breachReason}`}
-                        onClick={() => {
-                          setNotifOpen(false);
-                          router.push(`/cases/${b._id}`);
-                        }}
-                        className="flex w-full items-start gap-2 px-3 py-2.5 text-left text-xs hover:bg-slate-900/5 transition-colors"
+                        onClick={handleMarkAllRead}
+                        className="flex items-center gap-1 text-[10px] font-semibold text-accent hover:underline"
                       >
-                        <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-500" />
-                        <span>
-                          <span className="font-bold text-slate-900">{b.caseId}</span>
-                          <span className="block text-[11px] font-medium text-slate-500 mt-0.5">{b.breachReason}</span>
-                        </span>
+                        <CheckCheck className="h-3 w-3" /> Mark all read
                       </button>
-                    ))}
+                    )}
                   </div>
-                )}
+                  {notifications.length === 0 ? (
+                    <p className="px-3 pb-3 text-xs font-medium text-slate-600">Nothing new right now.</p>
+                  ) : (
+                    notifications.map((n) => {
+                      const Icon = NOTIFICATION_ICONS[n.type];
+                      return (
+                        <button
+                          key={n._id}
+                          onClick={() => handleNotificationClick(n)}
+                          className={`flex w-full items-start gap-2 px-3 py-2.5 text-left text-xs transition-colors hover:bg-slate-900/5 ${
+                            n.isRead ? "" : "bg-accent-soft/40"
+                          }`}
+                        >
+                          <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-soft text-accent">
+                            <Icon className="h-3 w-3" />
+                          </span>
+                          <span className="min-w-0 flex-1">
+                            <span className="block font-bold text-slate-900">{n.title}</span>
+                            <span className="block truncate text-[11px] font-medium text-slate-500">{n.message}</span>
+                            <span className="mt-0.5 block text-[10px] text-slate-400">{timeAgo(n.createdAt)}</span>
+                          </span>
+                          {!n.isRead && <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />}
+                        </button>
+                      );
+                    })
+                  )}
+                </div>
               </div>
             </>
           )}

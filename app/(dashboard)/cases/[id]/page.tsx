@@ -42,13 +42,22 @@ const DOC_TYPES: DocumentType[] = [
 ];
 const PAYMENT_MODES: PaymentMode[] = ["CASH", "UPI", "CARD", "NETBANKING", "WALLET", "CHEQUE", "BANK_TRANSFER"];
 
+// A case shouldn't get a volunteer lined up before it's actually been verified and approved —
+// PRD flow is verify → approve → assign, not assign-whenever. NEW/UNDER_VERIFICATION haven't
+// cleared that gate yet; REJECTED/CANCELLED never will.
+const BLOCKED_FOR_ASSIGNMENT: CaseStatus[] = ["NEW", "UNDER_VERIFICATION", "REJECTED", "CANCELLED"];
+
 export default function CaseDetailPage() {
   const params = useParams<{ id: string }>();
   const router = useRouter();
   const [kase, setKase] = useState<CaseDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [actionError, setActionError] = useState("");
-  const [busy, setBusy] = useState(false);
+  // Which specific action is in flight, not a single shared flag — otherwise submitting one form
+  // (say, an expense) made every unrelated button on the page (verify, assign volunteer, upload...)
+  // show a spinner too, since they all read the same boolean.
+  const [busyAction, setBusyAction] = useState<string | null>(null);
+  const isBusy = busyAction !== null;
 
   const load = useCallback(async () => {
     const data = await casesApi.getById(params.id);
@@ -74,7 +83,7 @@ export default function CaseDetailPage() {
 
   const handleAssignVolunteer = async () => {
     if (!kase || !pickedVolunteerId) return;
-    setBusy(true);
+    setBusyAction("assignVolunteer");
     setActionError("");
     try {
       await volunteersApi.assignToCase(kase._id, pickedVolunteerId, assignRole);
@@ -83,14 +92,14 @@ export default function CaseDetailPage() {
     } catch (err) {
       setActionError(err instanceof ApiRequestError ? err.message : "Could not assign volunteer.");
     } finally {
-      setBusy(false);
+      setBusyAction(null);
     }
   };
 
   const handleWithdrawAssignment = async (assignmentId: string) => {
     if (!kase) return;
     const reason = window.prompt("Reason for withdrawing this volunteer (optional)?") ?? undefined;
-    setBusy(true);
+    setBusyAction(`withdraw:${assignmentId}`);
     setActionError("");
     try {
       await casesApi.withdrawAssignment(kase._id, assignmentId, reason || undefined);
@@ -98,7 +107,7 @@ export default function CaseDetailPage() {
     } catch (err) {
       setActionError(err instanceof ApiRequestError ? err.message : "Could not withdraw the assignment.");
     } finally {
-      setBusy(false);
+      setBusyAction(null);
     }
   };
 
@@ -109,7 +118,7 @@ export default function CaseDetailPage() {
 
   const handleVerify = async () => {
     if (!kase) return;
-    setBusy(true);
+    setBusyAction("verify");
     setActionError("");
     try {
       await casesApi.verify(kase._id, { outcome: verifyOutcome, method: verifyMethod, note: verifyNote });
@@ -118,7 +127,7 @@ export default function CaseDetailPage() {
     } catch (err) {
       setActionError(err instanceof ApiRequestError ? err.message : "Could not record verification.");
     } finally {
-      setBusy(false);
+      setBusyAction(null);
     }
   };
 
@@ -131,7 +140,7 @@ export default function CaseDetailPage() {
     if (!kase) return;
     const reason = window.prompt("Reason for cancelling this case?");
     if (!reason || reason.trim().length < 3) return;
-    setBusy(true);
+    setBusyAction("cancel");
     setActionError("");
     try {
       await casesApi.cancel(kase._id, reason.trim());
@@ -139,7 +148,7 @@ export default function CaseDetailPage() {
     } catch (err) {
       setActionError(err instanceof ApiRequestError ? err.message : "Could not cancel the case.");
     } finally {
-      setBusy(false);
+      setBusyAction(null);
     }
   };
 
@@ -159,7 +168,7 @@ export default function CaseDetailPage() {
 
   const handleTransition = async () => {
     if (!kase || !nextStatus) return;
-    setBusy(true);
+    setBusyAction("transition");
     setActionError("");
     try {
       await casesApi.transitionStatus(kase._id, nextStatus as CaseStatus);
@@ -168,7 +177,7 @@ export default function CaseDetailPage() {
     } catch (err) {
       setActionError(err instanceof ApiRequestError ? err.message : "Could not update case status.");
     } finally {
-      setBusy(false);
+      setBusyAction(null);
     }
   };
 
@@ -179,7 +188,7 @@ export default function CaseDetailPage() {
 
   const handleUploadDocument = async () => {
     if (!kase || !docFile) return;
-    setBusy(true);
+    setBusyAction("uploadDocument");
     setActionError("");
     try {
       await casesApi.addDocument(kase._id, docFile, docType, isProof);
@@ -189,7 +198,7 @@ export default function CaseDetailPage() {
     } catch (err) {
       setActionError(err instanceof ApiRequestError ? err.message : "Could not upload document.");
     } finally {
-      setBusy(false);
+      setBusyAction(null);
     }
   };
 
@@ -207,7 +216,7 @@ export default function CaseDetailPage() {
 
   const handleAddExpense = async () => {
     if (!kase || !expCategoryId || !expAmount) return;
-    setBusy(true);
+    setBusyAction("addExpense");
     setActionError("");
     try {
       await casesApi.addExpense(kase._id, {
@@ -224,13 +233,13 @@ export default function CaseDetailPage() {
     } catch (err) {
       setActionError(err instanceof ApiRequestError ? err.message : "Could not submit expense.");
     } finally {
-      setBusy(false);
+      setBusyAction(null);
     }
   };
 
   const handleDecideExpense = async (expenseId: string, decision: "APPROVED" | "REJECTED") => {
     if (!kase) return;
-    setBusy(true);
+    setBusyAction(`decide:${expenseId}:${decision}`);
     setActionError("");
     try {
       await casesApi.decideExpense(kase._id, expenseId, decision);
@@ -238,7 +247,7 @@ export default function CaseDetailPage() {
     } catch (err) {
       setActionError(err instanceof ApiRequestError ? err.message : "Could not record the decision.");
     } finally {
-      setBusy(false);
+      setBusyAction(null);
     }
   };
 
@@ -255,6 +264,8 @@ export default function CaseDetailPage() {
   const rawNextStates = CASE_STATUS_TRANSITIONS[kase.status] ?? [];
   const transitionOptions =
     kase.status === "UNDER_VERIFICATION" ? [] : rawNextStates;
+
+  const canAssignVolunteer = !BLOCKED_FOR_ASSIGNMENT.includes(kase.status);
 
   const request = kase.request;
 
@@ -280,7 +291,7 @@ export default function CaseDetailPage() {
             Print Summary
           </Button>
           {CANCELLABLE_STATUSES.includes(kase.status) && (
-            <Button variant="danger" size="sm" onClick={handleCancelCase} disabled={busy}>
+            <Button variant="danger" size="sm" onClick={handleCancelCase} loading={busyAction === "cancel"} disabled={isBusy}>
               Cancel Case
             </Button>
           )}
@@ -370,7 +381,7 @@ export default function CaseDetailPage() {
                   />
                 </div>
               </div>
-              <Button className="mt-3" size="sm" onClick={handleVerify} loading={busy} disabled={!verifyNote.trim()}>
+              <Button className="mt-3" size="sm" onClick={handleVerify} loading={busyAction === "verify"} disabled={isBusy || !verifyNote.trim()}>
                 Submit Verification
               </Button>
             </Card>
@@ -391,7 +402,7 @@ export default function CaseDetailPage() {
                     ))}
                   </Select>
                 </div>
-                <Button size="sm" onClick={handleTransition} loading={busy} disabled={!nextStatus}>
+                <Button size="sm" onClick={handleTransition} loading={busyAction === "transition"} disabled={isBusy || !nextStatus}>
                   Update Status
                 </Button>
               </div>
@@ -421,7 +432,13 @@ export default function CaseDetailPage() {
                   <div className="flex items-center gap-2">
                     <Badge tone={ASSIGNMENT_STATUS_META[a.status].tone}>{ASSIGNMENT_STATUS_META[a.status].label}</Badge>
                     {(a.status === "ASSIGNED" || a.status === "ACCEPTED") && (
-                      <Button variant="ghost" size="sm" onClick={() => handleWithdrawAssignment(a._id)} disabled={busy}>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleWithdrawAssignment(a._id)}
+                        loading={busyAction === `withdraw:${a._id}`}
+                        disabled={isBusy}
+                      >
                         Withdraw
                       </Button>
                     )}
@@ -431,32 +448,40 @@ export default function CaseDetailPage() {
               {kase.assignments.length === 0 && <p className="text-xs text-text-muted">No volunteer assigned yet.</p>}
             </div>
 
-            <div className="mt-3 flex flex-wrap items-end gap-2 border-t border-surface-border pt-3">
-              <div className="w-56">
-                <Select
-                  label="Volunteer"
-                  value={pickedVolunteerId}
-                  onChange={(e) => setPickedVolunteerId(e.target.value)}
-                >
-                  <option value="">Select an active volunteer...</option>
-                  {activeVolunteers.map((v) => (
-                    <option key={v._id} value={v._id}>
-                      {v.name} — {v.city} ({v.availability}){v.distanceKm !== null ? ` · ${v.distanceKm} km away` : ""}
-                    </option>
-                  ))}
-                </Select>
+            {canAssignVolunteer ? (
+              <div className="mt-3 flex flex-wrap items-end gap-2 border-t border-surface-border pt-3">
+                <div className="w-56">
+                  <Select
+                    label="Volunteer"
+                    value={pickedVolunteerId}
+                    onChange={(e) => setPickedVolunteerId(e.target.value)}
+                  >
+                    <option value="">Select an active volunteer...</option>
+                    {activeVolunteers.map((v) => (
+                      <option key={v._id} value={v._id}>
+                        {v.name} — {v.city} ({v.availability}){v.distanceKm !== null ? ` · ${v.distanceKm} km away` : ""}
+                      </option>
+                    ))}
+                  </Select>
+                </div>
+                <div className="w-36">
+                  <Select label="Role" value={assignRole} onChange={(e) => setAssignRole(e.target.value as AssignmentRole)}>
+                    <option value="PRIMARY">Primary</option>
+                    <option value="SUPPORT">Support</option>
+                    <option value="DRIVER">Driver</option>
+                  </Select>
+                </div>
+                <Button size="sm" onClick={handleAssignVolunteer} loading={busyAction === "assignVolunteer"} disabled={isBusy || !pickedVolunteerId}>
+                  Assign
+                </Button>
               </div>
-              <div className="w-36">
-                <Select label="Role" value={assignRole} onChange={(e) => setAssignRole(e.target.value as AssignmentRole)}>
-                  <option value="PRIMARY">Primary</option>
-                  <option value="SUPPORT">Support</option>
-                  <option value="DRIVER">Driver</option>
-                </Select>
-              </div>
-              <Button size="sm" onClick={handleAssignVolunteer} loading={busy} disabled={!pickedVolunteerId}>
-                Assign
-              </Button>
-            </div>
+            ) : (
+              <p className="mt-3 border-t border-surface-border pt-3 text-xs text-text-muted">
+                {kase.status === "REJECTED" || kase.status === "CANCELLED"
+                  ? "This case is closed out — volunteers can no longer be assigned."
+                  : "Verify and approve this case before assigning a volunteer."}
+              </p>
+            )}
           </Card>
 
           {/* Documents */}
@@ -503,7 +528,7 @@ export default function CaseDetailPage() {
                 <input type="checkbox" checked={isProof} onChange={(e) => setIsProof(e.target.checked)} />
                 Proof document
               </label>
-              <Button size="sm" onClick={handleUploadDocument} loading={busy} disabled={!docFile}>
+              <Button size="sm" onClick={handleUploadDocument} loading={busyAction === "uploadDocument"} disabled={isBusy || !docFile}>
                 Upload
               </Button>
             </div>
@@ -534,10 +559,21 @@ export default function CaseDetailPage() {
                     <Badge tone={EXPENSE_STATUS_META[exp.status].tone}>{EXPENSE_STATUS_META[exp.status].label}</Badge>
                     {exp.status === "SUBMITTED" && (
                       <>
-                        <Button size="sm" variant="secondary" onClick={() => handleDecideExpense(exp._id, "REJECTED")} loading={busy}>
+                        <Button
+                          size="sm"
+                          variant="secondary"
+                          onClick={() => handleDecideExpense(exp._id, "REJECTED")}
+                          loading={busyAction === `decide:${exp._id}:REJECTED`}
+                          disabled={isBusy}
+                        >
                           Reject
                         </Button>
-                        <Button size="sm" onClick={() => handleDecideExpense(exp._id, "APPROVED")} loading={busy}>
+                        <Button
+                          size="sm"
+                          onClick={() => handleDecideExpense(exp._id, "APPROVED")}
+                          loading={busyAction === `decide:${exp._id}:APPROVED`}
+                          disabled={isBusy}
+                        >
                           Approve
                         </Button>
                       </>
@@ -570,7 +606,7 @@ export default function CaseDetailPage() {
               </Select>
               <Input placeholder="Payee (optional)" value={expPayee} onChange={(e) => setExpPayee(e.target.value)} />
             </div>
-            <Button size="sm" className="mt-2" onClick={handleAddExpense} loading={busy} disabled={!expCategoryId || !expAmount}>
+            <Button size="sm" className="mt-2" onClick={handleAddExpense} loading={busyAction === "addExpense"} disabled={isBusy || !expCategoryId || !expAmount}>
               Submit Expense
             </Button>
           </Card>

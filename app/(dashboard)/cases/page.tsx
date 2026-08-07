@@ -2,12 +2,22 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { AlertTriangle } from "lucide-react";
+import dynamic from "next/dynamic";
+import { AlertTriangle, Map as MapIcon } from "lucide-react";
 import Table, { Column } from "@/components/ui/Table";
+import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
 import { casesApi, SlaBreach } from "@/lib/casesApi";
 import { CaseSummary, CaseStatus } from "@/lib/types";
 import { CASE_STATUS_META, CASE_PRIORITY_META, formatDateTime } from "@/lib/statusMeta";
+
+// Leaflet touches `window` at load time — must never run during SSR. Toggled on-demand rather
+// than always rendered: with a busy caseload, a wall-to-wall pin map isn't a great default view —
+// this page's job is the sortable/filterable list, so the map is an opt-in extra, not the default.
+const CasesMap = dynamic(() => import("@/components/charts/CasesMap"), {
+  ssr: false,
+  loading: () => <div className="flex h-72 items-center justify-center text-xs text-text-muted">Loading map…</div>,
+});
 
 const STATUS_TABS: { key: CaseStatus | ""; label: string }[] = [
   { key: "", label: "All" },
@@ -30,6 +40,7 @@ export default function CasesPage() {
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<CaseStatus | "">("");
   const [breaches, setBreaches] = useState<SlaBreach[]>([]);
+  const [showMap, setShowMap] = useState(false);
 
   useEffect(() => {
     casesApi.slaBreaches().then(setBreaches).catch(() => setBreaches([]));
@@ -72,10 +83,27 @@ export default function CasesPage() {
 
   return (
     <div className="space-y-4">
-      <div>
-        <h1 className="text-lg font-semibold text-text-primary">Cases</h1>
-        <p className="text-xs text-text-muted">Operational cases from verification through closure.</p>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <h1 className="text-lg font-semibold text-text-primary">Cases</h1>
+          <p className="text-xs text-text-muted">Operational cases from verification through closure.</p>
+        </div>
+        <button
+          onClick={() => setShowMap((v) => !v)}
+          className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold transition-colors ${
+            showMap ? "border-accent bg-accent-soft text-accent" : "border-surface-border text-text-secondary hover:bg-surface-sunken"
+          }`}
+        >
+          <MapIcon className="h-3.5 w-3.5" />
+          {showMap ? "Hide Map" : "Show Map"}
+        </button>
       </div>
+
+      {showMap && (
+        <Card padding="sm">
+          <CasesMap />
+        </Card>
+      )}
 
       {breaches.length > 0 && (
         <div className="rounded-lg border border-amber-300 bg-amber-50 p-3">
