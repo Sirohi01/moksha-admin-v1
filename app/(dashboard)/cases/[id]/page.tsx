@@ -41,10 +41,6 @@ const DOC_TYPES: DocumentType[] = [
   "OTHER",
 ];
 const PAYMENT_MODES: PaymentMode[] = ["CASH", "UPI", "CARD", "NETBANKING", "WALLET", "CHEQUE", "BANK_TRANSFER"];
-
-// A case shouldn't get a volunteer lined up before it's actually been verified and approved —
-// PRD flow is verify → approve → assign, not assign-whenever. NEW/UNDER_VERIFICATION haven't
-// cleared that gate yet; REJECTED/CANCELLED never will.
 const BLOCKED_FOR_ASSIGNMENT: CaseStatus[] = ["NEW", "UNDER_VERIFICATION", "REJECTED", "CANCELLED"];
 
 export default function CaseDetailPage() {
@@ -53,9 +49,6 @@ export default function CaseDetailPage() {
   const [kase, setKase] = useState<CaseDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [actionError, setActionError] = useState("");
-  // Which specific action is in flight, not a single shared flag — otherwise submitting one form
-  // (say, an expense) made every unrelated button on the page (verify, assign volunteer, upload...)
-  // show a spinner too, since they all read the same boolean.
   const [busyAction, setBusyAction] = useState<string | null>(null);
   const isBusy = busyAction !== null;
 
