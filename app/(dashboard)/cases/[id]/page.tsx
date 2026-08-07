@@ -8,7 +8,7 @@ import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import { Input, Select, Textarea } from "@/components/ui/Input";
-import { casesApi } from "@/lib/casesApi";
+import { casesApi, NearestVolunteer } from "@/lib/casesApi";
 import { volunteersApi } from "@/lib/volunteersApi";
 import { expenseCategoriesApi } from "@/lib/expenseCategoriesApi";
 import {
@@ -17,7 +17,6 @@ import {
   VerificationStatus,
   DocumentType,
   PaymentMode,
-  VolunteerSummary,
   AssignmentRole,
   ExpenseCategory,
 } from "@/lib/types";
@@ -62,13 +61,16 @@ export default function CaseDetailPage() {
   }, [load]);
 
   // -------- Volunteer assignment --------
-  const [activeVolunteers, setActiveVolunteers] = useState<VolunteerSummary[]>([]);
+  // Nearest-first (see moksha-backend's geocoding.ts) rather than a flat active-volunteers list —
+  // a volunteer with no coordinates yet (geocoding still pending/failed) still shows up, just
+  // sorted after every distance-ranked one, so nobody silently disappears from the picker.
+  const [activeVolunteers, setActiveVolunteers] = useState<NearestVolunteer[]>([]);
   const [pickedVolunteerId, setPickedVolunteerId] = useState("");
   const [assignRole, setAssignRole] = useState<AssignmentRole>("PRIMARY");
 
   useEffect(() => {
-    volunteersApi.list({ status: "ACTIVE" }).then(setActiveVolunteers).catch(() => setActiveVolunteers([]));
-  }, []);
+    casesApi.nearestVolunteers(params.id).then(setActiveVolunteers).catch(() => setActiveVolunteers([]));
+  }, [params.id]);
 
   const handleAssignVolunteer = async () => {
     if (!kase || !pickedVolunteerId) return;
@@ -439,7 +441,7 @@ export default function CaseDetailPage() {
                   <option value="">Select an active volunteer...</option>
                   {activeVolunteers.map((v) => (
                     <option key={v._id} value={v._id}>
-                      {v.name} — {v.city} ({v.availability})
+                      {v.name} — {v.city} ({v.availability}){v.distanceKm !== null ? ` · ${v.distanceKm} km away` : ""}
                     </option>
                   ))}
                 </Select>

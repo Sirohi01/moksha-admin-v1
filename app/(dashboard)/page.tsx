@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import {
   FolderKanban,
   ClipboardList,
@@ -20,6 +21,7 @@ import {
   Megaphone,
   Receipt,
   Trophy,
+  MapPin,
 } from "lucide-react";
 import StatCard from "@/components/ui/StatCard";
 import Card from "@/components/ui/Card";
@@ -35,6 +37,12 @@ import { volunteersApi } from "@/lib/volunteersApi";
 import { formatCurrency, formatDateTime, CASE_STATUS_META } from "@/lib/statusMeta";
 import { CaseStatus, AuditLogEntry, VolunteerSummary, Enquiry } from "@/lib/types";
 import { useAppSelector } from "@/store/hooks";
+
+// Leaflet touches `window` at load time — must never run during SSR.
+const CasesMap = dynamic(() => import("@/components/charts/CasesMap"), {
+  ssr: false,
+  loading: () => <div className="flex h-72 items-center justify-center text-xs text-text-muted">Loading map…</div>,
+});
 
 interface DashboardData {
   overview: ReportsOverview;
@@ -250,6 +258,16 @@ export default function DashboardPage() {
           />
         </Card>
       </div>
+
+      {/* Open cases map — pins land here once a request's address has been geocoded (best-effort,
+          asynchronous; see moksha-backend's geocoding.ts). */}
+      <Card padding="sm">
+        <h2 className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-text-muted">
+          <MapPin className="h-3.5 w-3.5" />
+          Open Cases Map
+        </h2>
+        <CasesMap />
+      </Card>
 
       {/* Row: recent activity / quick actions / top volunteers */}
       <div className="grid gap-1 lg:grid-cols-3">

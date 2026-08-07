@@ -44,6 +44,8 @@ export const casesApi = {
     api.patch(`/cases/admin/${id}/volunteers/${assignmentId}/withdraw`, { reason }),
   summaryHtml: (id: string) => api.getHtml(`/cases/admin/${id}/summary`),
   slaBreaches: () => api.get<SlaBreach[]>("/cases/admin/sla-breaches"),
+  mapData: () => api.get<CaseMapPin[]>("/cases/admin/map-data"),
+  nearestVolunteers: (id: string) => api.get<NearestVolunteer[]>(`/cases/admin/${id}/nearest-volunteers`),
 };
 
 export interface SlaBreach {
@@ -55,4 +57,24 @@ export interface SlaBreach {
   createdAt: string;
   breachReason: string;
   thresholdHours: number;
+}
+
+export interface CaseMapPin {
+  _id: string;
+  caseId: string;
+  status: CaseStatus;
+  priority: CasePriority;
+  city: string;
+  lat: number;
+  lng: number;
+}
+
+export interface NearestVolunteer {
+  _id: string;
+  name?: string;
+  phone?: string;
+  city: string;
+  availability: "AVAILABLE" | "BUSY" | "UNAVAILABLE";
+  totalAssignments: number;
+  distanceKm: number | null;
 }
