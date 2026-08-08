@@ -33,7 +33,7 @@ export default function StatCard({ icon: Icon, label, value, hint, tone = "accen
 
   return (
     <div
-      className={`flex items-center gap-2.5 rounded-2xl border border-white/60 bg-white/40 backdrop-blur-xl px-3 py-2.5 shadow-sm transition-shadow hover:shadow-md ${
+      className={`flex items-center gap-2.5 rounded-none border border-white/60 bg-white/40 backdrop-blur-xl px-3 py-2.5 shadow-sm transition-shadow hover:shadow-md ${
         hasStripe ? `border-l-4 ${isDanger ? "border-l-status-danger-text" : ""}` : ""
       }`}
       style={stripeStyle}

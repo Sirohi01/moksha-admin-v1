@@ -167,7 +167,7 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
           {notifOpen && (
             <>
               <div className="fixed inset-0 z-10" onClick={() => setNotifOpen(false)} />
-              <div className="absolute right-0 top-full z-20 mt-2 w-80 rounded-2xl border border-white/60 bg-white/80 backdrop-blur-xl py-1.5 shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
+              <div className="absolute right-0 top-full z-20 mt-2 w-80 rounded-none border border-white/60 bg-white/80 backdrop-blur-xl py-1.5 shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
                 <div className="max-h-[28rem] overflow-y-auto">
                   {breaches.length > 0 && (
                     <div className="border-b border-slate-200/70 pb-1">
@@ -257,7 +257,7 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
           {menuOpen && (
             <>
               <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
-              <div className="absolute right-0 top-full z-20 mt-2 w-48 rounded-2xl border border-white/60 bg-white/80 backdrop-blur-xl py-1 shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
+              <div className="absolute right-0 top-full z-20 mt-2 w-48 rounded-none border border-white/60 bg-white/80 backdrop-blur-xl py-1 shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
                 <button
                   onClick={() => {
                     setMenuOpen(false);
