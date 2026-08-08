@@ -127,7 +127,7 @@ export default function DashboardPage() {
   return (
     <div className="space-y-1">
       {/* Welcome banner */}
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/60 bg-white/40 backdrop-blur-xl p-4 shadow-sm">
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-none border border-white/60 bg-white/40 backdrop-blur-xl py-2 px-4 shadow-sm">
         <div>
           <h1 className="text-xl font-extrabold tracking-tight text-slate-900">Welcome back, {firstName}!</h1>
           <p className="mt-1 text-[13px] font-medium text-slate-600">
