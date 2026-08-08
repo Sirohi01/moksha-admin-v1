@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { Menu, LogOut, ChevronDown, KeyRound, Bell, AlertTriangle, HeartHandshake, Mail, FolderKanban, HandHeart, CheckCheck } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -58,42 +58,51 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
   const [passwordSaving, setPasswordSaving] = useState(false);
   const [passwordError, setPasswordError] = useState("");
 
+  const isInternal = admin?.userType === "INTERNAL";
+
+  const loadNotifications = useCallback(() => {
+    if (!isInternal) return;
+    adminNotificationsApi
+      .list()
+      .then(({ notifications, unreadCount }) => {
+        setNotifications(notifications);
+        setUnreadCount(unreadCount);
+      })
+      .catch(() => {
+        setNotifications([]);
+        setUnreadCount(0);
+      });
+  }, [isInternal]);
+
   useEffect(() => {
-    if (!admin || admin.userType !== "INTERNAL") return;
+    if (!isInternal) return;
 
-    const load = () => {
-      casesApi.slaBreaches().then(setBreaches).catch(() => setBreaches([]));
-      adminNotificationsApi
-        .list()
-        .then(({ notifications, unreadCount }) => {
-          setNotifications(notifications);
-          setUnreadCount(unreadCount);
-        })
-        .catch(() => {
-          setNotifications([]);
-          setUnreadCount(0);
-        });
-    };
-
-    load();
+    casesApi.slaBreaches().then(setBreaches).catch(() => setBreaches([]));
+    loadNotifications();
     // No websockets/SSE in this stack yet — a minute-ish poll is the cheap, honest way to keep
-    // "new donation came in" from sitting unseen for a whole admin session.
-    const interval = setInterval(load, 60_000);
+    // "new donation came in" from sitting unseen for a whole admin session. Opening the bell
+    // (below) also force-refreshes, so a just-arrived notification never waits the full minute.
+    const interval = setInterval(loadNotifications, 60_000);
     return () => clearInterval(interval);
-  }, [admin]);
+  }, [isInternal, loadNotifications]);
+
+  const handleBellClick = () => {
+    setNotifOpen((v) => {
+      if (!v) loadNotifications();
+      return !v;
+    });
+  };
 
   const handleNotificationClick = async (n: AdminNotificationItem) => {
     setNotifOpen(false);
-    if (!n.isRead) {
-      setNotifications((prev) => prev.map((x) => (x._id === n._id ? { ...x, isRead: true } : x)));
-      setUnreadCount((prev) => Math.max(0, prev - 1));
-      adminNotificationsApi.markRead(n._id).catch(() => {});
-    }
+    setNotifications((prev) => prev.filter((x) => x._id !== n._id));
+    setUnreadCount((prev) => Math.max(0, prev - 1));
+    adminNotificationsApi.markRead(n._id).catch(() => {});
     if (n.link) router.push(n.link);
   };
 
   const handleMarkAllRead = async () => {
-    setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
+    setNotifications([]);
     setUnreadCount(0);
     adminNotificationsApi.markAllRead().catch(() => {});
   };
@@ -143,7 +152,7 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
       <div className="flex items-center gap-1.5">
         <div className="relative">
           <button
-            onClick={() => setNotifOpen((v) => !v)}
+            onClick={handleBellClick}
             className="relative flex h-8 w-8 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-900/5"
             aria-label="Notifications"
           >
@@ -184,7 +193,7 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
 
                   <div className="flex items-center justify-between px-3 py-2">
                     <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Activity</p>
-                    {unreadCount > 0 && (
+                    {notifications.length > 0 && (
                       <button
                         onClick={handleMarkAllRead}
                         className="flex items-center gap-1 text-[10px] font-semibold text-accent hover:underline"
@@ -202,9 +211,7 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
                         <button
                           key={n._id}
                           onClick={() => handleNotificationClick(n)}
-                          className={`flex w-full items-start gap-2 px-3 py-2.5 text-left text-xs transition-colors hover:bg-slate-900/5 ${
-                            n.isRead ? "" : "bg-accent-soft/40"
-                          }`}
+                          className="flex w-full items-start gap-2 bg-accent-soft/40 px-3 py-2.5 text-left text-xs transition-colors hover:bg-slate-900/5"
                         >
                           <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-soft text-accent">
                             <Icon className="h-3 w-3" />
@@ -214,7 +221,7 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
                             <span className="block truncate text-[11px] font-medium text-slate-500">{n.message}</span>
                             <span className="mt-0.5 block text-[10px] text-slate-400">{timeAgo(n.createdAt)}</span>
                           </span>
-                          {!n.isRead && <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />}
+                          <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
                         </button>
                       );
                     })
