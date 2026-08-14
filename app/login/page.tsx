@@ -148,24 +148,24 @@ export default function LoginPage() {
       </div>
 
       {/* Top Header Logos (Left & Right) */}
-      <div className="absolute top-0 left-0 w-full p-6 sm:p-12 flex items-start justify-between z-20 pointer-events-none">
+      <div className="absolute top-0 left-0 w-full p-4 sm:p-8 lg:p-12 flex items-start justify-between z-20 pointer-events-none">
         {/* Left Logo: Namo Gange */}
-        <div className="pointer-events-auto flex flex-col items-start gap-2">
-          <span className="text-xs font-black uppercase tracking-[0.2em] text-slate-500">An Initiative By</span>
+        <div className="pointer-events-auto flex flex-col items-start gap-1 sm:gap-2">
+          <span className="text-[9px] sm:text-[10px] md:text-xs font-black uppercase tracking-[0.2em] text-slate-500">An Initiative By</span>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.webp" alt="Namo Gange Trust" className="h-24 sm:h-32 w-auto object-contain drop-shadow-md" />
+          <img src="/logo.webp" alt="Namo Gange Trust" className="h-14 sm:h-20 md:h-28 lg:h-32 w-auto object-contain drop-shadow-md" />
         </div>
 
         {/* Right Logo: Moksha Sewa */}
         <div className="pointer-events-auto">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="https://mokshasewa.org/logo.png" alt="Moksha Sewa" className="h-20 sm:h-28 w-auto object-contain drop-shadow-md mt-4" />
+          <img src="https://mokshasewa.org/logo.png" alt="Moksha Sewa" className="h-12 sm:h-16 md:h-24 lg:h-28 w-auto object-contain drop-shadow-md mt-2 sm:mt-4" />
         </div>
       </div>
 
-      <div className="relative sm:mx-auto sm:w-full sm:max-w-md z-10 pt-5">
+      <div className="relative mx-auto w-full px-4 sm:px-0 sm:max-w-md z-10 pt-24 sm:pt-5">
 
-        <h2 className="text-center text-3xl font-extrabold tracking-tight text-slate-900">
+        <h2 className="text-center text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
           Admin Panel
         </h2>
         <p className="mt-2 text-center text-sm font-medium text-slate-500">
@@ -173,8 +173,8 @@ export default function LoginPage() {
         </p>
       </div>
 
-      <div className="relative mt-8 sm:mx-auto sm:w-full sm:max-w-md z-10">
-        <div className="overflow-hidden rounded-3xl border border-white/50 bg-white/20 px-4 py-8 shadow-[0_8px_30px_rgb(0,0,0,0.12)] backdrop-blur-2xl sm:px-10">
+      <div className="relative mt-6 sm:mt-8 mx-auto w-full px-4 sm:px-0 sm:max-w-md z-10">
+        <div className="overflow-hidden rounded-2xl sm:rounded-3xl border border-white/50 bg-white/20 px-5 py-8 shadow-[0_8px_30px_rgb(0,0,0,0.12)] backdrop-blur-2xl sm:px-10">
 
           {/* Subtle gradient line at the top of the card */}
           <div className="absolute left-0 top-0 h-1 w-full bg-gradient-to-r from-orange-400 via-blue-500 to-teal-400 opacity-80"></div>
