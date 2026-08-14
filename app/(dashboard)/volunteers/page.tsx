@@ -53,6 +53,23 @@ export default function VolunteersPage() {
     }
   };
 
+  const handlePrint = async (volunteer: VolunteerSummary) => {
+    setError("");
+    try {
+      const pdf = await volunteersApi.pdf(volunteer._id);
+      const url = URL.createObjectURL(pdf);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `moksha-sewa-volunteer-${volunteer.name ?? volunteer._id}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 10_000);
+    } catch {
+      setError("Could not download the volunteer registration PDF. Please try again.");
+    }
+  };
+
   const columns: Column<VolunteerSummary>[] = [
     { key: "name", header: "Volunteer", render: (v) => `${v.name ?? "—"} · ${v.phone ?? "—"}` },
     { key: "city", header: "City", render: (v) => v.city },
@@ -124,11 +141,15 @@ export default function VolunteersPage() {
       <Modal isOpen={!!selected} onClose={() => setSelected(null)} title={selected?.name ?? "Volunteer"} size="lg">
         {selected && (
           <div className="space-y-3 text-sm">
+            {selected.photographUrl && <img src={selected.photographUrl} alt={`${selected.name ?? "Volunteer"} photograph`} className="h-24 w-24 rounded-xl border object-cover" />}
             <div className="flex items-center gap-2">
               <Badge tone={VOLUNTEER_STATUS_META[selected.status].tone}>{VOLUNTEER_STATUS_META[selected.status].label}</Badge>
               <Badge tone={VOLUNTEER_AVAILABILITY_META[selected.availability].tone}>
                 {VOLUNTEER_AVAILABILITY_META[selected.availability].label}
               </Badge>
+              <button onClick={() => handlePrint(selected)} className="ml-auto rounded-lg bg-accent px-3 py-2 text-xs font-semibold text-white hover:opacity-90">
+                Download Registration PDF
+              </button>
             </div>
             <div className="grid grid-cols-2 gap-3 text-xs sm:grid-cols-3">
               <Field label="Phone" value={selected.phone} />
@@ -141,6 +162,16 @@ export default function VolunteersPage() {
               <Field label="Pincode" value={selected.pincode} />
               <Field label="Schedule Preference" value={selected.schedulePreference} />
               <Field label="Preferred Role" value={selected.preferredRole} />
+              <Field label="WhatsApp" value={selected.whatsappPhone} />
+              <Field label="Occupation" value={selected.occupation} />
+              <Field label="Organisation" value={selected.organisation} />
+              <Field label="Languages" value={selected.languagesKnown} />
+              <Field label="Hours / Week" value={selected.hoursPerWeek} />
+              <Field label="Emergency On-Call" value={yesNo(selected.emergencyOnCall)} />
+              <Field label="Field Cases" value={yesNo(selected.canParticipateFieldCases)} />
+              <Field label="Own Vehicle" value={yesNo(selected.ownVehicle)} />
+              <Field label="ID Proof Type" value={selected.idProofType} />
+              <Field label="ID Proof No." value={selected.idProofNumber} />
               <Field label="Total Assignments" value={String(selected.totalAssignments)} />
               <Field label="Joined" value={formatDateTime(selected.createdAt)} />
             </div>
@@ -156,6 +187,12 @@ export default function VolunteersPage() {
                 <p className="text-text-primary">{selected.skills.join(", ")}</p>
               </div>
             )}
+            {selected.volunteerAreas?.length > 0 && <Detail label="Preferred Service Areas" value={selected.volunteerAreas.join(", ")} />}
+            {selected.availabilityDays?.length > 0 && <Detail label="Availability Days" value={selected.availabilityDays.join(", ")} />}
+            {selected.preferredTimes?.length > 0 && <Detail label="Preferred Times" value={selected.preferredTimes.join(", ")} />}
+            {selected.previousOrganisationRole && <Detail label="Previous NGO / Role" value={selected.previousOrganisationRole} />}
+            {selected.emergencyContact && <Detail label="Emergency Contact" value={[selected.emergencyContact.name, selected.emergencyContact.relationship, selected.emergencyContact.phone].filter(Boolean).join(" · ")} />}
+            {selected.idProofUrl && <a href={selected.idProofUrl} target="_blank" rel="noreferrer" className="inline-flex rounded-lg border border-accent px-3 py-2 text-xs font-semibold text-accent">View ID Proof Attachment</a>}
             {selected.motivation && (
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-wide text-text-muted">Why they want to volunteer</p>
@@ -184,3 +221,9 @@ function Field({ label, value }: { label: string; value?: string }) {
     </div>
   );
 }
+
+function Detail({ label, value }: { label: string; value: string }) {
+  return <div><p className="text-[11px] font-semibold uppercase tracking-wide text-text-muted">{label}</p><p className="text-text-primary">{value}</p></div>;
+}
+
+function yesNo(value?: boolean) { return value === undefined ? undefined : value ? "Yes" : "No"; }

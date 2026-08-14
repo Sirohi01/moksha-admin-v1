@@ -10,6 +10,8 @@ export const volunteersApi = {
     return api.get<VolunteerSummary[]>(`/volunteers/admin${query ? `?${query}` : ""}`);
   },
   getById: (id: string) => api.get<VolunteerSummary>(`/volunteers/admin/${id}`),
+  print: (id: string) => api.getHtml(`/volunteers/admin/${id}/print`),
+  pdf: (id: string) => api.getBlob(`/volunteers/admin/${id}/pdf`),
   updateStatus: (id: string, status: VolunteerStatus) =>
     api.patch<VolunteerSummary>(`/volunteers/admin/${id}/status`, { status }),
   assignToCase: (caseId: string, volunteerId: string, role: AssignmentRole, note?: string) =>

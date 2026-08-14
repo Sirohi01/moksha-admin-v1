@@ -23,6 +23,21 @@ let accessToken: string | null = null;
 let refreshToken: string | null = null;
 let onTokensRefreshed: ((tokens: { accessToken: string; refreshToken: string }) => void) | null = null;
 let onRefreshFailed: (() => void) | null = null;
+const AUTH_STORAGE_KEY = "ms_admin_auth";
+
+function syncTokensFromStorage(): void {
+  if (typeof window === "undefined") return;
+  try {
+    const raw = window.localStorage.getItem(AUTH_STORAGE_KEY);
+    if (!raw) return;
+    const stored = JSON.parse(raw) as { accessToken?: string; refreshToken?: string };
+    if (!accessToken && stored.accessToken) accessToken = stored.accessToken;
+    if (!refreshToken && stored.refreshToken) refreshToken = stored.refreshToken;
+  } catch {
+    // A malformed persisted session is handled by StoreProvider/logout; requests simply proceed
+    // without a token and receive the normal 401 response.
+  }
+}
 
 export function setTokens(tokens: { accessToken: string | null; refreshToken: string | null }): void {
   accessToken = tokens.accessToken;
@@ -46,6 +61,7 @@ export function setTokenRefreshHandlers(handlers: {
 let refreshInFlight: Promise<boolean> | null = null;
 
 async function refreshAccessToken(): Promise<boolean> {
+  syncTokensFromStorage();
   if (!refreshToken) return false;
   if (refreshInFlight) return refreshInFlight;
 
@@ -73,6 +89,7 @@ async function refreshAccessToken(): Promise<boolean> {
 }
 
 async function request<T>(path: string, options?: RequestInit, isRetry = false): Promise<T> {
+  syncTokensFromStorage();
   // FormData bodies must NOT get an explicit Content-Type — the browser sets the multipart
   // boundary itself. JSON bodies (the default) do.
   const isFormData = options?.body instanceof FormData;
@@ -102,12 +119,30 @@ async function request<T>(path: string, options?: RequestInit, isRetry = false):
 /** For endpoints that return raw HTML (not the {success,message,data} envelope) — e.g. the
  * receipt view, which needs the Authorization header a plain <a href> navigation can't send. */
 async function requestHtml(path: string): Promise<string> {
+  syncTokensFromStorage();
   const headers: Record<string, string> = {};
   if (accessToken) headers.Authorization = `Bearer ${accessToken}`;
 
   const res = await fetch(`${API_BASE_URL}${path}`, { headers });
   if (!res.ok) throw new ApiRequestError(res.status, "Could not load this document.");
   return res.text();
+}
+
+async function requestBlob(path: string): Promise<Blob> {
+  syncTokensFromStorage();
+  const headers: Record<string, string> = {};
+  if (accessToken) headers.Authorization = `Bearer ${accessToken}`;
+  let res = await fetch(`${API_BASE_URL}${path}`, { headers });
+  if (res.status === 401) {
+    const refreshed = await refreshAccessToken();
+    if (refreshed) {
+      const retryHeaders: Record<string, string> = {};
+      if (accessToken) retryHeaders.Authorization = `Bearer ${accessToken}`;
+      res = await fetch(`${API_BASE_URL}${path}`, { headers: retryHeaders });
+    }
+  }
+  if (!res.ok) throw new ApiRequestError(res.status, "Could not download this document.");
+  return res.blob();
 }
 
 export const api = {
@@ -121,4 +156,5 @@ export const api = {
   delete: <T>(path: string) => request<T>(path, { method: "DELETE" }),
   postForm: <T>(path: string, formData: FormData) => request<T>(path, { method: "POST", body: formData }),
   getHtml: requestHtml,
+  getBlob: requestBlob,
 };

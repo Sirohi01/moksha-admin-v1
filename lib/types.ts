@@ -206,6 +206,25 @@ export interface VolunteerSummary {
   experience?: string;
   schedulePreference?: VolunteerSchedulePreference;
   preferredRole?: VolunteerPreferredRole;
+  whatsappPhone?: string;
+  occupation?: string;
+  organisation?: string;
+  volunteerAreas: string[];
+  availabilityDays: string[];
+  preferredTimes: string[];
+  emergencyOnCall?: boolean;
+  canParticipateFieldCases?: boolean;
+  ownVehicle?: boolean;
+  languagesKnown?: string;
+  hoursPerWeek?: string;
+  volunteeredBefore?: boolean;
+  previousOrganisationRole?: string;
+  emergencyContact?: { name?: string; relationship?: string; phone?: string };
+  idProofType?: string;
+  idProofNumber?: string;
+  declarationAccepted?: boolean;
+  photographUrl?: string;
+  idProofUrl?: string;
   createdAt: string;
 }
 
