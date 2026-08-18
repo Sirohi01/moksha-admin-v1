@@ -129,14 +129,14 @@ export default function DashboardPage() {
       {/* Welcome banner */}
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-none border border-white/60 bg-white/40 backdrop-blur-xl py-2 px-4 shadow-sm">
         <div>
-          <h1 className="text-xl font-extrabold tracking-tight text-slate-900">Welcome back, {firstName}!</h1>
+          <h1 className="text-xl font-semibold tracking-tight text-slate-900">Welcome back, {firstName}!</h1>
           <p className="mt-1 text-[13px] font-medium text-slate-600">
             Here&apos;s what&apos;s happening across cases, requests, volunteers and donations today.
           </p>
         </div>
         <Link
           href="/reports"
-          className="flex items-center gap-1.5 rounded-xl bg-slate-900 px-4 py-2 text-xs font-bold text-white hover:bg-slate-800 transition-colors shadow-sm"
+          className="flex items-center gap-1.5 rounded-xl bg-slate-900 px-4 py-2 text-xs font-semibold text-white hover:bg-slate-800 transition-colors shadow-sm"
         >
           Full Reports <ArrowRight className="h-3 w-3" />
         </Link>
@@ -322,7 +322,7 @@ export default function DashboardPage() {
           <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
             {newEnquiries.map((e) => (
               <div key={e._id} className="rounded-xl border border-white/60 bg-white/50 p-3 text-xs shadow-sm">
-                <p className="font-bold text-slate-900">{e.name}</p>
+                <p className="font-semibold text-slate-900">{e.name}</p>
                 <p className="font-medium text-slate-500">{e.phone}</p>
                 <p className="mt-1 line-clamp-2 text-slate-700">{e.message}</p>
               </div>

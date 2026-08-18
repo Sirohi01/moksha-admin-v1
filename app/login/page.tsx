@@ -165,7 +165,7 @@ export default function LoginPage() {
 
       <div className="relative mx-auto w-full px-4 sm:px-0 sm:max-w-md z-10 pt-24 sm:pt-5">
 
-        <h2 className="text-center text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
+        <h2 className="text-center text-2xl sm:text-3xl font-semibold tracking-tight text-slate-900">
           Admin Panel
         </h2>
         <p className="mt-2 text-center text-sm font-medium text-slate-500">
@@ -244,7 +244,7 @@ export default function LoginPage() {
                 <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 shadow-sm ring-1 ring-blue-100">
                   <Mail className="h-7 w-7" />
                 </div>
-                <h3 className="mt-5 text-xl font-bold text-slate-900">Reset your password</h3>
+                <h3 className="mt-5 text-xl font-semibold text-slate-900">Reset your password</h3>
                 <p className="mt-2 text-sm text-slate-500">
                   Enter your admin account email and we&apos;ll send you a link to choose a new password.
                 </p>
@@ -290,7 +290,7 @@ export default function LoginPage() {
                 <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 shadow-sm ring-1 ring-emerald-100">
                   <MailCheck className="h-7 w-7" />
                 </div>
-                <h3 className="mt-5 text-xl font-bold text-slate-900">Check your inbox</h3>
+                <h3 className="mt-5 text-xl font-semibold text-slate-900">Check your inbox</h3>
                 <p className="mt-2 text-sm text-slate-500">
                   If an account exists for <span className="font-semibold text-slate-700">{forgotEmail}</span>, a
                   password reset link is on its way. The link expires in 30 minutes.
@@ -316,7 +316,7 @@ export default function LoginPage() {
                 <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 shadow-sm ring-1 ring-blue-100">
                   <ShieldCheck className="h-7 w-7" />
                 </div>
-                <h3 className="mt-5 text-xl font-bold text-slate-900">Two-Step Verification</h3>
+                <h3 className="mt-5 text-xl font-semibold text-slate-900">Two-Step Verification</h3>
                 <p className="mt-2 text-sm text-slate-500">Enter the 6-digit code from your authenticator app.</p>
               </div>
 
@@ -365,7 +365,7 @@ export default function LoginPage() {
                 <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 shadow-sm ring-1 ring-blue-100">
                   <KeyRound className="h-7 w-7" />
                 </div>
-                <h3 className="mt-5 text-xl font-bold text-slate-900">Secure Your Account</h3>
+                <h3 className="mt-5 text-xl font-semibold text-slate-900">Secure Your Account</h3>
                 <p className="mt-2 text-sm text-slate-500">
                   Scan the QR code below with an authenticator app (e.g. Google Authenticator).
                 </p>
@@ -382,7 +382,7 @@ export default function LoginPage() {
 
               <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50/50">
                 <div className="border-b border-slate-200 bg-slate-100/50 p-2.5 text-center">
-                  <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Can&apos;t scan? Manual Key</p>
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">Can&apos;t scan? Manual Key</p>
                 </div>
                 <div className="flex items-center justify-between p-3 pl-4">
                   <code className="text-sm font-semibold tracking-wide text-slate-800">{secret}</code>
@@ -425,7 +425,7 @@ export default function LoginPage() {
                 <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 shadow-sm ring-1 ring-emerald-100">
                   <CheckCircle2 className="h-7 w-7" />
                 </div>
-                <h3 className="mt-5 text-xl font-bold text-slate-900">2FA Enabled</h3>
+                <h3 className="mt-5 text-xl font-semibold text-slate-900">2FA Enabled</h3>
                 <p className="mt-2 text-sm text-slate-500">
                   Save these emergency backup codes. They will not be shown again.
                 </p>

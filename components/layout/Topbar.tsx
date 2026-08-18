@@ -97,14 +97,14 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
     setNotifOpen(false);
     setNotifications((prev) => prev.filter((x) => x._id !== n._id));
     setUnreadCount((prev) => Math.max(0, prev - 1));
-    adminNotificationsApi.markRead(n._id).catch(() => {});
+    adminNotificationsApi.markRead(n._id).catch(() => { });
     if (n.link) router.push(n.link);
   };
 
   const handleMarkAllRead = async () => {
     setNotifications([]);
     setUnreadCount(0);
-    adminNotificationsApi.markAllRead().catch(() => {});
+    adminNotificationsApi.markAllRead().catch(() => { });
   };
 
   const bellBadgeCount = breaches.length + unreadCount;
@@ -146,7 +146,7 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
         >
           <Menu className="h-[18px] w-[18px]" />
         </button>
-        <h1 className="text-base font-extrabold text-slate-900 tracking-tight">{currentPageTitle(pathname)}</h1>
+        <h1 className="text-base font-semibold text-slate-900 tracking-tight">{currentPageTitle(pathname)}</h1>
       </div>
 
       <div className="flex items-center gap-1.5">
@@ -158,7 +158,7 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
           >
             <Bell className="h-4 w-4" />
             {bellBadgeCount > 0 && (
-              <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-status-danger-text px-1 text-[9px] font-bold text-white shadow-sm border border-white">
+              <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-status-danger-text px-1 text-[9px] font-semibold text-white shadow-sm border border-white">
                 {bellBadgeCount > 9 ? "9+" : bellBadgeCount}
               </span>
             )}
@@ -171,7 +171,7 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
                 <div className="max-h-[28rem] overflow-y-auto">
                   {breaches.length > 0 && (
                     <div className="border-b border-slate-200/70 pb-1">
-                      <p className="px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-slate-500">SLA Breaches</p>
+                      <p className="px-3 py-2 text-[10px] font-semibold uppercase tracking-wider text-slate-500">SLA Breaches</p>
                       {breaches.map((b) => (
                         <button
                           key={`${b._id}-${b.breachReason}`}
@@ -183,7 +183,7 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
                         >
                           <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-500" />
                           <span>
-                            <span className="font-bold text-slate-900">{b.caseId}</span>
+                            <span className="font-semibold text-slate-900">{b.caseId}</span>
                             <span className="block text-[11px] font-medium text-slate-500 mt-0.5">{b.breachReason}</span>
                           </span>
                         </button>
@@ -192,7 +192,7 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
                   )}
 
                   <div className="flex items-center justify-between px-3 py-2">
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Activity</p>
+                    <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">Activity</p>
                     {notifications.length > 0 && (
                       <button
                         onClick={handleMarkAllRead}
@@ -217,7 +217,7 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
                             <Icon className="h-3 w-3" />
                           </span>
                           <span className="min-w-0 flex-1">
-                            <span className="block font-bold text-slate-900">{n.title}</span>
+                            <span className="block font-semibold text-slate-900">{n.title}</span>
                             <span className="block truncate text-[11px] font-medium text-slate-500">{n.message}</span>
                             <span className="mt-0.5 block text-[10px] text-slate-400">{timeAgo(n.createdAt)}</span>
                           </span>
@@ -237,7 +237,7 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
             onClick={() => setMenuOpen((v) => !v)}
             className="flex items-center gap-2.5 rounded-lg px-2 py-1.5 text-sm hover:bg-slate-900/5 transition-colors"
           >
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white text-[11px] font-bold text-accent border border-white/60 shadow-sm">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white text-[11px] font-semibold text-accent border border-white/60 shadow-sm">
               {admin?.avatarUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element -- user-supplied Cloudinary URL, not a local/static asset
                 <img src={admin.avatarUrl} alt="" className="h-full w-full object-cover" />
@@ -246,8 +246,8 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
               )}
             </span>
             <span className="hidden text-left sm:block">
-              <span className="block text-[13px] font-extrabold leading-tight text-slate-900 tracking-tight">Hello, {firstName}!</span>
-              <span className="block text-[10px] font-bold capitalize leading-tight text-slate-500 mt-0.5">
+              <span className="block text-[13px] font-semibold leading-tight text-slate-900 tracking-tight">Hello, {firstName}!</span>
+              <span className="block text-[10px] font-semibold capitalize leading-tight text-slate-500 mt-0.5">
                 {admin?.roleSlug?.replace(/_/g, " ")}
               </span>
             </span>
@@ -266,14 +266,14 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
                     setPasswordError("");
                     setPasswordModalOpen(true);
                   }}
-                  className="flex w-full items-center gap-2.5 px-3 py-2.5 text-left text-xs font-bold text-slate-600 hover:bg-slate-900/5 hover:text-slate-900 transition-colors"
+                  className="flex w-full items-center gap-2.5 px-3 py-2.5 text-left text-xs font-semibold text-slate-600 hover:bg-slate-900/5 hover:text-slate-900 transition-colors"
                 >
                   <KeyRound className="h-4 w-4" />
                   Change Password
                 </button>
                 <button
                   onClick={handleLogout}
-                  className="flex w-full items-center gap-2.5 border-t border-white/40 px-3 py-2.5 text-left text-xs font-bold text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors"
+                  className="flex w-full items-center gap-2.5 border-t border-white/40 px-3 py-2.5 text-left text-xs font-semibold text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors"
                 >
                   <LogOut className="h-4 w-4" />
                   Logout
