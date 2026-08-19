@@ -156,6 +156,19 @@ export default function VolunteersPage() {
       ),
     },
     { key: "createdAt", header: "Joined", render: (v) => formatDateTime(v.createdAt) },
+    {
+      key: "actions",
+      header: "",
+      render: (v) => (
+        <button
+          onClick={(e) => { e.stopPropagation(); handleDelete(v); }}
+          disabled={busyId === v._id}
+          className="rounded-lg border border-red-200 px-2.5 py-1 text-[11px] font-semibold text-red-600 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          Delete
+        </button>
+      ),
+    },
   ];
 
   return (
