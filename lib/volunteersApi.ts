@@ -14,6 +14,9 @@ export const volunteersApi = {
   pdf: (id: string) => api.getBlob(`/volunteers/admin/${id}/pdf`),
   updateStatus: (id: string, status: VolunteerStatus) =>
     api.patch<VolunteerSummary>(`/volunteers/admin/${id}/status`, { status }),
+  updateOfficeUse: (id: string, input: { verified?: boolean; assignedRole?: string; assignedArea?: string; joiningDate?: string | null }) =>
+    api.patch<VolunteerSummary>(`/volunteers/admin/${id}/office-use`, input),
   assignToCase: (caseId: string, volunteerId: string, role: AssignmentRole, note?: string) =>
     api.post<CaseVolunteerAssignment>(`/cases/admin/${caseId}/volunteers`, { volunteerId, role, note }),
+  remove: (id: string) => api.delete<null>(`/volunteers/admin/${id}`),
 };

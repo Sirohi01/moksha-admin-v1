@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import Table, { Column } from "@/components/ui/Table";
 import Badge from "@/components/ui/Badge";
 import Modal from "@/components/ui/Modal";
-import { Select } from "@/components/ui/Input";
+import Button from "@/components/ui/Button";
+import { Input, Select } from "@/components/ui/Input";
 import { volunteersApi } from "@/lib/volunteersApi";
 import { VolunteerSummary, VolunteerStatus } from "@/lib/types";
 import { VOLUNTEER_STATUS_META, VOLUNTEER_AVAILABILITY_META, formatDate, formatDateTime } from "@/lib/statusMeta";
@@ -24,6 +25,44 @@ export default function VolunteersPage() {
   const [busyId, setBusyId] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [selected, setSelected] = useState<VolunteerSummary | null>(null);
+  const [officeForm, setOfficeForm] = useState({ verified: false, assignedRole: "", assignedArea: "", joiningDate: "" });
+  const [officeSaving, setOfficeSaving] = useState(false);
+  const [officeError, setOfficeError] = useState("");
+
+  // Re-sync the office-use form only when a *different* volunteer is opened, not on every
+  // `selected` update — otherwise an in-progress edit would get clobbered the moment the row list
+  // silently refreshes in the background (e.g. after saving) while the modal is still open.
+  useEffect(() => {
+    if (!selected) return;
+    setOfficeForm({
+      verified: selected.verified,
+      assignedRole: selected.assignedRole ?? "",
+      assignedArea: selected.assignedArea ?? "",
+      joiningDate: selected.joiningDate ? selected.joiningDate.slice(0, 10) : "",
+    });
+    setOfficeError("");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selected?._id]);
+
+  const saveOfficeUse = async () => {
+    if (!selected) return;
+    setOfficeSaving(true);
+    setOfficeError("");
+    try {
+      const updated = await volunteersApi.updateOfficeUse(selected._id, {
+        verified: officeForm.verified,
+        assignedRole: officeForm.assignedRole,
+        assignedArea: officeForm.assignedArea,
+        joiningDate: officeForm.joiningDate || null,
+      });
+      setSelected(updated);
+      setVolunteers((current) => current.map((v) => (v._id === updated._id ? updated : v)));
+    } catch (err) {
+      setOfficeError(err instanceof ApiRequestError ? err.message : "Could not update this volunteer's record.");
+    } finally {
+      setOfficeSaving(false);
+    }
+  };
 
   const load = async () => {
     setLoading(true);
@@ -32,6 +71,21 @@ export default function VolunteersPage() {
       setVolunteers(data);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDelete = async (volunteer: VolunteerSummary) => {
+    if (!window.confirm(`Delete ${volunteer.name ?? "this volunteer"}? This also removes their login account and cannot be undone.`)) return;
+    setBusyId(volunteer._id);
+    setError("");
+    try {
+      await volunteersApi.remove(volunteer._id);
+      setVolunteers((current) => current.filter((v) => v._id !== volunteer._id));
+      setSelected(null);
+    } catch (err) {
+      setError(err instanceof ApiRequestError ? err.message : "Could not delete this volunteer.");
+    } finally {
+      setBusyId(null);
     }
   };
 
@@ -150,6 +204,13 @@ export default function VolunteersPage() {
               <button onClick={() => handlePrint(selected)} className="ml-auto rounded-lg bg-accent px-3 py-2 text-xs font-semibold text-white hover:opacity-90">
                 Download Registration PDF
               </button>
+              <button
+                onClick={() => handleDelete(selected)}
+                disabled={busyId === selected._id}
+                className="rounded-lg border border-red-200 px-3 py-2 text-xs font-semibold text-red-600 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                Delete
+              </button>
             </div>
             <div className="grid grid-cols-2 gap-3 text-xs sm:grid-cols-3">
               <Field label="Phone" value={selected.phone} />
@@ -205,6 +266,49 @@ export default function VolunteersPage() {
                 <p className="text-text-secondary">{selected.experience}</p>
               </div>
             )}
+
+            <div className="rounded-lg border border-surface-border bg-surface-sunken p-3">
+              <div className="mb-2 flex items-center justify-between">
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-text-muted">For Office Use Only</p>
+                {selected.code && <span className="text-[11px] font-mono text-text-muted">{selected.code}</span>}
+              </div>
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                <label className="flex items-center gap-2 text-xs font-medium text-text-primary">
+                  <input
+                    type="checkbox"
+                    checked={officeForm.verified}
+                    onChange={(e) => setOfficeForm({ ...officeForm, verified: e.target.checked })}
+                    className="h-4 w-4 rounded accent-accent"
+                  />
+                  Verified
+                </label>
+                <Input
+                  label="Assigned Role"
+                  value={officeForm.assignedRole}
+                  onChange={(e) => setOfficeForm({ ...officeForm, assignedRole: e.target.value })}
+                />
+                <Input
+                  label="Assigned Area"
+                  value={officeForm.assignedArea}
+                  onChange={(e) => setOfficeForm({ ...officeForm, assignedArea: e.target.value })}
+                />
+                <Input
+                  label="Joining / Orientation Date"
+                  type="date"
+                  value={officeForm.joiningDate}
+                  onChange={(e) => setOfficeForm({ ...officeForm, joiningDate: e.target.value })}
+                  hint={`Leave blank to use the registration date (${formatDate(selected.createdAt)}).`}
+                />
+                <div>
+                  <p className="mb-1 block text-[11px] font-semibold uppercase tracking-wide text-text-secondary">Approved By</p>
+                  <p className="pt-2 text-xs text-text-primary">
+                    {selected.verified ? selected.approvedByName ?? "—" : "Not yet verified"}
+                  </p>
+                </div>
+              </div>
+              {officeError && <p className="mt-2 text-[11px] font-medium text-red-600">{officeError}</p>}
+              <Button size="sm" className="mt-3" loading={officeSaving} onClick={saveOfficeUse}>Save Office Use Details</Button>
+            </div>
           </div>
         )}
       </Modal>

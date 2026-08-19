@@ -233,6 +233,12 @@ export interface VolunteerSummary {
   declarationAccepted?: boolean;
   photographUrl?: string;
   idProofUrl?: string;
+  code?: string;
+  verified: boolean;
+  assignedRole?: string;
+  assignedArea?: string;
+  approvedByName?: string;
+  joiningDate?: string;
   createdAt: string;
 }
 
