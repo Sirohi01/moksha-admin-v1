@@ -17,10 +17,26 @@ const TABS: { key: EnquiryStatus | ""; label: string }[] = [
   { key: "closed", label: "Closed" },
 ];
 
+const SOURCE_TABS = [
+  { key: "", label: "All Sources" },
+  { key: "contact", label: "Contact" },
+  { key: "csr", label: "CSR" },
+  { key: "partnership", label: "Partnership" },
+  { key: "unclaimed_body", label: "Unclaimed Body" },
+] as const;
+
+const SOURCE_LABELS: Record<Enquiry["category"], string> = {
+  contact: "Contact",
+  csr: "CSR",
+  partnership: "Partnership",
+  unclaimed_body: "Unclaimed Body",
+};
+
 export default function EnquiriesPage() {
   const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<EnquiryStatus | "">("");
+  const [source, setSource] = useState<Enquiry["category"] | "">("");
   const [selected, setSelected] = useState<Enquiry | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -36,7 +52,7 @@ export default function EnquiriesPage() {
 
   useEffect(load, []);
 
-  const visible = tab ? enquiries.filter((e) => e.status === tab) : enquiries;
+  const visible = enquiries.filter((e) => (!tab || e.status === tab) && (!source || (e.category ?? "contact") === source));
 
   const handleStatusChange = async (id: string, status: EnquiryStatus) => {
     setBusy(true);
@@ -53,6 +69,7 @@ export default function EnquiriesPage() {
   };
 
   const columns: Column<Enquiry>[] = [
+    { key: "category", header: "Source", render: (e) => <Badge tone="neutral">{SOURCE_LABELS[e.category ?? "contact"]}</Badge> },
     { key: "name", header: "Name", render: (e) => <span className="font-medium">{e.name}</span> },
     { key: "phone", header: "Phone", render: (e) => e.phone },
     { key: "email", header: "Email", render: (e) => e.email ?? "—" },
@@ -69,7 +86,7 @@ export default function EnquiriesPage() {
     <div className="space-y-4">
       <div>
         <h1 className="text-lg font-semibold text-text-primary">Enquiries</h1>
-        <p className="text-xs text-text-muted">Messages submitted through the website contact form.</p>
+        <p className="text-xs text-text-muted">Contact, CSR, partnership and unclaimed-body requests submitted through the website.</p>
       </div>
 
       {error && <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-xs font-medium text-red-700">{error}</div>}
@@ -88,12 +105,24 @@ export default function EnquiriesPage() {
         ))}
       </div>
 
+      <div className="flex flex-wrap gap-1.5">
+        {SOURCE_TABS.map((item) => (
+          <button key={item.key} onClick={() => setSource(item.key)} className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${source === item.key ? "bg-slate-700 text-white" : "bg-surface-card text-text-secondary hover:bg-surface-sunken"}`}>
+            {item.label}
+          </button>
+        ))}
+      </div>
+
       <Table columns={columns} rows={visible} rowKey={(e) => e._id} loading={loading} emptyMessage="No enquiries yet." onRowClick={setSelected} />
 
       <Modal isOpen={!!selected} onClose={() => setSelected(null)} title={selected?.name ?? "Enquiry"}>
         {selected && (
           <div className="space-y-3 text-sm">
             <div className="grid grid-cols-2 gap-3 text-xs">
+              <div>
+                <p className="font-semibold uppercase tracking-wide text-text-muted">Source</p>
+                <p className="text-text-primary">{SOURCE_LABELS[selected.category ?? "contact"]}</p>
+              </div>
               <div>
                 <p className="font-semibold uppercase tracking-wide text-text-muted">Phone</p>
                 <p className="text-text-primary">{selected.phone}</p>
@@ -105,10 +134,21 @@ export default function EnquiriesPage() {
                 </div>
               )}
             </div>
+            {(selected.organization || selected.designation || selected.interest || selected.city || selected.authority || selected.reference) && (
+              <div className="grid grid-cols-2 gap-3 rounded-lg bg-surface-sunken p-3 text-xs">
+                {selected.organization && <div><p className="font-semibold uppercase tracking-wide text-text-muted">Organisation</p><p>{selected.organization}</p></div>}
+                {selected.designation && <div><p className="font-semibold uppercase tracking-wide text-text-muted">Designation</p><p>{selected.designation}</p></div>}
+                {selected.interest && <div><p className="font-semibold uppercase tracking-wide text-text-muted">Interest</p><p>{selected.interest}</p></div>}
+                {selected.city && <div><p className="font-semibold uppercase tracking-wide text-text-muted">City / Area</p><p>{selected.city}</p></div>}
+                {selected.authority && <div><p className="font-semibold uppercase tracking-wide text-text-muted">Hospital / Authority</p><p>{selected.authority}</p></div>}
+                {selected.reference && <div><p className="font-semibold uppercase tracking-wide text-text-muted">Case Reference</p><p>{selected.reference}</p></div>}
+              </div>
+            )}
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-wide text-text-muted">Message</p>
               <p className="text-text-primary">{selected.message}</p>
             </div>
+            {selected.documentUrl && <a href={selected.documentUrl} target="_blank" rel="noreferrer" className="inline-flex text-xs font-semibold text-accent hover:underline">View supporting document</a>}
             <Select
               label="Status"
               value={selected.status}

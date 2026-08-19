@@ -57,6 +57,14 @@ export interface Enquiry {
   phone: string;
   email?: string;
   message: string;
+  category: "contact" | "csr" | "partnership" | "unclaimed_body";
+  organization?: string;
+  designation?: string;
+  interest?: string;
+  city?: string;
+  authority?: string;
+  reference?: string;
+  documentUrl?: string;
   status: EnquiryStatus;
   createdAt: string;
 }
