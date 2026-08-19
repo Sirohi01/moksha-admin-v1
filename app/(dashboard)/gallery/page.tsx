@@ -122,7 +122,7 @@ export default function GalleryAdminPage() {
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{pagedItems.map((item) => <article key={item._id} className="overflow-hidden rounded-lg border border-surface-border">
           {item.type === "image" ? <img src={item.url} alt={item.alt} loading="lazy" className="aspect-video w-full object-cover" /> : <video src={item.url} poster={item.thumbnailUrl} preload="metadata" className="aspect-video w-full bg-black object-cover" />}
           <div className="space-y-2 p-3"><p className="truncate text-sm font-semibold">{item.caption || item.alt}</p><p className="line-clamp-2 text-xs text-text-muted">Alt: {item.alt}</p>
-            <div className="flex items-center justify-between"><span className={`text-xs ${item.isActive ? "text-green-700" : "text-text-muted"}`}>{item.isActive ? "Published" : "Hidden"}{item.type === "image" ? ` · ${item.downloadCount ?? 0} downloads` : ""}</span><div className="flex gap-1">
+            <div className="flex items-center justify-between"><span className={`text-xs ${item.isActive ? "text-green-700" : "text-text-muted"}`}>{item.isActive ? "Published" : "Hidden"} · {item.downloadCount ?? 0} downloads</span><div className="flex gap-1">
               <button onClick={() => openEdit(item)} className="rounded p-1.5 hover:bg-surface-sunken" aria-label="Edit"><Pencil className="h-4 w-4" /></button>
               <button onClick={() => remove(item)} className="rounded p-1.5 text-red-600 hover:bg-red-50" aria-label="Delete"><Trash2 className="h-4 w-4" /></button>
             </div></div></div></article>)}</div>}
