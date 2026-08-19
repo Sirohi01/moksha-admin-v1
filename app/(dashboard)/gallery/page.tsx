@@ -21,6 +21,12 @@ export default function GalleryAdminPage() {
   const [items, setItems] = useState<GalleryItem[]>([]);
   const [filter, setFilter] = useState<GalleryType>("image");
   const [loading, setLoading] = useState(true);
+  const [singleFile, setSingleFile] = useState<File | null>(null);
+  const [singleAlt, setSingleAlt] = useState("");
+  const [singleCaption, setSingleCaption] = useState("");
+  const [singleCategory, setSingleCategory] = useState("");
+  const [singleUploading, setSingleUploading] = useState(false);
+  const [singleFileInputKey, setSingleFileInputKey] = useState(0);
   const [drafts, setDrafts] = useState<Draft[]>([]);
   const [bulkAlt, setBulkAlt] = useState("");
   const [bulkCategory, setBulkCategory] = useState("");
@@ -47,6 +53,27 @@ export default function GalleryAdminPage() {
     if (!files) return;
     setDrafts(Array.from(files).map((file) => ({ file })));
     setError("");
+  };
+
+  const singleUpload = async () => {
+    if (!singleFile) { setError("Choose a file to upload."); return; }
+    if (singleAlt.trim().length < 3) { setError("Enter alt text for this file."); return; }
+    setSingleUploading(true); setError("");
+    try {
+      const uploaded = await uploadApi.file(singleFile, `moksha-sewa/gallery/${filter}s`);
+      await galleryApi.create({
+        ...EMPTY, type: filter, url: uploaded.url, publicId: uploaded.publicId,
+        alt: singleAlt.trim(), caption: singleCaption.trim() || singleAlt.trim(),
+        category: singleCategory.trim(), sortOrder: items.length,
+      });
+      setSingleFile(null); setSingleAlt(""); setSingleCaption(""); setSingleCategory("");
+      setSingleFileInputKey((key) => key + 1);
+      load();
+    } catch (e) {
+      setError(e instanceof ApiRequestError ? e.message : "Could not upload this file.");
+    } finally {
+      setSingleUploading(false);
+    }
   };
 
   const bulkUpload = async () => {
@@ -96,10 +123,33 @@ export default function GalleryAdminPage() {
     <div><h1 className="text-lg font-semibold text-text-primary">Gallery Media</h1>
       <p className="text-xs text-text-muted">Bulk upload images and videos to Cloudinary. Alt text is required for every item.</p></div>
     <div className="flex gap-2">{(["image", "video"] as GalleryType[]).map((type) =>
-      <Button key={type} size="sm" variant={filter === type ? "primary" : "secondary"} onClick={() => { setFilter(type); setDrafts([]); setBulkAlt(""); setBulkCategory(""); }}>
+      <Button key={type} size="sm" variant={filter === type ? "primary" : "secondary"} onClick={() => { setFilter(type); setDrafts([]); setBulkAlt(""); setBulkCategory(""); setSingleFile(null); setSingleAlt(""); setSingleCaption(""); setSingleCategory(""); }}>
         {type === "image" ? "Photo Gallery" : "Video Gallery"}
       </Button>)}</div>
     {error && <div className="flex items-center justify-between gap-3 rounded-lg border border-red-200 bg-red-50 p-3 text-xs text-red-700"><span>{error}</span>{!loading && <Button size="sm" variant="secondary" onClick={load}>Try Again</Button>}</div>}
+    <Card><h2 className="mb-1 text-sm font-semibold">Single upload</h2>
+      <p className="mb-3 text-xs text-text-muted">Upload one {filter} with its own alt text, caption and category.</p>
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div>
+          <label className="mb-1 block text-[11px] font-semibold uppercase tracking-wide text-text-secondary">File</label>
+          <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-dashed border-surface-border bg-surface-sunken px-3 py-2 text-xs font-medium text-text-secondary hover:border-accent">
+            <Upload className="h-4 w-4 shrink-0" />
+            <span className="truncate">{singleFile ? singleFile.name : `Choose a ${filter} file`}</span>
+            <input
+              key={singleFileInputKey}
+              className="hidden"
+              type="file"
+              accept={filter === "image" ? "image/jpeg,image/png,image/webp,image/gif" : "video/mp4,video/webm"}
+              onChange={(e) => { setSingleFile(e.target.files?.[0] ?? null); setError(""); }}
+            />
+          </label>
+        </div>
+        <Input label="Alt Text" required value={singleAlt} onChange={(e) => setSingleAlt(e.target.value)} placeholder="Describe this file" />
+        <Input label="Title / Caption" value={singleCaption} onChange={(e) => setSingleCaption(e.target.value)} placeholder="Optional — falls back to alt text" />
+        <Input label="Category" value={singleCategory} onChange={(e) => setSingleCategory(e.target.value)} placeholder="Optional" />
+      </div>
+      <Button className="mt-3" onClick={singleUpload} loading={singleUploading}><Upload className="h-4 w-4" /> Upload</Button>
+    </Card>
     <Card><div className="flex flex-wrap items-center justify-between gap-3">
       <div><h2 className="text-sm font-semibold">Bulk upload {filter}s</h2><p className="text-xs text-text-muted">{filter === "image" ? "JPG, PNG, WebP or GIF" : "MP4 or WebM"}; up to 100MB each.</p></div>
       <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-accent px-3 py-2 text-xs font-semibold text-white">

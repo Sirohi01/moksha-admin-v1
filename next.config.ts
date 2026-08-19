@@ -1,7 +1,37 @@
 import type { NextConfig } from "next";
 
+const apiOrigin = new URL(process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000").origin;
+const scriptSrcEval = process.env.NODE_ENV === "production" ? "" : " 'unsafe-eval'";
+
+const csp = [
+  "default-src 'self'",
+  `script-src 'self' 'unsafe-inline'${scriptSrcEval}`,
+  "style-src 'self' 'unsafe-inline'",
+  // https: (not just 'self') for map tiles (react-leaflet / OpenStreetMap) and Cloudinary media.
+  "img-src 'self' data: https:",
+  "font-src 'self' data:",
+  `connect-src 'self' ${apiOrigin}`,
+  "frame-src 'none'",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'none'",
+  "upgrade-insecure-requests",
+].join("; ");
+
+const securityHeaders = [
+  { key: "Content-Security-Policy", value: csp },
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "X-Frame-Options", value: "DENY" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), usb=()" },
+  { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains" },
+];
+
 const nextConfig: NextConfig = {
-  /* config options here */
+  async headers() {
+    return [{ source: "/:path*", headers: securityHeaders }];
+  },
 };
 
 export default nextConfig;

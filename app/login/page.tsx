@@ -159,7 +159,7 @@ export default function LoginPage() {
         {/* Right Logo: Moksha Sewa */}
         <div className="pointer-events-auto">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="https://mokshasewa.org/logo.png" alt="Moksha Sewa" className="h-12 sm:h-16 md:h-24 lg:h-28 w-auto object-contain drop-shadow-md mt-2 sm:mt-4" />
+          <img src="/moksha-sewa-logo.png" alt="Moksha Sewa" className="h-12 sm:h-16 md:h-24 lg:h-28 w-auto object-contain drop-shadow-md mt-2 sm:mt-4" />
         </div>
       </div>
 
