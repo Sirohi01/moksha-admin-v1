@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
 import Spinner from "./Spinner";
 import EmptyState from "./EmptyState";
 import { Inbox } from "lucide-react";
@@ -17,6 +20,7 @@ interface TableProps<T> {
   loading?: boolean;
   emptyMessage?: string;
   onRowClick?: (row: T) => void;
+  pageSize?: number;
 }
 
 const ALIGN_CLASSES = { left: "text-left", right: "text-right", center: "text-center" };
@@ -28,7 +32,12 @@ export default function Table<T>({
   loading,
   emptyMessage = "Nothing here yet.",
   onRowClick,
+  pageSize = 10,
 }: TableProps<T>) {
+  const [page, setPage] = useState(1);
+  const totalPages = Math.max(1, Math.ceil(rows.length / pageSize));
+  useEffect(() => setPage(1), [rows.length, pageSize]);
+  const pageRows = useMemo(() => rows.slice((page - 1) * pageSize, page * pageSize), [rows, page, pageSize]);
   if (loading) {
     return (
       <div className="border border-surface-border bg-surface-card">
@@ -58,7 +67,7 @@ export default function Table<T>({
             </tr>
           </thead>
           <tbody>
-            {rows.map((row) => (
+            {pageRows.map((row) => (
               <tr
                 key={rowKey(row)}
                 onClick={onRowClick ? () => onRowClick(row) : undefined}
@@ -77,6 +86,16 @@ export default function Table<T>({
           </tbody>
         </table>
       </div>
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between border-t border-surface-border px-3 py-2 text-xs text-text-muted">
+          <span>{(page - 1) * pageSize + 1}–{Math.min(page * pageSize, rows.length)} of {rows.length}</span>
+          <div className="flex items-center gap-2">
+            <button type="button" disabled={page === 1} onClick={() => setPage((value) => value - 1)} className="rounded border border-surface-border px-2.5 py-1 disabled:opacity-40">Previous</button>
+            <span>Page {page} of {totalPages}</span>
+            <button type="button" disabled={page === totalPages} onClick={() => setPage((value) => value + 1)} className="rounded border border-surface-border px-2.5 py-1 disabled:opacity-40">Next</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

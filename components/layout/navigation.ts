@@ -17,6 +17,7 @@ import {
   ShieldCheck,
   UserCog,
   History,
+  Images,
 } from "lucide-react";
 
 export interface NavItem {
@@ -52,6 +53,7 @@ export const NAV_SECTIONS: NavSection[] = [
   {
     title: "Masters",
     items: [
+      { label: "Gallery Media", href: "/gallery", icon: Images },
       { label: "Vehicles", href: "/vehicles", icon: Truck },
       { label: "Service Providers", href: "/service-providers", icon: Wrench },
       { label: "Expense Categories", href: "/expense-categories", icon: Receipt },
