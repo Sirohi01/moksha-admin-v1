@@ -63,6 +63,7 @@ export default function GalleryAdminPage() {
       const uploaded = await uploadApi.file(singleFile, `moksha-sewa/gallery/${filter}s`);
       await galleryApi.create({
         ...EMPTY, type: filter, url: uploaded.url, publicId: uploaded.publicId,
+        thumbnailUrl: filter === "video" ? uploaded.url.replace(/\.[^/.]+$/, ".jpg") : undefined,
         alt: singleAlt.trim(), caption: singleCaption.trim() || singleAlt.trim(),
         category: singleCategory.trim(), sortOrder: items.length,
       });
@@ -89,8 +90,9 @@ export default function GalleryAdminPage() {
       try {
         const uploaded = await uploadApi.file(draft.file, `moksha-sewa/gallery/${filter}s`);
         await galleryApi.create({
-          ...EMPTY, type: filter, url: uploaded.url, publicId: uploaded.publicId, alt: bulkAlt.trim(),
-          caption: bulkAlt.trim(), category: bulkCategory.trim(), sortOrder: items.length + index,
+          ...EMPTY, type: filter, url: uploaded.url, publicId: uploaded.publicId,
+          thumbnailUrl: filter === "video" ? uploaded.url.replace(/\.[^/.]+$/, ".jpg") : undefined,
+          alt: bulkAlt.trim(), caption: bulkAlt.trim(), category: bulkCategory.trim(), sortOrder: items.length + index,
         });
       } catch { failures.push(draft.file.name); }
     }

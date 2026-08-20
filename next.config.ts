@@ -9,8 +9,9 @@ const csp = [
   "style-src 'self' 'unsafe-inline'",
   // https: (not just 'self') for map tiles (react-leaflet / OpenStreetMap) and Cloudinary media.
   "img-src 'self' data: https:",
+  "media-src 'self' https://res.cloudinary.com",
   "font-src 'self' data:",
-  `connect-src 'self' ${apiOrigin}`,
+  `connect-src 'self' ${apiOrigin} https://res.cloudinary.com`,
   "frame-src 'none'",
   "object-src 'none'",
   "base-uri 'self'",
