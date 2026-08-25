@@ -5,6 +5,7 @@ export interface LandingSectionItem {
   description?: string;
   image?: string;
   href?: string;
+  features?: string[];
 }
 
 export interface LandingHeroSlide {
@@ -45,10 +46,33 @@ export interface LandingSectionContent {
   regionDescription?: string;
   phoneLabel?: string;
   phoneNumber?: string;
+  contactEmail?: string;
+  contactAddress?: string;
+  availabilityText?: string;
+  actionTitle?: string;
+  requestTitle?: string;
+  requestDescription?: string;
+  inputPlaceholder?: string;
+  submitLabel?: string;
+  submittedLabel?: string;
+  successMessage?: string;
+  initiativeLabel?: string;
+  quickLinksTitle?: string;
+  servicesTitle?: string;
+  initiativesTitle?: string;
+  contactTitle?: string;
+  sloganTitle?: string;
+  immediateHelpTitle?: string;
+  immediateHelpDescription?: string;
+  supportNowLabel?: string;
+  supportMissionTitle?: string;
+  supportMissionDescription?: string;
   buttonLabel?: string;
   buttonHref?: string;
   secondaryButtonLabel?: string;
   secondaryButtonHref?: string;
+  tertiaryButtonLabel?: string;
+  tertiaryButtonHref?: string;
   slides?: LandingHeroSlide[];
   items?: LandingSectionItem[];
 }
@@ -63,12 +87,10 @@ export const defaultLandingSections: LandingSectionContent[] = [
     subtitle: "Supporting weaker families with compassionate last-rites assistance.",
     description: "Moksha Sewa team helping a helpless family with a dignified final journey",
     image: "/hero-images/dignity-in-every-final-journey-bg.png",
+    logoImage: "/hero-images/image6.png",
+    initiativeLabel: "An Initiative of Namo Gange Trust",
     buttonLabel: "Request Sewa Help",
     buttonHref: "/request-help",
-      supportTitle: "We are here to support with care, respect and compassion.",
-      supportDescription: "You are not alone. We are with you.",
-      regionTitle: "Delhi • Ghaziabad • Noida",
-      regionDescription: "Currently serving with care in",
     secondaryButtonLabel: "Support This Mission",
     secondaryButtonHref: "/donation",
     slides: [
@@ -123,13 +145,19 @@ export const defaultLandingSections: LandingSectionContent[] = [
     eyebrow: "Our Sewa",
     title: "Essential Support for a\nDignified Final Journey",
     image: "/assets/km.jpeg",
+    sloganTitle: "Together, We Serve with Dignity",
+    immediateHelpTitle: "Need Immediate Help?",
+    immediateHelpDescription: "Our team is available 24x7 to support you.",
+    supportNowLabel: "Support Now",
+    supportMissionTitle: "Support Our Mission",
+    supportMissionDescription: "Your support can bring dignity to many final journeys.",
     description:
       "Moksha Sewa ensures that every individual—regardless of their circumstances—receives a respectful and dignified farewell with complete care and compassion.",
     items: [
-      { title: "Ambulance &\nFinal Journey Van", description: "Respectful transport for the\ndeceased from hospital/home\nto cremation ground.", image: "/assets/how-we-help/one.png" },
-      { title: "Cremation\nCoordination", description: "Support in arranging cremation\nground coordination and\nrequired formalities.", image: "/assets/how-we-help/two.png" },
-      { title: "Ritual &\nPriest Support", description: "Priest, wood, cloth, flowers\nand all ritual essentials\narranged.", image: "/assets/how-we-help/pandit.png" },
-      { title: "Family &\nOn-Ground Support", description: "Guidance, volunteers and\ndocumentation assistance\nat every step.", image: "/assets/how-we-help/three.png" },
+      { title: "Ambulance &\nFinal Journey Van", description: "Respectful transport for the\ndeceased from hospital/home\nto cremation ground.", image: "/assets/how-we-help/one.png", features: ["24x7 Availability", "Safe & Timely Transport", "Trained & Verified Partners"] },
+      { title: "Cremation\nCoordination", description: "Support in arranging cremation\nground coordination and\nrequired formalities.", image: "/assets/how-we-help/two.png", features: ["Cremation Ground Support", "Essential Arrangements", "Clean & Respectful Process"] },
+      { title: "Ritual &\nPriest Support", description: "Priest, wood, cloth, flowers\nand all ritual essentials\narranged.", image: "/assets/how-we-help/pandit.png", features: ["Experienced Priests", "Ritual Essentials", "As Per Tradition & Customs"] },
+      { title: "Family &\nOn-Ground Support", description: "Guidance, volunteers and\ndocumentation assistance\nat every step.", image: "/assets/how-we-help/three.png", features: ["Volunteer Support", "Documentation Help", "Emotional Support"] },
       { title: "For Everyone", description: "We serve unclaimed bodies, elderly alone, and families in financial distress." },
       { title: "Delhi • Ghaziabad • Noida", description: "Expanding our network and reach to support more vulnerable people in need." },
       { title: "Zero Financial Burden", description: "Our services are completely free for all those who are unable to afford them." },
@@ -147,6 +175,10 @@ export const defaultLandingSections: LandingSectionContent[] = [
       "During a difficult final journey, families may need more than arrangements—they may need guidance, coordination and someone willing to stand beside them.",
     buttonLabel: "Request Sewa Support",
     buttonHref: "/request-help",
+    supportTitle: "We are here to support with care, respect and compassion.",
+    supportDescription: "You are not alone. We are with you.",
+    regionTitle: "Delhi • Ghaziabad • Noida",
+    regionDescription: "Currently serving with care in",
     items: [
       { title: "Verified Support", description: "For eligible cases" },
       { title: "Guided Assistance", description: "With sensitivity\nand respect" },
@@ -302,6 +334,8 @@ export const defaultLandingSections: LandingSectionContent[] = [
     image: "/hero-images/one-final-act-humanity.png",
     logoImage: "/assets/footer-moksha-mark.png",
     partnerLogoImage: "/hero-images/namo-gange-logo.webp",
+    secondaryTitle: "Moksha Sewa",
+    initiativeLabel: "A Namo Gange Trust Initiative",
     buttonLabel: "Request Sewa Help",
     buttonHref: "/request-help",
     secondaryButtonLabel: "Support This Mission",
@@ -314,6 +348,8 @@ export const defaultLandingSections: LandingSectionContent[] = [
     eyebrow: "Help & Information",
     title: "Frequently Asked Questions",
     description: "Find quick answers to common questions about Moksha Sewa, our services and how you can get involved.",
+    image: "/assets/faq/bg.png",
+    logoImage: "/assets/logo-moksha-seva.png",
     items: [
       {
         title: "Who can request Moksha Sewa support?",
@@ -358,6 +394,27 @@ export const defaultLandingSections: LandingSectionContent[] = [
     image: "/assets/footer-ghat-sunset.png",
     logoImage: "/assets/footer-moksha-mark.png",
     partnerLogoImage: "/assets/namo-gange-logo.webp",
+    secondaryImage: "/assets/request_support.webp",
+    actionTitle: "Stand with dignity. Serve with compassion.",
+    contactAddress: "Delhi • Ghaziabad • Noida, India",
+    phoneNumber: "9220147229",
+    contactEmail: "info@mokshasewa.org",
+    availabilityText: "We are available\n24/7 for you",
+    quickLinksTitle: "Quick Links",
+    servicesTitle: "Our Services",
+    initiativesTitle: "Our Initiatives",
+    contactTitle: "Contact Us",
+    requestTitle: "Request Support",
+    requestDescription: "Share your email and our support team will contact you.",
+    inputPlaceholder: "Your email address",
+    submitLabel: "Send Request",
+    submittedLabel: "Submitted",
+    successMessage: "Thank you for reaching out. Our support team will contact you shortly.",
+    secondaryButtonLabel: "Request Help",
+    secondaryButtonHref: "/request-help",
+    tertiaryButtonLabel: "Become a Volunteer",
+    tertiaryButtonHref: "/volunteer/register",
+    initiativeLabel: "An Initiative of Namo Gange Trust",
     buttonLabel: "Donate Now",
     buttonHref: "/donation",
     items: [
@@ -373,6 +430,11 @@ export const defaultLandingSections: LandingSectionContent[] = [
     name: "Topbar",
     enabled: true,
     title: "Sewa Available in Delhi • Ghaziabad • Noida | 24×7 Last-Rites Assistance | Unclaimed & Needy Family Support",
+    secondaryTitle: "Login",
+    items: [
+      { label: "User Login", href: "/login" },
+      { label: "Admin Login", href: "admin" },
+    ],
   },
   {
     key: "navbar",
@@ -380,11 +442,11 @@ export const defaultLandingSections: LandingSectionContent[] = [
     enabled: true,
     image: "/assets/logo-moksha-seva.png",
     items: [
-      { label: "Home", href: "/" }, { label: "About Us", href: "/about" },
+      { label: "Home", href: "/" }, { label: "About Us", href: "/about" }, { label: "Sewa & Support", href: "#services" },
       { label: "Ground Support", href: "/prayerhallservices" }, { label: "Support for Needy Families", href: "/specialservices" }, { label: "Ambulance & Body Transport", href: "/ambulanceservices" }, { label: "Ritual Material Support", href: "/furalservices" }, { label: "Priest & Ritual Guidance", href: "/panditservices" }, { label: "Unclaimed Body Sewa", href: "/unclaimed-body-sewa" },
-      { label: "Photo Gallery", href: "/mokshagallery" }, { label: "Videos", href: "/mokshavediogallery" },
-      { label: "Become a Volunteer", href: "/volunteer/register" }, { label: "CSR Partnership", href: "/csr" }, { label: "Partner With Us", href: "/partnership" },
-      { label: "How to Request Help", href: "/request-help" }, { label: "Blog & Awareness", href: "/blog" },
+      { label: "Our Work", href: "/mortal-records" }, { label: "Photo Gallery", href: "/mokshagallery" }, { label: "Videos", href: "/mokshavediogallery" },
+      { label: "Join Us", href: "/volunteer/register" }, { label: "Become a Volunteer", href: "/volunteer/register" }, { label: "CSR Partnership", href: "/csr" }, { label: "Partner With Us", href: "/partnership" },
+      { label: "Help & Information", href: "/request-help" }, { label: "How to Request Help", href: "/request-help" }, { label: "Blog & Awareness", href: "/blog" },
       { label: "Contact Us", href: "/contact" }, { label: "Request Help", href: "/request-help" }, { label: "Donate", href: "/donation" },
     ],
   },
@@ -406,10 +468,21 @@ export function mergeLandingSections(sections?: LandingSectionContent[]): Landin
     }
     if (!saved) return fallback;
     const items = fallback.items?.length
-      ? [
-          ...fallback.items.map((item, index) => ({ ...item, ...(saved.items?.[index] ?? {}) })),
-          ...(saved.items?.slice(fallback.items.length) ?? []),
-        ]
+      ? fallback.key === "navbar"
+        ? [
+            ...fallback.items.map((item) => ({
+              ...item,
+              ...(saved.items?.find((savedItem) => savedItem.href === item.href || savedItem.label === item.label) ?? {}),
+            })),
+            ...(saved.items?.filter(
+              (savedItem) =>
+                !fallback.items?.some((item) => item.href === savedItem.href || item.label === savedItem.label)
+            ) ?? []),
+          ]
+        : [
+            ...fallback.items.map((item, index) => ({ ...item, ...(saved.items?.[index] ?? {}) })),
+            ...(saved.items?.slice(fallback.items.length) ?? []),
+          ]
       : saved.items;
     const slides = fallback.slides?.length
       ? [
@@ -417,6 +490,139 @@ export function mergeLandingSections(sections?: LandingSectionContent[]): Landin
           ...(saved.slides?.slice(fallback.slides.length) ?? []),
         ]
       : saved.slides;
-    return { ...fallback, ...saved, items, slides, enabled: saved.enabled !== false };
+    return normalizeLandingSection({ ...fallback, ...saved, items, slides, enabled: saved.enabled !== false }, fallback);
   });
+}
+
+const genericTextLimits: Partial<Record<keyof LandingSectionContent, number>> = {
+  name: 80,
+  eyebrow: 70,
+  title: 120,
+  subtitle: 140,
+  description: 260,
+  quote: 260,
+  legalNotice: 200,
+  lowerTitle: 90,
+  lowerDescription: 220,
+  bottomStatement: 240,
+  secondaryTitle: 80,
+  secondaryDescription: 140,
+  supportTitle: 160,
+  supportDescription: 120,
+  regionTitle: 90,
+  regionDescription: 90,
+  phoneLabel: 40,
+  phoneNumber: 24,
+  contactEmail: 100,
+  contactAddress: 180,
+  availabilityText: 120,
+  actionTitle: 90,
+  requestTitle: 90,
+  requestDescription: 180,
+  inputPlaceholder: 70,
+  submitLabel: 40,
+  submittedLabel: 40,
+  successMessage: 180,
+  initiativeLabel: 90,
+  quickLinksTitle: 50,
+  servicesTitle: 50,
+  initiativesTitle: 50,
+  contactTitle: 50,
+  buttonLabel: 40,
+  secondaryButtonLabel: 40,
+  tertiaryButtonLabel: 40,
+  sloganTitle: 90,
+  immediateHelpTitle: 70,
+  immediateHelpDescription: 120,
+  supportNowLabel: 40,
+  supportMissionTitle: 70,
+  supportMissionDescription: 140,
+};
+
+const itemTextLimits: Partial<Record<keyof LandingSectionItem, number>> = {
+  title: 120,
+  label: 70,
+  value: 50,
+  description: 260,
+};
+
+const slideTextLimits: Partial<Record<keyof LandingHeroSlide, number>> = {
+  title: 110,
+  description: 160,
+  alt: 180,
+  buttonLabel: 40,
+  secondaryButtonLabel: 40,
+};
+
+function withEllipsis(value: string) {
+  const truncated = value
+    .trimEnd()
+    .replace(/[.\u2026]+$/g, "");
+  return `${truncated}...`;
+}
+
+function truncateText(value: string | undefined, limit: number, fallback?: string) {
+  if (!value) return value;
+  const next = value.trim();
+  const fallbackText = fallback?.trim();
+  if (fallbackText && next.startsWith(fallbackText) && next.slice(fallbackText.length).trim()) {
+    return withEllipsis(fallbackText);
+  }
+  if (value.length <= limit) return value;
+  return withEllipsis(value.slice(0, Math.max(0, limit - 3)));
+}
+
+function limitFromFallback(value: string | undefined, generic: number) {
+  return value ? Math.max(value.length, generic) : generic;
+}
+
+function normalizeLandingSection(section: LandingSectionContent, fallback: LandingSectionContent): LandingSectionContent {
+  const normalized: LandingSectionContent = { ...section };
+  (Object.keys(genericTextLimits) as (keyof LandingSectionContent)[]).forEach((key) => {
+    const value = normalized[key];
+    if (typeof value === "string") {
+      const fallbackValue = fallback[key] as string | undefined;
+      const limit = limitFromFallback(fallbackValue, genericTextLimits[key] ?? 160);
+      (normalized as unknown as Record<string, unknown>)[key] = truncateText(value, limit, fallbackValue);
+    }
+  });
+
+  normalized.items = section.items?.map((item, index) => {
+    const fallbackItem = fallback.items?.[index];
+    const next = { ...item };
+    (Object.keys(itemTextLimits) as (keyof LandingSectionItem)[]).forEach((key) => {
+      const value = next[key];
+      if (typeof value === "string") {
+        const fallbackValue = fallbackItem?.[key] as string | undefined;
+        (next as unknown as Record<string, unknown>)[key] = truncateText(
+          value,
+          limitFromFallback(fallbackValue, itemTextLimits[key] ?? 120),
+          fallbackValue
+        );
+      }
+    });
+    next.features = item.features?.map((feature, featureIndex) =>
+      truncateText(feature, limitFromFallback(fallbackItem?.features?.[featureIndex], 80), fallbackItem?.features?.[featureIndex]) ?? ""
+    );
+    return next;
+  });
+
+  normalized.slides = section.slides?.map((slide, index) => {
+    const fallbackSlide = fallback.slides?.[index];
+    const next = { ...slide };
+    (Object.keys(slideTextLimits) as (keyof LandingHeroSlide)[]).forEach((key) => {
+      const value = next[key];
+      if (typeof value === "string") {
+        const fallbackValue = fallbackSlide?.[key] as string | undefined;
+        (next as Record<string, unknown>)[key] = truncateText(
+          value,
+          limitFromFallback(fallbackValue, slideTextLimits[key] ?? 120),
+          fallbackValue
+        );
+      }
+    });
+    return next;
+  });
+
+  return normalized;
 }

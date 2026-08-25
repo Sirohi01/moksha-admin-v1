@@ -14,8 +14,175 @@ import { defaultLandingSections, mergeLandingSections, type LandingHeroSlide, ty
 
 const FOLDER = "moksha-sewa/website";
 
+const baseRenderedFields = new Set<keyof LandingSectionContent>([
+  "key",
+  "name",
+  "enabled",
+  "eyebrow",
+  "title",
+  "subtitle",
+  "description",
+  "image",
+  "buttonLabel",
+  "buttonHref",
+  "secondaryButtonLabel",
+  "secondaryButtonHref",
+  "tertiaryButtonLabel",
+  "tertiaryButtonHref",
+  "slides",
+  "items",
+]);
+
+const extraTextFields: { key: keyof LandingSectionContent; label: string; multiline?: boolean }[] = [
+  { key: "quote", label: "Quote", multiline: true },
+  { key: "legalNotice", label: "Legal Notice", multiline: true },
+  { key: "lowerTitle", label: "Lower Title" },
+  { key: "lowerDescription", label: "Lower Description", multiline: true },
+  { key: "bottomStatement", label: "Bottom Statement", multiline: true },
+  { key: "secondaryTitle", label: "Secondary Title" },
+  { key: "secondaryDescription", label: "Secondary Description", multiline: true },
+  { key: "supportTitle", label: "Support Title", multiline: true },
+  { key: "supportDescription", label: "Support Description", multiline: true },
+  { key: "regionTitle", label: "Region Title" },
+  { key: "regionDescription", label: "Region Description" },
+  { key: "phoneLabel", label: "Phone Label" },
+  { key: "phoneNumber", label: "Phone Number" },
+  { key: "contactEmail", label: "Contact Email" },
+  { key: "contactAddress", label: "Contact Address", multiline: true },
+  { key: "availabilityText", label: "Availability Text", multiline: true },
+  { key: "actionTitle", label: "Action Band Text" },
+  { key: "requestTitle", label: "Request Card Title" },
+  { key: "requestDescription", label: "Request Card Description", multiline: true },
+  { key: "inputPlaceholder", label: "Input Placeholder" },
+  { key: "submitLabel", label: "Submit Button Text" },
+  { key: "submittedLabel", label: "Submitted Button Text" },
+  { key: "successMessage", label: "Success Popup Message", multiline: true },
+  { key: "initiativeLabel", label: "Initiative Label" },
+  { key: "quickLinksTitle", label: "Quick Links Column Title" },
+  { key: "servicesTitle", label: "Services Column Title" },
+  { key: "initiativesTitle", label: "Initiatives Column Title" },
+  { key: "contactTitle", label: "Contact Column Title" },
+  { key: "sloganTitle", label: "Slogan Title" },
+  { key: "immediateHelpTitle", label: "Immediate Help Title" },
+  { key: "immediateHelpDescription", label: "Immediate Help Description", multiline: true },
+  { key: "supportNowLabel", label: "Support Now Label" },
+  { key: "supportMissionTitle", label: "Support Mission Title" },
+  { key: "supportMissionDescription", label: "Support Mission Description", multiline: true },
+];
+
+const extraImageFields: { key: keyof LandingSectionContent; label: string }[] = [
+  { key: "logoImage", label: "Logo Image" },
+  { key: "partnerLogoImage", label: "Partner Logo Image" },
+  { key: "secondaryLogoImage", label: "Secondary Logo Image" },
+  { key: "secondaryImage", label: "Secondary Image" },
+];
+
+const sectionSpecificRenderedFields: Record<string, (keyof LandingSectionContent)[]> = {
+  hero: ["logoImage"],
+  footer: ["logoImage", "partnerLogoImage"],
+  "trust-transparency": [
+    "quote",
+    "legalNotice",
+    "lowerTitle",
+    "lowerDescription",
+    "bottomStatement",
+    "logoImage",
+    "partnerLogoImage",
+    "secondaryLogoImage",
+    "secondaryImage",
+  ],
+  "final-act": ["logoImage", "partnerLogoImage"],
+  "family-need": ["supportTitle", "supportDescription", "regionTitle", "regionDescription"],
+  compassion: ["phoneLabel", "phoneNumber", "secondaryTitle", "secondaryDescription"],
+  "practical-support": [
+    "sloganTitle",
+    "immediateHelpTitle",
+    "immediateHelpDescription",
+    "supportNowLabel",
+    "supportMissionTitle",
+    "supportMissionDescription",
+  ],
+};
+
 function updateAt<T>(items: T[], index: number, updater: (item: T) => T): T[] {
   return items.map((item, itemIndex) => (itemIndex === index ? updater(item) : item));
+}
+
+const fallbackSectionByKey = new Map(defaultLandingSections.map((section) => [section.key, section]));
+const genericFieldLimits: Partial<Record<keyof LandingSectionContent, number>> = {
+  name: 80,
+  eyebrow: 70,
+  title: 120,
+  subtitle: 140,
+  description: 260,
+  quote: 260,
+  legalNotice: 200,
+  lowerTitle: 90,
+  lowerDescription: 220,
+  bottomStatement: 240,
+  secondaryTitle: 80,
+  secondaryDescription: 140,
+  supportTitle: 160,
+  supportDescription: 120,
+  regionTitle: 90,
+  regionDescription: 90,
+  phoneLabel: 40,
+  phoneNumber: 24,
+  contactEmail: 100,
+  contactAddress: 180,
+  availabilityText: 120,
+  actionTitle: 90,
+  requestTitle: 90,
+  requestDescription: 180,
+  inputPlaceholder: 70,
+  submitLabel: 40,
+  submittedLabel: 40,
+  successMessage: 180,
+  initiativeLabel: 90,
+  quickLinksTitle: 50,
+  servicesTitle: 50,
+  initiativesTitle: 50,
+  contactTitle: 50,
+  sloganTitle: 90,
+  immediateHelpTitle: 70,
+  immediateHelpDescription: 120,
+  supportNowLabel: 40,
+  supportMissionTitle: 70,
+  supportMissionDescription: 140,
+  buttonLabel: 40,
+  secondaryButtonLabel: 40,
+  tertiaryButtonLabel: 40,
+};
+
+const itemFieldLimits: Partial<Record<keyof LandingSectionItem, number>> = {
+  title: 120,
+  label: 70,
+  value: 50,
+  description: 260,
+};
+
+const slideFieldLimits: Partial<Record<keyof LandingHeroSlide, number>> = {
+  title: 110,
+  description: 160,
+  alt: 180,
+  buttonLabel: 40,
+  secondaryButtonLabel: 40,
+};
+
+function limitFromFallback(value: string | undefined, generic: number) {
+  return value ? Math.max(value.length, generic) : generic;
+}
+
+function getSectionFieldLimit(sectionKey: string, key: keyof LandingSectionContent) {
+  return limitFromFallback(fallbackSectionByKey.get(sectionKey)?.[key] as string | undefined, genericFieldLimits[key] ?? 160);
+}
+
+function getItemFieldLimit(sectionKey: string, itemIndex: number, key: keyof LandingSectionItem) {
+  return limitFromFallback(fallbackSectionByKey.get(sectionKey)?.items?.[itemIndex]?.[key] as string | undefined, itemFieldLimits[key] ?? 120);
+}
+
+function getSlideFieldLimit(slideIndex: number, key: keyof LandingHeroSlide) {
+  return limitFromFallback(fallbackSectionByKey.get("hero")?.slides?.[slideIndex]?.[key] as string | undefined, slideFieldLimits[key] ?? 120);
 }
 
 function TextField({
@@ -23,27 +190,32 @@ function TextField({
   value,
   onChange,
   multiline = false,
+  maxLength,
 }: {
   label: string;
   value?: string;
   onChange: (value: string) => void;
   multiline?: boolean;
+  maxLength?: number;
 }) {
+  const lengthHint = maxLength ? `${(value ?? "").length}/${maxLength} characters. Default layout se zyada content allow nahi hai.` : undefined;
   if (multiline) {
-    return <Textarea label={label} value={value ?? ""} rows={3} onChange={(event) => onChange(event.target.value)} />;
+    return <Textarea label={label} value={value ?? ""} rows={3} maxLength={maxLength} hint={lengthHint} onChange={(event) => onChange(event.target.value)} />;
   }
-  return <Input label={label} value={value ?? ""} onChange={(event) => onChange(event.target.value)} />;
+  return <Input label={label} value={value ?? ""} maxLength={maxLength} hint={lengthHint} onChange={(event) => onChange(event.target.value)} />;
 }
 
 function ImageField({
   label,
   value,
+  hint = "Paste existing public path or upload a new image.",
   uploading,
   onChange,
   onUpload,
 }: {
   label: string;
   value?: string;
+  hint?: string;
   uploading?: boolean;
   onChange: (value: string) => void;
   onUpload: (file: File) => void;
@@ -56,7 +228,7 @@ function ImageField({
 
   return (
     <div className="space-y-2">
-      <Input label={label} value={value ?? ""} onChange={(event) => onChange(event.target.value)} hint="Paste existing public path or upload a new image." />
+      <Input label={label} value={value ?? ""} onChange={(event) => onChange(event.target.value)} hint={hint} />
       <div className="flex flex-wrap items-center gap-2">
         <label className="inline-flex h-8 cursor-pointer items-center gap-1.5 rounded-lg border border-surface-border bg-surface-card px-2.5 text-xs font-medium text-text-primary hover:bg-surface-sunken">
           <ImagePlus className="h-3.5 w-3.5" />
@@ -69,6 +241,58 @@ function ImageField({
         )}
       </div>
     </div>
+  );
+}
+
+function MoreSectionFields({
+  section,
+  uploadingKey,
+  onTextChange,
+  onImageChange,
+  onImageUpload,
+}: {
+  section: LandingSectionContent;
+  uploadingKey: string | null;
+  onTextChange: (key: keyof LandingSectionContent, value: string) => void;
+  onImageChange: (key: keyof LandingSectionContent, value: string) => void;
+  onImageUpload: (key: keyof LandingSectionContent, file: File) => void;
+}) {
+  const renderedFields = new Set<keyof LandingSectionContent>([
+    ...baseRenderedFields,
+    ...(sectionSpecificRenderedFields[section.key] ?? []),
+  ]);
+  const textFields = extraTextFields.filter((field) => !renderedFields.has(field.key));
+  const imageFields = extraImageFields.filter((field) => !renderedFields.has(field.key));
+
+  return (
+    <details className="mt-6 border-t border-surface-border pt-4">
+      <summary className="cursor-pointer text-xs font-semibold uppercase tracking-wide text-text-muted">
+        More editable fields
+      </summary>
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        {textFields.map((field) => (
+          <div key={field.key} className={field.multiline ? "sm:col-span-2" : undefined}>
+            <TextField
+              label={field.label}
+              value={section[field.key] as string | undefined}
+              multiline={field.multiline}
+              maxLength={getSectionFieldLimit(section.key, field.key)}
+              onChange={(value) => onTextChange(field.key, value)}
+            />
+          </div>
+        ))}
+        {imageFields.map((field) => (
+          <ImageField
+            key={field.key}
+            label={field.label}
+            value={section[field.key] as string | undefined}
+            uploading={uploadingKey === `${section.key}:${field.key}`}
+            onChange={(value) => onImageChange(field.key, value)}
+            onUpload={(file) => onImageUpload(field.key, file)}
+          />
+        ))}
+      </div>
+    </details>
   );
 }
 
@@ -85,7 +309,8 @@ export default function WebsitePage() {
   useEffect(() => {
     const sectionParam = searchParams.get("section");
     if (sectionParam) {
-      setActiveKey(sectionParam);
+      const frame = window.requestAnimationFrame(() => setActiveKey(sectionParam));
+      return () => window.cancelAnimationFrame(frame);
     }
   }, [searchParams]);
 
@@ -226,29 +451,44 @@ export default function WebsitePage() {
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
-            <TextField label="Admin Section Name" value={activeSection.name} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, name: value }))} />
-            <TextField label="Eyebrow / Small Heading" value={activeSection.eyebrow} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, eyebrow: value }))} />
+            <TextField label="Admin Section Name" value={activeSection.name} maxLength={getSectionFieldLimit(activeSection.key, "name")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, name: value }))} />
+            <TextField label="Eyebrow / Small Heading" value={activeSection.eyebrow} maxLength={getSectionFieldLimit(activeSection.key, "eyebrow")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, eyebrow: value }))} />
             <div className="sm:col-span-2">
-              <TextField label="Main Title" value={activeSection.title} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, title: value }))} multiline />
+              <TextField label="Main Title" value={activeSection.title} maxLength={getSectionFieldLimit(activeSection.key, "title")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, title: value }))} multiline />
             </div>
             <div className="sm:col-span-2">
-              <TextField label="Subtitle" value={activeSection.subtitle} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, subtitle: value }))} multiline />
+              <TextField label="Subtitle" value={activeSection.subtitle} maxLength={getSectionFieldLimit(activeSection.key, "subtitle")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, subtitle: value }))} multiline />
             </div>
             <div className="sm:col-span-2">
-              <TextField label="Description" value={activeSection.description} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, description: value }))} multiline />
+              <TextField label="Description" value={activeSection.description} maxLength={getSectionFieldLimit(activeSection.key, "description")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, description: value }))} multiline />
             </div>
+            {activeSection.key === "hero" && (
+              <div className="sm:col-span-2">
+                <ImageField
+                  label="Hero Logo"
+                  hint="This is the logo shown in the hero section above the title."
+                  value={activeSection.logoImage}
+                  uploading={uploadingKey === "hero:logo"}
+                  onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, logoImage: value }))}
+                  onUpload={(file) => uploadImage("hero:logo", file, (url) => setSection(activeSection.key, (section) => ({ ...section, logoImage: url })))}
+                />
+              </div>
+            )}
             <ImageField
-              label="Section Image"
+              label={activeSection.key === "hero" ? "Hero Background Image (not logo)" : "Section Image"}
+              hint={activeSection.key === "hero" ? "This controls the hero background/fallback image. Use Hero Logo above for the logo." : undefined}
               value={activeSection.image}
               uploading={uploadingKey === `${activeSection.key}:section`}
               onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, image: value }))}
               onUpload={(file) => uploadImage(`${activeSection.key}:section`, file, (url) => setSection(activeSection.key, (section) => ({ ...section, image: url })))}
             />
             <div className="grid gap-3 sm:grid-cols-2">
-              <TextField label="Primary Button Text" value={activeSection.buttonLabel} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, buttonLabel: value }))} />
+              <TextField label="Primary Button Text" value={activeSection.buttonLabel} maxLength={getSectionFieldLimit(activeSection.key, "buttonLabel")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, buttonLabel: value }))} />
               <TextField label="Primary Button Link" value={activeSection.buttonHref} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, buttonHref: value }))} />
-              <TextField label="Secondary Button Text" value={activeSection.secondaryButtonLabel} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, secondaryButtonLabel: value }))} />
+              <TextField label="Secondary Button Text" value={activeSection.secondaryButtonLabel} maxLength={getSectionFieldLimit(activeSection.key, "secondaryButtonLabel")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, secondaryButtonLabel: value }))} />
               <TextField label="Secondary Button Link" value={activeSection.secondaryButtonHref} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, secondaryButtonHref: value }))} />
+              <TextField label="Third Button Text" value={activeSection.tertiaryButtonLabel} maxLength={getSectionFieldLimit(activeSection.key, "tertiaryButtonLabel")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, tertiaryButtonLabel: value }))} />
+              <TextField label="Third Button Link" value={activeSection.tertiaryButtonHref} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, tertiaryButtonHref: value }))} />
             </div>
           </div>
 
@@ -289,12 +529,12 @@ export default function WebsitePage() {
                     <p className="mb-3 text-xs font-semibold text-text-primary">Slide {slideIndex + 1}</p>
                     <div className="grid gap-3 sm:grid-cols-2">
                       <div className="sm:col-span-2">
-                        <TextField label="Slide Title" value={slide.title} multiline onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, slides: updateAt(section.slides ?? [], slideIndex, (current) => ({ ...current, title: value })) }))} />
+                        <TextField label="Slide Title" value={slide.title} multiline maxLength={getSlideFieldLimit(slideIndex, "title")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, slides: updateAt(section.slides ?? [], slideIndex, (current) => ({ ...current, title: value })) }))} />
                       </div>
                       <div className="sm:col-span-2">
-                        <TextField label="Slide Description" value={slide.description} multiline onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, slides: updateAt(section.slides ?? [], slideIndex, (current) => ({ ...current, description: value })) }))} />
+                        <TextField label="Slide Description" value={slide.description} multiline maxLength={getSlideFieldLimit(slideIndex, "description")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, slides: updateAt(section.slides ?? [], slideIndex, (current) => ({ ...current, description: value })) }))} />
                       </div>
-                      <TextField label="Image Alt Text" value={slide.alt} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, slides: updateAt(section.slides ?? [], slideIndex, (current) => ({ ...current, alt: value })) }))} />
+                      <TextField label="Image Alt Text" value={slide.alt} maxLength={getSlideFieldLimit(slideIndex, "alt")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, slides: updateAt(section.slides ?? [], slideIndex, (current) => ({ ...current, alt: value })) }))} />
                       <label className="space-y-1.5 text-xs font-medium text-text-secondary">
                         Layout Variant
                         <select value={slide.variant ?? "default"} onChange={(event) => setSection(activeSection.key, (section) => ({ ...section, slides: updateAt(section.slides ?? [], slideIndex, (current) => ({ ...current, variant: event.target.value as LandingHeroSlide["variant"] })) }))} className="h-10 w-full rounded-lg border border-surface-border bg-surface-card px-3 text-sm text-text-primary outline-none focus:border-accent">
@@ -306,9 +546,9 @@ export default function WebsitePage() {
                       </label>
                       <ImageField label="Slide Image" value={slide.image} uploading={uploadingKey === `hero:slide:${slideIndex}`} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, slides: updateAt(section.slides ?? [], slideIndex, (current) => ({ ...current, image: value })) }))} onUpload={(file) => uploadImage(`hero:slide:${slideIndex}`, file, (url) => setSection(activeSection.key, (section) => ({ ...section, slides: updateAt(section.slides ?? [], slideIndex, (current) => ({ ...current, image: url })) })))} />
                       <div className="grid gap-3 sm:grid-cols-2">
-                        <TextField label="Primary Button Text" value={slide.buttonLabel} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, slides: updateAt(section.slides ?? [], slideIndex, (current) => ({ ...current, buttonLabel: value })) }))} />
+                        <TextField label="Primary Button Text" value={slide.buttonLabel} maxLength={getSlideFieldLimit(slideIndex, "buttonLabel")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, slides: updateAt(section.slides ?? [], slideIndex, (current) => ({ ...current, buttonLabel: value })) }))} />
                         <TextField label="Primary Button Link" value={slide.buttonHref} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, slides: updateAt(section.slides ?? [], slideIndex, (current) => ({ ...current, buttonHref: value })) }))} />
-                        <TextField label="Secondary Button Text" value={slide.secondaryButtonLabel} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, slides: updateAt(section.slides ?? [], slideIndex, (current) => ({ ...current, secondaryButtonLabel: value })) }))} />
+                        <TextField label="Secondary Button Text" value={slide.secondaryButtonLabel} maxLength={getSlideFieldLimit(slideIndex, "secondaryButtonLabel")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, slides: updateAt(section.slides ?? [], slideIndex, (current) => ({ ...current, secondaryButtonLabel: value })) }))} />
                         <TextField label="Secondary Button Link" value={slide.secondaryButtonHref} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, slides: updateAt(section.slides ?? [], slideIndex, (current) => ({ ...current, secondaryButtonHref: value })) }))} />
                       </div>
                     </div>
@@ -332,11 +572,11 @@ export default function WebsitePage() {
             <div className="mt-6 border-t border-surface-border pt-4">
               <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-text-muted">Trust &amp; Transparency Details</h3>
               <div className="grid gap-3 sm:grid-cols-2">
-                <div className="sm:col-span-2"><TextField label="Mission Quote" value={activeSection.quote} multiline onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, quote: value }))} /></div>
-                <div className="sm:col-span-2"><TextField label="Legal Notice" value={activeSection.legalNotice} multiline onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, legalNotice: value }))} /></div>
-                <TextField label="Lower Section Title" value={activeSection.lowerTitle} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, lowerTitle: value }))} />
-                <TextField label="Bottom Statement" value={activeSection.bottomStatement} multiline onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, bottomStatement: value }))} />
-                <div className="sm:col-span-2"><TextField label="Lower Section Description" value={activeSection.lowerDescription} multiline onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, lowerDescription: value }))} /></div>
+                <div className="sm:col-span-2"><TextField label="Mission Quote" value={activeSection.quote} multiline maxLength={getSectionFieldLimit(activeSection.key, "quote")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, quote: value }))} /></div>
+                <div className="sm:col-span-2"><TextField label="Legal Notice" value={activeSection.legalNotice} multiline maxLength={getSectionFieldLimit(activeSection.key, "legalNotice")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, legalNotice: value }))} /></div>
+                <TextField label="Lower Section Title" value={activeSection.lowerTitle} maxLength={getSectionFieldLimit(activeSection.key, "lowerTitle")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, lowerTitle: value }))} />
+                <TextField label="Bottom Statement" value={activeSection.bottomStatement} multiline maxLength={getSectionFieldLimit(activeSection.key, "bottomStatement")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, bottomStatement: value }))} />
+                <div className="sm:col-span-2"><TextField label="Lower Section Description" value={activeSection.lowerDescription} multiline maxLength={getSectionFieldLimit(activeSection.key, "lowerDescription")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, lowerDescription: value }))} /></div>
                 <ImageField label="Moksha Sewa Logo" value={activeSection.logoImage} uploading={uploadingKey === "trust:logo"} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, logoImage: value }))} onUpload={(file) => uploadImage("trust:logo", file, (url) => setSection(activeSection.key, (section) => ({ ...section, logoImage: url })))} />
                 <ImageField label="Namo Gange Logo" value={activeSection.partnerLogoImage} uploading={uploadingKey === "trust:partner-logo"} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, partnerLogoImage: value }))} onUpload={(file) => uploadImage("trust:partner-logo", file, (url) => setSection(activeSection.key, (section) => ({ ...section, partnerLogoImage: url })))} />
                 <ImageField label="Namo Gange Trust Logo" value={activeSection.secondaryLogoImage} uploading={uploadingKey === "trust:secondary-logo"} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, secondaryLogoImage: value }))} onUpload={(file) => uploadImage("trust:secondary-logo", file, (url) => setSection(activeSection.key, (section) => ({ ...section, secondaryLogoImage: url })))} />
@@ -355,25 +595,58 @@ export default function WebsitePage() {
             </div>
           )}
 
-          {(activeSection.key === "family-need" || activeSection.key === "compassion") && (
+          {(activeSection.key === "family-need" || activeSection.key === "compassion" || activeSection.key === "practical-support") && (
             <div className="mt-6 border-t border-surface-border pt-4">
               <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-text-muted">Additional Visible Content</h3>
               <div className="grid gap-3 sm:grid-cols-2">
                 {activeSection.key === "family-need" && <>
-                  <TextField label="Support Message" value={activeSection.supportTitle} multiline onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, supportTitle: value }))} />
-                  <TextField label="Support Submessage" value={activeSection.supportDescription} multiline onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, supportDescription: value }))} />
-                  <TextField label="Region Intro" value={activeSection.regionDescription} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, regionDescription: value }))} />
-                  <TextField label="Region Name" value={activeSection.regionTitle} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, regionTitle: value }))} />
+                  <TextField label="Support Message" value={activeSection.supportTitle} multiline maxLength={getSectionFieldLimit(activeSection.key, "supportTitle")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, supportTitle: value }))} />
+                  <TextField label="Support Submessage" value={activeSection.supportDescription} multiline maxLength={getSectionFieldLimit(activeSection.key, "supportDescription")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, supportDescription: value }))} />
+                  <TextField label="Region Intro" value={activeSection.regionDescription} maxLength={getSectionFieldLimit(activeSection.key, "regionDescription")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, regionDescription: value }))} />
+                  <TextField label="Region Name" value={activeSection.regionTitle} maxLength={getSectionFieldLimit(activeSection.key, "regionTitle")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, regionTitle: value }))} />
                 </>}
                 {activeSection.key === "compassion" && <>
-                  <TextField label="Phone CTA Label" value={activeSection.phoneLabel} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, phoneLabel: value }))} />
-                  <TextField label="Phone Number" value={activeSection.phoneNumber} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, phoneNumber: value }))} />
-                  <TextField label="Trust Card Title" value={activeSection.secondaryTitle} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, secondaryTitle: value }))} />
-                  <TextField label="Trust Card Description" value={activeSection.secondaryDescription} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, secondaryDescription: value }))} />
+                  <TextField label="Phone CTA Label" value={activeSection.phoneLabel} maxLength={getSectionFieldLimit(activeSection.key, "phoneLabel")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, phoneLabel: value }))} />
+                  <TextField label="Phone Number" value={activeSection.phoneNumber} maxLength={getSectionFieldLimit(activeSection.key, "phoneNumber")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, phoneNumber: value }))} />
+                  <TextField label="Trust Card Title" value={activeSection.secondaryTitle} maxLength={getSectionFieldLimit(activeSection.key, "secondaryTitle")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, secondaryTitle: value }))} />
+                  <TextField label="Trust Card Description" value={activeSection.secondaryDescription} maxLength={getSectionFieldLimit(activeSection.key, "secondaryDescription")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, secondaryDescription: value }))} />
+                </>}
+                {activeSection.key === "practical-support" && <>
+                  <TextField label="Slogan" value={activeSection.sloganTitle} maxLength={getSectionFieldLimit(activeSection.key, "sloganTitle")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, sloganTitle: value }))} />
+                  <TextField label="Immediate Help Title" value={activeSection.immediateHelpTitle} maxLength={getSectionFieldLimit(activeSection.key, "immediateHelpTitle")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, immediateHelpTitle: value }))} />
+                  <TextField label="Immediate Help Description" value={activeSection.immediateHelpDescription} multiline maxLength={getSectionFieldLimit(activeSection.key, "immediateHelpDescription")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, immediateHelpDescription: value }))} />
+                  <TextField label="Support Mission Title" value={activeSection.supportMissionTitle} maxLength={getSectionFieldLimit(activeSection.key, "supportMissionTitle")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, supportMissionTitle: value }))} />
+                  <TextField label="Support Mission Description" value={activeSection.supportMissionDescription} multiline maxLength={getSectionFieldLimit(activeSection.key, "supportMissionDescription")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, supportMissionDescription: value }))} />
+                  <TextField label="Support Now Label" value={activeSection.supportNowLabel} maxLength={getSectionFieldLimit(activeSection.key, "supportNowLabel")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, supportNowLabel: value }))} />
                 </>}
               </div>
             </div>
           )}
+
+          <MoreSectionFields
+            section={activeSection}
+            uploadingKey={uploadingKey}
+            onTextChange={(field, value) =>
+              setSection(activeSection.key, (section) => ({
+                ...section,
+                [field]: value,
+              }))
+            }
+            onImageChange={(field, value) =>
+              setSection(activeSection.key, (section) => ({
+                ...section,
+                [field]: value,
+              }))
+            }
+            onImageUpload={(field, file) =>
+              uploadImage(`${activeSection.key}:${field}`, file, (url) =>
+                setSection(activeSection.key, (section) => ({
+                  ...section,
+                  [field]: url,
+                }))
+              )
+            }
+          />
 
           <div className="mt-6 border-t border-surface-border pt-4">
             <div className="mb-3 flex items-center justify-between gap-2">
@@ -417,6 +690,7 @@ export default function WebsitePage() {
                     <TextField
                       label="Title / Question"
                       value={item.title}
+                      maxLength={getItemFieldLimit(activeSection.key, itemIndex, "title")}
                       onChange={(value) =>
                         setSection(activeSection.key, (section) => ({
                           ...section,
@@ -427,6 +701,7 @@ export default function WebsitePage() {
                     <TextField
                       label="Label"
                       value={item.label}
+                      maxLength={getItemFieldLimit(activeSection.key, itemIndex, "label")}
                       onChange={(value) =>
                         setSection(activeSection.key, (section) => ({
                           ...section,
@@ -437,6 +712,7 @@ export default function WebsitePage() {
                     <TextField
                       label="Value"
                       value={item.value}
+                      maxLength={getItemFieldLimit(activeSection.key, itemIndex, "value")}
                       onChange={(value) =>
                         setSection(activeSection.key, (section) => ({
                           ...section,
@@ -459,6 +735,7 @@ export default function WebsitePage() {
                         label="Description / Answer"
                         value={item.description}
                         multiline
+                        maxLength={getItemFieldLimit(activeSection.key, itemIndex, "description")}
                         onChange={(value) =>
                           setSection(activeSection.key, (section) => ({
                             ...section,
@@ -467,6 +744,27 @@ export default function WebsitePage() {
                         }
                       />
                     </div>
+                    {activeSection.key === "practical-support" && (
+                      <div className="sm:col-span-2 grid gap-3 sm:grid-cols-3">
+                        {[0, 1, 2].map((featureIndex) => (
+                          <TextField
+                            key={featureIndex}
+                            label={`Feature ${featureIndex + 1}`}
+                            value={item.features?.[featureIndex]}
+                            maxLength={80}
+                            onChange={(value) =>
+                              setSection(activeSection.key, (section) => ({
+                                ...section,
+                                items: updateAt(section.items ?? [], itemIndex, (current) => ({
+                                  ...current,
+                                  features: updateAt(current.features ?? [], featureIndex, () => value),
+                                })),
+                              }))
+                            }
+                          />
+                        ))}
+                      </div>
+                    )}
                     <div className="sm:col-span-2">
                       <ImageField
                         label="Item Image"
