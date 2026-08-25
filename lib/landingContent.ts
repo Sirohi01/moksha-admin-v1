@@ -341,6 +341,26 @@ export const defaultLandingSections: LandingSectionContent[] = [
       { label: "Privacy Policy", href: "/privacy-policy" }, { label: "Terms & Conditions", href: "/terms" }, { label: "Refund Policy", href: "/refund-policy" },
     ],
   },
+  {
+    key: "topbar",
+    name: "Topbar",
+    enabled: true,
+    title: "Sewa Available in Delhi • Ghaziabad • Noida | 24×7 Last-Rites Assistance | Unclaimed & Needy Family Support",
+  },
+  {
+    key: "navbar",
+    name: "Navbar",
+    enabled: true,
+    image: "/assets/logo-moksha-seva.png",
+    items: [
+      { label: "Home", href: "/" }, { label: "About Us", href: "/about" },
+      { label: "Ground Support", href: "/prayerhallservices" }, { label: "Support for Needy Families", href: "/specialservices" }, { label: "Ambulance & Body Transport", href: "/ambulanceservices" }, { label: "Ritual Material Support", href: "/furalservices" }, { label: "Priest & Ritual Guidance", href: "/panditservices" }, { label: "Unclaimed Body Sewa", href: "/unclaimed-body-sewa" },
+      { label: "Photo Gallery", href: "/mokshagallery" }, { label: "Videos", href: "/mokshavediogallery" },
+      { label: "Become a Volunteer", href: "/volunteer/register" }, { label: "CSR Partnership", href: "/csr" }, { label: "Partner With Us", href: "/partnership" },
+      { label: "How to Request Help", href: "/request-help" }, { label: "Blog & Awareness", href: "/blog" },
+      { label: "Contact Us", href: "/contact" }, { label: "Request Help", href: "/request-help" }, { label: "Donate", href: "/donation" },
+    ],
+  },
 ];
 
 export function mergeLandingSections(sections?: LandingSectionContent[]): LandingSectionContent[] {
