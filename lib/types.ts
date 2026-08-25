@@ -327,6 +327,30 @@ export interface Settings {
   };
   banners: { image: string; link?: string; title?: string }[];
   socialLinks: { platform: string; url: string }[];
+  landingPage?: {
+    sections: {
+      key: string;
+      name: string;
+      enabled: boolean;
+      eyebrow?: string;
+      title?: string;
+      subtitle?: string;
+      description?: string;
+      image?: string;
+      buttonLabel?: string;
+      buttonHref?: string;
+      secondaryButtonLabel?: string;
+      secondaryButtonHref?: string;
+      items?: {
+        title?: string;
+        label?: string;
+        value?: string;
+        description?: string;
+        image?: string;
+        href?: string;
+      }[];
+    }[];
+  };
 }
 
 export type VehicleType = "HEARSE" | "AMBULANCE" | "VAN" | "OTHER";
