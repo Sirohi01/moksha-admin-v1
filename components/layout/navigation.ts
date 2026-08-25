@@ -81,6 +81,7 @@ export const NAV_SECTIONS: NavSection[] = [
               { label: "Glimpse Of Journey", href: "/website?section=journey-glimpse", icon: Globe2 },
               { label: "One Final Act Of Humanity", href: "/website?section=final-act", icon: Globe2 },
               { label: "Footer", href: "/website?section=footer", icon: Globe2 },
+              { label: "Frequently Asked Questions", href: "/website?section=faq", icon: Globe2 },
             ],
           },
         ],

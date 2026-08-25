@@ -10,7 +10,7 @@ import { settingsApi } from "@/lib/settingsApi";
 import { uploadApi } from "@/lib/uploadApi";
 import { ApiRequestError } from "@/lib/api";
 import { Settings } from "@/lib/types";
-import { defaultLandingSections, mergeLandingSections, type LandingSectionContent, type LandingSectionItem } from "@/lib/landingContent";
+import { defaultLandingSections, mergeLandingSections, type LandingHeroSlide, type LandingSectionContent, type LandingSectionItem } from "@/lib/landingContent";
 
 const FOLDER = "moksha-sewa/website";
 
@@ -251,6 +251,82 @@ export default function WebsitePage() {
               <TextField label="Secondary Button Link" value={activeSection.secondaryButtonHref} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, secondaryButtonHref: value }))} />
             </div>
           </div>
+
+          {activeSection.key === "hero" && (
+            <div className="mt-6 border-t border-surface-border pt-4">
+              <div className="mb-3">
+                <h3 className="text-xs font-semibold uppercase tracking-wide text-text-muted">Hero Slides</h3>
+                <p className="mt-1 text-[11px] text-text-muted">Each slide controls its own image, message, accessibility text, and buttons.</p>
+              </div>
+              <Button
+                type="button"
+                size="sm"
+                variant="secondary"
+                onClick={() =>
+                  setSection(activeSection.key, (section) => ({
+                    ...section,
+                    slides: [
+                      ...(section.slides ?? []),
+                      {
+                        title: "New Hero Slide",
+                        description: "Add slide description.",
+                        image: section.slides?.[0]?.image || "/hero-images/dignity-in-every-final-journey-bg.png",
+                        alt: "Hero slide image",
+                        buttonLabel: "Learn More",
+                        buttonHref: "/",
+                        variant: "default",
+                      },
+                    ],
+                  }))
+                }
+              >
+                <Plus className="h-3.5 w-3.5" />
+                Add Slide
+              </Button>
+              <div className="space-y-3">
+                {(activeSection.slides ?? []).map((slide: LandingHeroSlide, slideIndex: number) => (
+                  <div key={`hero-slide-${slideIndex}`} className="rounded-lg border border-surface-border bg-surface-sunken/40 p-3">
+                    <p className="mb-3 text-xs font-semibold text-text-primary">Slide {slideIndex + 1}</p>
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <div className="sm:col-span-2">
+                        <TextField label="Slide Title" value={slide.title} multiline onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, slides: updateAt(section.slides ?? [], slideIndex, (current) => ({ ...current, title: value })) }))} />
+                      </div>
+                      <div className="sm:col-span-2">
+                        <TextField label="Slide Description" value={slide.description} multiline onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, slides: updateAt(section.slides ?? [], slideIndex, (current) => ({ ...current, description: value })) }))} />
+                      </div>
+                      <TextField label="Image Alt Text" value={slide.alt} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, slides: updateAt(section.slides ?? [], slideIndex, (current) => ({ ...current, alt: value })) }))} />
+                      <label className="space-y-1.5 text-xs font-medium text-text-secondary">
+                        Layout Variant
+                        <select value={slide.variant ?? "default"} onChange={(event) => setSection(activeSection.key, (section) => ({ ...section, slides: updateAt(section.slides ?? [], slideIndex, (current) => ({ ...current, variant: event.target.value as LandingHeroSlide["variant"] })) }))} className="h-10 w-full rounded-lg border border-surface-border bg-surface-card px-3 text-sm text-text-primary outline-none focus:border-accent">
+                          <option value="default">Default</option>
+                          <option value="family-support">Family Support</option>
+                          <option value="journey-prayer">Journey Prayer</option>
+                          <option value="volunteer-impact">Volunteer Impact</option>
+                        </select>
+                      </label>
+                      <ImageField label="Slide Image" value={slide.image} uploading={uploadingKey === `hero:slide:${slideIndex}`} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, slides: updateAt(section.slides ?? [], slideIndex, (current) => ({ ...current, image: value })) }))} onUpload={(file) => uploadImage(`hero:slide:${slideIndex}`, file, (url) => setSection(activeSection.key, (section) => ({ ...section, slides: updateAt(section.slides ?? [], slideIndex, (current) => ({ ...current, image: url })) })))} />
+                      <div className="grid gap-3 sm:grid-cols-2">
+                        <TextField label="Primary Button Text" value={slide.buttonLabel} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, slides: updateAt(section.slides ?? [], slideIndex, (current) => ({ ...current, buttonLabel: value })) }))} />
+                        <TextField label="Primary Button Link" value={slide.buttonHref} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, slides: updateAt(section.slides ?? [], slideIndex, (current) => ({ ...current, buttonHref: value })) }))} />
+                        <TextField label="Secondary Button Text" value={slide.secondaryButtonLabel} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, slides: updateAt(section.slides ?? [], slideIndex, (current) => ({ ...current, secondaryButtonLabel: value })) }))} />
+                        <TextField label="Secondary Button Link" value={slide.secondaryButtonHref} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, slides: updateAt(section.slides ?? [], slideIndex, (current) => ({ ...current, secondaryButtonHref: value })) }))} />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {activeSection.key === "footer" && (
+            <div className="mt-6 border-t border-surface-border pt-4">
+              <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-text-muted">Footer Logos</h3>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <ImageField label="Moksha Sewa Logo" value={activeSection.logoImage} uploading={uploadingKey === "footer:logo"} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, logoImage: value }))} onUpload={(file) => uploadImage("footer:logo", file, (url) => setSection(activeSection.key, (section) => ({ ...section, logoImage: url })))} />
+                <ImageField label="Namo Gange Trust Logo" value={activeSection.partnerLogoImage} uploading={uploadingKey === "footer:partner-logo"} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, partnerLogoImage: value }))} onUpload={(file) => uploadImage("footer:partner-logo", file, (url) => setSection(activeSection.key, (section) => ({ ...section, partnerLogoImage: url })))} />
+              </div>
+            </div>
+          )}
 
           <div className="mt-6 border-t border-surface-border pt-4">
             <div className="mb-3 flex items-center justify-between gap-2">
