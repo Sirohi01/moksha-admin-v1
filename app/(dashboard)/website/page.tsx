@@ -328,6 +328,53 @@ export default function WebsitePage() {
             </div>
           )}
 
+          {activeSection.key === "trust-transparency" && (
+            <div className="mt-6 border-t border-surface-border pt-4">
+              <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-text-muted">Trust &amp; Transparency Details</h3>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div className="sm:col-span-2"><TextField label="Mission Quote" value={activeSection.quote} multiline onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, quote: value }))} /></div>
+                <div className="sm:col-span-2"><TextField label="Legal Notice" value={activeSection.legalNotice} multiline onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, legalNotice: value }))} /></div>
+                <TextField label="Lower Section Title" value={activeSection.lowerTitle} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, lowerTitle: value }))} />
+                <TextField label="Bottom Statement" value={activeSection.bottomStatement} multiline onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, bottomStatement: value }))} />
+                <div className="sm:col-span-2"><TextField label="Lower Section Description" value={activeSection.lowerDescription} multiline onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, lowerDescription: value }))} /></div>
+                <ImageField label="Moksha Sewa Logo" value={activeSection.logoImage} uploading={uploadingKey === "trust:logo"} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, logoImage: value }))} onUpload={(file) => uploadImage("trust:logo", file, (url) => setSection(activeSection.key, (section) => ({ ...section, logoImage: url })))} />
+                <ImageField label="Namo Gange Logo" value={activeSection.partnerLogoImage} uploading={uploadingKey === "trust:partner-logo"} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, partnerLogoImage: value }))} onUpload={(file) => uploadImage("trust:partner-logo", file, (url) => setSection(activeSection.key, (section) => ({ ...section, partnerLogoImage: url })))} />
+                <ImageField label="Namo Gange Trust Logo" value={activeSection.secondaryLogoImage} uploading={uploadingKey === "trust:secondary-logo"} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, secondaryLogoImage: value }))} onUpload={(file) => uploadImage("trust:secondary-logo", file, (url) => setSection(activeSection.key, (section) => ({ ...section, secondaryLogoImage: url })))} />
+                <ImageField label="Sacred River Ghat Image" value={activeSection.secondaryImage} uploading={uploadingKey === "trust:secondary-image"} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, secondaryImage: value }))} onUpload={(file) => uploadImage("trust:secondary-image", file, (url) => setSection(activeSection.key, (section) => ({ ...section, secondaryImage: url })))} />
+              </div>
+            </div>
+          )}
+
+          {activeSection.key === "final-act" && (
+            <div className="mt-6 border-t border-surface-border pt-4">
+              <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-text-muted">Section Logos</h3>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <ImageField label="Moksha Sewa Logo" value={activeSection.logoImage} uploading={uploadingKey === "final-act:logo"} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, logoImage: value }))} onUpload={(file) => uploadImage("final-act:logo", file, (url) => setSection(activeSection.key, (section) => ({ ...section, logoImage: url })))} />
+                <ImageField label="Namo Gange Logo" value={activeSection.partnerLogoImage} uploading={uploadingKey === "final-act:partner-logo"} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, partnerLogoImage: value }))} onUpload={(file) => uploadImage("final-act:partner-logo", file, (url) => setSection(activeSection.key, (section) => ({ ...section, partnerLogoImage: url })))} />
+              </div>
+            </div>
+          )}
+
+          {(activeSection.key === "family-need" || activeSection.key === "compassion") && (
+            <div className="mt-6 border-t border-surface-border pt-4">
+              <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-text-muted">Additional Visible Content</h3>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {activeSection.key === "family-need" && <>
+                  <TextField label="Support Message" value={activeSection.supportTitle} multiline onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, supportTitle: value }))} />
+                  <TextField label="Support Submessage" value={activeSection.supportDescription} multiline onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, supportDescription: value }))} />
+                  <TextField label="Region Intro" value={activeSection.regionDescription} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, regionDescription: value }))} />
+                  <TextField label="Region Name" value={activeSection.regionTitle} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, regionTitle: value }))} />
+                </>}
+                {activeSection.key === "compassion" && <>
+                  <TextField label="Phone CTA Label" value={activeSection.phoneLabel} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, phoneLabel: value }))} />
+                  <TextField label="Phone Number" value={activeSection.phoneNumber} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, phoneNumber: value }))} />
+                  <TextField label="Trust Card Title" value={activeSection.secondaryTitle} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, secondaryTitle: value }))} />
+                  <TextField label="Trust Card Description" value={activeSection.secondaryDescription} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, secondaryDescription: value }))} />
+                </>}
+              </div>
+            </div>
+          )}
+
           <div className="mt-6 border-t border-surface-border pt-4">
             <div className="mb-3 flex items-center justify-between gap-2">
               <h3 className="text-xs font-semibold uppercase tracking-wide text-text-muted">Cards / FAQs / Stats</h3>

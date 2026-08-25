@@ -30,6 +30,21 @@ export interface LandingSectionContent {
   image?: string;
   logoImage?: string;
   partnerLogoImage?: string;
+  secondaryLogoImage?: string;
+  secondaryImage?: string;
+  quote?: string;
+  legalNotice?: string;
+  lowerTitle?: string;
+  lowerDescription?: string;
+  bottomStatement?: string;
+  secondaryTitle?: string;
+  secondaryDescription?: string;
+  supportTitle?: string;
+  supportDescription?: string;
+  regionTitle?: string;
+  regionDescription?: string;
+  phoneLabel?: string;
+  phoneNumber?: string;
   buttonLabel?: string;
   buttonHref?: string;
   secondaryButtonLabel?: string;
@@ -50,6 +65,10 @@ export const defaultLandingSections: LandingSectionContent[] = [
     image: "/hero-images/dignity-in-every-final-journey-bg.png",
     buttonLabel: "Request Sewa Help",
     buttonHref: "/request-help",
+      supportTitle: "We are here to support with care, respect and compassion.",
+      supportDescription: "You are not alone. We are with you.",
+      regionTitle: "Delhi • Ghaziabad • Noida",
+      regionDescription: "Currently serving with care in",
     secondaryButtonLabel: "Support This Mission",
     secondaryButtonHref: "/donation",
     slides: [
@@ -157,6 +176,10 @@ export const defaultLandingSections: LandingSectionContent[] = [
     eyebrow: "CREMATION & LAST RITES SUPPORT",
     title: "When a Family Needs Help\nWe Arrange the Essentials",
     image: "/assets/chatgpt.png",
+      phoneLabel: "Call for Help",
+      phoneNumber: "9220147229",
+      secondaryTitle: "Priest Support",
+      secondaryDescription: "Experienced & Verified",
     description:
       "At Moksha Sewa, we support economically weaker families and legally authorised unclaimed cases with practical final-rites coordination. Our team helps coordinate transport, ritual guidance, essential materials, relief support and on-ground volunteers after verification and required formalities.",
     buttonLabel: "Request Sewa Support",
@@ -225,12 +248,14 @@ export const defaultLandingSections: LandingSectionContent[] = [
     enabled: true,
     eyebrow: "Your Support In Action",
     title: "Helping Complete a Final Journey With Dignity",
+    buttonLabel: "Support Our Mission",
+    buttonHref: "/donation",
     items: [
-      { title: "Final Journey\nTransport", image: "/assets/how-we-help/five.png" },
-      { title: "Cremation\nCoordination", image: "/assets/how-we-help/four.png" },
-      { title: "Ritual\nEssentials", image: "/assets/about-optimized/samagri.webp" },
-      { title: "Priest & Ritual\nGuidance", image: "/assets/about-optimized/pandit-ji.webp" },
-      { title: "On-Ground\nSupport", image: "/assets/about-optimized/family-support.webp" },
+      { title: "Final Journey\nTransport", description: "Safe and respectful transport of the departed to the cremation facility.", image: "/assets/how-we-help/five.png" },
+      { title: "Cremation\nCoordination", description: "Coordinating with crematoriums and ensuring a smooth cremation process.", image: "/assets/how-we-help/four.png" },
+      { title: "Ritual\nEssentials", description: "Providing essential items required for the final rites and rituals.", image: "/assets/about-optimized/samagri.webp" },
+      { title: "Priest & Ritual\nGuidance", description: "Arranging experienced priests who guide and conduct the final rites with respect.", image: "/assets/about-optimized/pandit-ji.webp" },
+      { title: "On-Ground\nSupport", description: "Our team stands beside the family, providing support and care at every step.", image: "/assets/about-optimized/family-support.webp" },
     ],
   },
   {
@@ -275,6 +300,8 @@ export const defaultLandingSections: LandingSectionContent[] = [
     description:
       "Stand with Moksha Sewa in helping ensure dignity, compassion and respect in the final journey of those we are able to support.",
     image: "/hero-images/one-final-act-humanity.png",
+    logoImage: "/assets/footer-moksha-mark.png",
+    partnerLogoImage: "/hero-images/namo-gange-logo.webp",
     buttonLabel: "Request Sewa Help",
     buttonHref: "/request-help",
     secondaryButtonLabel: "Support This Mission",
