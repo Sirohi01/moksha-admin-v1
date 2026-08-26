@@ -12,6 +12,17 @@ import { ApiRequestError } from "@/lib/api";
 import { Settings } from "@/lib/types";
 import { defaultLandingSections, mergeLandingSections, type LandingHeroSlide, type LandingSectionContent, type LandingSectionItem } from "@/lib/landingContent";
 import { defaultAboutSections, mergeAboutSections } from "@/lib/aboutContent";
+import {
+  defaultServicesSections,
+  defaultUnclaimedBodySections,
+  defaultVolunteerSections,
+  defaultPartnershipSections,
+  defaultCSRSections,
+  defaultRequestHelpSections,
+  defaultDonationSections,
+  defaultContactSections,
+  defaultTrackSections,
+} from "@/lib/extraPagesContent";
 
 const FOLDER = "moksha-sewa/website";
 
@@ -109,14 +120,97 @@ function updateAt<T>(items: T[], index: number, updater: (item: T) => T): T[] {
   return items.map((item, itemIndex) => (itemIndex === index ? updater(item) : item));
 }
 
-type EditablePage = "landing" | "about";
+function mergeSections(defaults: LandingSectionContent[], saved?: LandingSectionContent[]) {
+  return defaults.map((section) => {
+    const existing = saved?.find((item) => item.key === section.key);
+    return existing ? { ...section, ...existing } : section;
+  });
+}
+
+function getPageDefaults(page: EditablePage) {
+  return editablePages[page].defaults;
+}
+
+function getPageSections(page: EditablePage, saved?: LandingSectionContent[]) {
+  if (page === "about") return mergeAboutSections(saved);
+  if (page === "landing") return mergeLandingSections(saved);
+  return mergeSections(getPageDefaults(page), saved);
+}
+
+function getPageFromSearch(value: string | null): EditablePage {
+  if (value && value in editablePages) return value as EditablePage;
+  return "landing";
+}
+
+type EditablePage =
+  | "landing"
+  | "about"
+  | "services"
+  | "unclaimed-body"
+  | "volunteer"
+  | "partnership"
+  | "csr"
+  | "request-help"
+  | "donation"
+  | "contact"
+  | "track";
+
+const pageFieldMap: Record<EditablePage, keyof Pick<
+  Settings,
+  | "landingPage"
+  | "aboutPage"
+  | "servicesPage"
+  | "unclaimedBodyPage"
+  | "volunteerPage"
+  | "partnershipPage"
+  | "csrPage"
+  | "requestHelpPage"
+  | "donationPage"
+  | "contactPage"
+  | "trackPage"
+>> = {
+  landing: "landingPage",
+  about: "aboutPage",
+  services: "servicesPage",
+  "unclaimed-body": "unclaimedBodyPage",
+  volunteer: "volunteerPage",
+  partnership: "partnershipPage",
+  csr: "csrPage",
+  "request-help": "requestHelpPage",
+  donation: "donationPage",
+  contact: "contactPage",
+  track: "trackPage",
+};
 
 const editablePages: Record<EditablePage, { label: string; defaults: LandingSectionContent[] }> = {
   landing: { label: "Landing Page", defaults: defaultLandingSections },
   about: { label: "About Page", defaults: defaultAboutSections },
+  services: { label: "Sewa Services Page", defaults: defaultServicesSections },
+  "unclaimed-body": { label: "Unclaimed Body Page", defaults: defaultUnclaimedBodySections },
+  volunteer: { label: "Volunteer Page", defaults: defaultVolunteerSections },
+  partnership: { label: "Partnership Page", defaults: defaultPartnershipSections },
+  csr: { label: "CSR Page", defaults: defaultCSRSections },
+  "request-help": { label: "Request Help Page", defaults: defaultRequestHelpSections },
+  donation: { label: "Donation Page", defaults: defaultDonationSections },
+  contact: { label: "Contact Page", defaults: defaultContactSections },
+  track: { label: "Track Status Page", defaults: defaultTrackSections },
 };
 
-const fallbackSectionByKey = new Map([...defaultLandingSections, ...defaultAboutSections].map((section) => [section.key, section]));
+const allDefaultSections = [
+  ...defaultLandingSections,
+  ...defaultAboutSections,
+  ...defaultServicesSections,
+  ...defaultUnclaimedBodySections,
+  ...defaultVolunteerSections,
+  ...defaultPartnershipSections,
+  ...defaultCSRSections,
+  ...defaultRequestHelpSections,
+  ...defaultDonationSections,
+  ...defaultContactSections,
+  ...defaultTrackSections,
+];
+
+const fallbackSectionByKey = new Map(allDefaultSections.map((section) => [section.key, section]));
 const genericFieldLimits: Partial<Record<keyof LandingSectionContent, number>> = {
   name: 100,
   eyebrow: 200,
@@ -307,7 +401,7 @@ function MoreSectionFields({
 export default function WebsitePage() {
   const searchParams = useSearchParams();
   const [settings, setSettings] = useState<Settings | null>(null);
-  const initialPage = searchParams.get("page") === "about" ? "about" : "landing";
+  const initialPage = getPageFromSearch(searchParams.get("page"));
   const [activePage, setActivePage] = useState<EditablePage>(initialPage);
   const [sections, setSections] = useState<LandingSectionContent[]>(editablePages[initialPage].defaults);
   const [activeKey, setActiveKey] = useState(searchParams.get("section") ?? editablePages[initialPage].defaults[0]?.key ?? "hero");
@@ -317,20 +411,22 @@ export default function WebsitePage() {
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
   useEffect(() => {
-    const pageParam = searchParams.get("page") === "about" ? "about" : "landing";
+    const pageParam = getPageFromSearch(searchParams.get("page"));
     const sectionParam = searchParams.get("section");
     if (pageParam || sectionParam) {
       setActivePage(pageParam);
-      setActiveKey(sectionParam ?? editablePages[pageParam].defaults[0]?.key ?? "hero");
+      const nextSections = getPageSections(pageParam, settings?.[pageFieldMap[pageParam]]?.sections);
+      setSections(nextSections);
+      setActiveKey(sectionParam ?? nextSections[0]?.key ?? "hero");
     }
-  }, [searchParams]);
+  }, [searchParams, settings]);
 
   useEffect(() => {
     settingsApi
       .get()
       .then((data) => {
         setSettings(data);
-        setSections(initialPage === "about" ? mergeAboutSections(data.aboutPage?.sections) : mergeLandingSections(data.landingPage?.sections));
+        setSections(getPageSections(initialPage, data[pageFieldMap[initialPage]]?.sections));
       })
       .catch(() => {})
       .finally(() => setLoading(false));
@@ -363,13 +459,11 @@ export default function WebsitePage() {
     setSaving(true);
     setMessage(null);
     try {
-      const payload =
-        activePage === "about"
-          ? { ...settings, aboutPage: { sections } }
-          : { ...settings, landingPage: { sections } };
+      const payload = { ...settings, [pageFieldMap[activePage]]: { sections } };
       const updated = await settingsApi.update(payload);
       setSettings(updated);
-      setSections(activePage === "about" ? mergeAboutSections(updated.aboutPage?.sections) : mergeLandingSections(updated.landingPage?.sections));
+      const updatedSections = updated[pageFieldMap[activePage]]?.sections;
+      setSections(getPageSections(activePage, updatedSections));
       setMessage({ type: "success", text: `${editablePages[activePage].label} content saved.` });
     } catch (err) {
       setMessage({ type: "error", text: err instanceof ApiRequestError ? err.message : "Could not save website content." });
@@ -389,13 +483,11 @@ export default function WebsitePage() {
     setMessage(null);
     try {
       const defaults = editablePages[activePage].defaults;
-      const payload =
-        activePage === "about"
-          ? { ...settings, aboutPage: { sections: defaults } }
-          : { ...settings, landingPage: { sections: defaults } };
+      const payload = { ...settings, [pageFieldMap[activePage]]: { sections: defaults } };
       const updated = await settingsApi.update(payload);
       setSettings(updated);
-      setSections(activePage === "about" ? mergeAboutSections(updated.aboutPage?.sections) : mergeLandingSections(updated.landingPage?.sections));
+      const updatedSections = updated[pageFieldMap[activePage]]?.sections;
+      setSections(getPageSections(activePage, updatedSections));
       setActiveKey(defaults[0]?.key ?? "hero");
       setMessage({ type: "success", text: `Original ${editablePages[activePage].label.toLowerCase()} content restored and saved.` });
     } catch (err) {
@@ -428,10 +520,8 @@ export default function WebsitePage() {
               onChange={(event) => {
                 const nextPage = event.target.value as EditablePage;
                 setActivePage(nextPage);
-                const nextSections =
-                  nextPage === "about"
-                    ? mergeAboutSections(settings?.aboutPage?.sections)
-                    : mergeLandingSections(settings?.landingPage?.sections);
+                const sourceSections = settings?.[pageFieldMap[nextPage]]?.sections;
+                const nextSections = getPageSections(nextPage, sourceSections);
                 setSections(nextSections);
                 setActiveKey(nextSections[0]?.key ?? "");
               }}
@@ -536,7 +626,7 @@ export default function WebsitePage() {
             </div>
           </div>
 
-          {activeSection.key === "hero" && (
+          {activePage === "landing" && activeSection.key === "hero" && (
             <div className="mt-6 border-t border-surface-border pt-4">
               <div className="mb-3">
                 <h3 className="text-xs font-semibold uppercase tracking-wide text-text-muted">Hero Slides</h3>
@@ -602,7 +692,7 @@ export default function WebsitePage() {
             </div>
           )}
 
-          {activeSection.key === "footer" && (
+          {activePage === "landing" && activeSection.key === "footer" && (
             <div className="mt-6 border-t border-surface-border pt-4">
               <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-text-muted">Footer Logos</h3>
               <div className="grid gap-3 sm:grid-cols-2">
@@ -612,7 +702,7 @@ export default function WebsitePage() {
             </div>
           )}
 
-          {activeSection.key === "trust-transparency" && (
+          {activePage === "landing" && activeSection.key === "trust-transparency" && (
             <div className="mt-6 border-t border-surface-border pt-4">
               <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-text-muted">Trust &amp; Transparency Details</h3>
               <div className="grid gap-3 sm:grid-cols-2">
@@ -629,7 +719,7 @@ export default function WebsitePage() {
             </div>
           )}
 
-          {activeSection.key === "final-act" && (
+          {activePage === "landing" && activeSection.key === "final-act" && (
             <div className="mt-6 border-t border-surface-border pt-4">
               <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-text-muted">Section Logos</h3>
               <div className="grid gap-3 sm:grid-cols-2">
@@ -639,7 +729,7 @@ export default function WebsitePage() {
             </div>
           )}
 
-          {(activeSection.key === "family-need" || activeSection.key === "compassion" || activeSection.key === "practical-support") && (
+          {activePage === "landing" && (activeSection.key === "family-need" || activeSection.key === "compassion" || activeSection.key === "practical-support") && (
             <div className="mt-6 border-t border-surface-border pt-4">
               <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-text-muted">Additional Visible Content</h3>
               <div className="grid gap-3 sm:grid-cols-2">
@@ -692,6 +782,7 @@ export default function WebsitePage() {
             }
           />
 
+          {activePage === "landing" && (
           <div className="mt-6 border-t border-surface-border pt-4">
             <div className="mb-3 flex items-center justify-between gap-2">
               <h3 className="text-xs font-semibold uppercase tracking-wide text-text-muted">Cards / FAQs / Stats</h3>
@@ -835,6 +926,7 @@ export default function WebsitePage() {
               ))}
             </div>
           </div>
+          )}
         </Card>
       </div>
     </div>

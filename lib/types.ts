@@ -393,6 +393,15 @@ export interface Settings {
     }[];
   };
   aboutPage?: Settings["landingPage"];
+  servicesPage?: Settings["landingPage"];
+  unclaimedBodyPage?: Settings["landingPage"];
+  volunteerPage?: Settings["landingPage"];
+  partnershipPage?: Settings["landingPage"];
+  csrPage?: Settings["landingPage"];
+  requestHelpPage?: Settings["landingPage"];
+  donationPage?: Settings["landingPage"];
+  contactPage?: Settings["landingPage"];
+  trackPage?: Settings["landingPage"];
 }
 
 export type VehicleType = "HEARSE" | "AMBULANCE" | "VAN" | "OTHER";
