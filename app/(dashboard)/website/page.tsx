@@ -11,6 +11,18 @@ import { uploadApi } from "@/lib/uploadApi";
 import { ApiRequestError } from "@/lib/api";
 import { Settings } from "@/lib/types";
 import { defaultLandingSections, mergeLandingSections, type LandingHeroSlide, type LandingSectionContent, type LandingSectionItem } from "@/lib/landingContent";
+import { defaultAboutSections, mergeAboutSections } from "@/lib/aboutContent";
+import {
+  defaultServicesSections,
+  defaultUnclaimedBodySections,
+  defaultVolunteerSections,
+  defaultPartnershipSections,
+  defaultCSRSections,
+  defaultRequestHelpSections,
+  defaultDonationSections,
+  defaultContactSections,
+  defaultTrackSections,
+} from "@/lib/extraPagesContent";
 
 const FOLDER = "moksha-sewa/website";
 
@@ -108,65 +120,155 @@ function updateAt<T>(items: T[], index: number, updater: (item: T) => T): T[] {
   return items.map((item, itemIndex) => (itemIndex === index ? updater(item) : item));
 }
 
-const fallbackSectionByKey = new Map(defaultLandingSections.map((section) => [section.key, section]));
+function mergeSections(defaults: LandingSectionContent[], saved?: LandingSectionContent[]) {
+  return defaults.map((section) => {
+    const existing = saved?.find((item) => item.key === section.key);
+    return existing ? { ...section, ...existing } : section;
+  });
+}
+
+function getPageDefaults(page: EditablePage) {
+  return editablePages[page].defaults;
+}
+
+function getPageSections(page: EditablePage, saved?: LandingSectionContent[]) {
+  if (page === "about") return mergeAboutSections(saved);
+  if (page === "landing") return mergeLandingSections(saved);
+  return mergeSections(getPageDefaults(page), saved);
+}
+
+function getPageFromSearch(value: string | null): EditablePage {
+  if (value && value in editablePages) return value as EditablePage;
+  return "landing";
+}
+
+type EditablePage =
+  | "landing"
+  | "about"
+  | "services"
+  | "unclaimed-body"
+  | "volunteer"
+  | "partnership"
+  | "csr"
+  | "request-help"
+  | "donation"
+  | "contact"
+  | "track";
+
+const pageFieldMap: Record<EditablePage, keyof Pick<
+  Settings,
+  | "landingPage"
+  | "aboutPage"
+  | "servicesPage"
+  | "unclaimedBodyPage"
+  | "volunteerPage"
+  | "partnershipPage"
+  | "csrPage"
+  | "requestHelpPage"
+  | "donationPage"
+  | "contactPage"
+  | "trackPage"
+>> = {
+  landing: "landingPage",
+  about: "aboutPage",
+  services: "servicesPage",
+  "unclaimed-body": "unclaimedBodyPage",
+  volunteer: "volunteerPage",
+  partnership: "partnershipPage",
+  csr: "csrPage",
+  "request-help": "requestHelpPage",
+  donation: "donationPage",
+  contact: "contactPage",
+  track: "trackPage",
+};
+
+const editablePages: Record<EditablePage, { label: string; defaults: LandingSectionContent[] }> = {
+  landing: { label: "Landing Page", defaults: defaultLandingSections },
+  about: { label: "About Page", defaults: defaultAboutSections },
+  services: { label: "Sewa Services Page", defaults: defaultServicesSections },
+  "unclaimed-body": { label: "Unclaimed Body Page", defaults: defaultUnclaimedBodySections },
+  volunteer: { label: "Volunteer Page", defaults: defaultVolunteerSections },
+  partnership: { label: "Partnership Page", defaults: defaultPartnershipSections },
+  csr: { label: "CSR Page", defaults: defaultCSRSections },
+  "request-help": { label: "Request Help Page", defaults: defaultRequestHelpSections },
+  donation: { label: "Donation Page", defaults: defaultDonationSections },
+  contact: { label: "Contact Page", defaults: defaultContactSections },
+  track: { label: "Track Status Page", defaults: defaultTrackSections },
+};
+
+const allDefaultSections = [
+  ...defaultLandingSections,
+  ...defaultAboutSections,
+  ...defaultServicesSections,
+  ...defaultUnclaimedBodySections,
+  ...defaultVolunteerSections,
+  ...defaultPartnershipSections,
+  ...defaultCSRSections,
+  ...defaultRequestHelpSections,
+  ...defaultDonationSections,
+  ...defaultContactSections,
+  ...defaultTrackSections,
+];
+
+const fallbackSectionByKey = new Map(allDefaultSections.map((section) => [section.key, section]));
 const genericFieldLimits: Partial<Record<keyof LandingSectionContent, number>> = {
-  name: 80,
-  eyebrow: 70,
-  title: 120,
-  subtitle: 140,
-  description: 260,
-  quote: 260,
-  legalNotice: 200,
-  lowerTitle: 90,
-  lowerDescription: 220,
-  bottomStatement: 240,
-  secondaryTitle: 80,
-  secondaryDescription: 140,
-  supportTitle: 160,
-  supportDescription: 120,
-  regionTitle: 90,
-  regionDescription: 90,
-  phoneLabel: 40,
-  phoneNumber: 24,
-  contactEmail: 100,
-  contactAddress: 180,
-  availabilityText: 120,
-  actionTitle: 90,
-  requestTitle: 90,
-  requestDescription: 180,
-  inputPlaceholder: 70,
-  submitLabel: 40,
-  submittedLabel: 40,
-  successMessage: 180,
-  initiativeLabel: 90,
-  quickLinksTitle: 50,
-  servicesTitle: 50,
-  initiativesTitle: 50,
-  contactTitle: 50,
-  sloganTitle: 90,
-  immediateHelpTitle: 70,
-  immediateHelpDescription: 120,
-  supportNowLabel: 40,
-  supportMissionTitle: 70,
-  supportMissionDescription: 140,
-  buttonLabel: 40,
-  secondaryButtonLabel: 40,
-  tertiaryButtonLabel: 40,
+  name: 100,
+  eyebrow: 200,
+  title: 300,
+  subtitle: 500,
+  description: 3000,
+  quote: 3000,
+  legalNotice: 1000,
+  lowerTitle: 200,
+  lowerDescription: 1000,
+  bottomStatement: 1000,
+  secondaryTitle: 200,
+  secondaryDescription: 1000,
+  supportTitle: 500,
+  supportDescription: 500,
+  regionTitle: 200,
+  regionDescription: 200,
+  phoneLabel: 100,
+  phoneNumber: 50,
+  contactEmail: 200,
+  contactAddress: 500,
+  availabilityText: 300,
+  actionTitle: 200,
+  requestTitle: 200,
+  requestDescription: 1000,
+  inputPlaceholder: 150,
+  submitLabel: 100,
+  submittedLabel: 100,
+  successMessage: 1000,
+  initiativeLabel: 200,
+  quickLinksTitle: 100,
+  servicesTitle: 100,
+  initiativesTitle: 100,
+  contactTitle: 100,
+  sloganTitle: 200,
+  immediateHelpTitle: 200,
+  immediateHelpDescription: 500,
+  supportNowLabel: 100,
+  supportMissionTitle: 200,
+  supportMissionDescription: 1000,
+  buttonLabel: 100,
+  secondaryButtonLabel: 100,
+  tertiaryButtonLabel: 100,
 };
 
 const itemFieldLimits: Partial<Record<keyof LandingSectionItem, number>> = {
-  title: 120,
-  label: 70,
-  value: 50,
-  description: 260,
+  title: 300,
+  label: 200,
+  value: 100,
+  description: 1500,
 };
 
 const slideFieldLimits: Partial<Record<keyof LandingHeroSlide, number>> = {
-  title: 110,
-  description: 160,
-  alt: 180,
-  buttonLabel: 40,
-  secondaryButtonLabel: 40,
+  title: 300,
+  description: 800,
+  alt: 300,
+  buttonLabel: 100,
+  secondaryButtonLabel: 100,
 };
 
 function limitFromFallback(value: string | undefined, generic: number) {
@@ -299,31 +401,36 @@ function MoreSectionFields({
 export default function WebsitePage() {
   const searchParams = useSearchParams();
   const [settings, setSettings] = useState<Settings | null>(null);
-  const [sections, setSections] = useState<LandingSectionContent[]>(defaultLandingSections);
-  const [activeKey, setActiveKey] = useState(searchParams.get("section") ?? defaultLandingSections[0]?.key ?? "hero");
+  const initialPage = getPageFromSearch(searchParams.get("page"));
+  const [activePage, setActivePage] = useState<EditablePage>(initialPage);
+  const [sections, setSections] = useState<LandingSectionContent[]>(editablePages[initialPage].defaults);
+  const [activeKey, setActiveKey] = useState(searchParams.get("section") ?? editablePages[initialPage].defaults[0]?.key ?? "hero");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [uploadingKey, setUploadingKey] = useState<string | null>(null);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
   useEffect(() => {
+    const pageParam = getPageFromSearch(searchParams.get("page"));
     const sectionParam = searchParams.get("section");
-    if (sectionParam) {
-      const frame = window.requestAnimationFrame(() => setActiveKey(sectionParam));
-      return () => window.cancelAnimationFrame(frame);
+    if (pageParam || sectionParam) {
+      setActivePage(pageParam);
+      const nextSections = getPageSections(pageParam, settings?.[pageFieldMap[pageParam]]?.sections);
+      setSections(nextSections);
+      setActiveKey(sectionParam ?? nextSections[0]?.key ?? "hero");
     }
-  }, [searchParams]);
+  }, [searchParams, settings]);
 
   useEffect(() => {
     settingsApi
       .get()
       .then((data) => {
         setSettings(data);
-        setSections(mergeLandingSections(data.landingPage?.sections));
+        setSections(getPageSections(initialPage, data[pageFieldMap[initialPage]]?.sections));
       })
       .catch(() => {})
       .finally(() => setLoading(false));
-  }, []);
+  }, [initialPage]);
 
   const activeSection = useMemo(
     () => sections.find((section) => section.key === activeKey) ?? sections[0],
@@ -352,10 +459,12 @@ export default function WebsitePage() {
     setSaving(true);
     setMessage(null);
     try {
-      const updated = await settingsApi.update({ ...settings, landingPage: { sections } });
+      const payload = { ...settings, [pageFieldMap[activePage]]: { sections } };
+      const updated = await settingsApi.update(payload);
       setSettings(updated);
-      setSections(mergeLandingSections(updated.landingPage?.sections));
-      setMessage({ type: "success", text: "Website content saved." });
+      const updatedSections = updated[pageFieldMap[activePage]]?.sections;
+      setSections(getPageSections(activePage, updatedSections));
+      setMessage({ type: "success", text: `${editablePages[activePage].label} content saved.` });
     } catch (err) {
       setMessage({ type: "error", text: err instanceof ApiRequestError ? err.message : "Could not save website content." });
     } finally {
@@ -364,8 +473,8 @@ export default function WebsitePage() {
   };
 
   const resetDefaults = () => {
-    setSections(defaultLandingSections);
-    setActiveKey(defaultLandingSections[0]?.key ?? "hero");
+    setSections(editablePages[activePage].defaults);
+    setActiveKey(editablePages[activePage].defaults[0]?.key ?? "hero");
   };
 
   const restoreAndSaveDefaults = async () => {
@@ -373,11 +482,14 @@ export default function WebsitePage() {
     setSaving(true);
     setMessage(null);
     try {
-      const updated = await settingsApi.update({ ...settings, landingPage: { sections: defaultLandingSections } });
+      const defaults = editablePages[activePage].defaults;
+      const payload = { ...settings, [pageFieldMap[activePage]]: { sections: defaults } };
+      const updated = await settingsApi.update(payload);
       setSettings(updated);
-      setSections(mergeLandingSections(updated.landingPage?.sections));
-      setActiveKey(defaultLandingSections[0]?.key ?? "hero");
-      setMessage({ type: "success", text: "Original website content restored and saved." });
+      const updatedSections = updated[pageFieldMap[activePage]]?.sections;
+      setSections(getPageSections(activePage, updatedSections));
+      setActiveKey(defaults[0]?.key ?? "hero");
+      setMessage({ type: "success", text: `Original ${editablePages[activePage].label.toLowerCase()} content restored and saved.` });
     } catch (err) {
       setMessage({ type: "error", text: err instanceof ApiRequestError ? err.message : "Could not restore website content." });
     } finally {
@@ -395,12 +507,34 @@ export default function WebsitePage() {
         <div className="space-y-2">
           <div>
             <h1 className="text-lg font-semibold text-text-primary">Website</h1>
-            <p className="text-xs text-text-muted">Landing page section content and images. Layout stays unchanged on the website.</p>
+            <p className="text-xs text-text-muted">Landing and About page section content and images. Layout stays unchanged on the website.</p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <label htmlFor="website-page-select" className="text-[10px] font-semibold uppercase tracking-[0.12em] text-text-muted">
+              Page
+            </label>
+            <select
+              id="website-page-select"
+              value={activePage}
+              onChange={(event) => {
+                const nextPage = event.target.value as EditablePage;
+                setActivePage(nextPage);
+                const sourceSections = settings?.[pageFieldMap[nextPage]]?.sections;
+                const nextSections = getPageSections(nextPage, sourceSections);
+                setSections(nextSections);
+                setActiveKey(nextSections[0]?.key ?? "");
+              }}
+              className="rounded-lg border border-surface-border bg-surface-card px-2.5 py-1.5 text-xs font-medium text-text-primary outline-none ring-0 transition focus:border-accent"
+            >
+              {Object.entries(editablePages).map(([key, page]) => (
+                <option key={key} value={key}>
+                  {page.label}
+                </option>
+              ))}
+            </select>
             <label htmlFor="landing-section-select" className="text-[10px] font-semibold uppercase tracking-[0.12em] text-text-muted">
-              Landing Page
+              Section
             </label>
             <select
               id="landing-section-select"
@@ -422,7 +556,7 @@ export default function WebsitePage() {
           <Button type="button" variant="secondary" onClick={restoreAndSaveDefaults} loading={saving}>Restore Original</Button>
           <Button type="button" onClick={handleSave} loading={saving}>
             <Save className="h-4 w-4" />
-            Save Website
+            Save {editablePages[activePage].label}
           </Button>
         </div>
       </div>
@@ -492,7 +626,7 @@ export default function WebsitePage() {
             </div>
           </div>
 
-          {activeSection.key === "hero" && (
+          {activePage === "landing" && activeSection.key === "hero" && (
             <div className="mt-6 border-t border-surface-border pt-4">
               <div className="mb-3">
                 <h3 className="text-xs font-semibold uppercase tracking-wide text-text-muted">Hero Slides</h3>
@@ -558,7 +692,7 @@ export default function WebsitePage() {
             </div>
           )}
 
-          {activeSection.key === "footer" && (
+          {activePage === "landing" && activeSection.key === "footer" && (
             <div className="mt-6 border-t border-surface-border pt-4">
               <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-text-muted">Footer Logos</h3>
               <div className="grid gap-3 sm:grid-cols-2">
@@ -568,7 +702,7 @@ export default function WebsitePage() {
             </div>
           )}
 
-          {activeSection.key === "trust-transparency" && (
+          {activePage === "landing" && activeSection.key === "trust-transparency" && (
             <div className="mt-6 border-t border-surface-border pt-4">
               <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-text-muted">Trust &amp; Transparency Details</h3>
               <div className="grid gap-3 sm:grid-cols-2">
@@ -585,7 +719,7 @@ export default function WebsitePage() {
             </div>
           )}
 
-          {activeSection.key === "final-act" && (
+          {activePage === "landing" && activeSection.key === "final-act" && (
             <div className="mt-6 border-t border-surface-border pt-4">
               <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-text-muted">Section Logos</h3>
               <div className="grid gap-3 sm:grid-cols-2">
@@ -595,7 +729,7 @@ export default function WebsitePage() {
             </div>
           )}
 
-          {(activeSection.key === "family-need" || activeSection.key === "compassion" || activeSection.key === "practical-support") && (
+          {activePage === "landing" && (activeSection.key === "family-need" || activeSection.key === "compassion" || activeSection.key === "practical-support") && (
             <div className="mt-6 border-t border-surface-border pt-4">
               <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-text-muted">Additional Visible Content</h3>
               <div className="grid gap-3 sm:grid-cols-2">
@@ -648,6 +782,7 @@ export default function WebsitePage() {
             }
           />
 
+          {activePage === "landing" && (
           <div className="mt-6 border-t border-surface-border pt-4">
             <div className="mb-3 flex items-center justify-between gap-2">
               <h3 className="text-xs font-semibold uppercase tracking-wide text-text-muted">Cards / FAQs / Stats</h3>
@@ -791,6 +926,7 @@ export default function WebsitePage() {
               ))}
             </div>
           </div>
+          )}
         </Card>
       </div>
     </div>
