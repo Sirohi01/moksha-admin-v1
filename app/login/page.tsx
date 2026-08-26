@@ -302,15 +302,15 @@ export default function LoginPage() {
               ["Arogya", "Health services"],
             ].map(([title, sub]) => (
               <div key={title}>
-                <dt className="text-[13px] font-semibold text-[var(--ng-ghat)]">{title}</dt>
-                <dd className="mt-1 text-[12px] leading-snug text-[#54767C]">{sub}</dd>
+                <dt className="text-[15px] font-semibold text-[var(--ng-ghat)]">{title}</dt>
+                <dd className="mt-1 text-[14px] leading-snug text-[#54767C]">{sub}</dd>
               </div>
             ))}
           </dl>
         </div>
 
-        <div className="relative z-10 flex items-center gap-2.5 text-[12px] font-medium text-[#54767C]">
-          <Lock className="h-3.5 w-3.5" />
+        <div className="relative z-10 flex items-center gap-2.5 text-[14px] font-medium text-[#54767C]">
+          <Lock className="h-4 w-4" />
           <span>Encrypted session · Two-step verification required for every staff account</span>
         </div>
       </aside>
@@ -608,8 +608,8 @@ export default function LoginPage() {
             )}
           </div>
 
-          <p className="mt-6 flex items-center justify-center gap-2 text-center text-[12px] text-slate-500 lg:hidden">
-            <Lock className="h-3.5 w-3.5" />
+          <p className="mt-6 flex items-center justify-center gap-2 text-center text-[14px] text-slate-500 lg:hidden">
+            <Lock className="h-4 w-4" />
             Encrypted session · staff access only
           </p>
         </div>
