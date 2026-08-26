@@ -303,13 +303,13 @@ export default function LoginPage() {
             ].map(([title, sub]) => (
               <div key={title}>
                 <dt className="text-[15px] font-semibold text-[var(--ng-ghat)]">{title}</dt>
-                <dd className="mt-1 text-[14px] leading-snug text-[#54767C]">{sub}</dd>
+                <dd className="mt-1 text-[14px] leading-snug text-black">{sub}</dd>
               </div>
             ))}
           </dl>
         </div>
 
-        <div className="relative z-10 flex items-center gap-2.5 text-[14px] font-medium text-[#54767C]">
+        <div className="relative z-10 flex items-center gap-2.5 text-[14px] font-medium text-black">
           <Lock className="h-4 w-4" />
           <span>Encrypted session · Two-step verification required for every staff account</span>
         </div>
