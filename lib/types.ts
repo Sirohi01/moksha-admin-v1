@@ -392,6 +392,7 @@ export interface Settings {
       }[];
     }[];
   };
+  aboutPage?: Settings["landingPage"];
 }
 
 export type VehicleType = "HEARSE" | "AMBULANCE" | "VAN" | "OTHER";

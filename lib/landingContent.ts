@@ -5,6 +5,8 @@ export interface LandingSectionItem {
   description?: string;
   image?: string;
   href?: string;
+  buttonLabel?: string;
+  buttonHref?: string;
   features?: string[];
 }
 
@@ -576,7 +578,7 @@ function limitFromFallback(value: string | undefined, generic: number) {
   return value ? Math.max(value.length, generic) : generic;
 }
 
-function normalizeLandingSection(section: LandingSectionContent, fallback: LandingSectionContent): LandingSectionContent {
+export function normalizeLandingSection(section: LandingSectionContent, fallback: LandingSectionContent): LandingSectionContent {
   const normalized: LandingSectionContent = { ...section };
   (Object.keys(genericTextLimits) as (keyof LandingSectionContent)[]).forEach((key) => {
     const value = normalized[key];
