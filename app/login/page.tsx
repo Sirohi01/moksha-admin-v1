@@ -35,21 +35,22 @@ function LogoLockup({ compact = false }: { compact?: boolean }) {
     <div
       className={
         compact
-          ? "inline-flex items-center gap-4 rounded-2xl border border-white/80 bg-white/90 px-5 py-3 shadow-[0_8px_28px_rgba(23,63,70,0.10)] backdrop-blur"
+          ? "inline-flex max-w-[92vw] overflow-x-auto items-center gap-3 sm:gap-4 rounded-2xl border border-white/80 bg-white/90 px-3 sm:px-5 py-2.5 sm:py-3 shadow-[0_8px_28px_rgba(23,63,70,0.10)] backdrop-blur no-scrollbar"
           : "inline-flex items-center gap-6 rounded-[24px] border border-white/80 bg-white px-7 py-4 shadow-[0_12px_34px_rgba(23,63,70,0.14)]"
       }
     >
       <img
         src="/moksha-sewa-logo.png"
         alt="Moksha Sewa"
-        className={compact ? "h-11 w-auto object-contain" : "h-16 w-auto object-contain"}
+        className={compact ? "h-8 sm:h-11 w-auto object-contain shrink-0" : "h-16 w-auto object-contain shrink-0"}
       />
-      <span className={compact ? "h-9 w-px bg-slate-200" : "h-12 w-px bg-slate-200"} />
+      <span className={compact ? "h-7 sm:h-9 w-px shrink-0 bg-black" : "h-12 w-px shrink-0 bg-black"} />
       <img
         src="/arogya-logo.png"
         alt="Arogya"
-        className={compact ? "h-11 w-auto object-contain" : "h-16 w-auto object-contain"}
+        className={compact ? "h-8 sm:h-11 w-auto object-contain shrink-0" : "h-16 w-auto object-contain shrink-0"}
       />
+      {/* <span className={compact ? "h-7 sm:h-9 w-px shrink-0 bg-slate-200" : "h-12 w-px shrink-0 bg-slate-200"} /> */}
     </div>
   );
 }
