@@ -15,6 +15,8 @@ import { formatDateTime } from "@/lib/statusMeta";
 import { ApiRequestError } from "@/lib/api";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { updateAdmin } from "@/store/slices/authSlice";
+import { AccessGrant, accessGrantApi } from "@/lib/accessGrantApi";
+import { FieldError, getFieldError } from "@/lib/formErrors";
 
 const EMPTY_FORM: InviteStaffInput = { name: "", email: "", phone: "", roleId: "" };
 
@@ -35,9 +37,13 @@ export default function StaffPage() {
   const [form, setForm] = useState<InviteStaffInput>(EMPTY_FORM);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<FieldError[]>([]);
   const [createdCredential, setCreatedCredential] = useState<{ email: string; password: string } | null>(null);
   const [copied, setCopied] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [accessGrants, setAccessGrants] = useState<AccessGrant[]>([]);
+  const [accessGrantsLoading, setAccessGrantsLoading] = useState(false);
+  const [accessGrantsError, setAccessGrantsError] = useState(false);
   const avatarInputRef = useRef<HTMLInputElement>(null);
 
   const load = () => {
@@ -57,7 +63,10 @@ export default function StaffPage() {
     setEditingId(null);
     setForm(EMPTY_FORM);
     setError("");
+    setFieldErrors([]);
     setCreatedCredential(null);
+    setAccessGrants([]);
+    setAccessGrantsError(false);
     setModalOpen(true);
   };
 
@@ -65,18 +74,29 @@ export default function StaffPage() {
     setEditingId(member._id);
     setForm({ name: member.name, email: member.email ?? "", phone: member.phone, roleId: member.roleId ?? "" });
     setError("");
+    setFieldErrors([]);
     setCreatedCredential(null);
+    setAccessGrants([]);
+    setAccessGrantsError(false);
+    setAccessGrantsLoading(true);
+    accessGrantApi
+      .list({ userId: member._id })
+      .then(setAccessGrants)
+      .catch(() => setAccessGrantsError(true))
+      .finally(() => setAccessGrantsLoading(false));
     setModalOpen(true);
   };
 
   const handleInvite = async () => {
     setSaving(true);
     setError("");
+    setFieldErrors([]);
     try {
       const result = await staffApi.invite(form);
       setCreatedCredential({ email: form.email, password: result.temporaryPassword });
       load();
     } catch (err) {
+      setFieldErrors(err instanceof ApiRequestError ? err.fieldErrors ?? [] : []);
       setError(err instanceof ApiRequestError ? err.message : "Could not create this staff account.");
     } finally {
       setSaving(false);
@@ -87,6 +107,7 @@ export default function StaffPage() {
     if (!editingId) return;
     setSaving(true);
     setError("");
+    setFieldErrors([]);
     try {
       await staffApi.update(editingId, form);
       // Editing your own account here doesn't refetch the session — without this, the
@@ -97,6 +118,7 @@ export default function StaffPage() {
       setModalOpen(false);
       load();
     } catch (err) {
+      setFieldErrors(err instanceof ApiRequestError ? err.fieldErrors ?? [] : []);
       setError(err instanceof ApiRequestError ? err.message : "Could not update this staff account.");
     } finally {
       setSaving(false);
@@ -109,6 +131,7 @@ export default function StaffPage() {
     if (!file) return;
     setUploadingAvatar(true);
     setError("");
+    setFieldErrors([]);
     try {
       const result = await uploadApi.file(file);
       setForm((f) => ({ ...f, avatarUrl: result.url }));
@@ -221,7 +244,7 @@ export default function StaffPage() {
               <div className="relative">
                 <span className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full border border-surface-border bg-accent-soft text-lg font-semibold text-accent">
                   {form.avatarUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element -- user-supplied Cloudinary URL, not a local/static asset
+                     
                     <img src={form.avatarUrl} alt="" className="h-full w-full object-cover" />
                   ) : (
                     (form.name.trim()[0] ?? "?").toUpperCase()
@@ -239,10 +262,10 @@ export default function StaffPage() {
                 <input ref={avatarInputRef} type="file" accept="image/*" hidden onChange={handleAvatarChange} />
               </div>
             </div>
-            <Input label="Name" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
-            <Input label="Email" required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
-            <Input label="Phone" required value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
-            <Select label="Role" required value={form.roleId} onChange={(e) => setForm({ ...form, roleId: e.target.value })}>
+            <Input label="Name" required error={getFieldError(fieldErrors, "name")} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+            <Input label="Email" required type="email" error={getFieldError(fieldErrors, "email")} value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+            <Input label="Phone" required error={getFieldError(fieldErrors, "phone")} value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+            <Select label="Role" required error={getFieldError(fieldErrors, "roleId")} value={form.roleId} onChange={(e) => setForm({ ...form, roleId: e.target.value })}>
               <option value="">Select a role…</option>
               {roles.map((r) => (
                 <option key={r._id} value={r._id}>
@@ -250,7 +273,41 @@ export default function StaffPage() {
                 </option>
               ))}
             </Select>
-            {error && <p className="text-xs font-medium text-red-600">{error}</p>}
+            {editingId && (
+              <div className="border-t border-surface-border pt-3">
+                <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-text-muted">Access Grants</p>
+                {accessGrantsLoading ? (
+                  <p className="text-xs text-text-muted">Loading access grants…</p>
+                ) : accessGrantsError ? (
+                  <p className="text-xs font-medium text-red-600">Could not load access grants.</p>
+                ) : accessGrants.length === 0 ? (
+                  <p className="text-xs text-text-muted">No access grants for this staff member.</p>
+                ) : (
+                  <div className="flex flex-wrap gap-2">
+                    {accessGrants.map((grant) => {
+                      const scope = grant.organisationId
+                        ? `${grant.organisationId.name} — ${grant.programCode ?? "All projects"}`
+                        : "All organisations";
+                      const revoked = grant.status === "REVOKED";
+                      return (
+                        <span
+                          key={grant._id}
+                          className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium ${
+                            revoked
+                              ? "border-surface-border bg-surface-sunken text-text-muted line-through opacity-60"
+                              : "border-accent/20 bg-accent-soft text-accent"
+                          }`}
+                        >
+                          {scope}
+                          {revoked && <span className="no-underline">(Revoked)</span>}
+                        </span>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            )}
+            {error && fieldErrors.length === 0 && <p className="text-xs font-medium text-red-600">{error}</p>}
           </div>
         )}
       </Modal>

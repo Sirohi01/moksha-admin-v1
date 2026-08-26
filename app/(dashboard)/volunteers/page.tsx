@@ -10,6 +10,7 @@ import { volunteersApi } from "@/lib/volunteersApi";
 import { VolunteerSummary, VolunteerStatus } from "@/lib/types";
 import { VOLUNTEER_STATUS_META, VOLUNTEER_AVAILABILITY_META, formatDate, formatDateTime } from "@/lib/statusMeta";
 import { ApiRequestError } from "@/lib/api";
+import { FieldError, getFieldError } from "@/lib/formErrors";
 
 const TABS: { key: VolunteerStatus | ""; label: string }[] = [
   { key: "", label: "All" },
@@ -28,6 +29,7 @@ export default function VolunteersPage() {
   const [officeForm, setOfficeForm] = useState({ verified: false, assignedRole: "", assignedArea: "", joiningDate: "" });
   const [officeSaving, setOfficeSaving] = useState(false);
   const [officeError, setOfficeError] = useState("");
+  const [officeFieldErrors, setOfficeFieldErrors] = useState<FieldError[]>([]);
 
   // Re-sync the office-use form only when a *different* volunteer is opened, not on every
   // `selected` update — otherwise an in-progress edit would get clobbered the moment the row list
@@ -41,6 +43,7 @@ export default function VolunteersPage() {
       joiningDate: selected.joiningDate ? selected.joiningDate.slice(0, 10) : "",
     });
     setOfficeError("");
+    setOfficeFieldErrors([]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected?._id]);
 
@@ -48,6 +51,7 @@ export default function VolunteersPage() {
     if (!selected) return;
     setOfficeSaving(true);
     setOfficeError("");
+    setOfficeFieldErrors([]);
     try {
       const updated = await volunteersApi.updateOfficeUse(selected._id, {
         verified: officeForm.verified,
@@ -58,6 +62,7 @@ export default function VolunteersPage() {
       setSelected(updated);
       setVolunteers((current) => current.map((v) => (v._id === updated._id ? updated : v)));
     } catch (err) {
+      setOfficeFieldErrors(err instanceof ApiRequestError ? err.fieldErrors ?? [] : []);
       setOfficeError(err instanceof ApiRequestError ? err.message : "Could not update this volunteer's record.");
     } finally {
       setOfficeSaving(false);
@@ -286,28 +291,34 @@ export default function VolunteersPage() {
                 {selected.code && <span className="text-[11px] font-mono text-text-muted">{selected.code}</span>}
               </div>
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                <label className="flex items-center gap-2 text-xs font-medium text-text-primary">
-                  <input
-                    type="checkbox"
-                    checked={officeForm.verified}
-                    onChange={(e) => setOfficeForm({ ...officeForm, verified: e.target.checked })}
-                    className="h-4 w-4 rounded accent-accent"
-                  />
-                  Verified
-                </label>
+                <div>
+                  <label className="flex items-center gap-2 text-xs font-medium text-text-primary">
+                    <input
+                      type="checkbox"
+                      checked={officeForm.verified}
+                      onChange={(e) => setOfficeForm({ ...officeForm, verified: e.target.checked })}
+                      className="h-4 w-4 rounded accent-accent"
+                    />
+                    Verified
+                  </label>
+                  {getFieldError(officeFieldErrors, "verified") && <p className="mt-1 text-[11px] font-medium text-red-600">{getFieldError(officeFieldErrors, "verified")}</p>}
+                </div>
                 <Input
                   label="Assigned Role"
+                  error={getFieldError(officeFieldErrors, "assignedRole")}
                   value={officeForm.assignedRole}
                   onChange={(e) => setOfficeForm({ ...officeForm, assignedRole: e.target.value })}
                 />
                 <Input
                   label="Assigned Area"
+                  error={getFieldError(officeFieldErrors, "assignedArea")}
                   value={officeForm.assignedArea}
                   onChange={(e) => setOfficeForm({ ...officeForm, assignedArea: e.target.value })}
                 />
                 <Input
                   label="Joining / Orientation Date"
                   type="date"
+                  error={getFieldError(officeFieldErrors, "joiningDate")}
                   value={officeForm.joiningDate}
                   onChange={(e) => setOfficeForm({ ...officeForm, joiningDate: e.target.value })}
                   hint={`Leave blank to use the registration date (${formatDate(selected.createdAt)}).`}
@@ -319,7 +330,7 @@ export default function VolunteersPage() {
                   </p>
                 </div>
               </div>
-              {officeError && <p className="mt-2 text-[11px] font-medium text-red-600">{officeError}</p>}
+              {officeError && officeFieldErrors.length === 0 && <p className="mt-2 text-[11px] font-medium text-red-600">{officeError}</p>}
               <Button size="sm" className="mt-3" loading={officeSaving} onClick={saveOfficeUse}>Save Office Use Details</Button>
             </div>
           </div>

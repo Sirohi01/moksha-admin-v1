@@ -8,7 +8,6 @@ import Button from "@/components/ui/Button";
 import { Input, Textarea, Select } from "@/components/ui/Input";
 import { rolesApi, CreateRoleInput } from "@/lib/rolesApi";
 import { Role, Permission } from "@/lib/types";
-import { formatDate } from "@/lib/statusMeta";
 import { ApiRequestError } from "@/lib/api";
 
 const EMPTY_FORM = { name: "", slug: "", description: "", status: "ACTIVE" as "ACTIVE" | "INACTIVE" };

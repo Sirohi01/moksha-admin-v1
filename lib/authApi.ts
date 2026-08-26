@@ -1,5 +1,6 @@
 import { api } from "./api";
 import { AdminUser, AuthTokens } from "@/store/slices/authSlice";
+import { MyAccess } from "@/store/slices/scopeSlice";
 
 type LoginResult = { user: AdminUser; twoFactorSetupRequired: boolean } & AuthTokens;
 
@@ -12,6 +13,7 @@ export const authApi = {
   setupTwoFactor: () => api.post<{ secret: string; provisioningUri: string }>("/auth/2fa/setup"),
   confirmTwoFactor: (code: string) => api.post<{ backupCodes: string[] }>("/auth/2fa/confirm", { code }),
   getMe: () => api.get<{ userId: string; userType: string; roleSlug?: string; permissions: string[]; twoFactorPending: boolean }>("/auth/me"),
+  myAccess: () => api.get<MyAccess>("/auth/my-access"),
   forgotPassword: (email: string) => api.post("/auth/forgot-password", { email }),
   resetPassword: (token: string, newPassword: string) => api.post("/auth/reset-password", { token, newPassword }),
 };

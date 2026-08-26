@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { ChevronDown } from "lucide-react";
 import { NAV_SECTIONS, NavItem } from "./navigation";
+import { useAppSelector } from "@/store/hooks";
 
 function isActive(pathname: string, href: string, searchParams?: URLSearchParams): boolean {
   if (href === "/") return pathname === "/";
@@ -22,9 +23,18 @@ function isActive(pathname: string, href: string, searchParams?: URLSearchParams
 export default function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const admin = useAppSelector((state) => state.auth.admin);
+  const permissions = admin?.permissions ?? [];
+  const isSuperAdmin = admin?.roleSlug === "super_admin";
+  const selectedOrganisationCode = useAppSelector((state) => state.scope.selectedOrganisationCode);
+  const permissionSet = new Set(permissions);
+  const canView = (item: NavItem) => {
+    const inOrganisation = !item.organisationCodes || (selectedOrganisationCode !== null && item.organisationCodes.includes(selectedOrganisationCode));
+    return inOrganisation && (isSuperAdmin || !item.requiredPermission || permissionSet.has(item.requiredPermission));
+  };
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>(() =>
     Object.fromEntries(
-      NAV_SECTIONS.filter((s) => s.title !== "Overview").map((s) => [s.title, s.title !== "Masters"])
+      NAV_SECTIONS.filter((s) => s.title !== "Overview").map((s) => [s.title, !["Masters", "Admin"].includes(s.title)])
     )
   );
   const [nestedCollapsed, setNestedCollapsed] = useState<Record<string, boolean>>({
@@ -41,6 +51,7 @@ export default function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   };
 
   const renderNavItem = (item: NavItem, depth = 0) => {
+    if (!canView(item)) return null;
     const active = isActive(pathname, item.href, searchParams);
     const Icon = item.icon;
 
@@ -56,11 +67,10 @@ export default function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
             <Link
               href={item.href}
               onClick={onNavigate}
-              className={`flex flex-1 items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13px] font-semibold transition-colors ${
-                active
+              className={`flex flex-1 items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13px] font-semibold transition-colors ${active
                   ? "bg-accent-soft text-accent shadow-sm border border-accent/20"
                   : "text-slate-600 hover:bg-slate-900/5 hover:text-slate-900"
-              }`}
+                }`}
             >
               <Icon className={`h-4 w-4 shrink-0 ${active ? "text-accent" : "text-slate-500"}`} />
               {item.label}
@@ -77,7 +87,7 @@ export default function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
 
           {isOpen && (
             <div className="ml-2 mt-1 space-y-1 border-l border-slate-200 pl-2">
-              {item.children.map((child) => {
+              {item.children.filter(canView).map((child) => {
                 return renderNavItem(child, depth + 1);
               })}
             </div>
@@ -92,11 +102,10 @@ export default function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
         href={item.href}
         onClick={onNavigate}
         style={{ marginLeft: depth * 10 }}
-        className={`relative flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13px] font-semibold transition-colors ${
-          active
+        className={`relative flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13px] font-semibold transition-colors ${active
             ? "bg-accent-soft text-accent shadow-sm border border-accent/20"
             : "text-slate-600 hover:bg-slate-900/5 hover:text-slate-900"
-        }`}
+          }`}
       >
         {active && <span className="absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-r-full bg-accent" />}
         <Icon className={`h-4 w-4 shrink-0 ${active ? "text-accent" : "text-slate-500"}`} />
@@ -108,12 +117,14 @@ export default function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   return (
     <aside className="flex h-full w-64 shrink-0 flex-col bg-white/75 backdrop-blur-xl border-r border-white/80 shadow-md overflow-hidden">
       <div className="flex w-full shrink-0 items-center justify-center border-b border-slate-200/70 px-2 py-4">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/logo.webp" alt="Moksha Sewa Admin" className="w-full object-contain mix-blend-multiply" />
+        { }
+        <img src="/logo.webp" alt="Namo Gange Admin" className="w-full object-contain mix-blend-multiply" />
       </div>
 
       <nav className="flex-1 overflow-y-auto px-2.5 py-3">
         {NAV_SECTIONS.map((section) => {
+          const visibleItems = section.items.filter(canView);
+          if (visibleItems.length === 0) return null;
           const isCollapsed = collapsed[section.title];
           return (
             <div key={section.title} className="mb-1.5">
@@ -127,7 +138,7 @@ export default function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
               </button>
               {!isCollapsed && (
                 <div className="mt-0.5 space-y-1.5">
-                  {section.items.map((item) => renderNavItem(item))}
+                  {visibleItems.map((item) => renderNavItem(item))}
                 </div>
               )}
             </div>
@@ -136,7 +147,7 @@ export default function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
       </nav>
 
       <div className="shrink-0 border-t border-slate-200/70 px-4 py-3">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
+        { }
         <img src="/encodency-logo.jpg" alt="enCodency" className="w-full rounded-md object-contain" />
       </div>
     </aside>

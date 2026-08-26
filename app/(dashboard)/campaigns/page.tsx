@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Plus } from "lucide-react";
 import Table, { Column } from "@/components/ui/Table";
 import Badge from "@/components/ui/Badge";
@@ -10,7 +10,7 @@ import { Input, Select, Textarea } from "@/components/ui/Input";
 import { campaignsApi, CampaignInput } from "@/lib/campaignsApi";
 import { Campaign, CampaignStatus, DonationCause } from "@/lib/types";
 import { CAMPAIGN_STATUS_META, formatCurrency, formatDate } from "@/lib/statusMeta";
-import { ApiRequestError } from "@/lib/api";
+import { useCrudResource } from "@/components/crud/useCrudResource";
 
 const EMPTY_FORM: CampaignInput = {
   title: "",
@@ -21,24 +21,13 @@ const EMPTY_FORM: CampaignInput = {
 };
 
 export default function CampaignsPage() {
-  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
-  const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<CampaignInput>(EMPTY_FORM);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
-
-  const load = () => {
-    setLoading(true);
-    campaignsApi
-      .list()
-      .then(setCampaigns)
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  };
-
-  useEffect(load, []);
+  const { rows: campaigns, loading, saving, error, setError, save } = useCrudResource(
+    campaignsApi,
+    { save: "Could not save campaign." },
+  );
 
   const openCreate = () => {
     setEditingId(null);
@@ -62,20 +51,8 @@ export default function CampaignsPage() {
   };
 
   const handleSave = async () => {
-    setSaving(true);
-    setError("");
-    try {
-      if (editingId) {
-        await campaignsApi.update(editingId, form);
-      } else {
-        await campaignsApi.create(form);
-      }
+    if (await save(editingId, form)) {
       setModalOpen(false);
-      load();
-    } catch (err) {
-      setError(err instanceof ApiRequestError ? err.message : "Could not save campaign.");
-    } finally {
-      setSaving(false);
     }
   };
 

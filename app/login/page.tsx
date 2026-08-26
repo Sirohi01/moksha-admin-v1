@@ -152,13 +152,13 @@ export default function LoginPage() {
         {/* Left Logo: Namo Gange */}
         <div className="pointer-events-auto flex flex-col items-start gap-1 sm:gap-2">
           <span className="text-[9px] sm:text-[10px] md:text-xs font-black uppercase tracking-[0.2em] text-slate-500">An Initiative By</span>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
+          { }
           <img src="/logo.webp" alt="Namo Gange Trust" className="h-14 sm:h-20 md:h-28 lg:h-32 w-auto object-contain drop-shadow-md" />
         </div>
 
         {/* Right Logo: Moksha Sewa */}
         <div className="pointer-events-auto">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
+          { }
           <img src="/moksha-sewa-logo.png" alt="Moksha Sewa" className="h-12 sm:h-16 md:h-24 lg:h-28 w-auto object-contain drop-shadow-md mt-2 sm:mt-4" />
         </div>
       </div>
@@ -374,7 +374,7 @@ export default function LoginPage() {
               {qrDataUrl && (
                 <div className="flex justify-center">
                   <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    { }
                     <img src={qrDataUrl} alt="QR Code" className="h-40 w-40" />
                   </div>
                 </div>

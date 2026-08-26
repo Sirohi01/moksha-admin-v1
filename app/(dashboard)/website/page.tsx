@@ -236,7 +236,7 @@ function ImageField({
           <input type="file" accept="image/*" className="hidden" onChange={handleFile} disabled={uploading} />
         </label>
         {value && (
-          // eslint-disable-next-line @next/next/no-img-element
+           
           <img src={value} alt="" className="h-10 w-16 rounded border border-surface-border object-cover" />
         )}
       </div>

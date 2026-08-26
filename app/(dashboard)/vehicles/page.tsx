@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Plus } from "lucide-react";
 import Table, { Column } from "@/components/ui/Table";
 import Badge from "@/components/ui/Badge";
@@ -10,7 +10,7 @@ import { Input, Select } from "@/components/ui/Input";
 import { vehiclesApi, VehicleInput } from "@/lib/vehiclesApi";
 import { Vehicle, VehicleType } from "@/lib/types";
 import { formatDate } from "@/lib/statusMeta";
-import { ApiRequestError } from "@/lib/api";
+import { useCrudResource } from "@/components/crud/useCrudResource";
 
 const EMPTY_FORM: VehicleInput = {
   type: "AMBULANCE",
@@ -26,24 +26,13 @@ const TYPE_LABELS: Record<VehicleType, string> = {
 };
 
 export default function VehiclesPage() {
-  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
-  const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<VehicleInput>(EMPTY_FORM);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
-
-  const load = () => {
-    setLoading(true);
-    vehiclesApi
-      .list()
-      .then(setVehicles)
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  };
-
-  useEffect(load, []);
+  const { rows: vehicles, loading, saving, error, setError, save, remove } = useCrudResource(
+    vehiclesApi,
+    { save: "Could not save vehicle.", remove: "Could not remove vehicle." },
+  );
 
   const openCreate = () => {
     setEditingId(null);
@@ -68,34 +57,15 @@ export default function VehiclesPage() {
   };
 
   const handleSave = async () => {
-    setSaving(true);
-    setError("");
-    try {
-      if (editingId) {
-        await vehiclesApi.update(editingId, form);
-      } else {
-        await vehiclesApi.create(form);
-      }
+    if (await save(editingId, form)) {
       setModalOpen(false);
-      load();
-    } catch (err) {
-      setError(err instanceof ApiRequestError ? err.message : "Could not save vehicle.");
-    } finally {
-      setSaving(false);
     }
   };
 
   const handleDelete = async () => {
     if (!editingId || !window.confirm("Remove this vehicle from the logistics list?")) return;
-    setSaving(true);
-    try {
-      await vehiclesApi.remove(editingId);
+    if (await remove(editingId)) {
       setModalOpen(false);
-      load();
-    } catch (err) {
-      setError(err instanceof ApiRequestError ? err.message : "Could not remove vehicle.");
-    } finally {
-      setSaving(false);
     }
   };
 

@@ -7,12 +7,14 @@ import { Input } from "@/components/ui/Input";
 import { settingsApi } from "@/lib/settingsApi";
 import { Settings } from "@/lib/types";
 import { ApiRequestError } from "@/lib/api";
+import { FieldError, getFieldError } from "@/lib/formErrors";
 
 export default function SettingsPage() {
   const [settings, setSettings] = useState<Settings | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<FieldError[]>([]);
 
   useEffect(() => {
     settingsApi
@@ -26,12 +28,17 @@ export default function SettingsPage() {
     if (!settings) return;
     setSaving(true);
     setMessage(null);
+    setFieldErrors([]);
     try {
       const updated = await settingsApi.update(settings);
       setSettings(updated);
       setMessage({ type: "success", text: "Settings saved." });
     } catch (err) {
-      setMessage({ type: "error", text: err instanceof ApiRequestError ? err.message : "Could not save settings." });
+      const structuredErrors = err instanceof ApiRequestError ? err.fieldErrors ?? [] : [];
+      setFieldErrors(structuredErrors);
+      if (structuredErrors.length === 0) {
+        setMessage({ type: "error", text: err instanceof ApiRequestError ? err.message : "Could not save settings." });
+      }
     } finally {
       setSaving(false);
     }
@@ -61,25 +68,28 @@ export default function SettingsPage() {
       <Card>
         <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-text-muted">General</h2>
         <div className="grid gap-3 sm:grid-cols-2">
-          <Input label="Site Name" value={settings.siteName} onChange={(e) => setSettings({ ...settings, siteName: e.target.value })} />
+          <Input label="Site Name" error={getFieldError(fieldErrors, "siteName")} value={settings.siteName} onChange={(e) => setSettings({ ...settings, siteName: e.target.value })} />
           <Input
             label="Helpline Number"
+            error={getFieldError(fieldErrors, "helplineNumber")}
             value={settings.helplineNumber}
             onChange={(e) => setSettings({ ...settings, helplineNumber: e.target.value })}
           />
           <Input
             label="WhatsApp Number"
+            error={getFieldError(fieldErrors, "whatsappNumber")}
             value={settings.whatsappNumber ?? ""}
             onChange={(e) => setSettings({ ...settings, whatsappNumber: e.target.value })}
           />
           <Input
             label="Support Email"
+            error={getFieldError(fieldErrors, "supportEmail")}
             type="email"
             value={settings.supportEmail ?? ""}
             onChange={(e) => setSettings({ ...settings, supportEmail: e.target.value })}
           />
           <div className="sm:col-span-2">
-            <Input label="Address" value={settings.address ?? ""} onChange={(e) => setSettings({ ...settings, address: e.target.value })} />
+            <Input label="Address" error={getFieldError(fieldErrors, "address")} value={settings.address ?? ""} onChange={(e) => setSettings({ ...settings, address: e.target.value })} />
           </div>
         </div>
       </Card>
@@ -93,22 +103,26 @@ export default function SettingsPage() {
         <div className="grid gap-3 sm:grid-cols-2">
           <Input
             label="Legal Name"
+            error={getFieldError(fieldErrors, "organisation.legalName")}
             value={settings.organisation?.legalName ?? ""}
             onChange={(e) => setSettings({ ...settings, organisation: { ...settings.organisation, legalName: e.target.value } })}
           />
           <Input
             label="Organisation PAN"
+            error={getFieldError(fieldErrors, "organisation.panNumber")}
             value={settings.organisation?.panNumber ?? ""}
             onChange={(e) => setSettings({ ...settings, organisation: { ...settings.organisation, panNumber: e.target.value } })}
           />
           <Input
             label="80G Exemption Reference"
+            error={getFieldError(fieldErrors, "organisation.exemptionRef")}
             value={settings.organisation?.exemptionRef ?? ""}
             onChange={(e) => setSettings({ ...settings, organisation: { ...settings.organisation, exemptionRef: e.target.value } })}
             hint="Leave blank to keep receipt generation disabled."
           />
           <Input
             label="Registered Address"
+            error={getFieldError(fieldErrors, "organisation.registeredAddress")}
             value={settings.organisation?.registeredAddress ?? ""}
             onChange={(e) => setSettings({ ...settings, organisation: { ...settings.organisation, registeredAddress: e.target.value } })}
           />
@@ -125,12 +139,14 @@ export default function SettingsPage() {
         <div className="grid gap-3 sm:grid-cols-2">
           <Input
             label="Quiet Hours Start"
+            error={getFieldError(fieldErrors, "notifications.quietHoursStart")}
             type="time"
             value={settings.notifications?.quietHoursStart ?? ""}
             onChange={(e) => setSettings({ ...settings, notifications: { ...settings.notifications, quietHoursStart: e.target.value } })}
           />
           <Input
             label="Quiet Hours End"
+            error={getFieldError(fieldErrors, "notifications.quietHoursEnd")}
             type="time"
             value={settings.notifications?.quietHoursEnd ?? ""}
             onChange={(e) => setSettings({ ...settings, notifications: { ...settings.notifications, quietHoursEnd: e.target.value } })}

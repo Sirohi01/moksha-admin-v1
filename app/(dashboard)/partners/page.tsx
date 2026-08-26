@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Plus } from "lucide-react";
 import Table, { Column } from "@/components/ui/Table";
 import Badge from "@/components/ui/Badge";
@@ -10,7 +10,7 @@ import { Input, Select, Textarea } from "@/components/ui/Input";
 import { partnersApi, PartnerInput } from "@/lib/partnersApi";
 import { Partner, PartnerType, PartnerStatus } from "@/lib/types";
 import { formatDate } from "@/lib/statusMeta";
-import { ApiRequestError } from "@/lib/api";
+import { useCrudResource } from "@/components/crud/useCrudResource";
 
 const EMPTY_FORM: PartnerInput = { name: "", type: "NGO", status: "LEAD" };
 
@@ -31,24 +31,13 @@ const STATUS_TONE: Record<PartnerStatus, "pending" | "success" | "danger" | "neu
 };
 
 export default function PartnersPage() {
-  const [partners, setPartners] = useState<Partner[]>([]);
-  const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<PartnerInput>(EMPTY_FORM);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
-
-  const load = () => {
-    setLoading(true);
-    partnersApi
-      .list()
-      .then(setPartners)
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  };
-
-  useEffect(load, []);
+  const { rows: partners, loading, saving, error, setError, save } = useCrudResource(
+    partnersApi,
+    { save: "Could not save partner." },
+  );
 
   const openCreate = () => {
     setEditingId(null);
@@ -75,20 +64,8 @@ export default function PartnersPage() {
   };
 
   const handleSave = async () => {
-    setSaving(true);
-    setError("");
-    try {
-      if (editingId) {
-        await partnersApi.update(editingId, form);
-      } else {
-        await partnersApi.create(form);
-      }
+    if (await save(editingId, form)) {
       setModalOpen(false);
-      load();
-    } catch (err) {
-      setError(err instanceof ApiRequestError ? err.message : "Could not save partner.");
-    } finally {
-      setSaving(false);
     }
   };
 

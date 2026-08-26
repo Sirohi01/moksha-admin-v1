@@ -2,10 +2,12 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000/a
 
 export class ApiRequestError extends Error {
   status: number;
+  fieldErrors?: { path: string; message: string }[];
 
-  constructor(status: number, message: string) {
+  constructor(status: number, message: string, fieldErrors?: { path: string; message: string }[]) {
     super(message);
     this.status = status;
+    this.fieldErrors = fieldErrors;
   }
 }
 
@@ -13,12 +15,16 @@ interface ApiEnvelope<T> {
   success: boolean;
   message: string;
   data: T;
+  errors?: { code?: string; path?: (string | number)[]; message: string }[];
 }
-
-// --- Token state -----------------------------------------------------------
-// Plain module state so this file never imports the store — the store's auth middleware pushes
-// tokens in here instead, avoiding a circular import (same pattern as the customer frontend).
-
+function formatValidationMessage(body: ApiEnvelope<unknown>): string {
+  if (!body.errors || body.errors.length === 0) return body.message || "Something went wrong. Please try again.";
+  const parts = body.errors.map((e) => {
+    const field = Array.isArray(e.path) ? e.path.slice(1).join(".") : undefined;
+    return field ? `${field}: ${e.message}` : e.message;
+  });
+  return parts.join("; ");
+}
 let accessToken: string | null = null;
 let refreshToken: string | null = null;
 let onTokensRefreshed: ((tokens: { accessToken: string; refreshToken: string }) => void) | null = null;
@@ -51,13 +57,6 @@ export function setTokenRefreshHandlers(handlers: {
   onTokensRefreshed = handlers.onRefreshed;
   onRefreshFailed = handlers.onFailed;
 }
-
-// The backend rotates refresh tokens on every use and treats presenting an already-rotated token
-// as theft (revokes every session for that user). Several requests can 401 at once — e.g. the
-// dashboard's Promise.all of several calls — so without this guard each would fire its own
-// refresh with the same (about-to-be-stale) token: the first rotates it, the rest then present
-// the now-rotated token and get flagged as reuse, wiping out the session that first call just
-// issued. Collapsing concurrent callers onto one in-flight request is the fix.
 let refreshInFlight: Promise<boolean> | null = null;
 
 async function refreshAccessToken(): Promise<boolean> {
@@ -110,7 +109,10 @@ async function request<T>(path: string, options?: RequestInit, isRetry = false):
   const body: ApiEnvelope<T> = await res.json();
 
   if (!res.ok || !body.success) {
-    throw new ApiRequestError(res.status, body.message || "Something went wrong. Please try again.");
+    const fieldErrors = body.errors
+      ?.filter((e): e is { code?: string; path: (string | number)[]; message: string } => Array.isArray(e.path))
+      .map((e) => ({ path: e.path.slice(1).join("."), message: e.message }));
+    throw new ApiRequestError(res.status, formatValidationMessage(body), fieldErrors);
   }
 
   return body.data;

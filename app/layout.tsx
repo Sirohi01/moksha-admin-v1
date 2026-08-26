@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Moksha Sewa Admin",
+  title: "Namo Gange Admin",
   description: "Admin dashboard for Moksha Sewa — bookings, donations, and content management.",
 };
 

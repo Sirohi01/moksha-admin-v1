@@ -13,6 +13,7 @@ import { NAV_SECTIONS } from "./navigation";
 import Modal from "@/components/ui/Modal";
 import Button from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import ScopeSwitchers from "./ScopeSwitchers";
 
 const NOTIFICATION_ICONS: Record<AdminNotificationType, typeof HeartHandshake> = {
   DONATION: HeartHandshake,
@@ -38,7 +39,7 @@ function currentPageTitle(pathname: string): string {
       }
     }
   }
-  return "Moksha Sewa Admin";
+  return "Namo Gange Admin";
 }
 
 export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
@@ -150,6 +151,7 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
       </div>
 
       <div className="flex items-center gap-1.5">
+        <ScopeSwitchers />
         <div className="relative">
           <button
             onClick={handleBellClick}
@@ -239,7 +241,7 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
           >
             <span className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white text-[11px] font-semibold text-accent border border-white/60 shadow-sm">
               {admin?.avatarUrl ? (
-                // eslint-disable-next-line @next/next/no-img-element -- user-supplied Cloudinary URL, not a local/static asset
+
                 <img src={admin.avatarUrl} alt="" className="h-full w-full object-cover" />
               ) : (
                 initials

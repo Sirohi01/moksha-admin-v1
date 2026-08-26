@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Plus } from "lucide-react";
 import Table, { Column } from "@/components/ui/Table";
 import Badge from "@/components/ui/Badge";
@@ -10,29 +10,18 @@ import { Input, Select, Textarea } from "@/components/ui/Input";
 import { expenseCategoriesApi, ExpenseCategoryInput } from "@/lib/expenseCategoriesApi";
 import { ExpenseCategory } from "@/lib/types";
 import { formatDate } from "@/lib/statusMeta";
-import { ApiRequestError } from "@/lib/api";
+import { useCrudResource } from "@/components/crud/useCrudResource";
 
 const EMPTY_FORM: ExpenseCategoryInput = { name: "", isActive: true };
 
 export default function ExpenseCategoriesPage() {
-  const [categories, setCategories] = useState<ExpenseCategory[]>([]);
-  const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<ExpenseCategoryInput>(EMPTY_FORM);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
-
-  const load = () => {
-    setLoading(true);
-    expenseCategoriesApi
-      .list()
-      .then(setCategories)
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  };
-
-  useEffect(load, []);
+  const { rows: categories, loading, saving, error, setError, save, remove } = useCrudResource(
+    expenseCategoriesApi,
+    { save: "Could not save expense category.", remove: "Could not remove expense category." },
+  );
 
   const openCreate = () => {
     setEditingId(null);
@@ -49,34 +38,15 @@ export default function ExpenseCategoriesPage() {
   };
 
   const handleSave = async () => {
-    setSaving(true);
-    setError("");
-    try {
-      if (editingId) {
-        await expenseCategoriesApi.update(editingId, form);
-      } else {
-        await expenseCategoriesApi.create(form);
-      }
+    if (await save(editingId, form)) {
       setModalOpen(false);
-      load();
-    } catch (err) {
-      setError(err instanceof ApiRequestError ? err.message : "Could not save expense category.");
-    } finally {
-      setSaving(false);
     }
   };
 
   const handleDelete = async () => {
     if (!editingId || !window.confirm("Remove this expense category?")) return;
-    setSaving(true);
-    try {
-      await expenseCategoriesApi.remove(editingId);
+    if (await remove(editingId)) {
       setModalOpen(false);
-      load();
-    } catch (err) {
-      setError(err instanceof ApiRequestError ? err.message : "Could not remove expense category.");
-    } finally {
-      setSaving(false);
     }
   };
 

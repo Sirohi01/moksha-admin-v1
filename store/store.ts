@@ -1,8 +1,10 @@
 import { configureStore, Middleware } from "@reduxjs/toolkit";
 import authReducer, { logout, setCredentials, setTokens as setTokensAction, updateAdmin, AdminUser } from "./slices/authSlice";
 import { setTokens, setTokenRefreshHandlers } from "@/lib/api";
+import scopeReducer, { clearScope, selectOrganisation, selectProject, setMyAccess } from "./slices/scopeSlice";
 
 const AUTH_STORAGE_KEY = "ms_admin_auth";
+const SCOPE_STORAGE_KEY = "ms_admin_scope";
 
 interface AuthStoreState {
   auth: { admin: AdminUser | null; accessToken: string | null; refreshToken: string | null };
@@ -35,6 +37,13 @@ const authSyncMiddleware: Middleware = (storeApi) => (next) => (action) => {
   if (logout.match(action)) {
     setTokens({ accessToken: null, refreshToken: null });
     localStorage.removeItem(AUTH_STORAGE_KEY);
+    storeApi.dispatch(clearScope());
+    localStorage.removeItem(SCOPE_STORAGE_KEY);
+  }
+
+  if (selectOrganisation.match(action) || selectProject.match(action) || setMyAccess.match(action)) {
+    const { selectedOrganisationCode, selectedProjectId } = (storeApi.getState() as RootState).scope;
+    localStorage.setItem(SCOPE_STORAGE_KEY, JSON.stringify({ selectedOrganisationCode, selectedProjectId }));
   }
 
   return result;
@@ -42,7 +51,7 @@ const authSyncMiddleware: Middleware = (storeApi) => (next) => (action) => {
 
 export function makeStore() {
   const store = configureStore({
-    reducer: { auth: authReducer },
+    reducer: { auth: authReducer, scope: scopeReducer },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(authSyncMiddleware),
   });
 
@@ -57,4 +66,4 @@ export function makeStore() {
 export type AppStore = ReturnType<typeof makeStore>;
 export type RootState = ReturnType<AppStore["getState"]>;
 export type AppDispatch = AppStore["dispatch"];
-export { AUTH_STORAGE_KEY };
+export { AUTH_STORAGE_KEY, SCOPE_STORAGE_KEY };

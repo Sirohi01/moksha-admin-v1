@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Plus } from "lucide-react";
 import Table, { Column } from "@/components/ui/Table";
 import Badge from "@/components/ui/Badge";
@@ -10,7 +10,7 @@ import { Input, Select, Textarea } from "@/components/ui/Input";
 import { serviceProvidersApi, ServiceProviderInput } from "@/lib/serviceProvidersApi";
 import { ServiceProvider, ServiceProviderCategory } from "@/lib/types";
 import { formatDate } from "@/lib/statusMeta";
-import { ApiRequestError } from "@/lib/api";
+import { useCrudResource } from "@/components/crud/useCrudResource";
 
 const EMPTY_FORM: ServiceProviderInput = {
   name: "",
@@ -28,24 +28,13 @@ const CATEGORY_LABELS: Record<ServiceProviderCategory, string> = {
 };
 
 export default function ServiceProvidersPage() {
-  const [providers, setProviders] = useState<ServiceProvider[]>([]);
-  const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<ServiceProviderInput>(EMPTY_FORM);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
-
-  const load = () => {
-    setLoading(true);
-    serviceProvidersApi
-      .list()
-      .then(setProviders)
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  };
-
-  useEffect(load, []);
+  const { rows: providers, loading, saving, error, setError, save, remove } = useCrudResource(
+    serviceProvidersApi,
+    { save: "Could not save service provider.", remove: "Could not remove service provider." },
+  );
 
   const openCreate = () => {
     setEditingId(null);
@@ -70,34 +59,15 @@ export default function ServiceProvidersPage() {
   };
 
   const handleSave = async () => {
-    setSaving(true);
-    setError("");
-    try {
-      if (editingId) {
-        await serviceProvidersApi.update(editingId, form);
-      } else {
-        await serviceProvidersApi.create(form);
-      }
+    if (await save(editingId, form)) {
       setModalOpen(false);
-      load();
-    } catch (err) {
-      setError(err instanceof ApiRequestError ? err.message : "Could not save service provider.");
-    } finally {
-      setSaving(false);
     }
   };
 
   const handleDelete = async () => {
     if (!editingId || !window.confirm("Remove this service provider from the list?")) return;
-    setSaving(true);
-    try {
-      await serviceProvidersApi.remove(editingId);
+    if (await remove(editingId)) {
       setModalOpen(false);
-      load();
-    } catch (err) {
-      setError(err instanceof ApiRequestError ? err.message : "Could not remove service provider.");
-    } finally {
-      setSaving(false);
     }
   };
 

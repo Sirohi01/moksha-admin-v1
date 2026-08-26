@@ -42,7 +42,6 @@ export default function RequestsPage() {
 
   useEffect(() => {
     load(tab);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tab]);
 
   const handleConvert = async () => {
