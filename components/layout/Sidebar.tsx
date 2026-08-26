@@ -34,20 +34,17 @@ export default function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   };
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>(() =>
     Object.fromEntries(
-      NAV_SECTIONS.filter((s) => s.title !== "Overview").map((s) => [s.title, !["Masters", "Admin"].includes(s.title)])
+      NAV_SECTIONS.filter((s) => s.title !== "Overview").map((s) => [s.title, true])
     )
   );
-  const [nestedCollapsed, setNestedCollapsed] = useState<Record<string, boolean>>({
-    Website: false,
-    "Landing Page": false,
-  });
+  const [nestedCollapsed, setNestedCollapsed] = useState<Record<string, boolean>>({});
 
   const toggleSection = (title: string) => {
     setCollapsed((prev) => ({ ...prev, [title]: !prev[title] }));
   };
 
   const toggleNested = (key: string) => {
-    setNestedCollapsed((prev) => ({ ...prev, [key]: !prev[key] }));
+    setNestedCollapsed((prev) => ({ ...prev, [key]: prev[key] === undefined ? false : !prev[key] }));
   };
 
   const renderNavItem = (item: NavItem, depth = 0) => {
@@ -56,7 +53,7 @@ export default function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
     const Icon = item.icon;
 
     if (item.children?.length) {
-      const isOpen = nestedCollapsed[item.label] !== true;
+      const isOpen = nestedCollapsed[item.label] === false;
       return (
         <div
           key={item.href}
