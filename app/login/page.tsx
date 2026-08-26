@@ -169,7 +169,7 @@ export default function LoginPage() {
           Admin Panel
         </h2>
         <p className="mt-2 text-center text-sm font-medium text-slate-500">
-          Sign in to manage Moksha Sewa operations
+          Sign in to manage Namo Gange Operations
         </p>
       </div>
 
