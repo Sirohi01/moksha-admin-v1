@@ -131,7 +131,7 @@ export const defaultUnclaimedBodySections: ExtraSectionContent[] = [
     name: "Unclaimed Body Hero",
     enabled: true,
     eyebrow: "Unclaimed Body Sewa",
-    title: "Ensuring Final Dignity  For Every Departed Soul",
+    title: "Ensuring Final Dignity\nFor Every Departed Soul",
     subtitle: "A Sacred Duty Undertaken By Moksha Sewa",
     description: "Standing for those who have no one. We perform final rites for authorised unclaimed bodies after strict police & legal verification.",
     image: "/hero-images/dignity-in-every-final-journey-bg.png",
@@ -146,67 +146,96 @@ export const defaultUnclaimedBodySections: ExtraSectionContent[] = [
     title: "Standing Beside The Unknown & Forgotten",
     description: "Every human life deserves a respectful farewell. Moksha Sewa coordinates with local police and hospital authorities to perform sacred rites.",
     image: "/assets/about-optimized/a_mission.png",
-  },
-  {
-    key: "unclaimed-dignity-first",
-    name: "Dignity Comes First",
-    enabled: true,
-    eyebrow: "Core Value",
-    title: "Humanity Beyond Circumstance",
-    description: "We handle every single body with sacred rituals, fresh garments, flowers and complete respect, regardless of identity or background.",
-    image: "/assets/about-optimized/existimage.png",
+    items: [
+      { description: "Support proceeds only after the required verification and authorisation from the competent authority." },
+      { description: "Police, hospital, municipal and legal procedures must be completed wherever applicable." },
+      { description: "Case information and documents are handled responsibly, with privacy and dignity." },
+    ],
   },
   {
     key: "unclaimed-process",
-    name: "Verification & Legal Process",
+    name: "The Sewa Process",
     enabled: true,
-    eyebrow: "Systematic Verification",
-    title: "Strict Authorisation & Protocol",
-    description: "Support is only initiated after statutory waiting periods, police clearance certificates, and official hospital handovers.",
+    eyebrow: "The Sewa Process",
+    title: "How Unclaimed Body Sewa Works",
+    description: "",
     items: [
-      { title: "Police Clearance", description: "Official NOC and NOC document verification." },
-      { title: "Hospital Coordination", description: "Proper post-mortem and identity documentation check." },
-      { title: "Sacred Rites Execution", description: "Final cremation performed with full spiritual rites." },
+      { title: "Case Referral", description: "Case details are received from an appropriate or verifiable source." },
+      { title: "Verification & Authorisation", description: "Available case information, documentation and required authorisation are reviewed before assistance is undertaken." },
+      { title: "Sewa Coordination", description: "Eligible assistance is coordinated according to case requirements, applicable process and available resources." },
+      { title: "Dignified Final Journey", description: "Approved support is provided with sensitivity, dignity and respect." },
     ],
   },
   {
     key: "unclaimed-final-journey",
-    name: "Final Journey Support",
+    name: "Sewa Support",
     enabled: true,
-    eyebrow: "Full Execution",
-    title: "From Mortuary To Sacred Ghats",
-    description: "End-to-end execution managed by verified volunteers and dedicated coordinators.",
-    image: "/assets/about-reference/story-ghat-temple.png",
+    eyebrow: "Sewa Support",
+    title: "Support for a Dignified Final Journey",
+    description: "Depending on the verified case, applicable requirements and available resources, assistance may include:",
+    image: "",
+    items: [
+      { title: "Final-Journey Transport", description: "Appropriate transport coordination where required and permitted." },
+      { title: "Cremation & Last-Rites Coordination", description: "Support with eligible final-journey arrangements." },
+      { title: "Ritual Essentials", description: "Basic materials required for final rites where applicable." },
+      { title: "Priest / Ritual Coordination", description: "Appropriate ritual guidance or coordination where relevant." },
+      { title: "On-Ground Sewa", description: "Compassionate presence and practical coordination during the final journey." },
+    ],
+  },
+  {
+    key: "unclaimed-dignity-first",
+    name: "Sewa With Responsibility",
+    enabled: true,
+    eyebrow: "Sewa With Responsibility",
+    title: "Dignity Comes First.",
+    description: "Humanitarian support during a final journey requires sensitivity, privacy and responsible processes.",
+    image: "",
+    items: [
+      { title: "Authorised Support", description: "Required legal and administrative clearances are verified before eligible assistance proceeds." },
+      { title: "Privacy & Respect", description: "Sensitive case information is handled responsibly, privately and with dignity at every stage." },
+      { title: "Responsible Documentation", description: "Relevant case and activity records are maintained where applicable for clear accountability." },
+      { title: "No Exploitation", description: "Human dignity always takes priority over publicity, promotion or unnecessary public exposure." },
+    ],
   },
   {
     key: "unclaimed-organisation",
     name: "Organisation Behind Mission",
     enabled: true,
-    eyebrow: "Institutional Backing",
-    title: "Namo Gange Trust Framework",
-    description: "Operating under transparent governance and institutional guidelines.",
+    eyebrow: "Namo Gange Trust",
+    title: "The Organisation Behind Moksha Sewa",
+    description: "A Humanitarian Initiative of Namo Gange Trust.",
     image: "/assets/logo-moksha-seva.png",
+    items: [
+      { title: "Governance", description: "Ethical leadership and transparent processes at every step." },
+      { title: "Social Service", description: "Working for community welfare and meaningful social impact." },
+      { title: "Humanitarian Action", description: "Compassionate action for people who need timely support." },
+      { title: "Responsible Sewa", description: "Dignity-first support with accountability and care." },
+    ],
   },
   {
     key: "unclaimed-faq",
     name: "Unclaimed Body FAQ",
     enabled: true,
-    eyebrow: "Questions & Answers",
+    eyebrow: "Help & Information",
     title: "Frequently Asked Questions",
-    description: "Clarifications regarding legal permissions, reporting process, and volunteer involvement.",
+    description: "About Unclaimed Body Sewa",
     items: [
-      { title: "Who can report an unclaimed body?", description: "Hospital authorities, police officers, or verified social workers can notify us." },
-      { title: "Is police permission mandatory?", description: "Yes, 100% legal verification and police authorization is required before any action." },
+      { title: "What is an unclaimed body?", description: "The legal or administrative status of a deceased person is determined by competent authorities under applicable procedures. Moksha Sewa does not independently declare a body to be unclaimed." },
+      { title: "Who can request Unclaimed Body Sewa?", description: "Hospital authorities, police officers, or verified social workers can notify us." },
+      { title: "What documents or authorisation may be required?", description: "Police clearance certificates, official hospital handovers, and statutory waiting periods are verified." },
+      { title: "What support can Moksha Sewa provide?", description: "Final-journey transport, cremation coordination, and basic ritual materials." },
+      { title: "Does Moksha Sewa declare a body legally unclaimed?", description: "No, we do not declare bodies as unclaimed. We only assist cases authorised by competent authorities." },
+      { title: "Where is Unclaimed Body Sewa currently available?", description: "Please contact our coordination desk for availability in your region." },
     ],
   },
   {
     key: "unclaimed-request",
     name: "Request Unclaimed Case Support",
     enabled: true,
-    eyebrow: "Official Channel",
-    title: "Notify Our Emergency Unclaimed Desk",
-    description: "Contact our dedicated coordination team for prompt case assistance.",
-    buttonLabel: "Submit Request",
+    eyebrow: "Need Assistance With",
+    title: "an Unclaimed Body Case?",
+    description: "Share the available details so our team can understand the situation and review the appropriate next step.\nIf the matter is currently with a hospital, police station or other competent authority, please complete the applicable official process and obtain the required authorisation before final-journey assistance can proceed.",
+    buttonLabel: "Submit Sewa Request",
     buttonHref: "/request-help",
   },
 ];
@@ -655,3 +684,778 @@ export function mergeTrackSections(sections?: ExtraSectionContent[]): ExtraSecti
     return normalizeLandingSection({ ...fallback, ...saved, items, enabled: saved.enabled !== false }, fallback);
   });
 }
+
+// Generated Services Content
+export const defaultAmbulanceSections: ExtraSectionContent[] = [
+  {
+    key: "ambulance-hero",
+    name: "Ambulance Hero",
+    enabled: true,
+    eyebrow: "24×7 Last Journey Support",
+    title: "Ambulance & Hearse\nSupport with Dignity",
+    description: "Namo Gange coordinates ambulance and hearse support for eligible last-journey cases with dignified transfer, calm guidance and timely assistance, subject to verification and availability.",
+    image: "/ambulance/hero-ambulance.webp",
+    buttonLabel: "Call for Ambulance",
+    buttonHref: "tel:+919654900525",
+    secondaryButtonLabel: "Request Support",
+    secondaryButtonHref: "/request-help",
+    bottomStatement: "Serving families with compassion, respect and timely support.",
+  },
+  {
+    key: "ambulance-highlights",
+    name: "Ambulance Highlights",
+    enabled: true,
+    items: [
+      { title: "24/7 Availability", description: "Always here, day or night. Whenever you need us.", label: "clock" },
+      { title: "Respectful Transport", description: "Dignified ambulance and hearse van for last journey.", label: "ambulance" },
+      { title: "Trained Support Team", description: "Compassionate and skilled team you can trust.", label: "team" },
+      { title: "Fast Response", description: "Quick response to reach you as soon as possible.", label: "timer" }
+    ],
+  },
+  {
+    key: "ambulance-how-it-works",
+    name: "Ambulance How It Works",
+    enabled: true,
+    title: "How It Works",
+    items: [
+      { title: "Call or Request", description: "Contact us anytime by call or request online.", label: "phone" },
+      { title: "We Respond", description: "Our team reaches you quickly.", label: "ambulance" },
+      { title: "We Assist", description: "We handle transport and support with care.", label: "hands" },
+      { title: "Dignified Last Journey", description: "We ensure a respectful and peaceful last journey.", label: "leaf" }
+    ],
+  },
+  {
+    key: "ambulance-support",
+    name: "Ambulance Support Section",
+    enabled: true,
+    title: "We Stand With You\nWhen It Matters Most",
+    description: "In your most difficult moments, we stand beside you. Our ambulance and hearse support services are designed to bring relief, care and dignity.",
+    image: "/ambulance/family-support.webp",
+    items: [
+      { title: "Ambulance for emergency & non-emergency transfer" },
+      { title: "Hearse van for last journey with full respect" },
+      { title: "Help with basic coordination & arrangements" },
+      { title: "Respectful support at the ghat and during rituals" }
+    ],
+    buttonLabel: "We Are Here For You",
+    buttonHref: "tel:+919654900525",
+    secondaryDescription: "Support team standing with a family",
+  },
+  {
+    key: "ambulance-stories",
+    name: "Ambulance Stories",
+    enabled: true,
+    items: [
+      { title: "Always Ready", description: "Ambulance available 24×7 at all locations.", image: "/ambulance/story-always-ready.webp", label: "clock" },
+      { title: "Careful & Respectful", description: "Trained team ensures safe and dignified transfer.", image: "/ambulance/story-respectful-transfer.webp", label: "hands" },
+      { title: "Compassionate Support", description: "We stand with families with empathy and care.", image: "/ambulance/story-family-care.webp", label: "family" }
+    ],
+  },
+  {
+    key: "ambulance-receive",
+    name: "Ambulance What Families Receive",
+    enabled: true,
+    title: "What Families Receive",
+    items: [
+      { title: "Ambulance Support", description: "24×7 ambulance service for quick and safe transfer.", label: "ambulance" },
+      { title: "Hearse Van Support", description: "Dignified hearse van for last journey transport.", label: "ambulance" },
+      { title: "Ritual Coordination", description: "Basic ritual support and puja samagri assistance.", label: "ritual" },
+      { title: "On-Ground Assistance", description: "Help with ghat entry, arrangements & support.", label: "team" },
+      { title: "Emergency Contact Support", description: "Dedicated helpline for immediate guidance.", label: "phone" }
+    ],
+  },
+  {
+    key: "ambulance-trust",
+    name: "Ambulance Why Families Trust Us",
+    enabled: true,
+    title: "Why Families Trust Namo Gange",
+    items: [
+      { title: "Sewa with Respect", description: "24×7 service with dignity and care.", label: "leaf" },
+      { title: "Trusted by Families", description: "Thousands of families trust our sewa.", label: "family" },
+      { title: "Transparent & Honest", description: "No hidden charges. Complete transparency.", label: "shield" },
+      { title: "Wide Service Network", description: "Help across Delhi • Ghaziabad • Noida and nearby regions.", label: "pin" },
+      { title: "End-to-End Support", description: "From first call to final ritual support.", label: "support" }
+    ],
+  },
+  {
+    key: "ambulance-donation",
+    name: "Ambulance Donation CTA",
+    enabled: true,
+    title: "Your Donation Brings Peace",
+    description: "Your kind contribution helps us provide ambulance, hearse and last-journey support to families who cannot afford it. Together, we can bring comfort, dignity and peace in their most difficult moments.",
+    image: "/assets/km.jpeg",
+    buttonLabel: "Donate for Ambulance Service",
+    buttonHref: "/donation",
+    secondaryButtonLabel: "Support Our Sewa",
+    secondaryButtonHref: "tel:+919654900525",
+    secondaryTitle: "Every\nContribution\nBrings Peace",
+  },
+];
+
+export function mergeAmbulanceSections(sections?: ExtraSectionContent[]): ExtraSectionContent[] {
+  if (!sections?.length) return defaultAmbulanceSections;
+  const byKey = new Map(sections.map((s) => [s.key, s]));
+  return defaultAmbulanceSections.map((fallback) => {
+    const saved = byKey.get(fallback.key);
+    if (!saved) return fallback;
+    const items = saved.items !== undefined ? saved.items : fallback.items;
+    return normalizeLandingSection({ ...fallback, ...saved, items, enabled: saved.enabled !== false }, fallback);
+  });
+}
+
+export const defaultPanditSections: ExtraSectionContent[] = [
+  {
+    key: "pandit-hero",
+    name: "Pandit Hero",
+    enabled: true,
+    title: "Priest Support",
+    subtitle: "For a Dignified Final Journey.",
+    description: "Experienced Pandit Ji's guide your family with compassion, clarity and reverence in every sacred ritual of your loved one's journey.",
+    image: "/assets/panditservices/hero-real.png",
+    buttonLabel: "Request Priest Support",
+    buttonHref: "/request-help",
+    secondaryButtonLabel: "Donate for Ritual Support",
+    secondaryButtonHref: "/donation",
+  },
+  {
+    key: "pandit-highlights",
+    name: "Pandit Highlights",
+    enabled: true,
+    items: [
+      { title: "Experienced Pandit Ji", description: "Learned and compassionate guidance", image: "/assets/panditservices/feature-pandit.png" },
+      { title: "Vedic Guidance", description: "Guidance based on Hindu traditions", image: "/assets/panditservices/feature-vedic.png" },
+      { title: "Ritual Planning", description: "Complete ritual planning and coordination", image: "/assets/panditservices/feature-planning.png" },
+      { title: "Regional Traditions", description: "Rituals according to family customs", image: "/assets/panditservices/feature-traditions.png" }
+    ],
+  },
+  {
+    key: "pandit-how-it-works",
+    name: "Pandit How It Works",
+    enabled: true,
+    title: "How It Works",
+    items: [
+      { title: "Call or Request Support", label: "phone" },
+      { title: "Pandit Ji Consultation", label: "team" },
+      { title: "Ritual Arrangement", label: "hands" },
+      { title: "Guidance Through Every Ceremony", label: "hands" }
+    ],
+  },
+  {
+    key: "pandit-support",
+    name: "Pandit Support Section",
+    enabled: true,
+    title: "",
+    description: "",
+    image: "",
+    items: [],
+  },
+  {
+    key: "pandit-stories",
+    name: "Pandit Stories",
+    enabled: true,
+    title: "Ritual Support at Every Step",
+    items: [
+      { title: "Pre-Ritual Consultation", image: "/assets/panditservices/ritual-1.png" },
+      { title: "Antim Sanskar Vidhi", image: "/assets/panditservices/ritual-2.png" },
+      { title: "Mukhagni Guidance", image: "/assets/panditservices/ritual-3.png" },
+      { title: "Asthi Visarjan", image: "/assets/panditservices/ritual-4.png" },
+      { title: "Pind Daan", image: "/assets/panditservices/ritual-5.png" },
+      { title: "Tehrvi & Shanti Paath", image: "/assets/panditservices/ritual-6.png" }
+    ],
+  },
+  {
+    key: "pandit-receive",
+    name: "Pandit What Families Receive",
+    enabled: true,
+    title: "Pandit Ji Roles",
+    items: [
+      { title: "Samagri Guidance", description: "Right samagri for every sacred ritual.", image: "/assets/panditservices/roles-1.png" },
+      { title: "Prayer Hall Ceremony", description: "Rituals conducted with peace and reverence.", image: "/assets/panditservices/roles-2.png" },
+      { title: "Family Ritual Explanation", description: "Simple guidance at every sacred step.", image: "/assets/panditservices/roles-3.png" },
+      { title: "Post-Ritual Support", description: "Guidance for remaining rituals and timelines.", image: "/assets/panditservices/roles-4.png" }
+    ],
+  },
+  {
+    key: "pandit-trust",
+    name: "Pandit Why Families Trust Us",
+    enabled: true,
+    title: "Why Families Trust Us",
+    items: [
+      { title: "Compassionate Guidance", description: "Care, sensitivity and respect in every moment.", label: "heart" },
+      { title: "Authentic Hindu Rituals", description: "Rituals performed according to Shastra and tradition.", label: "om" },
+      { title: "Support Beyond Ceremony", description: "Continued spiritual guidance after the ceremony.", label: "handshake" }
+    ],
+  },
+  {
+    key: "pandit-donation",
+    name: "Pandit Donation CTA",
+    enabled: true,
+    title: "Your Support Helps Families Receive Dignified & Sacred Final Rites",
+    description: "Every act of kindness becomes a blessing for many.",
+    image: "/assets/panditservices/hero.png",
+    buttonLabel: "Donate for Ritual Support",
+    buttonHref: "/donation",
+  },
+];
+
+export function mergePanditSections(sections?: ExtraSectionContent[]): ExtraSectionContent[] {
+  if (!sections?.length) return defaultPanditSections;
+  const byKey = new Map(sections.map((s) => [s.key, s]));
+  return defaultPanditSections.map((fallback) => {
+    const saved = byKey.get(fallback.key);
+    if (!saved) return fallback;
+    const items = saved.items !== undefined ? saved.items : fallback.items;
+    return normalizeLandingSection({ ...fallback, ...saved, items, enabled: saved.enabled !== false }, fallback);
+  });
+}
+
+export const defaultFuneralSections: ExtraSectionContent[] = [
+  {
+    key: "funeral-hero",
+    name: "Funeral Hero",
+    enabled: true,
+    title: "Wood & Ritual Items",
+    subtitle: "Arranged With Deep Respect.",
+    description: "At Moksha Sewa, we understand the financial and emotional burden of the final rites. We help eligible families coordinate cremation wood, shroud cloth (Kafan), flowers, lamps, and essential prayer items subject to verification and availability.",
+    image: "/woodrituals/hero.webp",
+    buttonLabel: "Request Wood & Items",
+    buttonHref: "/request-help",
+  },
+  {
+    key: "funeral-highlights",
+    name: "Funeral Highlights",
+    enabled: true,
+    items: [],
+  },
+  {
+    key: "funeral-how-it-works",
+    name: "Funeral How It Works",
+    enabled: true,
+    title: "",
+    items: [],
+  },
+  {
+    key: "funeral-support",
+    name: "Funeral Support Section",
+    enabled: true,
+    title: "",
+    description: "",
+    image: "",
+    items: [],
+  },
+  {
+    key: "funeral-stories",
+    name: "Funeral Stories",
+    enabled: true,
+    items: [],
+  },
+  {
+    key: "funeral-receive",
+    name: "Funeral What Families Receive",
+    enabled: true,
+    title: "What We Arrange",
+    items: [
+      { title: "Cremation Wood", description: "We provide sufficient dry wood required for a complete and respectful cremation ceremony, subject to verification and availability.", image: "/woodrituals/cremation-wood.webp" },
+      { title: "Shroud & Flowers", description: "Pure white shroud cloth, garlands and fresh flowers are arranged carefully to honour the departed soul with dignity and purity.", image: "/woodrituals/shroud-flowers.webp" },
+      { title: "Prayer Items", description: "Ghee, sandalwood, incense, earthen lamps and essential Pooja Samagri are carefully arranged for the final rites and prayers.", image: "/woodrituals/prayer-items.webp" }
+    ],
+  },
+  {
+    key: "funeral-trust",
+    name: "Funeral Why Families Trust Us",
+    enabled: true,
+    title: "“We believe that no family should have to worry about the expenses of a final farewell while grieving the loss of their loved one.”",
+    description: "Our volunteers work tirelessly to ensure that every necessary item reaches the cremation ground on time. You mourn in peace, let us handle the arrangements.",
+    items: [],
+  },
+  {
+    key: "funeral-donation",
+    name: "Funeral Donation CTA",
+    enabled: true,
+    title: "",
+    description: "",
+    buttonLabel: "",
+    buttonHref: "",
+    secondaryButtonLabel: "",
+    secondaryButtonHref: "",
+  },
+];
+
+export function mergeFuneralSections(sections?: ExtraSectionContent[]): ExtraSectionContent[] {
+  if (!sections?.length) return defaultFuneralSections;
+  const byKey = new Map(sections.map((s) => [s.key, s]));
+  return defaultFuneralSections.map((fallback) => {
+    const saved = byKey.get(fallback.key);
+    if (!saved) return fallback;
+    const items = saved.items !== undefined ? saved.items : fallback.items;
+    return normalizeLandingSection({ ...fallback, ...saved, items, enabled: saved.enabled !== false }, fallback);
+  });
+}
+
+export const defaultFuneralDecorationSections: ExtraSectionContent[] = [
+  {
+    key: "funeralDecoration-hero",
+    name: "Funeral Decoration Hero",
+    enabled: true,
+    title: "Funeral Decoration",
+    subtitle: "A Beautiful Final Journey.",
+    description: "We believe in bidding farewell with utmost respect and serenity. Our volunteers arrange traditional floral decorations for the hearse van, pyre, and prayer hall using fresh and sacred flowers to honor the departed soul.",
+    image: "/assets/how-we-help/three.png",
+    buttonLabel: "Request Decoration",
+    buttonHref: "/request-help",
+    secondaryButtonLabel: "24x7 Helpline",
+    secondaryButtonHref: "tel:+919999999999",
+  },
+  {
+    key: "funeralDecoration-highlights",
+    name: "Funeral Decoration Highlights",
+    enabled: true,
+    items: [],
+  },
+  {
+    key: "funeralDecoration-how-it-works",
+    name: "Funeral Decoration How It Works",
+    enabled: true,
+    title: "Our Decoration Services",
+    items: [
+      { title: "Hearse Van Decoration", description: "Elegant and respectful floral decoration for the ambulance or hearse van, creating a dignified setting for the final journey.", label: "florist" },
+      { title: "Pyre & Pathway Setup", description: "Fresh flowers and sacred leaves are arranged around the cremation area to create a peaceful and respectful environment.", label: "leaf" },
+      { title: "Prayer Hall Serenity", description: "Calming floral arrangements for the Shanti Path and prayer area, creating a serene atmosphere for family and grieving guests.", label: "nature" }
+    ],
+  },
+  {
+    key: "funeralDecoration-support",
+    name: "Funeral Decoration Support Section",
+    enabled: true,
+    title: "",
+    description: "",
+    image: "",
+    items: [],
+  },
+  {
+    key: "funeralDecoration-stories",
+    name: "Funeral Decoration Stories",
+    enabled: true,
+    items: [],
+  },
+  {
+    key: "funeralDecoration-receive",
+    name: "Funeral Decoration What Families Receive",
+    enabled: true,
+    title: "",
+    items: [],
+  },
+  {
+    key: "funeralDecoration-trust",
+    name: "Funeral Decoration Why Families Trust Us",
+    enabled: true,
+    title: "&quot;Flowers speak the language of peace, honoring a beautiful life that has moved on.&quot;",
+    description: "Our volunteers carefully handpick fresh flowers, ensuring the final journey of your loved one is surrounded by purity, respect, and unconditional love.",
+    items: [],
+  },
+  {
+    key: "funeralDecoration-donation",
+    name: "Funeral Decoration Donation CTA",
+    enabled: true,
+    title: "",
+    description: "",
+    buttonLabel: "",
+    buttonHref: "",
+    secondaryButtonLabel: "",
+    secondaryButtonHref: "",
+  },
+];
+
+export function mergeFuneralDecorationSections(sections?: ExtraSectionContent[]): ExtraSectionContent[] {
+  if (!sections?.length) return defaultFuneralDecorationSections;
+  const byKey = new Map(sections.map((s) => [s.key, s]));
+  return defaultFuneralDecorationSections.map((fallback) => {
+    const saved = byKey.get(fallback.key);
+    if (!saved) return fallback;
+    const items = saved.items !== undefined ? saved.items : fallback.items;
+    return normalizeLandingSection({ ...fallback, ...saved, items, enabled: saved.enabled !== false }, fallback);
+  });
+}
+
+export const defaultPrayerHallSections: ExtraSectionContent[] = [
+  {
+    key: "prayerHall-hero",
+    name: "Prayer Hall Hero",
+    enabled: true,
+    title: "Ground & Prayer Support",
+    subtitle: "Creating A Space For Peace.",
+    description: "Finding the right place to grieve and pray is essential. We assist with cremation-ground coordination, setting up serene prayer halls, and providing calm guidance for the entire family.",
+    image: "/assets/prayerhallservices/hero-real.png",
+    buttonLabel: "Request Support",
+    buttonHref: "/request-help",
+    secondaryButtonLabel: "Donate for Support",
+    secondaryButtonHref: "/donation",
+  },
+  {
+    key: "prayerHall-highlights",
+    name: "Prayer Hall Highlights",
+    enabled: true,
+    items: [
+      { title: "Ground Coordination", description: "Seamless coordination with ground staff and family members.", image: "/assets/prayerhallservices/feature-ground.png" },
+      { title: "Prayer Setup", description: "Serene prayer arrangements prepared with care and respect.", image: "/assets/prayerhallservices/feature-setup.png" },
+      { title: "Family Support", description: "Gentle guidance and assistance for family members throughout.", image: "/assets/prayerhallservices/feature-family.png" },
+      { title: "Peaceful Environment", description: "A calm and respectful space for prayer, mourning and remembrance.", image: "/assets/prayerhallservices/feature-peace.png" }
+    ],
+  },
+  {
+    key: "prayerHall-how-it-works",
+    name: "Prayer Hall How It Works",
+    enabled: true,
+    title: "How It Works",
+    items: [
+      { title: "Call or Request Support", label: "phone" },
+      { title: "Ground Coordination", label: "building" },
+      { title: "Prayer Hall Setup", label: "florist" },
+      { title: "Guidance During Ceremony", label: "hands" }
+    ],
+  },
+  {
+    key: "prayerHall-support",
+    name: "Prayer Hall Support Section",
+    enabled: true,
+    title: "",
+    description: "",
+    image: "",
+    items: [],
+  },
+  {
+    key: "prayerHall-stories",
+    name: "Prayer Hall Stories",
+    enabled: true,
+    title: "Our Complete Support",
+    items: [
+      { title: "Ground Booking", image: "/assets/prayerhallservices/support-1.png" },
+      { title: "Floral Setup", image: "/assets/prayerhallservices/support-2.png" },
+      { title: "Seating Arrangements", image: "/assets/prayerhallservices/support-3.png" },
+      { title: "Audio & Mic Setup", image: "/assets/prayerhallservices/support-4.png" },
+      { title: "Pandit Ji Coordination", image: "/assets/prayerhallservices/support-5.png" },
+      { title: "Guest Management", image: "/assets/prayerhallservices/support-6.png" }
+    ],
+  },
+  {
+    key: "prayerHall-receive",
+    name: "Prayer Hall What Families Receive",
+    enabled: true,
+    title: "Ground Support Roles",
+    items: [
+      { title: "Venue Coordination", description: "Suitable venue coordination for every sacred ritual.", image: "/assets/prayerhallservices/roles-1.png" },
+      { title: "Setup & Decor", description: "Peaceful arrangements prepared with care and dignity.", image: "/assets/prayerhallservices/roles-2.png" },
+      { title: "Guest Assistance", description: "Clear and compassionate guidance for guests at every step.", image: "/assets/prayerhallservices/roles-3.png" },
+      { title: "Post-Prayer Cleanup", description: "Respectful clearing and coordination after rituals conclude.", image: "/assets/prayerhallservices/roles-4.png" }
+    ],
+  },
+  {
+    key: "prayerHall-trust",
+    name: "Prayer Hall Why Families Trust Us",
+    enabled: true,
+    title: "Why Families Trust Us",
+    items: [
+      { title: "Compassionate Guidance", description: "Care, sensitivity and respect in every moment.", label: "heart" },
+      { title: "Authentic Arrangements", description: "Setups tailored carefully to Shastra and family traditions.", label: "om" },
+      { title: "Support Beyond Ceremony", description: "Continued guidance and support even after the ceremony.", label: "handshake" }
+    ],
+  },
+  {
+    key: "prayerHall-donation",
+    name: "Prayer Hall Donation CTA",
+    enabled: true,
+    title: "Your Support Helps Families Receive Dignified & Sacred Final Rites",
+    description: "Every act of kindness becomes a blessing for many.",
+    image: "/assets/prayerhallservices/hero.png",
+    buttonLabel: "Donate for Support",
+    buttonHref: "/donation",
+  },
+];
+
+export function mergePrayerHallSections(sections?: ExtraSectionContent[]): ExtraSectionContent[] {
+  if (!sections?.length) return defaultPrayerHallSections;
+  const byKey = new Map(sections.map((s) => [s.key, s]));
+  return defaultPrayerHallSections.map((fallback) => {
+    const saved = byKey.get(fallback.key);
+    if (!saved) return fallback;
+    const items = saved.items !== undefined ? saved.items : fallback.items;
+    return normalizeLandingSection({ ...fallback, ...saved, items, enabled: saved.enabled !== false }, fallback);
+  });
+}
+
+export const defaultSpecialServiceSections: ExtraSectionContent[] = [
+  {
+    key: "specialService-hero",
+    name: "Special Service Hero",
+    enabled: true,
+    eyebrow: "Extended Family Support",
+    title: "Family Support",
+    subtitle: "Standing Beside You.",
+    description: "Beyond the final rites, Moksha Sewa helps eligible families with case-based guidance, relief coordination and compassionate support, subject to verification and availability.",
+    image: "/assets/family-support/hero-bg-2.png",
+    buttonLabel: "Request Support",
+    buttonHref: "/request-help",
+    secondaryButtonLabel: "24x7 Helpline",
+    secondaryButtonHref: "tel:+919220147229",
+  },
+  {
+    key: "specialService-highlights",
+    name: "Special Service Highlights",
+    enabled: true,
+    items: [
+      { title: "Emotional Support", description: "Counseling and a sympathetic ear for grieving families.", image: "/assets/serving/counseling-support.png" },
+      { title: "Tehravi Khana", description: "Respectful management of the 13th-day meal for grieving families.", image: "/assets/serving/food-essentials.png" },
+      { title: "Formalities", description: "Help with death certificates and important legal procedures.", image: "/assets/serving/document-assistance.png" },
+      { title: "Ambulance", description: "Transport support for eligible cases after required verification.", image: "/assets/serving/emergency-transport.png" },
+      { title: "Eligibility Based", description: "Assistance is provided subject to verification and availability.", image: "/assets/serving/community-outreach.png" },
+      { title: "Hospital Care", description: "On-ground help and coordination during hospital discharge formalities.", image: "/assets/serving/hospital-support.png" },
+      { title: "Ground Help", description: "Volunteers support and guide families carefully at every step.", image: "/assets/serving/on-ground-support.png" },
+      { title: "Remote Reach", description: "Extending compassionate and dignified support to remote areas.", image: "/assets/serving/rural-remote-reach.png" }
+    ],
+  },
+  {
+    key: "specialService-how-it-works",
+    name: "Special Service How It Works",
+    enabled: true,
+    title: "How We Extend Our Help",
+    items: [
+      { title: "Contact Us", description: "Reach out through our 24x7 helpline whenever your family needs help.", label: "phone" },
+      { title: "Needs Assessment", description: "We understand your family's emotional, practical and financial needs.", label: "comment" },
+      { title: "Arrange Support", description: "We arrange meals, paperwork and compassionate support for your family.", label: "clipboard" },
+      { title: "Ongoing Care", description: "Our support continues beyond the cremation ground with care each step.", label: "users" }
+    ],
+  },
+  {
+    key: "specialService-support",
+    name: "Special Service Support Section",
+    enabled: true,
+    title: "Empowered by <br class=\"hidden lg:block\" /><span class=\"text-[#9A6A31]\">Namo Gange Volunteers</span>",
+    description: "Our widespread network of dedicated volunteers is always ready to mobilize. They step forward to organize meals, manage hospital formalities, and support grieving families.",
+    image: "/assets/about-optimized/family-support.webp",
+    items: [],
+  },
+  {
+    key: "specialService-stories",
+    name: "Special Service Stories",
+    enabled: true,
+    items: [],
+  },
+  {
+    key: "specialService-receive",
+    name: "Special Service What Families Receive",
+    enabled: true,
+    eyebrow: "Holistic Support System",
+    title: "An Extended Family <br /><span class=\"text-[#9A6A31]\">For Those Who Need One</span>",
+    description: "\"Our service does not end at the cremation ground. We believe in providing holistic support that helps a family get back on its feet while remembering their departed with love and peace.\"",
+    image: "/assets/serving/hospital-support.png",
+    buttonLabel: "Know More About Our Work",
+    buttonHref: "/contact",
+    items: [
+      { title: "Sympathetic ear for intense grief and trauma" },
+      { title: "Assistance with death certificates and formalities" },
+      { title: "Relief coordination for verified family needs" },
+      { title: "Assistance subject to eligibility and availability" }
+    ],
+  },
+  {
+    key: "specialService-trust",
+    name: "Special Service Why Families Trust Us",
+    enabled: true,
+    title: "",
+    items: [],
+  },
+  {
+    key: "specialService-donation",
+    name: "Special Service Donation CTA",
+    enabled: true,
+    title: "Your Support Helps Us <br />Feed Grieving Families",
+    description: "By donating, you help us organize Tehravi Khana and provide continued assistance for families who cannot afford the post-cremation rituals and meals.",
+    image: "/assets/serving/counseling-support.png",
+    buttonLabel: "Donate to Moksha Sewa",
+    buttonHref: "/donation",
+    secondaryButtonLabel: "Support Our Seva",
+    secondaryButtonHref: "/volunteer/register",
+  },
+];
+
+export function mergeSpecialServiceSections(sections?: ExtraSectionContent[]): ExtraSectionContent[] {
+  if (!sections?.length) return defaultSpecialServiceSections;
+  const byKey = new Map(sections.map((s) => [s.key, s]));
+  return defaultSpecialServiceSections.map((fallback) => {
+    const saved = byKey.get(fallback.key);
+    if (!saved) return fallback;
+    const items = saved.items !== undefined ? saved.items : fallback.items;
+    return normalizeLandingSection({ ...fallback, ...saved, items, enabled: saved.enabled !== false }, fallback);
+  });
+}
+
+export const defaultCallingRelativesSections: ExtraSectionContent[] = [
+  {
+    key: "callingRelatives-hero",
+    name: "Calling Relatives Hero",
+    enabled: true,
+    title: "Family & Relative Support",
+    subtitle: "Compassionate Communication.",
+    description: "In times of sudden loss, making phone calls to inform relatives can be emotionally draining. Our compassionate volunteers take this burden off your shoulders, respectfully notifying all extended family members and friends.",
+    image: "/assets/serving/counseling-support.png",
+    buttonLabel: "Request Assistance",
+    buttonHref: "/request-help",
+    secondaryButtonLabel: "24x7 Helpline",
+    secondaryButtonHref: "tel:+919999999999",
+  },
+  {
+    key: "callingRelatives-highlights",
+    name: "Calling Relatives Highlights",
+    enabled: true,
+    items: [],
+  },
+  {
+    key: "callingRelatives-how-it-works",
+    name: "Calling Relatives How It Works",
+    enabled: true,
+    title: "How We Assist You",
+    items: [
+      { title: "Respectful Notifications", description: "We thoughtfully convey the news and Antim Sanskar details to relatives and friends with sensitivity, clarity and complete respect.", label: "users" },
+      { title: "Coordinating Arrivals", description: "We help guide relatives travelling from outside the city so they receive timely information and can reach the family without confusion.", label: "connect" },
+      { title: "Emotional Shielding", description: "We reduce the immediate family's emotional burden by handling repeated communication with relatives and friends in a calm manner.", label: "empathize" }
+    ],
+  },
+  {
+    key: "callingRelatives-support",
+    name: "Calling Relatives Support Section",
+    enabled: true,
+    title: "",
+    description: "",
+    image: "",
+    items: [],
+  },
+  {
+    key: "callingRelatives-stories",
+    name: "Calling Relatives Stories",
+    enabled: true,
+    items: [],
+  },
+  {
+    key: "callingRelatives-receive",
+    name: "Calling Relatives What Families Receive",
+    enabled: true,
+    title: "",
+    items: [],
+  },
+  {
+    key: "callingRelatives-trust",
+    name: "Calling Relatives Why Families Trust Us",
+    enabled: true,
+    title: "&quot;You have lost someone precious. Focus on saying goodbye, let us handle the words for the rest.&quot;",
+    description: "Our volunteers step in as your extended family, offering support that lets you grieve without the added burden of coordination and communication.",
+    items: [],
+  },
+  {
+    key: "callingRelatives-donation",
+    name: "Calling Relatives Donation CTA",
+    enabled: true,
+    title: "",
+    description: "",
+    buttonLabel: "",
+    buttonHref: "",
+    secondaryButtonLabel: "",
+    secondaryButtonHref: "",
+  },
+];
+
+export function mergeCallingRelativesSections(sections?: ExtraSectionContent[]): ExtraSectionContent[] {
+  if (!sections?.length) return defaultCallingRelativesSections;
+  const byKey = new Map(sections.map((s) => [s.key, s]));
+  return defaultCallingRelativesSections.map((fallback) => {
+    const saved = byKey.get(fallback.key);
+    if (!saved) return fallback;
+    const items = saved.items !== undefined ? saved.items : fallback.items;
+    return normalizeLandingSection({ ...fallback, ...saved, items, enabled: saved.enabled !== false }, fallback);
+  });
+}
+
+export const defaultHarsevanSections: ExtraSectionContent[] = [
+  {
+    key: "harsevan-hero",
+    name: "Harsevan Hero",
+    enabled: true,
+    title: "Hearse Van (Shav Vahan)",
+    subtitle: "For a Dignified Final Journey.",
+    description: "The final journey should be carried out with the utmost dignity. We help coordinate Hearse Van (Shav Vahan) support for eligible cases, subject to verification, location and availability.",
+    image: "/assets/serving/emergency-transport.png",
+    buttonLabel: "Request Hearse Van",
+    buttonHref: "/request-help",
+    secondaryButtonLabel: "24x7 Helpline",
+    secondaryButtonHref: "tel:+919999999999",
+  },
+  {
+    key: "harsevan-highlights",
+    name: "Harsevan Highlights",
+    enabled: true,
+    items: [],
+  },
+  {
+    key: "harsevan-how-it-works",
+    name: "Harsevan How It Works",
+    enabled: true,
+    title: "How We Assist You",
+    items: [
+      { title: "Immediate Availability", description: "Our hearse vans are coordinated promptly across service areas to provide timely and dignified transportation when families need support.", label: "car" },
+      { title: "Professional Drivers", description: "Experienced and empathetic drivers understand the sensitivity of the moment and ensure every journey is handled carefully and respectfully.", label: "wheel" },
+      { title: "Seamless Coordination", description: "Our volunteers help coordinate between the family, hospital and cremation ground to reduce confusion and unnecessary logistical burden.", label: "phone" }
+    ],
+  },
+  {
+    key: "harsevan-support",
+    name: "Harsevan Support Section",
+    enabled: true,
+    title: "",
+    description: "",
+    image: "",
+    items: [],
+  },
+  {
+    key: "harsevan-stories",
+    name: "Harsevan Stories",
+    enabled: true,
+    items: [],
+  },
+  {
+    key: "harsevan-receive",
+    name: "Harsevan What Families Receive",
+    enabled: true,
+    title: "",
+    items: [],
+  },
+  {
+    key: "harsevan-trust",
+    name: "Harsevan Why Families Trust Us",
+    enabled: true,
+    title: "&quot;We ensure their final journey is as peaceful and dignified as the life they lived.&quot;",
+    description: "You should never have to worry about transportation logistics while mourning. Moksha Sewa stands ready to help you navigate this difficult time.",
+    items: [],
+  },
+  {
+    key: "harsevan-donation",
+    name: "Harsevan Donation CTA",
+    enabled: true,
+    title: "",
+    description: "",
+    buttonLabel: "",
+    buttonHref: "",
+    secondaryButtonLabel: "",
+    secondaryButtonHref: "",
+  },
+];
+
+export function mergeHarsevanSections(sections?: ExtraSectionContent[]): ExtraSectionContent[] {
+  if (!sections?.length) return defaultHarsevanSections;
+  const byKey = new Map(sections.map((s) => [s.key, s]));
+  return defaultHarsevanSections.map((fallback) => {
+    const saved = byKey.get(fallback.key);
+    if (!saved) return fallback;
+    const items = saved.items !== undefined ? saved.items : fallback.items;
+    return normalizeLandingSection({ ...fallback, ...saved, items, enabled: saved.enabled !== false }, fallback);
+  });
+}
+

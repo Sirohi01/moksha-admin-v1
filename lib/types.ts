@@ -394,6 +394,14 @@ export interface Settings {
   };
   aboutPage?: Settings["landingPage"];
   servicesPage?: Settings["landingPage"];
+  ambulancePage?: Settings["landingPage"];
+  panditPage?: Settings["landingPage"];
+  funeralPage?: Settings["landingPage"];
+  funeralDecorationPage?: Settings["landingPage"];
+  prayerHallPage?: Settings["landingPage"];
+  specialServicePage?: Settings["landingPage"];
+  callingRelativesPage?: Settings["landingPage"];
+  harsevanPage?: Settings["landingPage"];
   unclaimedBodyPage?: Settings["landingPage"];
   volunteerPage?: Settings["landingPage"];
   partnershipPage?: Settings["landingPage"];
