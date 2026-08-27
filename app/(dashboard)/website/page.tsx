@@ -1,7 +1,7 @@
 "use client";
 
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { ImagePlus, Plus, Save, Trash2 } from "lucide-react";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
@@ -14,6 +14,14 @@ import { defaultLandingSections, mergeLandingSections, type LandingHeroSlide, ty
 import { defaultAboutSections, mergeAboutSections } from "@/lib/aboutContent";
 import {
   defaultServicesSections,
+  defaultAmbulanceSections,
+  defaultPanditSections,
+  defaultFuneralSections,
+  defaultFuneralDecorationSections,
+  defaultPrayerHallSections,
+  defaultSpecialServiceSections,
+  defaultCallingRelativesSections,
+  defaultHarsevanSections,
   defaultUnclaimedBodySections,
   defaultVolunteerSections,
   defaultPartnershipSections,
@@ -146,6 +154,14 @@ type EditablePage =
   | "landing"
   | "about"
   | "services"
+  | "ambulance"
+  | "pandit"
+  | "funeral"
+  | "funeralDecoration"
+  | "prayerHall"
+  | "specialService"
+  | "callingRelatives"
+  | "harsevan"
   | "unclaimed-body"
   | "volunteer"
   | "partnership"
@@ -160,6 +176,14 @@ const pageFieldMap: Record<EditablePage, keyof Pick<
   | "landingPage"
   | "aboutPage"
   | "servicesPage"
+  | "ambulancePage"
+  | "panditPage"
+  | "funeralPage"
+  | "funeralDecorationPage"
+  | "prayerHallPage"
+  | "specialServicePage"
+  | "callingRelativesPage"
+  | "harsevanPage"
   | "unclaimedBodyPage"
   | "volunteerPage"
   | "partnershipPage"
@@ -172,6 +196,14 @@ const pageFieldMap: Record<EditablePage, keyof Pick<
   landing: "landingPage",
   about: "aboutPage",
   services: "servicesPage",
+  ambulance: "ambulancePage",
+  pandit: "panditPage",
+  funeral: "funeralPage",
+  funeralDecoration: "funeralDecorationPage",
+  prayerHall: "prayerHallPage",
+  specialService: "specialServicePage",
+  callingRelatives: "callingRelativesPage",
+  harsevan: "harsevanPage",
   "unclaimed-body": "unclaimedBodyPage",
   volunteer: "volunteerPage",
   partnership: "partnershipPage",
@@ -186,6 +218,14 @@ const editablePages: Record<EditablePage, { label: string; defaults: LandingSect
   landing: { label: "Landing Page", defaults: defaultLandingSections },
   about: { label: "About Page", defaults: defaultAboutSections },
   services: { label: "Sewa Services Page", defaults: defaultServicesSections },
+  ambulance: { label: "Ambulance Service", defaults: defaultAmbulanceSections },
+  pandit: { label: "Pandit Service", defaults: defaultPanditSections },
+  funeral: { label: "Funeral Service", defaults: defaultFuneralSections },
+  funeralDecoration: { label: "Funeral Decoration", defaults: defaultFuneralDecorationSections },
+  prayerHall: { label: "Prayer Hall", defaults: defaultPrayerHallSections },
+  specialService: { label: "Special Service", defaults: defaultSpecialServiceSections },
+  callingRelatives: { label: "Calling Relatives", defaults: defaultCallingRelativesSections },
+  harsevan: { label: "Harsevan", defaults: defaultHarsevanSections },
   "unclaimed-body": { label: "Unclaimed Body Page", defaults: defaultUnclaimedBodySections },
   volunteer: { label: "Volunteer Page", defaults: defaultVolunteerSections },
   partnership: { label: "Partnership Page", defaults: defaultPartnershipSections },
@@ -200,6 +240,14 @@ const allDefaultSections = [
   ...defaultLandingSections,
   ...defaultAboutSections,
   ...defaultServicesSections,
+  ...defaultAmbulanceSections,
+  ...defaultPanditSections,
+  ...defaultFuneralSections,
+  ...defaultFuneralDecorationSections,
+  ...defaultPrayerHallSections,
+  ...defaultSpecialServiceSections,
+  ...defaultCallingRelativesSections,
+  ...defaultHarsevanSections,
   ...defaultUnclaimedBodySections,
   ...defaultVolunteerSections,
   ...defaultPartnershipSections,
@@ -400,6 +448,8 @@ function MoreSectionFields({
 
 export default function WebsitePage() {
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
   const [settings, setSettings] = useState<Settings | null>(null);
   const initialPage = getPageFromSearch(searchParams.get("page"));
   const [activePage, setActivePage] = useState<EditablePage>(initialPage);
@@ -466,7 +516,7 @@ export default function WebsitePage() {
       setSections(getPageSections(activePage, updatedSections));
       setMessage({ type: "success", text: `${editablePages[activePage].label} content saved.` });
     } catch (err) {
-      setMessage({ type: "error", text: err instanceof ApiRequestError ? err.message : "Could not save website content." });
+      setMessage({ type: "error", text: (err as any).message || "Could not save website content." });
     } finally {
       setSaving(false);
     }
@@ -519,11 +569,7 @@ export default function WebsitePage() {
               value={activePage}
               onChange={(event) => {
                 const nextPage = event.target.value as EditablePage;
-                setActivePage(nextPage);
-                const sourceSections = settings?.[pageFieldMap[nextPage]]?.sections;
-                const nextSections = getPageSections(nextPage, sourceSections);
-                setSections(nextSections);
-                setActiveKey(nextSections[0]?.key ?? "");
+                router.push(`${pathname}?page=${nextPage}`);
               }}
               className="rounded-lg border border-surface-border bg-surface-card px-2.5 py-1.5 text-xs font-medium text-text-primary outline-none ring-0 transition focus:border-accent"
             >
@@ -539,7 +585,9 @@ export default function WebsitePage() {
             <select
               id="landing-section-select"
               value={activeKey}
-              onChange={(event) => setActiveKey(event.target.value)}
+              onChange={(event) => {
+                router.push(`${pathname}?page=${activePage}&section=${event.target.value}`);
+              }}
               className="rounded-lg border border-surface-border bg-surface-card px-2.5 py-1.5 text-xs font-medium text-text-primary outline-none ring-0 transition focus:border-accent"
             >
               {sections.map((section) => (
@@ -782,7 +830,6 @@ export default function WebsitePage() {
             }
           />
 
-          {activePage === "landing" && (
           <div className="mt-6 border-t border-surface-border pt-4">
             <div className="mb-3 flex items-center justify-between gap-2">
               <h3 className="text-xs font-semibold uppercase tracking-wide text-text-muted">Cards / FAQs / Stats</h3>
@@ -926,7 +973,6 @@ export default function WebsitePage() {
               ))}
             </div>
           </div>
-          )}
         </Card>
       </div>
     </div>
