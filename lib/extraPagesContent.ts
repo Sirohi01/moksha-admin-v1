@@ -89,7 +89,7 @@ export const defaultServicesSections: ExtraSectionContent[] = [
     eyebrow: "Floral Tributes",
     title: "Floral & Vahan Decoration",
     description: "Thoughtfully designed floral tributes and vehicle decorations to honor the memory of the departed.",
-    image: "/assets/about-optimized/story-hero.png",
+    image: "/assets/about-optimized/about-hero-new.webp",
   },
   {
     key: "services-calling-relatives",
@@ -303,6 +303,59 @@ export const defaultVolunteerSections: ExtraSectionContent[] = [
     buttonLabel: "Submit Registration",
     buttonHref: "/volunteer/register",
   },
+  {
+    key: "volunteer-registration-steps",
+    name: "Registration Steps",
+    enabled: true,
+    eyebrow: "Registration Process",
+    title: "How Volunteer Registration Works",
+    items: [
+      { title: "Fill Details", description: "Complete the form with your preferences and accurate contact details." },
+      { title: "Verification", description: "Our team will review your application and reach out for a quick verification." },
+      { title: "Orientation", description: "Attend a brief onboarding session to understand the code of conduct and protocols." },
+      { title: "Start Sewa", description: "Begin receiving active requests and updates from the central coordination desk." },
+    ]
+  },
+  {
+    key: "volunteer-skills",
+    name: "Volunteer Suggested Skills",
+    enabled: true,
+    eyebrow: "Suggested Skills",
+    title: "Select your skills",
+    items: [
+      { title: "First Aid / Medical Basics" },
+      { title: "Counselling / Emotional Support" },
+      { title: "Logistics / Driving" },
+      { title: "Coordination & Administration" },
+      { title: "Social Work Experience" },
+      { title: "Event Management" },
+      { title: "Photography / Content" },
+      { title: "Legal / Documentation" }
+    ]
+  },
+  {
+    key: "volunteer-service-areas",
+    name: "Volunteer Service Areas",
+    enabled: true,
+    eyebrow: "Service Areas",
+    title: "Select preferred areas of service",
+    items: [
+      { title: "Field Volunteer" },
+      { title: "Hospital & Authority Coordination" },
+      { title: "Cremation & Ritual Assistance" },
+      { title: "Unclaimed Body Support" },
+      { title: "Economically Weaker Family Support" },
+      { title: "24×7 Helpline Support" },
+      { title: "Ambulance / Logistics Support" },
+      { title: "Documentation & Case Support" },
+      { title: "Community Awareness" },
+      { title: "Social Media / Digital Volunteering" },
+      { title: "Photography / Videography / Content" },
+      { title: "Fundraising & Donor Outreach" },
+      { title: "Professional / Pro-Bono Support" },
+      { title: "Events & Campaign Support" }
+    ]
+  },
 ];
 
 export function mergeVolunteerSections(sections?: ExtraSectionContent[]): ExtraSectionContent[] {
@@ -328,7 +381,7 @@ export const defaultPartnershipSections: ExtraSectionContent[] = [
     title: "Partnering To Expand Dignified Last Rites Across Regions",
     subtitle: "Hospitals, NGOs, Municipalities & Social Organizations",
     description: "Join hands with Moksha Sewa to streamline unclaimed body handling, ambulance networks, and subsidised family support.",
-    image: "/assets/about-optimized/partner-with-us.png",
+    image: "/assets/partnership/hero.png",
     buttonLabel: "Become A Partner",
     buttonHref: "#partner-form",
   },
@@ -411,10 +464,10 @@ export const defaultCSRSections: ExtraSectionContent[] = [
     name: "CSR Hero",
     enabled: true,
     eyebrow: "Corporate Social Responsibility",
-    title: "Empower Dignified Final Rites Support Through Corporate CSR",
+    title: "Empower Dignified Final Rites Support\nThrough Corporate CSR",
     subtitle: "Fulfilling Social Impact With Complete Tax Exemption & Audits",
     description: "Partner with Namo Gange Trust's Moksha Sewa initiative to sponsor hearse vans, cremation kits, and unclaimed body rites.",
-    image: "/assets/about-optimized/csr-image.webp",
+    image: "/assets/csr/csr-hero-photo.jpg",
     buttonLabel: "Explore CSR Proposal",
     buttonHref: "#csr-form",
   },
@@ -547,10 +600,10 @@ export const defaultDonationSections: ExtraSectionContent[] = [
     name: "Donation Hero",
     enabled: true,
     eyebrow: "Support The Mission",
-    title: "Your Contribution Restores Sacred Dignity To Human Life",
+    title: "Your Contribution Restores\nSacred Dignity To Human Life",
     subtitle: "100% Tax Exempted Under Section 80G",
     description: "Support free ambulance movement, woodless cremation, priest samagri kits, and unclaimed body rites.",
-    image: "/assets/about-optimized/support_the_mission.png",
+    image: "/hero-images/3.png",
     buttonLabel: "Donate Now",
     buttonHref: "#donation-form",
   },
@@ -562,9 +615,35 @@ export const defaultDonationSections: ExtraSectionContent[] = [
     title: "Direct Impact Causes You Can Support",
     description: "Select specific areas of service to direct your donation.",
     items: [
-      { title: "Unclaimed Body Cremation", description: "Sponsor full rites for an authorized unclaimed case." },
-      { title: "Ambulance Fuel & Maintenance", description: "Keep emergency hearse vans running 24/7." },
-      { title: "Annadan & Family Support", description: "Provide meals and guidance to destitute families." },
+      { 
+        title: "Support a Final Journey", 
+        description: "Indicative contribution toward verified last-rites assistance and related programme needs.",
+        image: "/assets/namo-gange/vol2.png",
+        value: "1100",
+        features: ["Case support", "Most needed", "Mission fund", "General support"]
+      },
+      { 
+        title: "Last-Rites Assistance", 
+        description: "Indicative contribution toward essential ritual materials and case-based support.",
+        image: "/assets/namo-gange/vol3.png",
+        value: "2100",
+        label: "MISSION NEED",
+        features: ["Ritual support", "Guidance", "Materials", "Case care"]
+      },
+      { 
+        title: "Transport Support", 
+        description: "Indicative contribution toward ambulance or hearse-van coordination for verified cases.",
+        image: "/assets/namo-gange/vol4.png",
+        value: "5100",
+        features: ["Readiness", "Transport care", "Helpline support", "Coordination"]
+      },
+      { 
+        title: "Family Relief Support", 
+        description: "Indicative contribution toward food, water and basic relief where verified need exists.",
+        image: "/assets/namo-gange/vol5.png",
+        value: "11000",
+        features: ["Meal support", "Family relief", "Essentials", "Community care"]
+      },
     ],
   },
   {
@@ -574,6 +653,33 @@ export const defaultDonationSections: ExtraSectionContent[] = [
     eyebrow: "Tax Benefits",
     title: "Save Tax While Serving Humanity",
     description: "Instant 80G tax exemption receipts generated automatically upon successful payment.",
+  },
+  {
+    key: "donation-stats",
+    name: "Donation Quick Stats",
+    enabled: true,
+    eyebrow: "Quick Stats",
+    title: "Donation Impact Numbers",
+    items: [
+      { value: "Verified", label: "Case Support" },
+      { value: "Delhi • Ghaziabad • Noida", label: "Launch Region" },
+      { value: "Need-Based", label: "Relief Assistance" },
+      { value: "Trust-Led", label: "Sewa Mission" },
+    ]
+  },
+  {
+    key: "donation-faq",
+    name: "Donation FAQ",
+    enabled: true,
+    eyebrow: "Help & Information",
+    title: "Frequently Asked Questions",
+    items: [
+      { title: "Will I receive a receipt for my donation?", description: "Yes. A donation receipt is generated for every contribution and emailed to you — please keep it for your records." },
+      { title: "Is my contribution tax-exempt?", description: "Yes. All contributions made to Namo Gange Trust are eligible for tax exemption under Section 80G of the Income Tax Act." },
+      { title: "How are the funds utilized?", description: "Your support goes directly toward the specific cause you select—whether for cremation rites, ambulance coordination, or essential relief." },
+      { title: "Is my payment information secure?", description: "Yes. Payments are processed through encrypted, secure payment gateways — your card and bank details are never stored on our servers." },
+      { title: "Can I set up a monthly donation?", description: "Yes — choose ‘Monthly’ while donating and our team will coordinate recurring contributions on your behalf." },
+    ]
   },
 ];
 
@@ -597,7 +703,7 @@ export const defaultContactSections: ExtraSectionContent[] = [
     name: "Contact Hero",
     enabled: true,
     eyebrow: "Contact Us",
-    title: "We Are Here To Assist You 24 Hours A Day",
+    title: "We Are Here To Assist You\n24 Hours A Day",
     subtitle: "Reach Out For Help, Inquiries, Or Volunteer Guidance",
     description: "Connect with our central coordination desk in Delhi NCR via phone, email, or office visit.",
     image: "/assets/about-reference/who-we-are-background-v2.png",
@@ -672,6 +778,20 @@ export const defaultTrackSections: ExtraSectionContent[] = [
     title: "Complete Transparency At Every Milestone",
     description: "Every step is logged from initial intake to final certificate upload.",
   },
+  {
+    key: "track-how-it-works",
+    name: "Track Process Steps",
+    enabled: true,
+    eyebrow: "How It Works",
+    title: "The Tracking Process",
+    items: [
+      { title: "Initial Request", description: "Information collected and case registered." },
+      { title: "Verification", description: "Details verified by our coordination desk." },
+      { title: "Assignment", description: "Volunteer or vehicle allocated to the case." },
+      { title: "In Progress", description: "Active on-ground coordination and assistance." },
+      { title: "Completed", description: "Support successfully provided and documented." },
+    ]
+  }
 ];
 
 export function mergeTrackSections(sections?: ExtraSectionContent[]): ExtraSectionContent[] {
