@@ -79,11 +79,6 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
 
     casesApi.slaBreaches().then(setBreaches).catch(() => setBreaches([]));
     loadNotifications();
-    // No websockets/SSE in this stack yet — a minute-ish poll is the cheap, honest way to keep
-    // "new donation came in" from sitting unseen for a whole admin session. Opening the bell
-    // (below) also force-refreshes, so a just-arrived notification never waits the full minute.
-    const interval = setInterval(loadNotifications, 60_000);
-    return () => clearInterval(interval);
   }, [isInternal, loadNotifications]);
 
   const handleBellClick = () => {
