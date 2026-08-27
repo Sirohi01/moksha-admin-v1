@@ -179,6 +179,7 @@ export const defaultLandingSections: LandingSectionContent[] = [
     buttonHref: "/request-help",
     supportTitle: "We are here to support with care, respect and compassion.",
     supportDescription: "You are not alone. We are with you.",
+    secondaryDescription: "We are available 24x7\nto stand beside you.",
     regionTitle: "Delhi • Ghaziabad • Noida",
     regionDescription: "Currently serving with care in",
     items: [
@@ -226,6 +227,8 @@ export const defaultLandingSections: LandingSectionContent[] = [
     eyebrow: "Our Humanitarian Commitment",
     title: "No One Should Leave\nThis World Without Dignity.",
     description: "Moksha Sewa supports legally authorised unclaimed cases with respectful final-rites coordination after completion of applicable police, hospital and authority formalities. Our team works carefully with the concerned authorities and service partners to help ensure that each final journey is handled with dignity, compassion, proper coordination and due respect. Support is provided only within the approved legal process and after the required documentation, verification and permissions have been completed.",
+    bottomStatement: "We follow all legal requirements and work in coordination with authorities to ensure dignity and responsibility.",
+    secondaryDescription: "All support is subject to verification, applicable legal requirements and availability of resources.",
     image: "/assets/image.png",
     buttonLabel: "Know About Unclaimed Body Sewa",
     buttonHref: "/unclaimed-body-sewa",
@@ -270,6 +273,7 @@ export const defaultLandingSections: LandingSectionContent[] = [
     title: "There Is a Place for Everyone in Sewa",
     description:
       "Every act of kindness helps us bring dignity, compassion and support to those who need it most in their final journey.",
+    bottomStatement: "Whether you give, serve or partner – your support creates a meaningful difference in ensuring dignity and respect in every final journey we are able to support.",
     items: [
       { title: "Give in Sewa", label: "Donate", description: "Help extend dignified final-rites\nsupport to eligible cases.", image: "/assets/donation-images/donate-sewa.png", href: "/donation" },
       { title: "Serve in Sewa", label: "Volunteer", description: "Give your valuable time, presence,\nand compassionate support.", image: "/assets/donation-images/volunteer-sewa.png", href: "/volunteer/register" },
