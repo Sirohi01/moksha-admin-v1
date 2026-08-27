@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { ChevronDown } from "lucide-react";
@@ -10,11 +10,26 @@ import { useAppSelector } from "@/store/hooks";
 function isActive(pathname: string, href: string, searchParams?: URLSearchParams): boolean {
   if (href === "/") return pathname === "/";
 
-  if (href.includes("?section=")) {
+  if (href.includes("?")) {
     const [basePath, query = ""] = href.split("?");
     const params = new URLSearchParams(query);
-    const section = params.get("section");
-    return pathname === basePath && searchParams?.get("section") === section;
+
+    // Pathname must match
+    if (pathname !== basePath) return false;
+
+    // Every param in the href must match the current searchParams
+    let allMatch = true;
+    params.forEach((value, key) => {
+      let currentVal = searchParams?.get(key);
+      if (key === "page" && !currentVal) {
+        currentVal = "landing";
+      }
+      if (currentVal !== value) {
+        allMatch = false;
+      }
+    });
+
+    return allMatch;
   }
 
   return pathname === href || pathname.startsWith(`${href}/`);
@@ -65,8 +80,8 @@ export default function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
               href={item.href}
               onClick={onNavigate}
               className={`flex flex-1 items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13px] font-semibold transition-colors ${active
-                  ? "bg-accent-soft text-accent shadow-sm border border-accent/20"
-                  : "text-slate-600 hover:bg-slate-900/5 hover:text-slate-900"
+                ? "bg-accent-soft text-accent shadow-sm border border-accent/20"
+                : "text-slate-600 hover:bg-slate-900/5 hover:text-slate-900"
                 }`}
             >
               <Icon className={`h-4 w-4 shrink-0 ${active ? "text-accent" : "text-slate-500"}`} />
@@ -100,8 +115,8 @@ export default function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
         onClick={onNavigate}
         style={{ marginLeft: depth * 10 }}
         className={`relative flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13px] font-semibold transition-colors ${active
-            ? "bg-accent-soft text-accent shadow-sm border border-accent/20"
-            : "text-slate-600 hover:bg-slate-900/5 hover:text-slate-900"
+          ? "bg-accent-soft text-accent shadow-sm border border-accent/20"
+          : "text-slate-600 hover:bg-slate-900/5 hover:text-slate-900"
           }`}
       >
         {active && <span className="absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-r-full bg-accent" />}

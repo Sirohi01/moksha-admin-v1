@@ -39,6 +39,8 @@ export const defaultAboutSections: AboutSectionContent[] = [
     secondaryDescription: "The initiative operates under the guidance and institutional framework of Namo Gange Trust, bringing together volunteers, coordinators, service partners and compassionate citizens to support dignified final journeys.",
     image: "/assets/about-reference/who-we-are-background-v2.png",
     logoImage: "/assets/logo-moksha-seva.png",
+    supportTitle: "MOKSHA SEWA",
+    supportDescription: "A Namo Gange Trust Initiative",
     bottomStatement: "Together, we ensure that no one is left without dignity, care and respect in their final journey.",
     items: [
       { title: "Compassion", description: "At Every Step" },
