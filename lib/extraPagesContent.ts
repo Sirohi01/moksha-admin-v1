@@ -1216,9 +1216,9 @@ export const defaultPrayerHallSections: ExtraSectionContent[] = [
     name: "Prayer Hall Highlights",
     enabled: true,
     items: [
-      { title: "Ground Coordination", description: "Seamless coordination with ground staff and family members.", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1787830378/moksha-sewa/website/dg2yjxz0ws8f6xmanbgd.png" },
-      { title: "Prayer Setup", description: "Serene prayer arrangements prepared with care and respect.", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1787830389/moksha-sewa/website/jamopdpbnfdvftmxmqo8.png" },
-      { title: "Family Support", description: "Gentle guidance and assistance for family members throughout.", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1787830400/moksha-sewa/website/hpfemqs7sio5z5juymus.png" },
+      { title: "Ground Coordination", description: "Seamless coordination with ground staff and family members.", image: "/assets/prayerhallservices/feature-ground.png" },
+      { title: "Prayer Setup", description: "Serene prayer arrangements prepared with care and respect.", image: "/assets/prayerhallservices/feature-setup.png" },
+      { title: "Family Support", description: "Gentle guidance and assistance for family members throughout.", image: "/assets/prayerhallservices/feature-family.png" },
       { title: "Peaceful Environment", description: "A calm and respectful space for prayer, mourning and remembrance.", image: "/assets/prayerhallservices/feature-peace.png" }
     ],
   },
