@@ -63,7 +63,7 @@ export const NAV_SECTIONS: NavSection[] = [
         children: [
           {
             label: "Landing Page",
-            href: "/website",
+            href: "/website?page=landing",
             icon: Globe2,
             children: [
               { label: "Hero Section", href: "/website?section=hero", icon: Globe2 },
