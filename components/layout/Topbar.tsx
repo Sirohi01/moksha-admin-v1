@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { Menu, LogOut, ChevronDown, KeyRound, Bell, AlertTriangle, HeartHandshake, Mail, FolderKanban, HandHeart, CheckCheck } from "lucide-react";
+import { Menu, LogOut, ChevronDown, KeyRound, Bell, AlertTriangle, HeartHandshake, Mail, FolderKanban, HandHeart, CheckCheck, Users2, BriefcaseBusiness, HandCoins } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { logout } from "@/store/slices/authSlice";
 import { authApi } from "@/lib/authApi";
@@ -20,6 +20,10 @@ const NOTIFICATION_ICONS: Record<AdminNotificationType, typeof HeartHandshake> =
   ENQUIRY: Mail,
   CASE: FolderKanban,
   VOLUNTEER: HandHeart,
+  DELEGATE: Users2,
+  MEMBER: Users2,
+  JOB_APPLICATION: BriefcaseBusiness,
+  SUPPORT: HandCoins,
 };
 
 function timeAgo(iso: string): string {
@@ -48,6 +52,7 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
   const dispatch = useAppDispatch();
   const admin = useAppSelector((state) => state.auth.admin);
   const refreshToken = useAppSelector((state) => state.auth.refreshToken);
+  const selectedOrganisationCode = useAppSelector((state) => state.scope.selectedOrganisationCode);
   const [menuOpen, setMenuOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
   const [breaches, setBreaches] = useState<SlaBreach[]>([]);
@@ -64,7 +69,7 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
   const loadNotifications = useCallback(() => {
     if (!isInternal) return;
     adminNotificationsApi
-      .list()
+      .list(selectedOrganisationCode ?? undefined)
       .then(({ notifications, unreadCount }) => {
         setNotifications(notifications);
         setUnreadCount(unreadCount);
@@ -73,16 +78,13 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
         setNotifications([]);
         setUnreadCount(0);
       });
-  }, [isInternal]);
+  }, [isInternal, selectedOrganisationCode]);
 
   useEffect(() => {
     if (!isInternal) return;
 
     casesApi.slaBreaches().then(setBreaches).catch(() => setBreaches([]));
     loadNotifications();
-    // No websockets/SSE in this stack yet — a minute-ish poll is the cheap, honest way to keep
-    // "new donation came in" from sitting unseen for a whole admin session. Opening the bell
-    // (below) also force-refreshes, so a just-arrived notification never waits the full minute.
     const interval = setInterval(loadNotifications, 60_000);
     return () => clearInterval(interval);
   }, [isInternal, loadNotifications]);
@@ -105,7 +107,7 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
   const handleMarkAllRead = async () => {
     setNotifications([]);
     setUnreadCount(0);
-    adminNotificationsApi.markAllRead().catch(() => { });
+    adminNotificationsApi.markAllRead(selectedOrganisationCode ?? undefined).catch(() => { });
   };
 
   const bellBadgeCount = breaches.length + unreadCount;

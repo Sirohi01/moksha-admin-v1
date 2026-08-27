@@ -12,6 +12,8 @@ export interface Job {
   summary: string;
   description: string;
   requirements: string[];
+  experienceText?: string;
+  salaryText?: string;
   applicationUrl?: string;
   applicationEmail?: string;
   status: JobStatus;
@@ -29,6 +31,8 @@ export interface JobInput {
   summary: string;
   description: string;
   requirements: string[];
+  experienceText?: string;
+  salaryText?: string;
   applicationUrl?: string;
   applicationEmail?: string;
   status: JobStatus;

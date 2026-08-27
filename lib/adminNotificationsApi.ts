@@ -1,6 +1,6 @@
 import { api } from "./api";
 
-export type AdminNotificationType = "DONATION" | "ENQUIRY" | "CASE" | "VOLUNTEER";
+export type AdminNotificationType = "DONATION" | "ENQUIRY" | "CASE" | "VOLUNTEER" | "DELEGATE" | "MEMBER" | "JOB_APPLICATION" | "SUPPORT";
 
 export interface AdminNotificationItem {
   _id: string;
@@ -18,7 +18,7 @@ export interface AdminNotificationsResult {
 }
 
 export const adminNotificationsApi = {
-  list: () => api.get<AdminNotificationsResult>("/notifications/admin"),
+  list: (organisationCode?: string) => api.get<AdminNotificationsResult>(`/notifications/admin${organisationCode ? `?organisationCode=${organisationCode}` : ""}`),
   markRead: (id: string) => api.patch(`/notifications/admin/${id}/read`),
-  markAllRead: () => api.patch("/notifications/admin/read-all"),
+  markAllRead: (organisationCode?: string) => api.patch(`/notifications/admin/read-all${organisationCode ? `?organisationCode=${organisationCode}` : ""}`),
 };

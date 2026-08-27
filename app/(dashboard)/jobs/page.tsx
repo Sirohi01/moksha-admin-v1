@@ -14,8 +14,8 @@ import { useAppSelector } from "@/store/hooks";
 
 const EMPTY: JobInput = {
   title: "", slug: "", department: "", location: "", employmentType: "Full time",
-  summary: "", description: "", requirements: [], applicationUrl: "", applicationEmail: "",
-  status: "DRAFT", closesAt: "",
+  summary: "", description: "", requirements: [], experienceText: "", salaryText: "",
+  applicationUrl: "", applicationEmail: "", status: "DRAFT", closesAt: "",
 };
 
 export default function JobsPage() {
@@ -40,7 +40,8 @@ export default function JobsPage() {
     setForm({
       title: job.title, slug: job.slug, department: job.department ?? "", location: job.location,
       employmentType: job.employmentType, summary: job.summary, description: job.description,
-      requirements: job.requirements, applicationUrl: job.applicationUrl ?? "",
+      requirements: job.requirements, experienceText: job.experienceText ?? "", salaryText: job.salaryText ?? "",
+      applicationUrl: job.applicationUrl ?? "",
       applicationEmail: job.applicationEmail ?? "", status: job.status,
       closesAt: job.closesAt?.slice(0, 10) ?? "",
     });
@@ -80,6 +81,7 @@ export default function JobsPage() {
         <Textarea required label="Summary" rows={2} error={getFieldError(fieldErrors, "summary")} value={form.summary} onChange={(e) => setForm({ ...form, summary: e.target.value })} />
         <Textarea required label="Description" rows={6} error={getFieldError(fieldErrors, "description")} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
         <Textarea label="Requirements" hint="One requirement per line" rows={4} value={requirementsText} onChange={(e) => setRequirementsText(e.target.value)} />
+        <div className="grid gap-3 sm:grid-cols-2"><Input label="Experience" hint="Shown on the public career page, e.g. '2-4 years'" value={form.experienceText} onChange={(e) => setForm({ ...form, experienceText: e.target.value })} /><Input label="Salary" hint="Shown on the public career page, e.g. '₹3-5 LPA'" value={form.salaryText} onChange={(e) => setForm({ ...form, salaryText: e.target.value })} /></div>
         <div className="grid gap-3 sm:grid-cols-2"><Input label="Application email" type="email" error={getFieldError(fieldErrors, "applicationEmail")} value={form.applicationEmail} onChange={(e) => setForm({ ...form, applicationEmail: e.target.value })} /><Input label="Application URL" type="url" error={getFieldError(fieldErrors, "applicationUrl")} value={form.applicationUrl} onChange={(e) => setForm({ ...form, applicationUrl: e.target.value })} /></div>
         <div className="grid gap-3 sm:grid-cols-2"><Select label="Status" value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value as JobStatus })}><option value="DRAFT">Draft</option><option value="PUBLISHED">Published</option><option value="CLOSED">Closed</option></Select><Input label="Closing date" type="date" value={form.closesAt} onChange={(e) => setForm({ ...form, closesAt: e.target.value })} /></div>
         {error && fieldErrors.length === 0 && <p className="text-xs font-medium text-red-600">{error}</p>}

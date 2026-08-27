@@ -1,6 +1,6 @@
 import { api } from "./api";
 
-export const NAMO_CONTENT_KINDS = ["BLOG", "FAQ", "TESTIMONIAL", "BANNER", "GALLERY_IMAGE", "GALLERY_VIDEO", "ABOUT", "ACHIEVEMENT", "INITIATIVE", "OBJECTIVE", "RECENT_UPDATE", "TRUST_BODY", "SEO", "SOCIAL_MEDIA"] as const;
+export const NAMO_CONTENT_KINDS = ["BLOG", "FAQ", "TESTIMONIAL", "BANNER", "GALLERY_IMAGE", "GALLERY_VIDEO", "ABOUT", "ACHIEVEMENT", "INITIATIVE", "OBJECTIVE", "RECENT_UPDATE", "TRUST_BODY", "SEO", "SOCIAL_MEDIA", "HERO", "NEWSLETTER", "CATEGORY_IMAGE", "PUBLISHED", "SEO_CODE", "EVENT", "AGS_EVENT"] as const;
 export type NamoContentKind = (typeof NAMO_CONTENT_KINDS)[number];
 export type NamoContentStatus = "ACTIVE" | "INACTIVE";
 export interface NamoContent {

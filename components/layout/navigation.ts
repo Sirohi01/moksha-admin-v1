@@ -22,9 +22,6 @@ import {
   Building2,
   PanelsTopLeft,
   KeyRound,
-  BookOpen,
-  MessageSquareQuote,
-  CircleHelp,
   BriefcaseBusiness,
   UsersRound,
   Files,
@@ -32,6 +29,8 @@ import {
   HeartPulse,
   Ticket,
   BadgePercent,
+  MousePointerClick,
+  List,
 } from "lucide-react";
 
 export interface NavItem {
@@ -71,9 +70,10 @@ export const NAV_SECTIONS: NavSection[] = [
     title: "Masters",
     items: [
       { label: "Gallery Media", href: "/gallery", icon: Images, requiredPermission: "cms.read", organisationCodes: ["MOKSHA"] },
-      { label: "Blog", href: "/blog", icon: BookOpen, requiredPermission: "cms.update", organisationCodes: ["MOKSHA"] },
-      { label: "Testimonials", href: "/testimonials", icon: MessageSquareQuote, requiredPermission: "cms.update", organisationCodes: ["MOKSHA"] },
-      { label: "FAQs", href: "/faqs", icon: CircleHelp, requiredPermission: "cms.update", organisationCodes: ["MOKSHA"] },
+      // Blog / Testimonials / FAQs hidden from nav 2026-08-27 (user request) — the real Moksha
+      // public site doesn't read from these models (hardcoded content instead), so no one knew
+      // what they were for. Pages/routes/backend are untouched and still reachable directly if
+      // needed later — this only removes the sidebar links.
       {
         label: "Website",
         href: "/website",
@@ -251,6 +251,13 @@ export const NAV_SECTIONS: NavSection[] = [
       { label: "Members", href: "/members", icon: UsersRound, requiredPermission: "members.read", organisationCodes: ["NAMOGANGE"] },
       { label: "Website CMS", href: "/namo-cms", icon: Files, requiredPermission: "cms.read", organisationCodes: ["NAMOGANGE"] },
       { label: "AGS Delegates", href: "/ags", icon: Users2, requiredPermission: "agsDelegates.read", organisationCodes: ["NAMOGANGE"] },
+      { label: "Career Applications", href: "/namo-job-applications", icon: BriefcaseBusiness, requiredPermission: "namoJobApplications.read", organisationCodes: ["NAMOGANGE"] },
+      { label: "Contact Enquiries", href: "/namo-enquiries", icon: Mail, requiredPermission: "namoEnquiries.read", organisationCodes: ["NAMOGANGE"] },
+      { label: "Support Requests", href: "/namo-support-requests", icon: HandHeart, requiredPermission: "namoSupportRequests.read", organisationCodes: ["NAMOGANGE"] },
+      { label: "Donation Pledges", href: "/namo-donation-leads", icon: HeartHandshake, requiredPermission: "namoDonationLeads.read", organisationCodes: ["NAMOGANGE"] },
+      { label: "Click Analytics", href: "/namo-click-analytics", icon: MousePointerClick, requiredPermission: "namoClickAnalytics.read", organisationCodes: ["NAMOGANGE"] },
+      { label: "AGS Institution Directory", href: "/namo-ags-colleges", icon: Building2, requiredPermission: "namoAgsColleges.read", organisationCodes: ["NAMOGANGE"] },
+      { label: "Lookup / Master Data", href: "/namo-lookups", icon: List, requiredPermission: "namoLookups.read", organisationCodes: ["NAMOGANGE"] },
     ],
   },
   {
