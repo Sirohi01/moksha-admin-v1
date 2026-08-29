@@ -410,6 +410,10 @@ export interface Settings {
   donationPage?: Settings["landingPage"];
   contactPage?: Settings["landingPage"];
   trackPage?: Settings["landingPage"];
+  privacyPage?: Settings["landingPage"];
+  termsPage?: Settings["landingPage"];
+  refundPage?: Settings["landingPage"];
+  conductPage?: Settings["landingPage"];
 }
 
 export type VehicleType = "HEARSE" | "AMBULANCE" | "VAN" | "OTHER";
