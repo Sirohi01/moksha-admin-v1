@@ -764,7 +764,7 @@ export default function WebsitePage() {
               <TextField label="Admin Section Name" value={activeSection.name} maxLength={getSectionFieldLimit(activeSection.key, "name")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, name: value }))} />
               <TextField label="Eyebrow / Small Heading" value={activeSection.eyebrow} maxLength={getSectionFieldLimit(activeSection.key, "eyebrow")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, eyebrow: value }))} />
               <div className="sm:col-span-2">
-                <TextField label="H1 (Main Title)" value={activeSection.title} maxLength={getSectionFieldLimit(activeSection.key, "title")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, title: value }))} multiline />
+                <TextField label={activeSection.key === "hero" ? "H1 (Main Title)" : "Main Title"} value={activeSection.title} maxLength={getSectionFieldLimit(activeSection.key, "title")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, title: value }))} multiline />
               </div>
               <div className="sm:col-span-2">
                 <TextField label="Subtitle" value={activeSection.subtitle} maxLength={getSectionFieldLimit(activeSection.key, "subtitle")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, subtitle: value }))} multiline />

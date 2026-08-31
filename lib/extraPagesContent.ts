@@ -9,7 +9,7 @@ export const defaultServicesSections: ExtraSectionContent[] = [
     title: "Comprehensive Final Journey Support With Care & Dignity",
     subtitle: "A humanitarian initiative of Namo Gange Trust.",
     description: "Providing compassionate, end-to-end assistance including hearse vans, priest coordination, funeral samagri, prayer hall arrangements, and family support.",
-    image: "/hero-images/dignity-in-every-final-journey-bg.png",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788164944/moksha-sewa/hero-images/dignity-in-every-final-journey-bg.png",
     buttonLabel: "Request Sewa Help",
     buttonHref: "/request-help",
     secondaryButtonLabel: "Call Helpline",
@@ -22,7 +22,7 @@ export const defaultServicesSections: ExtraSectionContent[] = [
     eyebrow: "Transport Sewa",
     title: "Ambulance & Hearse Van Assistance",
     description: "24/7 dignified transport support across Delhi, Noida, Ghaziabad and NCR with trained drivers and hygienic vehicles.",
-    image: "/assets/about-optimized/existimage.png",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165000/moksha-sewa/assets/about-optimized/existimage.png",
     buttonLabel: "Book Transport",
     buttonHref: "/request-help",
     items: [
@@ -38,7 +38,7 @@ export const defaultServicesSections: ExtraSectionContent[] = [
     eyebrow: "Final Rites",
     title: "Dignified Funeral & Cremation Support",
     description: "Assistance with cremation ground bookings, wood or electric rites, and complete ritual management.",
-    image: "/assets/about-reference/story-ghat-temple.png",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165060/moksha-sewa/assets/about-reference/story-ghat-temple.png",
     buttonLabel: "Learn More",
     buttonHref: "/contact",
     items: [
@@ -53,7 +53,7 @@ export const defaultServicesSections: ExtraSectionContent[] = [
     eyebrow: "Spiritual Guidance",
     title: "Vedic Pandit & Priest Coordination",
     description: "Experienced Vedic priests to perform last rites, antim sanskar, and prayer ceremonies with utmost reverence.",
-    image: "/assets/about-reference/who-we-are-background-v2.png",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165070/moksha-sewa/assets/about-reference/who-we-are-background-v2.png",
     items: [
       { title: "Vedic Rites", description: "Customary rituals conducted with sacred precision." },
       { title: "Multilingual Support", description: "Priests versed in regional traditions and languages." },
@@ -66,7 +66,7 @@ export const defaultServicesSections: ExtraSectionContent[] = [
     eyebrow: "Arrangements",
     title: "Prayer Hall Booking & Samagri Kit",
     description: "Providing complete eco-friendly samagri kits and arranging prayer halls for shradhanjali or chautha.",
-    image: "/assets/about-reference/story-evening-ghat.png",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165059/moksha-sewa/assets/about-reference/story-evening-ghat.png",
   },
   {
     key: "services-harsevan",
@@ -75,7 +75,7 @@ export const defaultServicesSections: ExtraSectionContent[] = [
     eyebrow: "Harsevan",
     title: "Harsevan Vehicle Support",
     description: "Specially dedicated vehicles for traditional carrying and respect during the procession.",
-    image: "/assets/about-optimized/family-support.webp",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165001/moksha-sewa/assets/about-optimized/family-support.webp",
   },
   {
     key: "services-decoration",
@@ -84,7 +84,7 @@ export const defaultServicesSections: ExtraSectionContent[] = [
     eyebrow: "Floral Tributes",
     title: "Floral & Vahan Decoration",
     description: "Thoughtfully designed floral tributes and vehicle decorations to honor the memory of the departed.",
-    image: "/assets/about-optimized/about-hero-new.webp",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788164983/moksha-sewa/assets/about-optimized/about-hero-new.webp",
   },
   {
     key: "services-calling-relatives",
@@ -93,7 +93,7 @@ export const defaultServicesSections: ExtraSectionContent[] = [
     eyebrow: "Family Coordination",
     title: "Inform Relatives & Support Center",
     description: "Assisting bereaved families with broadcast notifications, venue guidance, and relative coordination.",
-    image: "/assets/about-reference/who-we-are-background-v2.png",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165070/moksha-sewa/assets/about-reference/who-we-are-background-v2.png",
   },
   {
     key: "services-special",
@@ -102,7 +102,7 @@ export const defaultServicesSections: ExtraSectionContent[] = [
     eyebrow: "Custom Support",
     title: "Special Needs & Custom Assistance",
     description: "Tailored support for out-of-station families, legal documentation help, and emergency assistance.",
-    image: "/assets/about-optimized/existimage.png",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165000/moksha-sewa/assets/about-optimized/existimage.png",
   },
 ];
 
@@ -129,7 +129,7 @@ export const defaultUnclaimedBodySections: ExtraSectionContent[] = [
     title: "Ensuring Final Dignity\nFor Every Departed Soul",
     subtitle: "A Sacred Duty Undertaken By Moksha Sewa",
     description: "Standing for those who have no one. We perform final rites for authorised unclaimed bodies after strict police & legal verification.",
-    image: "/hero-images/dignity-in-every-final-journey-bg.png",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788164944/moksha-sewa/hero-images/dignity-in-every-final-journey-bg.png",
     buttonLabel: "Report Unclaimed Case",
     buttonHref: "/request-help",
   },
@@ -140,7 +140,7 @@ export const defaultUnclaimedBodySections: ExtraSectionContent[] = [
     eyebrow: "Understanding The Mission",
     title: "Standing Beside The Unknown & Forgotten",
     description: "Every human life deserves a respectful farewell. Moksha Sewa coordinates with local police and hospital authorities to perform sacred rites.",
-    image: "/assets/about-optimized/a_mission.png",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788164982/moksha-sewa/assets/about-optimized/a_mission.png",
     items: [
       { description: "Support proceeds only after the required verification and authorisation from the competent authority." },
       { description: "Police, hospital, municipal and legal procedures must be completed wherever applicable." },
@@ -199,7 +199,7 @@ export const defaultUnclaimedBodySections: ExtraSectionContent[] = [
     eyebrow: "Namo Gange Trust",
     title: "The Organisation Behind Moksha Sewa",
     description: "A Humanitarian Initiative of Namo Gange Trust.",
-    image: "/assets/logo-moksha-seva.png",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165236/moksha-sewa/assets/logo-moksha-seva.png",
     items: [
       { title: "Governance", description: "Ethical leadership and transparent processes at every step." },
       { title: "Social Service", description: "Working for community welfare and meaningful social impact." },
@@ -258,9 +258,9 @@ export const defaultVolunteerSections: ExtraSectionContent[] = [
     title: "Offer Your Time & Heart to Serve the Final Journey",
     subtitle: "Join a Dedicated Network of Compassionate Citizens",
     description: "Volunteers are the backbone of Moksha Sewa. Help coordinate transport, support grieving families, or assist during last rites.",
-    image: "/hero-images/volunteer-elderly-woman.png",
-    secondaryImage: "/hero-images/volunteer-hero-second.png",
-    logoImage: "/hero-images/image6.png",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788164963/moksha-sewa/hero-images/volunteer-elderly-woman.png",
+    secondaryImage: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788164964/moksha-sewa/hero-images/volunteer-hero-second.png",
+    logoImage: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788164952/moksha-sewa/hero-images/image6.png",
     buttonLabel: "Register As Volunteer",
     buttonHref: "/volunteer/register",
   },
@@ -447,7 +447,7 @@ export const defaultPartnershipSections: ExtraSectionContent[] = [
     title: "Partnering To Expand Dignified Last Rites Across Regions",
     subtitle: "Hospitals, NGOs, Municipalities & Social Organizations",
     description: "Join hands with Moksha Sewa to streamline unclaimed body handling, ambulance networks, and subsidised family support.",
-    image: "/assets/partnership/hero.png",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165302/moksha-sewa/assets/partnership/hero.png",
     buttonLabel: "Become A Partner",
     buttonHref: "#partner-form",
     secondaryButtonLabel: "Explore Partnerships",
@@ -481,7 +481,7 @@ export const defaultPartnershipSections: ExtraSectionContent[] = [
     eyebrow: "Accountability First",
     title: "High Standards Of Compliance & Ethics",
     description: "Every partnership operates within strict legal permissions and transparent auditing frameworks.",
-    image: "/assets/about-optimized/existimage.png",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165000/moksha-sewa/assets/about-optimized/existimage.png",
     buttonLabel: "Know Namo Gange Trust",
     buttonHref: "#",
     secondaryTitle: "Moksha Sewa",
@@ -590,7 +590,7 @@ export const defaultCSRSections: ExtraSectionContent[] = [
     title: "Empower Dignified Final Rites Support\nThrough Corporate CSR",
     subtitle: "Fulfilling Social Impact With Complete Tax Exemption & Audits",
     description: "Partner with Namo Gange Trust's Moksha Sewa initiative to sponsor hearse vans, cremation kits, and unclaimed body rites.",
-    image: "/assets/csr/csr-hero-photo.jpg",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165101/moksha-sewa/assets/csr/csr-hero-photo.jpg",
     buttonLabel: "Discuss a CSR Partnership",
     buttonHref: "#csr-enquiry",
     secondaryButtonLabel: "Request Organisation Profile",
@@ -613,14 +613,14 @@ export const defaultCSRSections: ExtraSectionContent[] = [
     eyebrow: "Where Your CSR Support Helps",
     title: "Meaningful Support at a Deeply Human Moment.",
     description: "CSR collaborations can help strengthen essential final-journey\nassistance for eligible and verified humanitarian cases.",
-    image: "/assets/csr/meaningful-support-bg.jpeg",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165112/moksha-sewa/assets/csr/meaningful-support-bg.jpg",
     bottomStatement: "Important Note:\nSupport is case-based and subject to verification, applicable formalities, availability and the mutually agreed project scope.",
     items: [
-      { title: "Final-Journey\nTransport", description: "Dignified and respectful\ntransport for the departed.", value: "Ambulance", image: "/assets/csr/journey-1.jpg" },
-      { title: "Cremation &\nLast-Rites Support", description: "Coordination of cremation\nand last-rites with care.", value: "Fire", image: "/assets/csr/journey-2.jpg" },
-      { title: "Ritual\nEssentials", description: "Providing essential materials\nrequired for rituals.", value: "Ritual", image: "/assets/csr/journey-3.jpg" },
-      { title: "Family\nGuidance", description: "Supporting families with guidance\nand necessary formalities.", value: "Family", image: "/assets/csr/journey-4.jpg" },
-      { title: "On-Ground\nAssistance", description: "On-ground support with compassion,\ndignity and respect.", value: "HeartHands", image: "/assets/csr/journey-5.jpg" }
+      { title: "Final-Journey\nTransport", description: "Dignified and respectful\ntransport for the departed.", value: "Ambulance", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165105/moksha-sewa/assets/csr/journey-1.jpg" },
+      { title: "Cremation &\nLast-Rites Support", description: "Coordination of cremation\nand last-rites with care.", value: "Fire", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165106/moksha-sewa/assets/csr/journey-2.jpg" },
+      { title: "Ritual\nEssentials", description: "Providing essential materials\nrequired for rituals.", value: "Ritual", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165107/moksha-sewa/assets/csr/journey-3.jpg" },
+      { title: "Family\nGuidance", description: "Supporting families with guidance\nand necessary formalities.", value: "Family", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165109/moksha-sewa/assets/csr/journey-4.jpg" },
+      { title: "On-Ground\nAssistance", description: "On-ground support with compassion,\ndignity and respect.", value: "HeartHands", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165110/moksha-sewa/assets/csr/journey-5.jpg" }
     ]
   },
   {
@@ -630,7 +630,7 @@ export const defaultCSRSections: ExtraSectionContent[] = [
     eyebrow: "100% Tax Benefit",
     title: "80G & 12A Certified Legal Compliance",
     description: "All corporate donations receive tax deduction benefits under Section 80G with audited utilization certificates.",
-    image: "/assets/csr/compliance-photo.jpg",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165099/moksha-sewa/assets/csr/compliance-photo.jpg",
     supportTitle: "Rigorous Due Diligence",
     supportDescription: "We strictly adhere to ethical practices, maintaining transparency and compliance in every project.",
     bottomStatement: "Transparent operations\nsupported by robust audits",
@@ -650,8 +650,8 @@ export const defaultCSRSections: ExtraSectionContent[] = [
     eyebrow: "The Organisation Behind Moksha Sewa",
     title: "Institutional Responsibility\nBehind the Mission.",
     description: "Moksha Sewa is an initiative of Namo Gange Trust.\nThrough this institutional framework, the initiative\nseeks to build responsible humanitarian collaborations\ncentred on dignity, service and accountability.",
-    image: "/assets/csr/institutional-responsibility-bg.jpeg",
-    partnerLogoImage: "/hero-images/namo-gange-logo.webp",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165104/moksha-sewa/assets/csr/institutional-responsibility-bg.jpg",
+    partnerLogoImage: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788164958/moksha-sewa/hero-images/namo-gange-logo.webp",
     buttonLabel: "Know Namo Gange Trust",
     buttonHref: "#",
     supportTitle: "Our Institutional Pillars",
@@ -673,9 +673,9 @@ export const defaultCSRSections: ExtraSectionContent[] = [
     buttonLabel: "Discuss a CSR Partnership",
     buttonHref: "#csr-enquiry",
     items: [
-      { title: "Project Partnership", description: "Support a defined humanitarian programme with mutually agreed objectives, scope and reporting.", value: "Handshake", image: "/assets/csr/model-project.jpg" },
-      { title: "Employee Volunteering", description: "Create suitable opportunities for employees to contribute their time, skills and participation.", value: "People", image: "/assets/csr/model-volunteering.jpg" },
-      { title: "Institutional Partnership", description: "Collaborate through hospitals, institutions, organisations and community networks where appropriate.", value: "Institution", image: "/assets/csr/model-institutional.jpg" },
+      { title: "Project Partnership", description: "Support a defined humanitarian programme with mutually agreed objectives, scope and reporting.", value: "Handshake", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165114/moksha-sewa/assets/csr/model-project.jpg" },
+      { title: "Employee Volunteering", description: "Create suitable opportunities for employees to contribute their time, skills and participation.", value: "People", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165116/moksha-sewa/assets/csr/model-volunteering.jpg" },
+      { title: "Institutional Partnership", description: "Collaborate through hospitals, institutions, organisations and community networks where appropriate.", value: "Institution", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165113/moksha-sewa/assets/csr/model-institutional.jpg" },
     ],
   },
   {
@@ -685,7 +685,7 @@ export const defaultCSRSections: ExtraSectionContent[] = [
     eyebrow: "Corporate Inquiry",
     title: "Connect With Our CSR Leadership Team",
     description: "Share your company's CSR priorities and we will create a tailored proposal.",
-    image: "/assets/csr/responsible-partnership-conversation.png",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165136/moksha-sewa/assets/csr/responsible-partnership-conversation.png",
     contactTitle: "CSR Partnership Enquiry",
     phoneNumber: "+91 92201 47229",
     contactEmail: "csr@mokshasewa.org",
@@ -741,7 +741,7 @@ export const defaultRequestHelpSections: ExtraSectionContent[] = [
     title: "Request Cremation Assistance",
     subtitle: "We Are Here To Stand Beside You In Your Hour Of Need",
     description: "We are here to support you with compassion, dignity and care in your time of need.",
-    image: "/assets/about-optimized/existimage.png",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165000/moksha-sewa/assets/about-optimized/existimage.png",
     phoneLabel: "Helpline Number",
     phoneNumber: "+91 9220147229",
     buttonLabel: "Call Helpline Now",
@@ -765,7 +765,7 @@ export const defaultRequestHelpSections: ExtraSectionContent[] = [
     supportTitle: "In Sewa, we find peace. In supporting each other, we honor life.",
     supportDescription: "With Sewa in our heart, we walk with you in this journey.",
     quote: "Your information is safe and secure with us. We provide confidential support.",
-    image: "/assets/route-optimized/request-trust-ritual.webp",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165420/moksha-sewa/assets/route-optimized/request-trust-ritual.webp",
     items: [
       { title: "24/7 Immediate Support", description: "We are available round the clock whenever you need us." },
       { title: "Verified & Compassionate Team", description: "Trained professionals you can trust, with experience and empathy." },
@@ -809,7 +809,7 @@ export const defaultDonationSections: ExtraSectionContent[] = [
     title: "Your Contribution Restores\nSacred Dignity To Human Life",
     subtitle: "100% Tax Exempted Under Section 80G",
     description: "Support free ambulance movement, woodless cremation, priest samagri kits, and unclaimed body rites.",
-    image: "/hero-images/3.png",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788164932/moksha-sewa/hero-images/3.png",
     buttonLabel: "Donate Now",
     buttonHref: "#donation-form",
   },
@@ -824,14 +824,14 @@ export const defaultDonationSections: ExtraSectionContent[] = [
       {
         title: "Support a Final Journey",
         description: "Indicative contribution toward verified last-rites assistance and related programme needs.",
-        image: "/assets/namo-gange/vol2.png",
+        image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165250/moksha-sewa/assets/namo-gange/vol2.png",
         value: "1100",
         features: ["Case support", "Most needed", "Mission fund", "General support"]
       },
       {
         title: "Last-Rites Assistance",
         description: "Indicative contribution toward essential ritual materials and case-based support.",
-        image: "/assets/namo-gange/vol3.png",
+        image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165251/moksha-sewa/assets/namo-gange/vol3.png",
         value: "2100",
         label: "MISSION NEED",
         features: ["Ritual support", "Guidance", "Materials", "Case care"]
@@ -839,14 +839,14 @@ export const defaultDonationSections: ExtraSectionContent[] = [
       {
         title: "Transport Support",
         description: "Indicative contribution toward ambulance or hearse-van coordination for verified cases.",
-        image: "/assets/namo-gange/vol4.png",
+        image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165253/moksha-sewa/assets/namo-gange/vol4.png",
         value: "5100",
         features: ["Readiness", "Transport care", "Helpline support", "Coordination"]
       },
       {
         title: "Family Relief Support",
         description: "Indicative contribution toward food, water and basic relief where verified need exists.",
-        image: "/assets/namo-gange/vol5.png",
+        image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165258/moksha-sewa/assets/namo-gange/vol5.png",
         value: "11000",
         features: ["Meal support", "Family relief", "Essentials", "Community care"]
       },
@@ -912,7 +912,7 @@ export const defaultContactSections: ExtraSectionContent[] = [
     title: "We Are Here To Assist You\n24 Hours A Day",
     subtitle: "Reach Out For Help, Inquiries, Or Volunteer Guidance",
     description: "Connect with our central coordination desk in Delhi NCR via phone, email, or office visit.",
-    image: "/assets/about-reference/who-we-are-background-v2.png",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165070/moksha-sewa/assets/about-reference/who-we-are-background-v2.png",
     phoneLabel: "24/7 Helpline",
     phoneNumber: "1800123456",
     contactEmail: "info@mokshasewa.org",
@@ -966,8 +966,8 @@ export const defaultContactSections: ExtraSectionContent[] = [
     title: "Office Locations",
     description: "Find our head office and regional branches.",
     items: [
-      { title: "Head Office", subtitle: "Ghaziabad, Uttar Pradesh", description: "12/52, Site - 2, Sunrise Industrial Area, Mohan Nagar, Sahibabad, Ghaziabad, Uttar Pradesh, India", value: "+91 98183 53841", image: "/assets/contact/im.png" },
-      { title: "London Office", subtitle: "Luton, England", description: "Registration address: 6 Liddel Close, Luton, Bedfordshire, United Kingdom LU3 1TW", value: "+44 7429 519276", image: "/assets/contact/en.png" },
+      { title: "Head Office", subtitle: "Ghaziabad, Uttar Pradesh", description: "12/52, Site - 2, Sunrise Industrial Area, Mohan Nagar, Sahibabad, Ghaziabad, Uttar Pradesh, India", value: "+91 98183 53841", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165096/moksha-sewa/assets/contact/im.png" },
+      { title: "London Office", subtitle: "Luton, England", description: "Registration address: 6 Liddel Close, Luton, Bedfordshire, United Kingdom LU3 1TW", value: "+44 7429 519276", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165092/moksha-sewa/assets/contact/en.png" },
     ]
   },
 ];
@@ -995,7 +995,7 @@ export const defaultTrackSections: ExtraSectionContent[] = [
     title: "Track Case Or Request Progress In Real-Time",
     subtitle: "Transparent & Accountable Verification System",
     description: "Enter your Request Number or Case ID to view live verification, volunteer assignment, and completion status.",
-    image: "/assets/about-optimized/existimage.png",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165000/moksha-sewa/assets/about-optimized/existimage.png",
   },
   {
     key: "track-info",
@@ -1130,7 +1130,7 @@ export const defaultAmbulanceSections: ExtraSectionContent[] = [
     enabled: true,
     title: "Your Donation Brings Peace",
     description: "Your kind contribution helps us provide ambulance, hearse and last-journey support to families who cannot afford it. Together, we can bring comfort, dignity and peace in their most difficult moments.",
-    image: "/assets/km.jpeg",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165233/moksha-sewa/assets/km.jpg",
     buttonLabel: "Donate for Ambulance Service",
     buttonHref: "/donation",
     secondaryButtonLabel: "Support Our Sewa",
@@ -1158,7 +1158,7 @@ export const defaultPanditSections: ExtraSectionContent[] = [
     title: "Priest Support",
     subtitle: "For a Dignified Final Journey.",
     description: "Experienced Pandit Ji's guide your family with compassion, clarity and reverence in every sacred ritual of your loved one's journey.",
-    image: "/assets/panditservices/hero-real.png",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165283/moksha-sewa/assets/panditservices/hero-real.png",
     buttonLabel: "Request Priest Support",
     buttonHref: "/request-help",
     secondaryButtonLabel: "Donate for Ritual Support",
@@ -1169,10 +1169,10 @@ export const defaultPanditSections: ExtraSectionContent[] = [
     name: "Pandit Highlights",
     enabled: true,
     items: [
-      { title: "Experienced Pandit Ji", description: "Learned and compassionate guidance", image: "/assets/panditservices/feature-pandit.png" },
-      { title: "Vedic Guidance", description: "Guidance based on Hindu traditions", image: "/assets/panditservices/feature-vedic.png" },
-      { title: "Ritual Planning", description: "Complete ritual planning and coordination", image: "/assets/panditservices/feature-planning.png" },
-      { title: "Regional Traditions", description: "Rituals according to family customs", image: "/assets/panditservices/feature-traditions.png" }
+      { title: "Experienced Pandit Ji", description: "Learned and compassionate guidance", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165275/moksha-sewa/assets/panditservices/feature-pandit.png" },
+      { title: "Vedic Guidance", description: "Guidance based on Hindu traditions", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165279/moksha-sewa/assets/panditservices/feature-vedic.png" },
+      { title: "Ritual Planning", description: "Complete ritual planning and coordination", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165276/moksha-sewa/assets/panditservices/feature-planning.png" },
+      { title: "Regional Traditions", description: "Rituals according to family customs", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165277/moksha-sewa/assets/panditservices/feature-traditions.png" }
     ],
   },
   {
@@ -1202,12 +1202,12 @@ export const defaultPanditSections: ExtraSectionContent[] = [
     enabled: true,
     title: "Ritual Support at Every Step",
     items: [
-      { title: "Pre-Ritual Consultation", image: "/assets/panditservices/ritual-1.png" },
-      { title: "Antim Sanskar Vidhi", image: "/assets/panditservices/ritual-2.png" },
-      { title: "Mukhagni Guidance", image: "/assets/panditservices/ritual-3.png" },
-      { title: "Asthi Visarjan", image: "/assets/panditservices/ritual-4.png" },
-      { title: "Pind Daan", image: "/assets/panditservices/ritual-5.png" },
-      { title: "Tehrvi & Shanti Paath", image: "/assets/panditservices/ritual-6.png" }
+      { title: "Pre-Ritual Consultation", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165285/moksha-sewa/assets/panditservices/ritual-1.png" },
+      { title: "Antim Sanskar Vidhi", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165286/moksha-sewa/assets/panditservices/ritual-2.png" },
+      { title: "Mukhagni Guidance", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165288/moksha-sewa/assets/panditservices/ritual-3.png" },
+      { title: "Asthi Visarjan", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165289/moksha-sewa/assets/panditservices/ritual-4.png" },
+      { title: "Pind Daan", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165290/moksha-sewa/assets/panditservices/ritual-5.png" },
+      { title: "Tehrvi & Shanti Paath", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165291/moksha-sewa/assets/panditservices/ritual-6.png" }
     ],
   },
   {
@@ -1216,10 +1216,10 @@ export const defaultPanditSections: ExtraSectionContent[] = [
     enabled: true,
     title: "Pandit Ji Roles",
     items: [
-      { title: "Samagri Guidance", description: "Right samagri for every sacred ritual.", image: "/assets/panditservices/roles-1.png" },
-      { title: "Prayer Hall Ceremony", description: "Rituals conducted with peace and reverence.", image: "/assets/panditservices/roles-2.png" },
-      { title: "Family Ritual Explanation", description: "Simple guidance at every sacred step.", image: "/assets/panditservices/roles-3.png" },
-      { title: "Post-Ritual Support", description: "Guidance for remaining rituals and timelines.", image: "/assets/panditservices/roles-4.png" }
+      { title: "Samagri Guidance", description: "Right samagri for every sacred ritual.", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165293/moksha-sewa/assets/panditservices/roles-1.png" },
+      { title: "Prayer Hall Ceremony", description: "Rituals conducted with peace and reverence.", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165294/moksha-sewa/assets/panditservices/roles-2.png" },
+      { title: "Family Ritual Explanation", description: "Simple guidance at every sacred step.", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165295/moksha-sewa/assets/panditservices/roles-3.png" },
+      { title: "Post-Ritual Support", description: "Guidance for remaining rituals and timelines.", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165296/moksha-sewa/assets/panditservices/roles-4.png" }
     ],
   },
   {
@@ -1239,7 +1239,7 @@ export const defaultPanditSections: ExtraSectionContent[] = [
     enabled: true,
     title: "Your Support Helps Families Receive Dignified & Sacred Final Rites",
     description: "Every act of kindness becomes a blessing for many.",
-    image: "/assets/panditservices/hero.png",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165284/moksha-sewa/assets/panditservices/hero.png",
     buttonLabel: "Donate for Ritual Support",
     buttonHref: "/donation",
   },
@@ -1347,7 +1347,7 @@ export const defaultFuneralDecorationSections: ExtraSectionContent[] = [
     title: "Funeral Decoration",
     subtitle: "A Beautiful Final Journey.",
     description: "We believe in bidding farewell with utmost respect and serenity. Our volunteers arrange traditional floral decorations for the hearse van, pyre, and prayer hall using fresh and sacred flowers to honor the departed soul.",
-    image: "/assets/how-we-help/three.png",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165195/moksha-sewa/assets/how-we-help/three.png",
     buttonLabel: "Request Decoration",
     buttonHref: "/request-help",
     secondaryButtonLabel: "24x7 Helpline",
@@ -1432,7 +1432,7 @@ export const defaultPrayerHallSections: ExtraSectionContent[] = [
     title: "Ground & Prayer Support",
     subtitle: "Creating A Space For Peace.",
     description: "Finding the right place to grieve and pray is essential. We assist with cremation-ground coordination, setting up serene prayer halls, and providing calm guidance for the entire family.",
-    image: "/assets/prayerhallservices/hero-real.png",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165319/moksha-sewa/assets/prayerhallservices/hero-real.png",
     buttonLabel: "Request Support",
     buttonHref: "/request-help",
     secondaryButtonLabel: "Donate for Support",
@@ -1443,10 +1443,10 @@ export const defaultPrayerHallSections: ExtraSectionContent[] = [
     name: "Prayer Hall Highlights",
     enabled: true,
     items: [
-      { title: "Ground Coordination", description: "Seamless coordination with ground staff and family members.", image: "/assets/prayerhallservices/feature-ground.png" },
-      { title: "Prayer Setup", description: "Serene prayer arrangements prepared with care and respect.", image: "/assets/prayerhallservices/feature-setup.png" },
-      { title: "Family Support", description: "Gentle guidance and assistance for family members throughout.", image: "/assets/prayerhallservices/feature-family.png" },
-      { title: "Peaceful Environment", description: "A calm and respectful space for prayer, mourning and remembrance.", image: "/assets/prayerhallservices/feature-peace.png" }
+      { title: "Ground Coordination", description: "Seamless coordination with ground staff and family members.", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165310/moksha-sewa/assets/prayerhallservices/feature-ground.png" },
+      { title: "Prayer Setup", description: "Serene prayer arrangements prepared with care and respect.", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165316/moksha-sewa/assets/prayerhallservices/feature-setup.png" },
+      { title: "Family Support", description: "Gentle guidance and assistance for family members throughout.", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165309/moksha-sewa/assets/prayerhallservices/feature-family.png" },
+      { title: "Peaceful Environment", description: "A calm and respectful space for prayer, mourning and remembrance.", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165312/moksha-sewa/assets/prayerhallservices/feature-peace.png" }
     ],
   },
   {
@@ -1476,12 +1476,12 @@ export const defaultPrayerHallSections: ExtraSectionContent[] = [
     enabled: true,
     title: "Our Complete Support",
     items: [
-      { title: "Ground Booking", image: "/assets/prayerhallservices/support-1.png" },
-      { title: "Floral Setup", image: "/assets/prayerhallservices/support-2.png" },
-      { title: "Seating Arrangements", image: "/assets/prayerhallservices/support-3.png" },
-      { title: "Audio & Mic Setup", image: "/assets/prayerhallservices/support-4.png" },
-      { title: "Pandit Ji Coordination", image: "/assets/prayerhallservices/support-5.png" },
-      { title: "Guest Management", image: "/assets/prayerhallservices/support-6.png" }
+      { title: "Ground Booking", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165329/moksha-sewa/assets/prayerhallservices/support-1.png" },
+      { title: "Floral Setup", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165330/moksha-sewa/assets/prayerhallservices/support-2.png" },
+      { title: "Seating Arrangements", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165332/moksha-sewa/assets/prayerhallservices/support-3.png" },
+      { title: "Audio & Mic Setup", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165333/moksha-sewa/assets/prayerhallservices/support-4.png" },
+      { title: "Pandit Ji Coordination", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165334/moksha-sewa/assets/prayerhallservices/support-5.png" },
+      { title: "Guest Management", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165335/moksha-sewa/assets/prayerhallservices/support-6.png" }
     ],
   },
   {
@@ -1490,10 +1490,10 @@ export const defaultPrayerHallSections: ExtraSectionContent[] = [
     enabled: true,
     title: "Ground Support Roles",
     items: [
-      { title: "Venue Coordination", description: "Suitable venue coordination for every sacred ritual.", image: "/assets/prayerhallservices/roles-1.png" },
-      { title: "Setup & Decor", description: "Peaceful arrangements prepared with care and dignity.", image: "/assets/prayerhallservices/roles-2.png" },
-      { title: "Guest Assistance", description: "Clear and compassionate guidance for guests at every step.", image: "/assets/prayerhallservices/roles-3.png" },
-      { title: "Post-Prayer Cleanup", description: "Respectful clearing and coordination after rituals conclude.", image: "/assets/prayerhallservices/roles-4.png" }
+      { title: "Venue Coordination", description: "Suitable venue coordination for every sacred ritual.", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165323/moksha-sewa/assets/prayerhallservices/roles-1.png" },
+      { title: "Setup & Decor", description: "Peaceful arrangements prepared with care and dignity.", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165325/moksha-sewa/assets/prayerhallservices/roles-2.png" },
+      { title: "Guest Assistance", description: "Clear and compassionate guidance for guests at every step.", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165326/moksha-sewa/assets/prayerhallservices/roles-3.png" },
+      { title: "Post-Prayer Cleanup", description: "Respectful clearing and coordination after rituals conclude.", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165328/moksha-sewa/assets/prayerhallservices/roles-4.png" }
     ],
   },
   {
@@ -1513,7 +1513,7 @@ export const defaultPrayerHallSections: ExtraSectionContent[] = [
     enabled: true,
     title: "Your Support Helps Families Receive Dignified & Sacred Final Rites",
     description: "Every act of kindness becomes a blessing for many.",
-    image: "/assets/prayerhallservices/hero.png",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165320/moksha-sewa/assets/prayerhallservices/hero.png",
     buttonLabel: "Donate for Support",
     buttonHref: "/donation",
   },
@@ -1539,7 +1539,7 @@ export const defaultSpecialServiceSections: ExtraSectionContent[] = [
     title: "Family Support",
     subtitle: "Standing Beside You.",
     description: "Beyond the final rites, Moksha Sewa helps eligible families with case-based guidance, relief coordination and compassionate support, subject to verification and availability.",
-    image: "/assets/family-support/hero-bg-2.png",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165157/moksha-sewa/assets/family-support/hero-bg-2.png",
     buttonLabel: "Request Support",
     buttonHref: "/request-help",
     secondaryButtonLabel: "24x7 Helpline",
@@ -1550,14 +1550,14 @@ export const defaultSpecialServiceSections: ExtraSectionContent[] = [
     name: "Special Service Highlights",
     enabled: true,
     items: [
-      { title: "Emotional Support", description: "Counseling and a sympathetic ear for grieving families.", image: "/assets/serving/counseling-support.png" },
-      { title: "Tehravi Khana", description: "Respectful management of the 13th-day meal for grieving families.", image: "/assets/serving/food-essentials.png" },
-      { title: "Formalities", description: "Help with death certificates and important legal procedures.", image: "/assets/serving/document-assistance.png" },
-      { title: "Ambulance", description: "Transport support for eligible cases after required verification.", image: "/assets/serving/emergency-transport.png" },
-      { title: "Eligibility Based", description: "Assistance is provided subject to verification and availability.", image: "/assets/serving/community-outreach.png" },
-      { title: "Hospital Care", description: "On-ground help and coordination during hospital discharge formalities.", image: "/assets/serving/hospital-support.png" },
-      { title: "Ground Help", description: "Volunteers support and guide families carefully at every step.", image: "/assets/serving/on-ground-support.png" },
-      { title: "Remote Reach", description: "Extending compassionate and dignified support to remote areas.", image: "/assets/serving/rural-remote-reach.png" }
+      { title: "Emotional Support", description: "Counseling and a sympathetic ear for grieving families.", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165435/moksha-sewa/assets/serving/counseling-support.png" },
+      { title: "Tehravi Khana", description: "Respectful management of the 13th-day meal for grieving families.", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165439/moksha-sewa/assets/serving/food-essentials.png" },
+      { title: "Formalities", description: "Help with death certificates and important legal procedures.", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165436/moksha-sewa/assets/serving/document-assistance.png" },
+      { title: "Ambulance", description: "Transport support for eligible cases after required verification.", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165438/moksha-sewa/assets/serving/emergency-transport.png" },
+      { title: "Eligibility Based", description: "Assistance is provided subject to verification and availability.", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165433/moksha-sewa/assets/serving/community-outreach.png" },
+      { title: "Hospital Care", description: "On-ground help and coordination during hospital discharge formalities.", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165440/moksha-sewa/assets/serving/hospital-support.png" },
+      { title: "Ground Help", description: "Volunteers support and guide families carefully at every step.", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165442/moksha-sewa/assets/serving/on-ground-support.png" },
+      { title: "Remote Reach", description: "Extending compassionate and dignified support to remote areas.", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165447/moksha-sewa/assets/serving/rural-remote-reach.png" }
     ],
   },
   {
@@ -1578,7 +1578,7 @@ export const defaultSpecialServiceSections: ExtraSectionContent[] = [
     enabled: true,
     title: "Empowered by <br class=\"hidden lg:block\" /><span class=\"text-[#9A6A31]\">Namo Gange Volunteers</span>",
     description: "Our widespread network of dedicated volunteers is always ready to mobilize. They step forward to organize meals, manage hospital formalities, and support grieving families.",
-    image: "/assets/about-optimized/family-support.webp",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165001/moksha-sewa/assets/about-optimized/family-support.webp",
     items: [],
   },
   {
@@ -1594,7 +1594,7 @@ export const defaultSpecialServiceSections: ExtraSectionContent[] = [
     eyebrow: "Holistic Support System",
     title: "An Extended Family <br /><span class=\"text-[#9A6A31]\">For Those Who Need One</span>",
     description: "\"Our service does not end at the cremation ground. We believe in providing holistic support that helps a family get back on its feet while remembering their departed with love and peace.\"",
-    image: "/assets/serving/hospital-support.png",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165440/moksha-sewa/assets/serving/hospital-support.png",
     buttonLabel: "Know More About Our Work",
     buttonHref: "/contact",
     items: [
@@ -1617,7 +1617,7 @@ export const defaultSpecialServiceSections: ExtraSectionContent[] = [
     enabled: true,
     title: "Your Support Helps Us <br />Feed Grieving Families",
     description: "By donating, you help us organize Tehravi Khana and provide continued assistance for families who cannot afford the post-cremation rituals and meals.",
-    image: "/assets/serving/counseling-support.png",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165435/moksha-sewa/assets/serving/counseling-support.png",
     buttonLabel: "Donate to Moksha Sewa",
     buttonHref: "/donation",
     secondaryButtonLabel: "Support Our Seva",
@@ -1644,7 +1644,7 @@ export const defaultCallingRelativesSections: ExtraSectionContent[] = [
     title: "Family & Relative Support",
     subtitle: "Compassionate Communication.",
     description: "In times of sudden loss, making phone calls to inform relatives can be emotionally draining. Our compassionate volunteers take this burden off your shoulders, respectfully notifying all extended family members and friends.",
-    image: "/assets/serving/counseling-support.png",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165435/moksha-sewa/assets/serving/counseling-support.png",
     buttonLabel: "Request Assistance",
     buttonHref: "/request-help",
     secondaryButtonLabel: "24x7 Helpline",
@@ -1729,7 +1729,7 @@ export const defaultHarsevanSections: ExtraSectionContent[] = [
     title: "Hearse Van (Shav Vahan)",
     subtitle: "For a Dignified Final Journey.",
     description: "The final journey should be carried out with the utmost dignity. We help coordinate Hearse Van (Shav Vahan) support for eligible cases, subject to verification, location and availability.",
-    image: "/assets/serving/emergency-transport.png",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165438/moksha-sewa/assets/serving/emergency-transport.png",
     buttonLabel: "Request Hearse Van",
     buttonHref: "/request-help",
     secondaryButtonLabel: "24x7 Helpline",
@@ -1855,7 +1855,7 @@ export const defaultPrivacySections: ExtraSectionContent[] = [
       {
         title: "Our Commitment",
         description: "We are committed to transparency and protecting your personal information.\n\nWe collect only what we need and use it responsibly to serve humanity.",
-        image: "/assets/privacy-policy/our_commitment.webp"
+        image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165338/moksha-sewa/assets/privacy-policy/our_commitment.webp"
       }
     ]
   }
@@ -1922,7 +1922,7 @@ export const defaultTermsSections: ExtraSectionContent[] = [
       {
         title: "Our Commitment",
         description: "We are committed to transparency and upholding these guidelines for all users.\n\nPlease read carefully before engaging with our services.",
-        image: "/assets/privacy-policy/our_commitment.webp"
+        image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165338/moksha-sewa/assets/privacy-policy/our_commitment.webp"
       }
     ]
   }
@@ -2016,7 +2016,7 @@ export const defaultRefundSections: ExtraSectionContent[] = [
       {
         title: "Our Commitment",
         description: "We are committed to transparency and accountability in managing all donations.\n\nEvery contribution directly supports our mission to serve humanity.",
-        image: "/assets/privacy-policy/our_commitment.webp"
+        image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165338/moksha-sewa/assets/privacy-policy/our_commitment.webp"
       }
     ]
   }
@@ -2080,7 +2080,7 @@ export const defaultConductSections: ExtraSectionContent[] = [
       {
         title: "Our Commitment",
         description: "We are committed to maintaining a respectful, safe, and supportive environment.\n\nBy engaging with our community, you agree to uphold these values.",
-        image: "/assets/privacy-policy/our_commitment.webp"
+        image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165338/moksha-sewa/assets/privacy-policy/our_commitment.webp"
       }
     ]
   }
