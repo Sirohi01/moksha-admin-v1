@@ -7,10 +7,9 @@ export interface AdminUser {
   phone: string;
   avatarUrl?: string;
   userType: "INTERNAL" | "VOLUNTEER" | "DONOR";
-  // Resolved at login time for UI purposes only — every actual API call is re-authorized fresh
-  // server-side (PRD §3.2 "fail closed"), so a stale permission here can never grant real access.
   roleSlug?: string;
   permissions: string[];
+  isSuperAdmin?: boolean;
 }
 
 export interface AuthTokens {

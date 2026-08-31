@@ -2,22 +2,20 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAppSelector } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { authApi } from "@/lib/authApi";
+import { updateAdmin } from "@/store/slices/authSlice";
 import Spinner from "@/components/ui/Spinner";
-
-/** Gate for the dashboard shell — redirects to /login if no admin session is present, OR if the
- * account still has mandatory 2FA enrollment pending (every permission-gated route 403s until
- * that's done — see auth.middleware.ts's authorize() — so the dashboard can't actually be used
- * yet; /login owns the enrollment UI, not this shell). */
 export default function RequireAdminAuth({ children }: { children: React.ReactNode }) {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const { admin, hydrated } = useAppSelector((state) => state.auth);
   const [checked, setChecked] = useState(false);
+  const adminId = admin?.id;
 
   useEffect(() => {
     if (!hydrated) return;
-    if (!admin) {
+    if (!adminId) {
       router.replace("/login");
       return;
     }
@@ -27,11 +25,12 @@ export default function RequireAdminAuth({ children }: { children: React.ReactNo
         if (me.twoFactorPending) {
           router.replace("/login");
         } else {
+          dispatch(updateAdmin({ roleSlug: me.roleSlug, permissions: me.permissions, isSuperAdmin: me.isSuperAdmin }));
           setChecked(true);
         }
       })
       .catch(() => router.replace("/login"));
-  }, [hydrated, admin, router]);
+  }, [hydrated, adminId, router, dispatch]);
 
   if (!hydrated || !admin || !checked) {
     return (

@@ -57,7 +57,7 @@ export default function AccessGrantsPage() {
         setRoles(roleRows);
       })
       .catch(() => {});
-    authApi.getMe().then((me) => setIsSuperAdmin(me.roleSlug === "super_admin")).catch(() => setIsSuperAdmin(false));
+    authApi.getMe().then((me) => setIsSuperAdmin(me.isSuperAdmin ?? false)).catch(() => setIsSuperAdmin(false));
   }, []);
 
   const filteredStaff = useMemo(() => {

@@ -40,7 +40,7 @@ export default function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   const searchParams = useSearchParams();
   const admin = useAppSelector((state) => state.auth.admin);
   const permissions = admin?.permissions ?? [];
-  const isSuperAdmin = admin?.roleSlug === "super_admin";
+  const isSuperAdmin = admin?.isSuperAdmin ?? false;
   const selectedOrganisationCode = useAppSelector((state) => state.scope.selectedOrganisationCode);
   const permissionSet = new Set(permissions);
   const canView = (item: NavItem) => {
