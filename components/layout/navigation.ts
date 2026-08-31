@@ -19,6 +19,8 @@ import {
   History,
   Images,
   Globe2,
+  Route,
+  MessageSquare,
 } from "lucide-react";
 
 export interface NavItem {
@@ -56,6 +58,7 @@ export const NAV_SECTIONS: NavSection[] = [
     title: "Masters",
     items: [
       { label: "Gallery Media", href: "/gallery", icon: Images },
+      { label: "Blog Posts", href: "/blogs", icon: Route },
       {
         label: "Website",
         href: "/website",
@@ -267,6 +270,8 @@ export const NAV_SECTIONS: NavSection[] = [
       { label: "Staff", href: "/staff", icon: UserCog },
       { label: "Audit Log", href: "/audit-log", icon: History },
       { label: "Settings", href: "/settings", icon: Settings },
+      { label: "301 Redirects", href: "/redirects", icon: Route },
+      { label: "FAQ Manager", href: "/faqs", icon: MessageSquare },
     ],
   },
 ];

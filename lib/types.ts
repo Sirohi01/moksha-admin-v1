@@ -325,9 +325,19 @@ export interface Settings {
     quietHoursStart?: string;
     quietHoursEnd?: string;
   };
+  advancedSeo?: {
+    globalHeadCode?: string;
+    globalBodyCode?: string;
+    defaultOgImage?: string;
+    googleSearchConsoleVerification?: string;
+    robotsTxt?: string;
+    ga4MeasurementId?: string;
+    gtmContainerId?: string;
+  };
   banners: { image: string; link?: string; title?: string }[];
   socialLinks: { platform: string; url: string }[];
   landingPage?: {
+    seo?: any;
     sections: {
       key: string;
       name: string;

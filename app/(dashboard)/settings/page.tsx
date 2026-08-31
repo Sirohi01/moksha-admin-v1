@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
+import { Input, Textarea } from "@/components/ui/Input";
 import { settingsApi } from "@/lib/settingsApi";
 import { Settings } from "@/lib/types";
 import { ApiRequestError } from "@/lib/api";
@@ -135,6 +135,66 @@ export default function SettingsPage() {
             value={settings.notifications?.quietHoursEnd ?? ""}
             onChange={(e) => setSettings({ ...settings, notifications: { ...settings.notifications, quietHoursEnd: e.target.value } })}
           />
+        </div>
+      </Card>
+
+      <Card>
+        <h2 className="mb-1 text-xs font-semibold uppercase tracking-wide text-text-muted">Advanced SEO / Scripts</h2>
+        <p className="mb-3 text-[11px] text-text-muted">
+          Global head and body scripts (like GTM or Analytics) and robots.txt configuration.
+        </p>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <Input
+            label="Google Search Console Verification"
+            value={settings.advancedSeo?.googleSearchConsoleVerification ?? ""}
+            onChange={(e) => setSettings({ ...settings, advancedSeo: { ...settings.advancedSeo, googleSearchConsoleVerification: e.target.value } })}
+            hint="The meta content value (e.g., 'v1234...')"
+          />
+          <Input
+            label="Default Open Graph Image URL"
+            value={settings.advancedSeo?.defaultOgImage ?? ""}
+            onChange={(e) => setSettings({ ...settings, advancedSeo: { ...settings.advancedSeo, defaultOgImage: e.target.value } })}
+            hint="Fallback image for pages without an explicit OG image."
+          />
+          <Input
+            label="GA4 Measurement ID"
+            value={settings.advancedSeo?.ga4MeasurementId ?? ""}
+            onChange={(e) => setSettings({ ...settings, advancedSeo: { ...settings.advancedSeo, ga4MeasurementId: e.target.value } })}
+            hint="e.g., 'G-XXXXXXXXXX'"
+          />
+          <Input
+            label="GTM Container ID"
+            value={settings.advancedSeo?.gtmContainerId ?? ""}
+            onChange={(e) => setSettings({ ...settings, advancedSeo: { ...settings.advancedSeo, gtmContainerId: e.target.value } })}
+            hint="e.g., 'GTM-XXXXXXX'"
+          />
+          <div className="sm:col-span-2">
+            <Textarea
+              label="Global Head Code"
+              value={settings.advancedSeo?.globalHeadCode ?? ""}
+              onChange={(e) => setSettings({ ...settings, advancedSeo: { ...settings.advancedSeo, globalHeadCode: e.target.value } })}
+              rows={4}
+              hint="Raw HTML scripts to be placed in the <head> of every page."
+            />
+          </div>
+          <div className="sm:col-span-2">
+            <Textarea
+              label="Global Body Code"
+              value={settings.advancedSeo?.globalBodyCode ?? ""}
+              onChange={(e) => setSettings({ ...settings, advancedSeo: { ...settings.advancedSeo, globalBodyCode: e.target.value } })}
+              rows={4}
+              hint="Raw HTML scripts to be placed at the end of the <body>."
+            />
+          </div>
+          <div className="sm:col-span-2">
+            <Textarea
+              label="Robots.txt Content"
+              value={settings.advancedSeo?.robotsTxt ?? ""}
+              onChange={(e) => setSettings({ ...settings, advancedSeo: { ...settings.advancedSeo, robotsTxt: e.target.value } })}
+              rows={4}
+              hint="Override the default robots.txt. Leave blank to use Next.js defaults."
+            />
+          </div>
         </div>
       </Card>
 
