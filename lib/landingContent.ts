@@ -211,6 +211,7 @@ export const defaultLandingSections: LandingSectionContent[] = [
     enabled: true,
     eyebrow: "Our Humanitarian Commitment",
     title: "No One Should Leave\nThis World Without Dignity.",
+    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165202/moksha-sewa/assets/image.png",
     items: [
       { title: "Legally Authorised Cases", description: "We support only legally authorised unclaimed cases." },
       { title: "Dignified Final Rites", description: "Every soul deserves a respectful and dignified farewell." },
@@ -224,7 +225,7 @@ export const defaultLandingSections: LandingSectionContent[] = [
     title: "Sewa Stories",
     items: [
       { title: "ECONOMICALLY WEAKER FAMILY", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165001/moksha-sewa/assets/about-optimized/family-support.webp" },
-      { title: "ELDERLY WITHOUT SUPPORT", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165004/moksha-sewa/assets/about-optimized/hearse-van.webp" },
+      { title: "ELDERLY WITHOUT SUPPORT", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165202/moksha-sewa/assets/image.png" },
       { title: "UNCLAIMED BODY CASE", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788164996/moksha-sewa/assets/about-optimized/cremation-ritual.webp" },
     ],
   },
