@@ -8,7 +8,7 @@ import { Input, Select } from "@/components/ui/Input";
 import Modal from "@/components/ui/Modal";
 import Table, { Column } from "@/components/ui/Table";
 import { useCrudResource } from "@/components/crud/useCrudResource";
-import { NamoAgsCollege, NamoAgsCollegeInput, namoAgsCollegeApi } from "@/lib/namoAgsCollegeApi";
+import { NamoAgsCollege, NamoAgsCollegeContact, NamoAgsCollegeInput, namoAgsCollegeApi } from "@/lib/namoAgsCollegeApi";
 import { useAppSelector } from "@/store/hooks";
 
 const EMPTY: NamoAgsCollegeInput = {
@@ -35,6 +35,13 @@ export default function NamoAgsCollegesPage() {
   };
   const handleSave = async () => { if (await save(editingId, form, form)) setModalOpen(false); };
   const handleDelete = async () => { if (editingId && window.confirm("Delete this college?") && await remove(editingId)) setModalOpen(false); };
+
+  const EMPTY_CONTACT: NamoAgsCollegeContact = { contactPerson: "", designation: "", email: "", mobile: "", alternate: "", landline: "" };
+  const addContact = () => setForm((prev) => ({ ...prev, contacts: [...prev.contacts, { ...EMPTY_CONTACT }] }));
+  const updateContact = (index: number, patch: Partial<NamoAgsCollegeContact>) =>
+    setForm((prev) => ({ ...prev, contacts: prev.contacts.map((c, i) => (i === index ? { ...c, ...patch } : c)) }));
+  const removeContact = (index: number) =>
+    setForm((prev) => ({ ...prev, contacts: prev.contacts.filter((_, i) => i !== index) }));
 
   const columns: Column<NamoAgsCollege>[] = [
     { key: "name", header: "College", render: (c) => <div><p className="font-medium">{c.collegeName}</p><p className="text-xs text-text-muted">{c.category || "—"}</p></div> },
@@ -91,16 +98,35 @@ export default function NamoAgsCollegesPage() {
               <option value="Inactive">Inactive</option>
             </Select>
           </div>
-          {form.contacts.length > 0 && (
-            <div>
-              <label className="mb-1 block text-xs font-medium text-text-muted">Contacts</label>
-              <div className="space-y-1 rounded-lg border border-surface-border p-2 text-xs">
-                {form.contacts.map((c, i) => (
-                  <p key={i}>{c.contactPerson || "—"} · {c.designation || "—"} · {c.email || "—"} · {c.mobile || "—"}</p>
-                ))}
-              </div>
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-medium text-text-muted">Contacts</label>
+              <Button variant="secondary" size="sm" onClick={addContact}><Plus className="h-3.5 w-3.5" /> Add Contact</Button>
             </div>
-          )}
+            {form.contacts.length === 0 && <p className="text-xs text-text-muted">No contacts added yet.</p>}
+            {form.contacts.map((contact, i) => (
+              <div key={i} className="space-y-2 rounded-lg border border-surface-border p-3">
+                <div className="flex items-center justify-between">
+                  <p className="text-xs font-medium text-text-muted">Contact {i + 1}</p>
+                  <button type="button" onClick={() => removeContact(i)} className="text-red-600" aria-label="Remove contact">
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                  <Input label="Contact Person" value={contact.contactPerson} onChange={(e) => updateContact(i, { contactPerson: e.target.value })} />
+                  <Input label="Designation" value={contact.designation} onChange={(e) => updateContact(i, { designation: e.target.value })} />
+                </div>
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                  <Input label="Email" type="email" value={contact.email} onChange={(e) => updateContact(i, { email: e.target.value })} />
+                  <Input label="Mobile" value={contact.mobile} onChange={(e) => updateContact(i, { mobile: e.target.value })} />
+                </div>
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                  <Input label="Alternate" value={contact.alternate} onChange={(e) => updateContact(i, { alternate: e.target.value })} />
+                  <Input label="Landline" value={contact.landline} onChange={(e) => updateContact(i, { landline: e.target.value })} />
+                </div>
+              </div>
+            ))}
+          </div>
           {error && <p className="text-xs font-medium text-red-600">{error}</p>}
         </div>
       </Modal>

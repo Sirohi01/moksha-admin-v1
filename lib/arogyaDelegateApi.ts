@@ -73,6 +73,19 @@ export interface OfflineGroupInput {
   members: ArogyaDelegateFormFields[];
 }
 
+export type ArogyaDelegateUpdateInput = Partial<Omit<ArogyaDelegateFormFields, "source">>;
+
+async function downloadCsv(path: string, filename: string): Promise<void> {
+  const csv = await api.getHtml(path);
+  const blob = new Blob([csv], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
 export const arogyaDelegateApi = {
   list: (filters: ArogyaDelegateListFilters = {}) => {
     const params = new URLSearchParams();
@@ -82,8 +95,11 @@ export const arogyaDelegateApi = {
     return api.get<ArogyaDelegateRegistration[]>(`/arogya-delegates/admin${query ? `?${query}` : ""}`);
   },
   getById: (id: string) => api.get<ArogyaDelegateRegistration>(`/arogya-delegates/admin/${id}`),
+  update: (id: string, input: ArogyaDelegateUpdateInput) =>
+    api.put<ArogyaDelegateRegistration>(`/arogya-delegates/admin/${id}`, input),
   createOfflineSingle: (input: OfflineSingleInput) =>
     api.post<ArogyaDelegateRegistration>("/arogya-delegates/admin/offline/single", input),
   createOfflineGroup: (input: OfflineGroupInput) =>
     api.post<ArogyaDelegateRegistration[]>("/arogya-delegates/admin/offline/group", input),
+  exportCsv: () => downloadCsv("/arogya-delegates/admin/export/delegates.csv", `arogya-delegates-${Date.now()}.csv`),
 };

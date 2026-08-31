@@ -31,6 +31,8 @@ import {
   BadgePercent,
   MousePointerClick,
   List,
+  Tags,
+  Wallet,
 } from "lucide-react";
 
 export interface NavItem {
@@ -300,8 +302,10 @@ export const NAV_SECTIONS: NavSection[] = [
     items: [
       { label: "Website CMS", href: "/arogya-cms", icon: HeartPulse, requiredPermission: "cms.read", organisationCodes: ["AROGYA"] },
       { label: "Delegate Registrations", href: "/arogya-delegates", icon: Users2, requiredPermission: "arogyaDelegates.read", organisationCodes: ["AROGYA"] },
+      { label: "Payments", href: "/arogya-payments", icon: Wallet, requiredPermission: "arogyaDelegates.read", organisationCodes: ["AROGYA"] },
       { label: "Delegate Passes", href: "/arogya-passes", icon: Ticket, requiredPermission: "cms.read", organisationCodes: ["AROGYA"] },
       { label: "Coupons", href: "/arogya-coupons", icon: BadgePercent, requiredPermission: "cms.read", organisationCodes: ["AROGYA"] },
+      { label: "Delegate Category", href: "/arogya-categories", icon: Tags, requiredPermission: "cms.read", organisationCodes: ["AROGYA"] },
     ],
   },
   {

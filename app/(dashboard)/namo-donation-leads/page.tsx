@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { HeartHandshake } from "lucide-react";
 import Badge from "@/components/ui/Badge";
+import Modal from "@/components/ui/Modal";
 import Table, { Column } from "@/components/ui/Table";
 import { NamoDonationLead, namoDonationLeadApi } from "@/lib/namoDonationLeadApi";
 import { useAppSelector } from "@/store/hooks";
@@ -11,6 +12,7 @@ export default function NamoDonationLeadsPage() {
   const organisationCode = useAppSelector((state) => state.scope.selectedOrganisationCode);
   const [rows, setRows] = useState<NamoDonationLead[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selected, setSelected] = useState<NamoDonationLead | null>(null);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -46,7 +48,25 @@ export default function NamoDonationLeadsPage() {
         <p className="text-xs text-text-muted">Submissions from the public donation form — these are pledges/leads, not verified payments (Namo Gange's public site has no payment gateway integration).</p>
       </div>
       {error && <p className="text-xs font-medium text-red-600">{error}</p>}
-      <Table columns={columns} rows={rows} rowKey={(d) => d._id} loading={loading} emptyMessage="No donation pledges found." />
+      <Table columns={columns} rows={rows} rowKey={(d) => d._id} loading={loading} emptyMessage="No donation pledges found." onRowClick={setSelected} />
+
+      <Modal isOpen={!!selected} onClose={() => setSelected(null)} title={selected?.anonymous ? "Anonymous Pledge" : selected?.fullName ?? "Donation Pledge"} size="md" footer={null}>
+        {selected && (
+          <div className="space-y-2 text-sm">
+            <p><span className="text-text-muted">Email:</span> {selected.email}</p>
+            <p><span className="text-text-muted">Phone:</span> {selected.phone}</p>
+            {selected.gender && <p><span className="text-text-muted">Gender:</span> {selected.gender}</p>}
+            <p><span className="text-text-muted">Location:</span> {[selected.city, selected.state, selected.country].filter(Boolean).join(", ") || "—"}</p>
+            <p><span className="text-text-muted">Address:</span> {selected.address || "—"}</p>
+            <p><span className="text-text-muted">Sewa Type:</span> {selected.sewaType}</p>
+            <p><span className="text-text-muted">Package:</span> {selected.donationPackage}</p>
+            <p><span className="text-text-muted">Amount:</span> ₹{selected.amount.toLocaleString("en-IN")}</p>
+            {selected.pan && <p><span className="text-text-muted">PAN:</span> {selected.pan}</p>}
+            <p><span className="text-text-muted">Anonymous:</span> {selected.anonymous ? "Yes" : "No"}</p>
+            {selected.message && <p><span className="text-text-muted">Message:</span> {selected.message}</p>}
+          </div>
+        )}
+      </Modal>
     </div>
   );
 }

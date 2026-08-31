@@ -1,16 +1,19 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
-import { Plus, Trash2, Users2 } from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import QRCode from "qrcode";
+import { Calendar, Download, Pencil, Plus, QrCode, Trash2, Users2, UsersRound, Wallet } from "lucide-react";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import { Input, Select } from "@/components/ui/Input";
 import Modal from "@/components/ui/Modal";
+import StatCard from "@/components/ui/StatCard";
 import Table, { Column } from "@/components/ui/Table";
 import { ApiRequestError } from "@/lib/api";
 import {
   ArogyaDelegateFormFields,
   ArogyaDelegateRegistration,
+  ArogyaDelegateUpdateInput,
   ArogyaPaymentMode,
   arogyaDelegateApi,
 } from "@/lib/arogyaDelegateApi";
@@ -33,6 +36,15 @@ export default function ArogyaDelegatesPage() {
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<ArogyaDelegateRegistration | null>(null);
   const [error, setError] = useState("");
+  const [exporting, setExporting] = useState(false);
+
+  const [editMode, setEditMode] = useState(false);
+  const [editForm, setEditForm] = useState<ArogyaDelegateUpdateInput>({});
+  const [editSaving, setEditSaving] = useState(false);
+  const [editError, setEditError] = useState("");
+
+  const [passModalDelegate, setPassModalDelegate] = useState<ArogyaDelegateRegistration | null>(null);
+  const [passQrDataUrl, setPassQrDataUrl] = useState("");
 
   const [passes, setPasses] = useState<ArogyaPass[]>([]);
   const [offlineModalOpen, setOfflineModalOpen] = useState(false);
@@ -62,6 +74,68 @@ export default function ArogyaDelegatesPage() {
   useEffect(() => {
     if (organisationCode === "AROGYA") arogyaPassApi.list().then(setPasses).catch(() => undefined);
   }, [organisationCode]);
+
+  const stats = useMemo(() => {
+    const todayKey = new Date().toDateString();
+    const totalRevenuePaise = rows.reduce((sum, d) => sum + d.amountPaise, 0);
+    return {
+      total: rows.length,
+      today: rows.filter((d) => new Date(d.createdAt).toDateString() === todayKey).length,
+      revenue: totalRevenuePaise / 100,
+      groups: rows.filter((d) => d.registrationType === "group" && d.isGroupPrimary).length,
+    };
+  }, [rows]);
+
+  const handleExport = async () => {
+    setExporting(true);
+    try {
+      await arogyaDelegateApi.exportCsv();
+    } catch {
+      setError("Could not export registrations.");
+    } finally {
+      setExporting(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!passModalDelegate) { setPassQrDataUrl(""); return; }
+    const payload = [
+      passModalDelegate.delegateCode,
+      passModalDelegate.fullName,
+      passModalDelegate.passName,
+      `Days: ${passModalDelegate.selectedDays.join(", ") || "—"}`,
+      `Amount: ₹${(passModalDelegate.amountPaise / 100).toLocaleString("en-IN")}`,
+    ].join("\n");
+    QRCode.toDataURL(payload, { width: 220, margin: 1 }).then(setPassQrDataUrl).catch(() => setPassQrDataUrl(""));
+  }, [passModalDelegate]);
+
+  const openEdit = () => {
+    if (!selected) return;
+    setEditForm({
+      title: selected.title, fullName: selected.fullName, email: selected.email, mobile: selected.mobile,
+      whatsappNumber: selected.whatsappNumber, designation: selected.designation, organization: selected.organization,
+      country: selected.country, state: selected.state, city: selected.city,
+      isSpeaker: selected.isSpeaker, dietary: selected.dietary, assistance: selected.assistance,
+    });
+    setEditError("");
+    setEditMode(true);
+  };
+
+  const handleUpdate = async () => {
+    if (!selected) return;
+    setEditSaving(true);
+    setEditError("");
+    try {
+      const updated = await arogyaDelegateApi.update(selected._id, editForm);
+      setSelected(updated);
+      setRows((prev) => prev.map((d) => (d._id === updated._id ? updated : d)));
+      setEditMode(false);
+    } catch (err) {
+      setEditError(err instanceof ApiRequestError ? err.message : "Could not update this registration.");
+    } finally {
+      setEditSaving(false);
+    }
+  };
 
   const toggleDay = (day: number) => {
     setSelectedDays((prev) => (prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day].sort()));
@@ -138,9 +212,21 @@ export default function ArogyaDelegatesPage() {
           <h1 className="text-lg font-semibold text-text-primary">Delegate Registrations</h1>
           <p className="text-xs text-text-muted">Every row here has a verified payment behind it — either Razorpay, or an offline payment recorded by an admin below.</p>
         </div>
-        <Button size="sm" onClick={openOfflineModal} disabled={passes.length === 0}>
-          <Plus className="h-3.5 w-3.5" /> Record Offline Registration
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button size="sm" variant="secondary" onClick={handleExport} loading={exporting} disabled={rows.length === 0}>
+            <Download className="h-3.5 w-3.5" /> Export CSV
+          </Button>
+          <Button size="sm" onClick={openOfflineModal} disabled={passes.length === 0}>
+            <Plus className="h-3.5 w-3.5" /> Record Offline Registration
+          </Button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <StatCard icon={Users2} label="Total Registrations" value={stats.total} />
+        <StatCard icon={Calendar} label="Today" value={stats.today} />
+        <StatCard icon={Wallet} label="Total Revenue" value={`₹${stats.revenue.toLocaleString("en-IN")}`} />
+        <StatCard icon={UsersRound} label="Group Registrations" value={stats.groups} />
       </div>
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
