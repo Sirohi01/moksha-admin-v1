@@ -241,10 +241,25 @@ export default function ArogyaDelegatesPage() {
       </div>
 
       {error && <p className="text-xs font-medium text-red-600">{error}</p>}
-      <Table columns={columns} rows={rows} rowKey={(d) => d._id} loading={loading} emptyMessage="No registrations found." onRowClick={setSelected} />
+      <Table columns={columns} rows={rows} rowKey={(d) => d._id} loading={loading} emptyMessage="No registrations found." onRowClick={(d) => { setSelected(d); setEditMode(false); }} />
 
-      <Modal isOpen={!!selected} onClose={() => setSelected(null)} title={selected?.delegateCode ?? "Registration"} size="lg" footer={null}>
-        {selected && (
+      <Modal
+        isOpen={!!selected} onClose={() => { setSelected(null); setEditMode(false); }} title={selected?.delegateCode ?? "Registration"} size="lg"
+        footer={selected ? (
+          editMode ? (
+            <>
+              <Button variant="secondary" size="sm" onClick={() => setEditMode(false)}>Cancel</Button>
+              <Button size="sm" onClick={handleUpdate} loading={editSaving}>Save Changes</Button>
+            </>
+          ) : (
+            <>
+              <Button variant="secondary" size="sm" onClick={() => setPassModalDelegate(selected)}><QrCode className="h-3.5 w-3.5" /> Entry Pass</Button>
+              <Button size="sm" onClick={openEdit}><Pencil className="h-3.5 w-3.5" /> Edit</Button>
+            </>
+          )
+        ) : null}
+      >
+        {selected && !editMode && (
           <div className="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2">
             <p><span className="text-text-muted">Name:</span> {[selected.title, selected.fullName].filter(Boolean).join(" ")}</p>
             <p><span className="text-text-muted">Email:</span> {selected.email}</p>
@@ -261,6 +276,58 @@ export default function ArogyaDelegatesPage() {
             {selected.dietary && <p><span className="text-text-muted">Dietary:</span> {selected.dietary}</p>}
             {selected.assistance && <p><span className="text-text-muted">Assistance:</span> {selected.assistance}</p>}
             {selected.documentUrl && <p className="sm:col-span-2"><a className="text-brand-600 hover:underline" href={selected.documentUrl} target="_blank" rel="noreferrer">View uploaded document</a></p>}
+          </div>
+        )}
+        {selected && editMode && (
+          <div className="space-y-3">
+            <p className="text-xs text-text-muted">Only contact and demographic details can be edited here — the pass, amount, coupon and payment stay tied to what was actually paid.</p>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+              <Input label="Title" value={editForm.title ?? ""} onChange={(e) => setEditForm({ ...editForm, title: e.target.value })} />
+              <div className="sm:col-span-2">
+                <Input label="Full Name" required value={editForm.fullName ?? ""} onChange={(e) => setEditForm({ ...editForm, fullName: e.target.value })} />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <Input label="Email" type="email" required value={editForm.email ?? ""} onChange={(e) => setEditForm({ ...editForm, email: e.target.value })} />
+              <Input label="Mobile" required value={editForm.mobile ?? ""} onChange={(e) => setEditForm({ ...editForm, mobile: e.target.value })} />
+            </div>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+              <Input label="WhatsApp" value={editForm.whatsappNumber ?? ""} onChange={(e) => setEditForm({ ...editForm, whatsappNumber: e.target.value })} />
+              <Input label="Designation" value={editForm.designation ?? ""} onChange={(e) => setEditForm({ ...editForm, designation: e.target.value })} />
+              <Input label="Organization" value={editForm.organization ?? ""} onChange={(e) => setEditForm({ ...editForm, organization: e.target.value })} />
+            </div>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+              <Input label="Country" value={editForm.country ?? ""} onChange={(e) => setEditForm({ ...editForm, country: e.target.value })} />
+              <Input label="State" value={editForm.state ?? ""} onChange={(e) => setEditForm({ ...editForm, state: e.target.value })} />
+              <Input label="City" value={editForm.city ?? ""} onChange={(e) => setEditForm({ ...editForm, city: e.target.value })} />
+            </div>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <Input label="Dietary Preference" value={editForm.dietary ?? ""} onChange={(e) => setEditForm({ ...editForm, dietary: e.target.value })} />
+              <Input label="Assistance Needed" value={editForm.assistance ?? ""} onChange={(e) => setEditForm({ ...editForm, assistance: e.target.value })} />
+            </div>
+            <label className="flex items-center gap-2 text-sm">
+              <input type="checkbox" checked={editForm.isSpeaker ?? false} onChange={(e) => setEditForm({ ...editForm, isSpeaker: e.target.checked })} />
+              Is a speaker
+            </label>
+            {editError && <p className="text-xs font-medium text-red-600">{editError}</p>}
+          </div>
+        )}
+      </Modal>
+
+      <Modal isOpen={!!passModalDelegate} onClose={() => setPassModalDelegate(null)} title="Entry Pass" size="sm" footer={null}>
+        {passModalDelegate && (
+          <div className="space-y-3 text-center print:p-4" id="arogya-entry-pass">
+            <p className="text-sm font-semibold text-text-primary">{[passModalDelegate.title, passModalDelegate.fullName].filter(Boolean).join(" ")}</p>
+            <p className="font-mono text-xs text-text-muted">{passModalDelegate.delegateCode}</p>
+            {passQrDataUrl && <img src={passQrDataUrl} alt="Entry pass QR code" className="mx-auto h-44 w-44" />}
+            <div className="space-y-1 text-xs text-text-muted">
+              <p>{passModalDelegate.passName}</p>
+              <p>Days: {passModalDelegate.selectedDays.join(", ") || "—"}</p>
+              <p>₹{(passModalDelegate.amountPaise / 100).toLocaleString("en-IN")}</p>
+            </div>
+            <div className="flex justify-center gap-2 print:hidden">
+              <Button size="sm" variant="secondary" onClick={() => window.print()}>Print</Button>
+            </div>
           </div>
         )}
       </Modal>
