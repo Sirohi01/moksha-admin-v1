@@ -138,7 +138,7 @@ export const defaultAboutSections: AboutSectionContent[] = [
     quote: "Dignity should never depend on whether someone has money, family or someone standing beside them.",
     secondaryTitle: "A Message From The Founder",
     secondaryDescription: "Moksha Sewa is not just a service—it is a promise. A promise that in someone's final moment, humanity will not look away.",
-    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165477/moksha-sewa/assets/vijay_sharma.jpg",
+    image: "/assets/vijay_sharma.jpg",
     secondaryImage: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788164976/moksha-sewa/assets/about/our-story/ghat-background.png",
   },
   {
@@ -298,7 +298,7 @@ export const defaultAboutSections: AboutSectionContent[] = [
     items: [
       { title: "Madhukar Reddy Dasari", subtitle: "Namo Gange Trust Leadership", description: "Supports governance, finance and operational oversight for the mission.", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165005/moksha-sewa/assets/about-optimized/madhukar-reddy-dasari.webp" },
       { title: "Sandeep Singh", subtitle: "Technology & Data Support", description: "Supports technology, data security and platform infrastructure.", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165019/moksha-sewa/assets/about-optimized/sandeep-singh.webp" },
-      { title: "Vijay Sharma", subtitle: "Operations Coordination", description: "Supports on-ground coordination, field execution and case response.", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165477/moksha-sewa/assets/vijay_sharma.jpg" },
+      { title: "Vijay Sharma", subtitle: "Operations Coordination", description: "Supports on-ground coordination, field execution and case response.", image: "/assets/vijay_sharma.jpg" },
       { title: "Srujana Paid", subtitle: "Partnerships & Outreach", description: "Supports partnerships, outreach and progressive mission expansion.", image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165020/moksha-sewa/assets/about-optimized/srujana-paid.webp" },
     ],
   },
@@ -308,7 +308,7 @@ export const defaultAboutSections: AboutSectionContent[] = [
     enabled: true,
     eyebrow: "Founder's Vision",
     title: "The Thought Behind Moksha Sewa",
-    image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165477/moksha-sewa/assets/vijay_sharma.jpg",
+    image: "/assets/vijay_sharma.jpg",
     supportTitle: "Vijay Sharma",
     supportDescription: "Founder",
     description: "When a family loses a loved one, they are overwhelmed with grief. At that critical moment, dealing with the logistics of rituals, cremation, and arrangements should not add to their burden. Moksha Sewa was born out of this very realization.",
