@@ -317,6 +317,13 @@ export default function ArogyaDelegatesPage() {
       <Modal isOpen={!!passModalDelegate} onClose={() => setPassModalDelegate(null)} title="Entry Pass" size="sm" footer={null}>
         {passModalDelegate && (
           <div className="space-y-3 text-center print:p-4" id="arogya-entry-pass">
+            <style>{`
+              @media print {
+                body * { visibility: hidden; }
+                #arogya-entry-pass, #arogya-entry-pass * { visibility: visible; }
+                #arogya-entry-pass { position: fixed; inset: 0; }
+              }
+            `}</style>
             <p className="text-sm font-semibold text-text-primary">{[passModalDelegate.title, passModalDelegate.fullName].filter(Boolean).join(" ")}</p>
             <p className="font-mono text-xs text-text-muted">{passModalDelegate.delegateCode}</p>
             {passQrDataUrl && <img src={passQrDataUrl} alt="Entry pass QR code" className="mx-auto h-44 w-44" />}
