@@ -1,5 +1,4 @@
 "use client";
-
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { ImagePlus, Plus, Save, Trash2 } from "lucide-react";
@@ -30,6 +29,10 @@ import {
   defaultDonationSections,
   defaultContactSections,
   defaultTrackSections,
+  defaultPrivacySections,
+  defaultTermsSections,
+  defaultRefundSections,
+  defaultConductSections,
 } from "@/lib/extraPagesContent";
 
 const FOLDER = "moksha-sewa/website";
@@ -88,6 +91,8 @@ const extraTextFields: { key: keyof LandingSectionContent; label: string; multil
   { key: "supportNowLabel", label: "Support Now Label" },
   { key: "supportMissionTitle", label: "Support Mission Title" },
   { key: "supportMissionDescription", label: "Support Mission Description", multiline: true },
+  { key: "videoUrl", label: "Video URL" },
+  { key: "secondaryVideoUrl", label: "Secondary Video URL" },
 ];
 
 const extraImageFields: { key: keyof LandingSectionContent; label: string }[] = [
@@ -95,10 +100,13 @@ const extraImageFields: { key: keyof LandingSectionContent; label: string }[] = 
   { key: "partnerLogoImage", label: "Partner Logo Image" },
   { key: "secondaryLogoImage", label: "Secondary Logo Image" },
   { key: "secondaryImage", label: "Secondary Image" },
+  { key: "tertiaryImage", label: "Tertiary Image" },
+  { key: "quaternaryImage", label: "Quaternary Image" },
 ];
 
 const sectionSpecificRenderedFields: Record<string, (keyof LandingSectionContent)[]> = {
   hero: ["logoImage"],
+  "volunteer-hero": ["secondaryImage", "logoImage"],
   footer: ["logoImage", "partnerLogoImage"],
   "trust-transparency": [
     "quote",
@@ -169,7 +177,11 @@ type EditablePage =
   | "request-help"
   | "donation"
   | "contact"
-  | "track";
+  | "track"
+  | "privacy-policy"
+  | "terms"
+  | "refund-policy"
+  | "code-of-conduct";
 
 const pageFieldMap: Record<EditablePage, keyof Pick<
   Settings,
@@ -192,6 +204,10 @@ const pageFieldMap: Record<EditablePage, keyof Pick<
   | "donationPage"
   | "contactPage"
   | "trackPage"
+  | "privacyPage"
+  | "termsPage"
+  | "refundPage"
+  | "conductPage"
 >> = {
   landing: "landingPage",
   about: "aboutPage",
@@ -212,6 +228,10 @@ const pageFieldMap: Record<EditablePage, keyof Pick<
   donation: "donationPage",
   contact: "contactPage",
   track: "trackPage",
+  "privacy-policy": "privacyPage",
+  terms: "termsPage",
+  "refund-policy": "refundPage",
+  "code-of-conduct": "conductPage",
 };
 
 const editablePages: Record<EditablePage, { label: string; defaults: LandingSectionContent[] }> = {
@@ -234,6 +254,10 @@ const editablePages: Record<EditablePage, { label: string; defaults: LandingSect
   donation: { label: "Donation Page", defaults: defaultDonationSections },
   contact: { label: "Contact Page", defaults: defaultContactSections },
   track: { label: "Track Status Page", defaults: defaultTrackSections },
+  "privacy-policy": { label: "Privacy Policy Page", defaults: defaultPrivacySections },
+  terms: { label: "Terms & Conditions Page", defaults: defaultTermsSections },
+  "refund-policy": { label: "Refund Policy Page", defaults: defaultRefundSections },
+  "code-of-conduct": { label: "Code Of Conduct Page", defaults: defaultConductSections },
 };
 
 const allDefaultSections = [
@@ -256,6 +280,10 @@ const allDefaultSections = [
   ...defaultDonationSections,
   ...defaultContactSections,
   ...defaultTrackSections,
+  ...defaultPrivacySections,
+  ...defaultTermsSections,
+  ...defaultRefundSections,
+  ...defaultConductSections,
 ];
 
 const fallbackSectionByKey = new Map(allDefaultSections.map((section) => [section.key, section]));
@@ -478,7 +506,7 @@ export default function WebsitePage() {
         setSettings(data);
         setSections(getPageSections(initialPage, data[pageFieldMap[initialPage]]?.sections));
       })
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => setLoading(false));
   }, [initialPage]);
 
@@ -644,25 +672,32 @@ export default function WebsitePage() {
             <div className="sm:col-span-2">
               <TextField label="Description" value={activeSection.description} maxLength={getSectionFieldLimit(activeSection.key, "description")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, description: value }))} multiline />
             </div>
-            {activeSection.key === "hero" && (
+            {(activeSection.key === "hero" || activeSection.key === "volunteer-hero") && (
               <div className="sm:col-span-2">
                 <ImageField
                   label="Hero Logo"
                   hint="This is the logo shown in the hero section above the title."
                   value={activeSection.logoImage}
-                  uploading={uploadingKey === "hero:logo"}
+                  uploading={uploadingKey === `${activeSection.key}:logo`}
                   onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, logoImage: value }))}
-                  onUpload={(file) => uploadImage("hero:logo", file, (url) => setSection(activeSection.key, (section) => ({ ...section, logoImage: url })))}
+                  onUpload={(file) => uploadImage(`${activeSection.key}:logo`, file, (url) => setSection(activeSection.key, (section) => ({ ...section, logoImage: url })))}
                 />
               </div>
             )}
             <ImageField
-              label={activeSection.key === "hero" ? "Hero Background Image (not logo)" : "Section Image"}
+              label={activeSection.key === "hero" ? "Hero Background Image (not logo)" : activeSection.key === "volunteer-hero" ? "Hero Slide 1 Image" : "Section Image"}
               hint={activeSection.key === "hero" ? "This controls the hero background/fallback image. Use Hero Logo above for the logo." : undefined}
               value={activeSection.image}
               uploading={uploadingKey === `${activeSection.key}:section`}
               onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, image: value }))}
               onUpload={(file) => uploadImage(`${activeSection.key}:section`, file, (url) => setSection(activeSection.key, (section) => ({ ...section, image: url })))}
+            />
+            <ImageField
+              label={activeSection.key === "volunteer-hero" ? "Hero Slide 2 Image" : "Secondary Image"}
+              value={activeSection.secondaryImage}
+              uploading={uploadingKey === `${activeSection.key}:secondary`}
+              onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, secondaryImage: value }))}
+              onUpload={(file) => uploadImage(`${activeSection.key}:secondary`, file, (url) => setSection(activeSection.key, (section) => ({ ...section, secondaryImage: url })))}
             />
             <div className="grid gap-3 sm:grid-cols-2">
               <TextField label="Primary Button Text" value={activeSection.buttonLabel} maxLength={getSectionFieldLimit(activeSection.key, "buttonLabel")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, buttonLabel: value }))} />
@@ -912,6 +947,27 @@ export default function WebsitePage() {
                         }))
                       }
                     />
+                    <TextField
+                      label="Button Label"
+                      value={item.buttonLabel}
+                      maxLength={getItemFieldLimit(activeSection.key, itemIndex, "buttonLabel")}
+                      onChange={(value) =>
+                        setSection(activeSection.key, (section) => ({
+                          ...section,
+                          items: updateAt(section.items ?? [], itemIndex, (current) => ({ ...current, buttonLabel: value })),
+                        }))
+                      }
+                    />
+                    <TextField
+                      label="Button Link"
+                      value={item.buttonHref}
+                      onChange={(value) =>
+                        setSection(activeSection.key, (section) => ({
+                          ...section,
+                          items: updateAt(section.items ?? [], itemIndex, (current) => ({ ...current, buttonHref: value })),
+                        }))
+                      }
+                    />
                     <div className="sm:col-span-2">
                       <TextField
                         label="Description / Answer"
@@ -949,7 +1005,7 @@ export default function WebsitePage() {
                     )}
                     <div className="sm:col-span-2">
                       <ImageField
-                        label="Item Image"
+                        label="Item Image 1 (Main)"
                         value={item.image}
                         uploading={uploadingKey === `${activeSection.key}:item:${itemIndex}`}
                         onChange={(value) =>
@@ -968,6 +1024,71 @@ export default function WebsitePage() {
                         }
                       />
                     </div>
+                    <>
+                      <div className="sm:col-span-2">
+                        <ImageField
+                          label="Item Image 2"
+                          value={item.secondaryImage}
+                          uploading={uploadingKey === `${activeSection.key}:item:${itemIndex}:secondary`}
+                          onChange={(value) =>
+                            setSection(activeSection.key, (section) => ({
+                              ...section,
+                              items: updateAt(section.items ?? [], itemIndex, (current) => ({ ...current, secondaryImage: value })),
+                            }))
+                          }
+                          onUpload={(file) =>
+                            uploadImage(`${activeSection.key}:item:${itemIndex}:secondary`, file, (url) =>
+                              setSection(activeSection.key, (section) => ({
+                                ...section,
+                                items: updateAt(section.items ?? [], itemIndex, (current) => ({ ...current, secondaryImage: url })),
+                              }))
+                            )
+                          }
+                        />
+                      </div>
+                      <div className="sm:col-span-2">
+                        <ImageField
+                          label="Item Image 3"
+                          value={item.tertiaryImage}
+                          uploading={uploadingKey === `${activeSection.key}:item:${itemIndex}:tertiary`}
+                          onChange={(value) =>
+                            setSection(activeSection.key, (section) => ({
+                              ...section,
+                              items: updateAt(section.items ?? [], itemIndex, (current) => ({ ...current, tertiaryImage: value })),
+                            }))
+                          }
+                          onUpload={(file) =>
+                            uploadImage(`${activeSection.key}:item:${itemIndex}:tertiary`, file, (url) =>
+                              setSection(activeSection.key, (section) => ({
+                                ...section,
+                                items: updateAt(section.items ?? [], itemIndex, (current) => ({ ...current, tertiaryImage: url })),
+                              }))
+                            )
+                          }
+                        />
+                      </div>
+                      <div className="sm:col-span-2">
+                        <ImageField
+                          label="Item Image 4"
+                          value={item.quaternaryImage}
+                          uploading={uploadingKey === `${activeSection.key}:item:${itemIndex}:quaternary`}
+                          onChange={(value) =>
+                            setSection(activeSection.key, (section) => ({
+                              ...section,
+                              items: updateAt(section.items ?? [], itemIndex, (current) => ({ ...current, quaternaryImage: value })),
+                            }))
+                          }
+                          onUpload={(file) =>
+                            uploadImage(`${activeSection.key}:item:${itemIndex}:quaternary`, file, (url) =>
+                              setSection(activeSection.key, (section) => ({
+                                ...section,
+                                items: updateAt(section.items ?? [], itemIndex, (current) => ({ ...current, quaternaryImage: url })),
+                              }))
+                            )
+                          }
+                        />
+                      </div>
+                    </>
                   </div>
                 </div>
               ))}

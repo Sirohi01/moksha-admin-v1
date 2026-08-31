@@ -1,6 +1,7 @@
 export interface LandingSectionItem {
   title?: string;
   label?: string;
+  subtitle?: string;
   value?: string;
   description?: string;
   image?: string;
@@ -8,6 +9,9 @@ export interface LandingSectionItem {
   buttonLabel?: string;
   buttonHref?: string;
   features?: string[];
+  secondaryImage?: string;
+  tertiaryImage?: string;
+  quaternaryImage?: string;
 }
 
 export interface LandingHeroSlide {
@@ -35,6 +39,10 @@ export interface LandingSectionContent {
   partnerLogoImage?: string;
   secondaryLogoImage?: string;
   secondaryImage?: string;
+  tertiaryImage?: string;
+  quaternaryImage?: string;
+  videoUrl?: string;
+  secondaryVideoUrl?: string;
   quote?: string;
   legalNotice?: string;
   lowerTitle?: string;
@@ -50,6 +58,7 @@ export interface LandingSectionContent {
   phoneNumber?: string;
   contactEmail?: string;
   contactAddress?: string;
+  altPhoneNumber?: string;
   availabilityText?: string;
   actionTitle?: string;
   requestTitle?: string;
@@ -93,16 +102,12 @@ export const defaultLandingSections: LandingSectionContent[] = [
     initiativeLabel: "An Initiative of Namo Gange Trust",
     buttonLabel: "Request Sewa Help",
     buttonHref: "/request-help",
+      supportTitle: "We are here to support with care, respect and compassion.",
+      supportDescription: "You are not alone. We are with you.",
+      regionTitle: "Delhi • Ghaziabad • Noida",
+      regionDescription: "Currently serving with care in",
     secondaryButtonLabel: "Support This Mission",
     secondaryButtonHref: "/donation",
-    slides: [
-      { title: "Dignity in Every\nFinal Journey", description: "Supporting weaker families with compassionate last-rites assistance.", image: "/hero-images/dignity-in-every-final-journey-bg.png", alt: "Moksha Sewa team helping a helpless family with a dignified final journey", buttonLabel: "Request Sewa Help", buttonHref: "/request-help", secondaryButtonLabel: "Support This Mission", secondaryButtonHref: "/donation" },
-      { title: "No One Leaves\nWithout Final Dignity.", description: "Respectful last rites for authorised unclaimed cases.", image: "/hero-images/image2.png", alt: "Moksha Sewa volunteers providing dignified last rites support for an authorised unclaimed case", buttonLabel: "Know Our Mission", buttonHref: "/about", secondaryButtonLabel: "Support This Mission", secondaryButtonHref: "/donation" },
-      { title: "Be the Reason\nDignity Reaches Someone.", description: "Your support brings dignity through every farewell.", image: "/hero-images/image3.png", alt: "Moksha Sewa volunteers supporting an elderly couple with dignity and compassion", buttonLabel: "Support This Mission", buttonHref: "/donation", secondaryButtonLabel: "Become a Volunteer", secondaryButtonHref: "/volunteer/register" },
-      { title: "When a Family Cannot\nAfford a Final Farewell.", description: "Humanity stands beside families through every farewell.", image: "/hero-images/image7.png", alt: "Moksha Sewa volunteers standing beside a grieving family with dignity and compassion", variant: "family-support", buttonLabel: "Request Support", buttonHref: "/request-help", secondaryButtonLabel: "Support a Family", secondaryButtonHref: "/donation" },
-      { title: "Final Journey to Prayer\nWe Stand Beside Them.", description: "Transport and rituals support families with compassion.", image: "/hero-images/image8.png", alt: "Moksha Sewa transport, rituals and family support during a dignified final journey", variant: "journey-prayer", buttonLabel: "Explore Our Sewa", buttonHref: "/prayerhallservices", secondaryButtonLabel: "Support This Mission", secondaryButtonHref: "/donation" },
-      { title: "Be the Reason\nDignity Reaches Someone.", description: "Your time brings comfort, care and compassion.", image: "/hero-images/volunteer-impact-v2.png", alt: "Moksha Sewa volunteers serving with compassion and dignity", variant: "volunteer-impact", buttonLabel: "Become a Volunteer", buttonHref: "/volunteer/register", secondaryButtonLabel: "Support This Mission", secondaryButtonHref: "/donation" },
-    ],
     items: [
       { value: "24/7", label: "Helpline Guidance" },
       { value: "Delhi • Ghaziabad • Noida", label: "Launch Region" },
@@ -114,10 +119,7 @@ export const defaultLandingSections: LandingSectionContent[] = [
     key: "who-we-help",
     name: "Who We Help",
     enabled: true,
-    eyebrow: "Who We Help",
     title: "Who We Help",
-    subtitle: "Standing Beside Those Who Need Us Most",
-    description: "Moksha Sewa provides compassionate last-rites support for unclaimed cases and families in need with dignity, respect and complete sensitivity.",
     items: [
       {
         title: "Unclaimed & Legally\nAuthorised Cases",
@@ -134,10 +136,6 @@ export const defaultLandingSections: LandingSectionContent[] = [
         description: "Verified support for eligible families who are unable to manage essential last-rites arrangements.",
         image: "/assets/about-optimized/prayer-hall.webp",
       },
-      { title: "Verified &\nTransparent", description: "Every sewa request is carefully verified before providing help." },
-      { title: "Compassion is Our\nCommitment", description: "We serve every life with deep respect, care and full dignity." },
-      { title: "Support with\nResponsibility", description: "Our support is subject to verification and legal requirements." },
-      { title: "Local Sewa\nNetwork", description: "Our dedicated teams are available across Delhi • Ghaziabad • Noida for support." },
     ],
   },
   {
@@ -160,10 +158,6 @@ export const defaultLandingSections: LandingSectionContent[] = [
       { title: "Cremation\nCoordination", description: "Support in arranging cremation\nground coordination and\nrequired formalities.", image: "/assets/how-we-help/two.png", features: ["Cremation Ground Support", "Essential Arrangements", "Clean & Respectful Process"] },
       { title: "Ritual &\nPriest Support", description: "Priest, wood, cloth, flowers\nand all ritual essentials\narranged.", image: "/assets/how-we-help/pandit.png", features: ["Experienced Priests", "Ritual Essentials", "As Per Tradition & Customs"] },
       { title: "Family &\nOn-Ground Support", description: "Guidance, volunteers and\ndocumentation assistance\nat every step.", image: "/assets/how-we-help/three.png", features: ["Volunteer Support", "Documentation Help", "Emotional Support"] },
-      { title: "For Everyone", description: "We serve unclaimed bodies, elderly alone, and families in financial distress." },
-      { title: "Delhi • Ghaziabad • Noida", description: "Expanding our network and reach to support more vulnerable people in need." },
-      { title: "Zero Financial Burden", description: "Our services are completely free for all those who are unable to afford them." },
-      { title: "Humanity First", description: "Every single life deserves dignity. Every family deserves complete support." },
     ],
   },
   {
@@ -175,13 +169,6 @@ export const defaultLandingSections: LandingSectionContent[] = [
     image: "/assets/manish.jpeg",
     description:
       "During a difficult final journey, families may need more than arrangements—they may need guidance, coordination and someone willing to stand beside them.",
-    buttonLabel: "Request Sewa Support",
-    buttonHref: "/request-help",
-    supportTitle: "We are here to support with care, respect and compassion.",
-    supportDescription: "You are not alone. We are with you.",
-    secondaryDescription: "We are available 24x7\nto stand beside you.",
-    regionTitle: "Delhi • Ghaziabad • Noida",
-    regionDescription: "Currently serving with care in",
     items: [
       { title: "Verified Support", description: "For eligible cases" },
       { title: "Guided Assistance", description: "With sensitivity\nand respect" },
@@ -195,8 +182,6 @@ export const defaultLandingSections: LandingSectionContent[] = [
     eyebrow: "How Sewa Works",
     title: "Support With Care, Verification & Responsibility",
     description: "A simple process. Compassionate support. Dignified final journey.",
-    buttonLabel: "Request Sewa Help",
-    buttonHref: "/request-help",
     items: [
       { value: "01", title: "Request Sewa Help", description: "Share the basic\ncase details." },
       { value: "02", title: "Case Verification", description: "Our team reviews the need\nand applicable requirements." },
@@ -226,12 +211,6 @@ export const defaultLandingSections: LandingSectionContent[] = [
     enabled: true,
     eyebrow: "Our Humanitarian Commitment",
     title: "No One Should Leave\nThis World Without Dignity.",
-    description: "Moksha Sewa supports legally authorised unclaimed cases with respectful final-rites coordination after completion of applicable police, hospital and authority formalities. Our team works carefully with the concerned authorities and service partners to help ensure that each final journey is handled with dignity, compassion, proper coordination and due respect. Support is provided only within the approved legal process and after the required documentation, verification and permissions have been completed.",
-    bottomStatement: "We follow all legal requirements and work in coordination with authorities to ensure dignity and responsibility.",
-    secondaryDescription: "All support is subject to verification, applicable legal requirements and availability of resources.",
-    image: "/assets/image.png",
-    buttonLabel: "Know About Unclaimed Body Sewa",
-    buttonHref: "/unclaimed-body-sewa",
     items: [
       { title: "Legally Authorised Cases", description: "We support only legally authorised unclaimed cases." },
       { title: "Dignified Final Rites", description: "Every soul deserves a respectful and dignified farewell." },
@@ -242,10 +221,7 @@ export const defaultLandingSections: LandingSectionContent[] = [
     key: "sewa-stories",
     name: "Sewa Stories",
     enabled: true,
-    eyebrow: "Sewa Stories",
     title: "Sewa Stories",
-    subtitle: "Every Sewa Has a Human Story",
-    description: "Behind every case is a life, a family and a final journey deserving of respect.",
     items: [
       { title: "ECONOMICALLY WEAKER FAMILY", image: "/assets/about-optimized/family-support.webp" },
       { title: "ELDERLY WITHOUT SUPPORT", image: "/assets/about-optimized/hearse-van.webp" },
@@ -273,7 +249,6 @@ export const defaultLandingSections: LandingSectionContent[] = [
     title: "There Is a Place for Everyone in Sewa",
     description:
       "Every act of kindness helps us bring dignity, compassion and support to those who need it most in their final journey.",
-    bottomStatement: "Whether you give, serve or partner – your support creates a meaningful difference in ensuring dignity and respect in every final journey we are able to support.",
     items: [
       { title: "Give in Sewa", label: "Donate", description: "Help extend dignified final-rites\nsupport to eligible cases.", image: "/assets/donation-images/donate-sewa.png", href: "/donation" },
       { title: "Serve in Sewa", label: "Volunteer", description: "Give your valuable time, presence,\nand compassionate support.", image: "/assets/donation-images/volunteer-sewa.png", href: "/volunteer/register" },
@@ -303,11 +278,22 @@ export const defaultLandingSections: LandingSectionContent[] = [
     eyebrow: "Sewa With Responsibility",
     title: "Trust &\nTransparency",
     description: "Our commitment to transparency, integrity and responsible service.",
+    logoImage: "/assets/footer-moksha-mark.png",
+    partnerLogoImage: "/hero-images/namo-gange-logo.webp",
+    secondaryLogoImage: "/hero-images/namo-gange-logo.png",
+    secondaryImage: "/assets/about-reference/story-ghat-temple.png",
+    quote: "We believe in being open, accountable and answerable\nto all those who walk with us in this mission.",
+    legalNotice: "Applicable registration / tax\ninformation will be displayed\nafter legal verification.",
+    lowerTitle: "Transparency in every step.",
+    lowerDescription: "Moksha Sewa follows responsible practices, transparency and applicable legal norms to ensure trust.",
+    bottomStatement: "A mission of compassion. | A commitment to transparency. | A promise of accountability.",
+    buttonLabel: "Know About The Trust",
+    buttonHref: "/about",
     items: [
-      { title: "About\nNamo Gange Trust" },
-      { title: "Governance &\nPolicies" },
-      { title: "Impact /\nReports" },
-      { title: "Donation &\nRefund Policy" },
+      { title: "About\nNamo Gange Trust", description: "Learn about our vision, mission, values, community purpose, commitment while staying connected." },
+      { title: "Governance &\nPolicies", description: "Understand our governance, policies, ethical standards, accountability, and processes clearly." },
+      { title: "Impact /\nReports", description: "Explore our impact, reports, case highlights, progress, outcomes and shared responsibility clearly." },
+      { title: "Donation &\nRefund Policy", description: "Read about donations, fund use, refunds, policies, transparency and responsible management clearly." },
       { title: "SEWA", description: "Service with\ncompassion" },
       { title: "INTEGRITY", description: "Ethical actions,\nhonest intent" },
       { title: "TRANSPARENCY", description: "Open processes,\nclear communication" },
@@ -349,7 +335,7 @@ export const defaultLandingSections: LandingSectionContent[] = [
   },
   {
     key: "faq",
-    name: "Frequently Asked Questions",
+    name: "FAQ",
     enabled: true,
     eyebrow: "Help & Information",
     title: "Frequently Asked Questions",
@@ -359,32 +345,38 @@ export const defaultLandingSections: LandingSectionContent[] = [
     items: [
       {
         title: "Who can request Moksha Sewa support?",
-        description: "Moksha Sewa support can be requested by families, authorised representatives, institutions and individuals who need assistance with last rites and related services.",
+        description:
+          "Moksha Sewa support can be requested by families, authorised representatives, institutions and individuals who need assistance with last rites and related services.",
         image: "/assets/faq/request.png",
       },
       {
         title: "Does Moksha Sewa assist with legally authorised unclaimed bodies?",
-        description: "Yes. Subject to applicable legal permissions and local procedures, Moksha Sewa can assist with legally authorised unclaimed body cases.",
+        description:
+          "Yes. Subject to applicable legal permissions and local procedures, Moksha Sewa can assist with legally authorised unclaimed body cases.",
         image: "/assets/faq/legally.png",
       },
       {
         title: "What cremation and last-rites assistance is available?",
-        description: "Moksha Sewa provides assistance and coordination for cremation, transportation, essential last-rites arrangements and other support based on the circumstances.",
+        description:
+          "Moksha Sewa provides assistance and coordination for cremation, transportation, essential last-rites arrangements and other support based on the circumstances.",
         image: "/assets/faq/cremation.png",
       },
       {
         title: "Where is Moksha Sewa currently available?",
-        description: "Moksha Sewa services are currently available in selected locations. Please contact the team to confirm availability in your area.",
+        description:
+          "Moksha Sewa services are currently available in selected locations. Please contact the team to confirm availability in your area.",
         image: "/assets/faq/where_is_moksha.png",
       },
       {
         title: "How can I become a volunteer?",
-        description: "You can express your interest in volunteering by contacting the Moksha Sewa team and sharing your basic details and preferred area of support.",
+        description:
+          "You can express your interest in volunteering by contacting the Moksha Sewa team and sharing your basic details and preferred area of support.",
         image: "/assets/faq/volunteer.png",
       },
       {
         title: "How can I support Moksha Sewa through a donation?",
-        description: "You can support Moksha Sewa through an authorised donation channel. Contact the organisation for current donation details and available donation options.",
+        description:
+          "You can support Moksha Sewa through an authorised donation channel. Contact the organisation for current donation details and available donation options.",
         image: "/assets/faq/support.png",
       },
     ],
@@ -401,6 +393,7 @@ export const defaultLandingSections: LandingSectionContent[] = [
     logoImage: "/assets/footer-moksha-mark.png",
     partnerLogoImage: "/assets/namo-gange-logo.webp",
     secondaryImage: "/assets/request_support.webp",
+    bottomStatement: "© 2026 Moksha Sewa. All Rights Reserved.",
     actionTitle: "Stand with dignity. Serve with compassion.",
     contactAddress: "Delhi • Ghaziabad • Noida, India",
     phoneNumber: "9220147229",
@@ -521,6 +514,7 @@ const genericTextLimits: Partial<Record<keyof LandingSectionContent, number>> = 
   phoneNumber: 24,
   contactEmail: 100,
   contactAddress: 180,
+  altPhoneNumber: 24,
   availabilityText: 120,
   actionTitle: 90,
   requestTitle: 90,
@@ -548,6 +542,7 @@ const genericTextLimits: Partial<Record<keyof LandingSectionContent, number>> = 
 const itemTextLimits: Partial<Record<keyof LandingSectionItem, number>> = {
   title: 120,
   label: 70,
+  subtitle: 120,
   value: 50,
   description: 260,
 };

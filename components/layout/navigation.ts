@@ -234,6 +234,41 @@ export const NAV_SECTIONS: NavSection[] = [
               { label: "Track Info", href: "/website?page=track&section=track-info", icon: Globe2 },
             ],
           },
+          {
+            label: "Legal & Policies",
+            href: "/website?page=privacy-policy",
+            icon: Globe2,
+            children: [
+              { label: "Privacy Policy", href: "/website?page=privacy-policy", icon: Globe2,
+                children: [
+                  { label: "Privacy Hero", href: "/website?page=privacy-policy&section=privacy-hero", icon: Globe2 },
+                  { label: "Privacy Content", href: "/website?page=privacy-policy&section=privacy-content", icon: Globe2 },
+                  { label: "Privacy Contact", href: "/website?page=privacy-policy&section=privacy-contact", icon: Globe2 },
+                ]
+              },
+              { label: "Terms & Conditions", href: "/website?page=terms", icon: Globe2,
+                children: [
+                  { label: "Terms Hero", href: "/website?page=terms&section=terms-hero", icon: Globe2 },
+                  { label: "Terms Content", href: "/website?page=terms&section=terms-content", icon: Globe2 },
+                  { label: "Terms Contact", href: "/website?page=terms&section=terms-contact", icon: Globe2 },
+                ]
+              },
+              { label: "Refund Policy", href: "/website?page=refund-policy", icon: Globe2,
+                children: [
+                  { label: "Refund Hero", href: "/website?page=refund-policy&section=refund-hero", icon: Globe2 },
+                  { label: "Refund Content", href: "/website?page=refund-policy&section=refund-content", icon: Globe2 },
+                  { label: "Refund Contact", href: "/website?page=refund-policy&section=refund-contact", icon: Globe2 },
+                ]
+              },
+              { label: "Code Of Conduct", href: "/website?page=code-of-conduct", icon: Globe2,
+                children: [
+                  { label: "Conduct Hero", href: "/website?page=code-of-conduct&section=conduct-hero", icon: Globe2 },
+                  { label: "Conduct Content", href: "/website?page=code-of-conduct&section=conduct-content", icon: Globe2 },
+                  { label: "Conduct Contact", href: "/website?page=code-of-conduct&section=conduct-contact", icon: Globe2 },
+                ]
+              },
+            ],
+          },
           { label: "Topbar", href: "/website?section=topbar", icon: Globe2 },
           { label: "Navbar", href: "/website?section=navbar", icon: Globe2 },
           { label: "Footer", href: "/website?section=footer", icon: Globe2 },

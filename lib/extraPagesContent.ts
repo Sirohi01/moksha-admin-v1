@@ -1,10 +1,5 @@
 import { normalizeLandingSection, type LandingSectionContent } from "./landingContent";
-
 export type ExtraSectionContent = LandingSectionContent;
-
-// ============================================================================
-// 1. SERVICES PAGE SECTIONS
-// ============================================================================
 export const defaultServicesSections: ExtraSectionContent[] = [
   {
     key: "services-hero",
@@ -263,7 +258,9 @@ export const defaultVolunteerSections: ExtraSectionContent[] = [
     title: "Offer Your Time & Heart to Serve the Final Journey",
     subtitle: "Join a Dedicated Network of Compassionate Citizens",
     description: "Volunteers are the backbone of Moksha Sewa. Help coordinate transport, support grieving families, or assist during last rites.",
-    image: "/assets/about-optimized/volunteer.png",
+    image: "/hero-images/volunteer-elderly-woman.png",
+    secondaryImage: "/hero-images/volunteer-hero-second.png",
+    logoImage: "/hero-images/image6.png",
     buttonLabel: "Register As Volunteer",
     buttonHref: "/volunteer/register",
   },
@@ -302,6 +299,50 @@ export const defaultVolunteerSections: ExtraSectionContent[] = [
     description: "Fill out the registration form to be verified and added to our active volunteer roster.",
     buttonLabel: "Submit Registration",
     buttonHref: "/volunteer/register",
+  },
+  {
+    key: "volunteer-form-content",
+    name: "Volunteer Form Labels & Texts",
+    enabled: true,
+    items: [
+      { title: "Step 1 of 3: Basic Details", description: "Please provide your basic information." },
+      { title: "First Name *" },
+      { title: "Last Name *" },
+      { title: "Mobile Number *" },
+      { title: "Email Address *" },
+      { title: "Date of Birth *" },
+      { title: "Gender *" },
+      { title: "Blood Group" },
+      { title: "Address Information" },
+      { title: "Pincode *" },
+      { title: "State *" },
+      { title: "City *" },
+      { title: "Address *" },
+      { title: "Your information is safe with us." },
+      { title: "Step 2 of 3: Choose Your Seva", description: "How would you like to serve?" },
+      { title: "About You" },
+      { title: "Why Volunteer With Us? *" },
+      { title: "Skills / Experience" },
+      { title: "Availability *" },
+      { title: "Preferred Role *" },
+      { title: "Step 3 of 3: Verification & Consent", description: "Almost there." },
+      { title: "Identity Verification" },
+      { title: "Upload Photograph *" },
+      { title: "Upload ID Proof (Aadhaar / PAN) *" },
+      { title: "I agree to the Moksha Sewa" },
+      { title: "Volunteer Code of Conduct" }
+    ]
+  },
+  {
+    key: "volunteer-form-dropdowns",
+    name: "Volunteer Form Dropdowns",
+    enabled: true,
+    items: [
+      { title: "Gender Options", description: "Male, Female, Other" },
+      { title: "Blood Group Options", description: "A+, A-, B+, B-, AB+, AB-, O+, O-" },
+      { title: "Availability Options", description: "Weekdays, Weekends, Evenings, Emergency Support, Flexible" },
+      { title: "Role Options", description: "Field Volunteer, Transport Support, Documentation, Family Coordination, Ritual Assistance" }
+    ]
   },
   {
     key: "volunteer-registration-steps",
@@ -352,9 +393,34 @@ export const defaultVolunteerSections: ExtraSectionContent[] = [
       { title: "Social Media / Digital Volunteering" },
       { title: "Photography / Videography / Content" },
       { title: "Fundraising & Donor Outreach" },
-      { title: "Professional / Pro-Bono Support" },
       { title: "Events & Campaign Support" }
     ]
+  },
+  {
+    key: "volunteer-dashboard-content",
+    name: "Dashboard Labels",
+    enabled: true,
+    eyebrow: "Volunteer Dashboard UI",
+    title: "Namaste,",
+    subtitle: "Here's your volunteer profile and assigned cases.",
+    description: "No assignments yet — our team will reach out when a case near you needs support.",
+    items: [
+      { title: "Needs Your Response", description: "Active Assignments" },
+      { title: "History", description: "Change Password" },
+      { title: "Edit Profile", description: "assignments accepted" },
+      { title: "Your Availability", description: "Case" },
+      { title: "Assigned", description: "Case status:" },
+      { title: "Accept", description: "Decline" },
+      { title: "View Details", description: "Please respond as soon as you can" },
+      { title: "Name", description: "Email" },
+      { title: "Pincode", description: "State" },
+      { title: "City", description: "Address" },
+      { title: "Skills (comma-separated)", description: "Schedule Preference" },
+      { title: "Preferred Role", description: "Cancel" },
+      { title: "Save Changes", description: "Saving..." },
+      { title: "Current Password", description: "New Password" },
+      { title: "Confirm New Password", description: "At least 8 characters. You'll be signed out of every session after this." }
+    ],
   },
 ];
 
@@ -384,6 +450,14 @@ export const defaultPartnershipSections: ExtraSectionContent[] = [
     image: "/assets/partnership/hero.png",
     buttonLabel: "Become A Partner",
     buttonHref: "#partner-form",
+    secondaryButtonLabel: "Explore Partnerships",
+    secondaryButtonHref: "#partnership-network",
+    items: [
+      { title: "Shared Purpose", description: "Working together for a common mission.", value: "People" },
+      { title: "Defined Roles", description: "Clear understanding of responsibilities.", value: "ShieldCheck" },
+      { title: "Responsible Coordination", description: "Collaborating with care, process and accountability.", value: "Handshake" },
+      { title: "Human Dignity", description: "Respect and compassion at the heart of every action.", value: "HeartHands" },
+    ],
   },
   {
     key: "partnership-process",
@@ -392,10 +466,12 @@ export const defaultPartnershipSections: ExtraSectionContent[] = [
     eyebrow: "Seamless Integration",
     title: "A Transparent & Structured Collaboration Model",
     description: "From MoU signing to real-time case tracking, we ensure accountability and complete compliance.",
+    bottomStatement: "Submitting an enquiry does not itself create or imply a formal partnership.",
     items: [
-      { title: "Institutional MoU", description: "Formal agreement outlining roles and ethical guidelines." },
-      { title: "Dedicated Desk", description: "Direct helpline & case manager assigned for partners." },
-      { title: "Transparent Audit", description: "Regular reporting and case verification logs." },
+      { title: "Connect", description: "Tell us about your organisation\nand interest.", value: "Chat" },
+      { title: "Explore", description: "We assess mission and\ncollaboration alignment.", value: "Search" },
+      { title: "Define", description: "Scope, responsibilities and\nprocesses are clarified.", value: "Clipboard" },
+      { title: "Collaborate", description: "Approved activities proceed\nwithin the agreed framework.", value: "Handshake" },
     ],
   },
   {
@@ -406,6 +482,21 @@ export const defaultPartnershipSections: ExtraSectionContent[] = [
     title: "High Standards Of Compliance & Ethics",
     description: "Every partnership operates within strict legal permissions and transparent auditing frameworks.",
     image: "/assets/about-optimized/existimage.png",
+    buttonLabel: "Know Namo Gange Trust",
+    buttonHref: "#",
+    secondaryTitle: "Moksha Sewa",
+    secondaryDescription: "A Namo Gange Trust Initiative",
+    sloganTitle: "A Journey to Healthy World...",
+    items: [
+      { title: "Dignity First", description: "Human dignity\nremains central.", value: "HeartHands" },
+      { title: "Defined Roles", description: "Roles and expectations\nare clearly understood.", value: "Clipboard" },
+      { title: "Privacy &\nAccountability", description: "Information is handled\nresponsibly.", value: "Lock" },
+      { title: "Responsible\nRepresentation", description: "Partnerships are represented\nonly after approval.", value: "People" },
+      { title: "NAMO GANGE\nTRUST", value: "Building" },
+      { title: "MOKSHA\nSEWA", value: "Lotus" },
+      { title: "RESPONSIBLE\nPARTNERSHIPS", value: "Handshake" },
+      { title: "HUMANITARIAN\nSEWA", value: "HeartHands" },
+    ],
   },
   {
     key: "partnership-network",
@@ -414,6 +505,16 @@ export const defaultPartnershipSections: ExtraSectionContent[] = [
     eyebrow: "Our Ecosystem",
     title: "Building A Compassionate Network",
     description: "Connecting hospitals, mortuaries, police departments, cremation grounds, and ground volunteers.",
+    secondaryDescription: "We are building a coordinated ecosystem where institutions, communities and professionals work together to ensure that no one is denied a dignified final journey due to a lack of resources, support or guidance.",
+    buttonLabel: "Explore a Partnership",
+    buttonHref: "#partnership-enquiry",
+    bottomStatement: "Potential partner categories do not imply an existing affiliation, endorsement or formal partnership with any institution or authority.",
+    items: [
+      { title: "Hospitals &\nInstitutions", description: "Explore appropriate referral\nand coordination pathways\nfor eligible cases.", value: "Hospital" },
+      { title: "NGOs &\nCommunity Networks", description: "Strengthen community reach,\nreferrals and humanitarian\ncoordination for families.", value: "Community" },
+      { title: "Service & Professional\nPartners", description: "Contribute logistics and\nfinal-journey services or\nrelevant professional expertise.", value: "Gear" },
+      { title: "Volunteer &\nSupport Networks", description: "Create suitable opportunities\nfor organised participation\nand community Sewa.", value: "Volunteer" },
+    ],
   },
   {
     key: "partnership-enquiry",
@@ -422,6 +523,15 @@ export const defaultPartnershipSections: ExtraSectionContent[] = [
     eyebrow: "Reach Out",
     title: "Submit Your Partnership Proposal",
     description: "Fill in your institution details and our team will get in touch shortly.",
+    legalNotice: "Moksha Sewa partnerships are structured strictly for humanitarian service, transparency and non-commercial impact. Submitting an enquiry does not constitute a formal agreement.",
+    submitLabel: "Submit Partnership Enquiry",
+    quote: "Your information is secure and will only be used for partnership communication.",
+    items: [
+      { title: "Purpose-Driven Partnerships", description: "We collaborate with organisations that share our commitment to dignity and humanitarian service.", value: "People" },
+      { title: "Clear Roles & Responsibility", description: "Partnerships are built on transparency, defined roles and mutual understanding.", value: "ShieldCheck" },
+      { title: "Responsible & Accountable", description: "We ensure all collaboration follows due process, privacy and accountability standards.", value: "Handshake" },
+      { title: "Mission First", description: "Every partnership supports our mission to ensure dignity in the final journey of those in need.", value: "HeartHands" },
+    ],
   },
   {
     key: "partnership-faq",
@@ -429,8 +539,18 @@ export const defaultPartnershipSections: ExtraSectionContent[] = [
     enabled: true,
     eyebrow: "Questions",
     title: "Partnership FAQs",
+    description: "Explore how your organisation, services or network can contribute to responsible humanitarian Sewa.",
+    subtitle: "Partnership Questions",
+    secondaryTitle: "Frequently Asked Questions",
     items: [
-      { title: "What type of organizations can partner?", description: "Hospitals, Municipal Bodies, Police Depts, NGOs, and Cremation Trusts." },
+      { title: "Shared Purpose", description: "Work together for a common mission and responsible Sewa.", value: "People" },
+      { title: "Responsible Collaboration", description: "Defined roles, clear processes and mutual accountability.", value: "ShieldCheck" },
+      { title: "Trust & Transparency", description: "Collaboration built on honesty, privacy and responsible communication.", value: "Handshake" },
+      { title: "Human Dignity First", description: "Every partnership is guided by respect, dignity and compassion.", value: "HeartHands" },
+      { title: "Who can partner with Moksha Sewa?", description: "We welcome partnerships from hospitals, institutions, NGOs, service providers, professional organisations and community networks that share our commitment to dignity and humanitarian service." },
+      { title: "What types of partnerships are possible?", description: "Partnerships may include institutional coordination, service partnership, community collaboration, professional support, volunteer engagement and other mission-aligned collaborations." },
+      { title: "Does submitting an enquiry make us an official partner?", description: "No. Submitting an enquiry does not create or imply any formal partnership. All partnerships are subject to review, mutual agreement and applicable requirements." },
+      { title: "How are partnership roles and responsibilities defined?", description: "Where a partnership is explored further, roles, responsibilities, communication protocols and expectations are clearly defined and mutually agreed upon." },
     ],
   },
   {
@@ -438,9 +558,12 @@ export const defaultPartnershipSections: ExtraSectionContent[] = [
     name: "Partnership Final CTA",
     enabled: true,
     eyebrow: "Join Hands",
-    title: "Ready To Make A Difference Together?",
-    buttonLabel: "Contact Partner Cell",
-    buttonHref: "/contact",
+    title: "Let's Build a Partnership That Creates Meaningful Impact.",
+    description: "Start a conversation today. Together, we can serve with greater purpose.",
+    buttonLabel: "Become a Partner",
+    buttonHref: "#partnership-enquiry",
+    secondaryButtonLabel: "Start a Conversation",
+    secondaryButtonHref: "#partnership-enquiry",
   },
 ];
 
@@ -468,16 +591,37 @@ export const defaultCSRSections: ExtraSectionContent[] = [
     subtitle: "Fulfilling Social Impact With Complete Tax Exemption & Audits",
     description: "Partner with Namo Gange Trust's Moksha Sewa initiative to sponsor hearse vans, cremation kits, and unclaimed body rites.",
     image: "/assets/csr/csr-hero-photo.jpg",
-    buttonLabel: "Explore CSR Proposal",
-    buttonHref: "#csr-form",
+    buttonLabel: "Discuss a CSR Partnership",
+    buttonHref: "#csr-enquiry",
+    secondaryButtonLabel: "Request Organisation Profile",
+    secondaryButtonHref: "#organisation",
+    items: [
+      { title: "Defined Scope", value: "Target" },
+      { title: "Due Diligence", value: "ShieldCheck" },
+      { title: "Documentation", value: "ClipboardCheck" },
+      { title: "Impact Reporting", value: "Report" },
+      { title: "Strengthen essential", description: "final-journey assistance", value: "HeartHands" },
+      { title: "Stand beside eligible", description: "& verified families", value: "People" },
+      { title: "Build long-term,", description: "responsible partnerships", value: "Handshake" },
+      { title: "Create measurable", description: "human impact", value: "ClipboardCheck" }
+    ]
   },
   {
     key: "csr-support-journey",
     name: "CSR Support Journey",
     enabled: true,
-    eyebrow: "Impact & Journey",
-    title: "How Corporate Funding Restores Human Dignity",
-    description: "Track how your CSR contribution directly touches lives and ensures dignified farewells.",
+    eyebrow: "Where Your CSR Support Helps",
+    title: "Meaningful Support at a Deeply Human Moment.",
+    description: "CSR collaborations can help strengthen essential final-journey\nassistance for eligible and verified humanitarian cases.",
+    image: "/assets/csr/meaningful-support-bg.jpeg",
+    bottomStatement: "Important Note:\nSupport is case-based and subject to verification, applicable formalities, availability and the mutually agreed project scope.",
+    items: [
+      { title: "Final-Journey\nTransport", description: "Dignified and respectful\ntransport for the departed.", value: "Ambulance", image: "/assets/csr/journey-1.jpg" },
+      { title: "Cremation &\nLast-Rites Support", description: "Coordination of cremation\nand last-rites with care.", value: "Fire", image: "/assets/csr/journey-2.jpg" },
+      { title: "Ritual\nEssentials", description: "Providing essential materials\nrequired for rituals.", value: "Ritual", image: "/assets/csr/journey-3.jpg" },
+      { title: "Family\nGuidance", description: "Supporting families with guidance\nand necessary formalities.", value: "Family", image: "/assets/csr/journey-4.jpg" },
+      { title: "On-Ground\nAssistance", description: "On-ground support with compassion,\ndignity and respect.", value: "HeartHands", image: "/assets/csr/journey-5.jpg" }
+    ]
   },
   {
     key: "csr-compliance",
@@ -486,19 +630,37 @@ export const defaultCSRSections: ExtraSectionContent[] = [
     eyebrow: "100% Tax Benefit",
     title: "80G & 12A Certified Legal Compliance",
     description: "All corporate donations receive tax deduction benefits under Section 80G with audited utilization certificates.",
+    image: "/assets/csr/compliance-photo.jpg",
+    supportTitle: "Rigorous Due Diligence",
+    supportDescription: "We strictly adhere to ethical practices, maintaining transparency and compliance in every project.",
+    bottomStatement: "Transparent operations\nsupported by robust audits",
+    buttonLabel: "Request Compliance Information",
+    buttonHref: "#csr-enquiry",
     items: [
-      { title: "80G & 12A Registered", description: "Tax-exempt receipts provided for every contribution." },
-      { title: "CSR Form 1 Compliant", description: "Registered for MCA CSR activities." },
-      { title: "Impact Reports", description: "Detailed monthly/quarterly execution reports." },
+      { title: "Due Diligence", description: "Applicable organisational\nand project documentation\nis reviewed.", value: "DocumentSearch" },
+      { title: "Defined Scope", description: "Objectives, responsibilities,\nbudgets and deliverables\nare mutually defined.", value: "Target" },
+      { title: "Documentation", description: "Relevant activity and\nutilisation records are\nmaintained as applicable.", value: "Folder" },
+      { title: "Reporting", description: "Programme and impact\nreporting is provided\naccording to the agreed\nframework.", value: "Report" },
     ],
   },
   {
     key: "csr-responsibility",
     name: "Institutional Governance",
     enabled: true,
-    eyebrow: "Governance",
-    title: "Transparent Financial Management & Oversight",
-    description: "Governed under the established framework of Namo Gange Trust with independent third-party audits.",
+    eyebrow: "The Organisation Behind Moksha Sewa",
+    title: "Institutional Responsibility\nBehind the Mission.",
+    description: "Moksha Sewa is an initiative of Namo Gange Trust.\nThrough this institutional framework, the initiative\nseeks to build responsible humanitarian collaborations\ncentred on dignity, service and accountability.",
+    image: "/assets/csr/institutional-responsibility-bg.jpeg",
+    partnerLogoImage: "/hero-images/namo-gange-logo.webp",
+    buttonLabel: "Know Namo Gange Trust",
+    buttonHref: "#",
+    supportTitle: "Our Institutional Pillars",
+    items: [
+      { title: "Governance", description: "Upholding transparent systems,\nethical practices and strong\ninstitutional governance.", value: "Institution" },
+      { title: "Social Service", description: "Working for community welfare\nand creating inclusive, compassionate\nand meaningful social impact.", value: "People" },
+      { title: "Humanitarian Action", description: "Extending timely support and relief\nto those in need with dignity,\ncare and respect.", value: "HeartHands" },
+      { title: "Responsible Partnerships", description: "Building accountable partnerships\nthat create sustainable impact\nand long-term shared value.", value: "Handshake" }
+    ]
   },
   {
     key: "csr-models",
@@ -507,10 +669,13 @@ export const defaultCSRSections: ExtraSectionContent[] = [
     eyebrow: "Custom Models",
     title: "Flexible Sponsorship & Grant Programs",
     description: "Sponsor a Hearse Van, adopt a cremation zone, or fund unclaimed body support campaigns.",
+    image: "/assets/csr/engagement-models-bg.png",
+    buttonLabel: "Discuss a CSR Partnership",
+    buttonHref: "#csr-enquiry",
     items: [
-      { title: "Hearse Van Sponsorship", description: "Branded vehicle dedicated to free service." },
-      { title: "Unclaimed Rites Fund", description: "Sponsor monthly unclaimed body rites." },
-      { title: "E-Crematorium Support", description: "Eco-friendly woodless cremation adoption." },
+      { title: "Project Partnership", description: "Support a defined humanitarian programme with mutually agreed objectives, scope and reporting.", value: "Handshake", image: "/assets/csr/model-project.jpg" },
+      { title: "Employee Volunteering", description: "Create suitable opportunities for employees to contribute their time, skills and participation.", value: "People", image: "/assets/csr/model-volunteering.jpg" },
+      { title: "Institutional Partnership", description: "Collaborate through hospitals, institutions, organisations and community networks where appropriate.", value: "Institution", image: "/assets/csr/model-institutional.jpg" },
     ],
   },
   {
@@ -520,6 +685,23 @@ export const defaultCSRSections: ExtraSectionContent[] = [
     eyebrow: "Corporate Inquiry",
     title: "Connect With Our CSR Leadership Team",
     description: "Share your company's CSR priorities and we will create a tailored proposal.",
+    image: "/assets/csr/responsible-partnership-conversation.png",
+    contactTitle: "CSR Partnership Enquiry",
+    phoneNumber: "+91 92201 47229",
+    contactEmail: "csr@mokshasewa.org",
+    contactAddress: "Delhi • Ghaziabad • Noida",
+    submitLabel: "Submit CSR Enquiry",
+    submittedLabel: "Inquiry Submitted",
+    supportDescription: "For CSR, institutional and corporate partnership enquiries.",
+    secondaryTitle: "Thank you!",
+    secondaryDescription: "Your CSR partnership enquiry has been received. Our team will review the information and respond through the contact details provided.",
+    legalNotice: "I consent to being contacted regarding this enquiry and acknowledge the Privacy Policy.",
+    items: [
+      { title: "Meaningful\\nImpact", description: "Support dignified\\nhumanitarian\\ninitiatives.", value: "Handshake" },
+      { title: "Responsible\\nCollaboration", description: "Built on trust, compliance\\nand accountability.", value: "ShieldCheck" },
+      { title: "Community\\nDriven", description: "Strengthen support\\nwhere it's needed\\nmost.", value: "People" },
+      { title: "Transparent\\nReporting", description: "Clear updates and\\nimpact reporting\\nas agreed.", value: "Report" },
+    ],
   },
   {
     key: "csr-cta",
@@ -527,8 +709,12 @@ export const defaultCSRSections: ExtraSectionContent[] = [
     enabled: true,
     eyebrow: "Take Action",
     title: "Make Final Journey Dignity Part Of Your Corporate Legacy",
+    description: "Join us in bringing compassion and accountability to those in need.",
+    image: "/assets/csr/final-cta-bg.png",
     buttonLabel: "Request Proposal",
-    buttonHref: "#csr-form",
+    buttonHref: "#csr-enquiry",
+    secondaryButtonLabel: "Request Organisation Profile",
+    secondaryButtonHref: "#organisation",
   },
 ];
 
@@ -552,20 +738,40 @@ export const defaultRequestHelpSections: ExtraSectionContent[] = [
     name: "Request Help Hero",
     enabled: true,
     eyebrow: "Emergency Assistance",
-    title: "Request Immediate Moksha Sewa Assistance",
+    title: "Request Cremation Assistance",
     subtitle: "We Are Here To Stand Beside You In Your Hour Of Need",
-    description: "24/7 helpline and quick assistance form for urgent ambulance, cremation, or priest support.",
+    description: "We are here to support you with compassion, dignity and care in your time of need.",
     image: "/assets/about-optimized/existimage.png",
+    phoneLabel: "Helpline Number",
+    phoneNumber: "+91 9220147229",
     buttonLabel: "Call Helpline Now",
-    buttonHref: "tel:1800123456",
+    buttonHref: "tel:+919220147229",
   },
   {
     key: "request-help-form",
     name: "Request Form Details",
     enabled: true,
     eyebrow: "Submit Details",
-    title: "Assistance Application & Verification Form",
+    title: "Request Assistance",
     description: "Please fill in accurate information to help our emergency coordinators dispatch prompt support.",
+    secondaryTitle: "Why Families Trust Moksha Sewa",
+    secondaryDescription: "Compassionate guidance, verified coordination and confidential support at every step.",
+    submitLabel: "Request Assistance Now",
+    submittedLabel: "Request Received",
+    secondaryButtonLabel: "Already submitted? Track your request →",
+    secondaryButtonHref: "/track",
+    bottomStatement: "॥ अन्तिम सेवा, हमारी श्रद्धा और आपका विश्वास ॥",
+    legalNotice: "I consent to Moksha Sewa using these details only to provide the requested cremation assistance.",
+    supportTitle: "In Sewa, we find peace. In supporting each other, we honor life.",
+    supportDescription: "With Sewa in our heart, we walk with you in this journey.",
+    quote: "Your information is safe and secure with us. We provide confidential support.",
+    image: "/assets/route-optimized/request-trust-ritual.webp",
+    items: [
+      { title: "24/7 Immediate Support", description: "We are available round the clock whenever you need us." },
+      { title: "Verified & Compassionate Team", description: "Trained professionals you can trust, with experience and empathy." },
+      { title: "Transparent Guidance", description: "Clear information, an honest process and no hidden charges." },
+      { title: "Dignified & Respectful Service", description: "Every service is carried out with dignity, care and respect." },
+    ],
   },
   {
     key: "request-help-faq",
@@ -615,30 +821,30 @@ export const defaultDonationSections: ExtraSectionContent[] = [
     title: "Direct Impact Causes You Can Support",
     description: "Select specific areas of service to direct your donation.",
     items: [
-      { 
-        title: "Support a Final Journey", 
+      {
+        title: "Support a Final Journey",
         description: "Indicative contribution toward verified last-rites assistance and related programme needs.",
         image: "/assets/namo-gange/vol2.png",
         value: "1100",
         features: ["Case support", "Most needed", "Mission fund", "General support"]
       },
-      { 
-        title: "Last-Rites Assistance", 
+      {
+        title: "Last-Rites Assistance",
         description: "Indicative contribution toward essential ritual materials and case-based support.",
         image: "/assets/namo-gange/vol3.png",
         value: "2100",
         label: "MISSION NEED",
         features: ["Ritual support", "Guidance", "Materials", "Case care"]
       },
-      { 
-        title: "Transport Support", 
+      {
+        title: "Transport Support",
         description: "Indicative contribution toward ambulance or hearse-van coordination for verified cases.",
         image: "/assets/namo-gange/vol4.png",
         value: "5100",
         features: ["Readiness", "Transport care", "Helpline support", "Coordination"]
       },
-      { 
-        title: "Family Relief Support", 
+      {
+        title: "Family Relief Support",
         description: "Indicative contribution toward food, water and basic relief where verified need exists.",
         image: "/assets/namo-gange/vol5.png",
         value: "11000",
@@ -732,6 +938,15 @@ export const defaultContactSections: ExtraSectionContent[] = [
     eyebrow: "Send Message",
     title: "Leave Us A Message",
     description: "Fill out the contact form and our team will respond within 2 hours.",
+    buttonLabel: "Send message",
+    items: [
+      { title: "First name *", description: "Rahul" },
+      { title: "Last name *", description: "Sharma" },
+      { title: "Email address *", description: "rahul@example.com" },
+      { title: "Phone number *", description: "Enter 10 digit mobile number" },
+      { title: "Subject *", description: "What do you need help with?" },
+      { title: "Message *", description: "Share the details — city, timing, and what you need arranged." },
+    ]
   },
   {
     key: "contact-faq",
@@ -742,6 +957,18 @@ export const defaultContactSections: ExtraSectionContent[] = [
     items: [
       { title: "Where are services available?", description: "Currently serving Delhi, Ghaziabad, Noida and surrounding NCR areas." },
     ],
+  },
+  {
+    key: "contact-locations",
+    name: "Office Locations",
+    enabled: true,
+    eyebrow: "Our Presence",
+    title: "Office Locations",
+    description: "Find our head office and regional branches.",
+    items: [
+      { title: "Head Office", subtitle: "Ghaziabad, Uttar Pradesh", description: "12/52, Site - 2, Sunrise Industrial Area, Mohan Nagar, Sahibabad, Ghaziabad, Uttar Pradesh, India", value: "+91 98183 53841", image: "/assets/contact/im.png" },
+      { title: "London Office", subtitle: "Luton, England", description: "Registration address: 6 Liddel Close, Luton, Bedfordshire, United Kingdom LU3 1TW", value: "+44 7429 519276", image: "/assets/contact/en.png" },
+    ]
   },
 ];
 
@@ -1579,3 +1806,293 @@ export function mergeHarsevanSections(sections?: ExtraSectionContent[]): ExtraSe
   });
 }
 
+
+// ============================================================================
+// 10. LEGAL PAGES SECTIONS
+// ============================================================================
+
+export const defaultPrivacySections: ExtraSectionContent[] = [
+  {
+    key: "privacy-hero",
+    name: "Privacy Policy Hero",
+    enabled: true,
+    eyebrow: "Legal Information",
+    title: "Privacy Policy",
+    subtitle: "Your privacy is important to us.",
+    description: "This Privacy Policy explains how Moksha Sewa (an initiative of Namo Gange Trust) collects, uses, protects, and shares your personal information when you visit our website or use our services.",
+    items: [
+      { label: "Effective Date", value: "17 August 2026" },
+      { label: "Last Updated", value: "17 August 2026" },
+      { label: "Governing Law", value: "Laws of India" },
+      { label: "Applies To", value: "Website & All Services" }
+    ],
+  },
+  {
+    key: "privacy-content",
+    name: "Privacy Content",
+    enabled: true,
+    items: [
+      { title: "About Moksha Sewa", description: "Moksha Sewa provides humanitarian assistance relating to dignified final-rites support, particularly for eligible economically weaker families and legally authorised unclaimed cases.\n\nOur services include ambulance/hearse-van coordination, cremation-ground support, wood, cloth, flowers and ritual-material assistance, priest and ritual guidance, family guidance, hospital and ground coordination, food and basic-essentials assistance, volunteer support and documentation guidance.\n\nAll assistance is subject to case verification, availability and applicable legal, police, hospital, municipal and other competent-authority requirements." },
+      { title: "Information We Collect", description: "We collect only the information that is necessary for providing our services and improving our experience.\n\n• Name, mobile number, email address\n• Communication preferences\n• City/location and address or service location where required\n• Nature of assistance required and details of the case\n• Documents or details required for legal / authority formalities" },
+      { title: "How We Use Your Information", description: "We may use your personal information to:\n\n• Respond to requests for Seva assistance.\n• Verify and assess assistance requests.\n• Coordinate eligible support with families, volunteers, hospitals, cremation grounds and authorities.\n• Maintain records relating to donations, assistance and enquiries.\n• Prevent fraud, misuse and unauthorised activity." },
+      { title: "Your Privacy Rights", description: "Subject to applicable law, you may have the following rights regarding your personal data:\n\n• Right to be Informed\n• Right to Access\n• Right to Correction\n• Right to Erasure\n• Right to Withdraw Consent" }
+    ]
+  },
+  {
+    key: "privacy-contact",
+    name: "Privacy Contact Block",
+    enabled: true,
+    title: "Have Questions About Your Privacy?",
+    description: "If you have any questions, requests or concerns regarding this policy or your personal information, please contact our Grievance Officer.",
+    buttonLabel: "Contact Us",
+    buttonHref: "/contact"
+  },
+  {
+    key: "privacy-sidebar",
+    name: "Sidebar Items",
+    enabled: true,
+    items: [
+      {
+        title: "Our Commitment",
+        description: "We are committed to transparency and protecting your personal information.\n\nWe collect only what we need and use it responsibly to serve humanity.",
+        image: "/assets/privacy-policy/our_commitment.webp"
+      }
+    ]
+  }
+];
+
+export function mergePrivacySections(sections?: ExtraSectionContent[]): ExtraSectionContent[] {
+  if (!sections?.length) return defaultPrivacySections;
+  const byKey = new Map(sections.map((s) => [s.key, s]));
+  return defaultPrivacySections.map((fallback) => {
+    const saved = byKey.get(fallback.key);
+    if (!saved) return fallback;
+    const items = saved.items !== undefined ? saved.items : fallback.items;
+    return normalizeLandingSection({ ...fallback, ...saved, items, enabled: saved.enabled !== false }, fallback);
+  });
+}
+
+export const defaultTermsSections: ExtraSectionContent[] = [
+  {
+    key: "terms-hero",
+    name: "Terms & Conditions Hero",
+    enabled: true,
+    eyebrow: "Legal Information",
+    title: "Terms & Conditions",
+    subtitle: "Please read these terms carefully.",
+    description: "These terms govern your use of the Moksha Sewa platform and services.",
+    items: [
+      { label: "Effective Date", value: "17 August 2026" },
+      { label: "Last Updated", value: "17 August 2026" },
+      { label: "Governing Law", value: "Laws of India" },
+      { label: "Applies To", value: "Website & All Services" }
+    ],
+  },
+  {
+    key: "terms-content",
+    name: "Terms Content",
+    enabled: true,
+    items: [
+      { title: "Acceptance of Terms", description: "By accessing or using the Moksha Sewa website and our services, you agree to these Terms & Conditions and our Privacy Policy. If you do not agree, please do not use our website or services." },
+      { title: "About Moksha Sewa", description: "Moksha Sewa, an initiative of Namo Gange Trust, is dedicated to providing dignified final-rites support and humanitarian assistance to eligible individuals and families, especially for unclaimed and underprivileged cases. Our services are subject to verification, availability and applicable laws." },
+      { title: "Use of Our Website", description: "You agree to use our website only for lawful purposes and in a manner that does not infringe the rights of, restrict or inhibit anyone else's use. You must not attempt to gain unauthorized access, interfere with the functioning of the website or introduce harmful code." },
+      { title: "Our Services", description: "Services include assistance with ambulance/hearse-van, cremation-ground support, ritual materials, priest guidance, documentation support, food and basic-essentials assistance, volunteer support and related humanitarian services. All services are subject to verification, availability and legal requirements." },
+      { title: "Eligibility", description: "Our services are intended for individuals/families in genuine need. We may request information and documents for verification. We reserve the right to accept or decline any request at our sole discretion." },
+      { title: "User Responsibilities", description: "You agree to provide accurate, complete and current information. You must not misuse our services, provide false information or engage in any activity that may harm our organisation, beneficiaries, volunteers or service partners." },
+      { title: "Requests for Assistance", description: "All requests are subject to verification and availability of resources. Assistance will be provided in accordance with our policies, priorities and capacity. We do not guarantee immediate or specific outcomes." },
+      { title: "Donations & Payments", description: "Donations are voluntary and non-refundable. Transactions are processed securely through authorised payment gateways. We do not store your card details, CVV, UPI PIN or net-banking passwords." },
+      { title: "Volunteer Engagement", description: "Volunteers must act with compassion, integrity and respect. We reserve the right to accept, assign or terminate volunteer participation based on suitability and conduct." },
+      { title: "Content & Intellectual Property", description: "All content on this website, including text, images, logos and graphics, is the property of Moksha Sewa or its licensors. You may not copy, reproduce or use our content without prior written permission." }
+    ]
+  },
+  {
+    key: "terms-contact",
+    name: "Terms Contact Block",
+    enabled: true,
+    title: "Questions About These Terms?",
+    description: "If you have any questions about these Terms & Conditions, please reach out to us.",
+    buttonLabel: "Contact Us",
+    buttonHref: "/contact"
+  },
+  {
+    key: "terms-sidebar",
+    name: "Sidebar Items",
+    enabled: true,
+    items: [
+      {
+        title: "Our Commitment",
+        description: "We are committed to transparency and upholding these guidelines for all users.\n\nPlease read carefully before engaging with our services.",
+        image: "/assets/privacy-policy/our_commitment.webp"
+      }
+    ]
+  }
+];
+
+export function mergeTermsSections(sections?: ExtraSectionContent[]): ExtraSectionContent[] {
+  if (!sections?.length) return defaultTermsSections;
+  const byKey = new Map(sections.map((s) => [s.key, s]));
+  return defaultTermsSections.map((fallback) => {
+    const saved = byKey.get(fallback.key);
+    if (!saved) return fallback;
+    const items = saved.items !== undefined ? saved.items : fallback.items;
+    return normalizeLandingSection({ ...fallback, ...saved, items, enabled: saved.enabled !== false }, fallback);
+  });
+}
+
+export const defaultRefundSections: ExtraSectionContent[] = [
+  {
+    key: "refund-hero",
+    name: "Refund Policy Hero",
+    enabled: true,
+    eyebrow: "Legal Information",
+    title: "Refund Policy",
+    subtitle: "Please read our refund terms carefully",
+    description: "At Moksha Sewa, we ensure complete transparency in all our donation and transaction processes. This Refund Policy explains the conditions under which refunds may be considered.",
+    items: [
+      { label: "Effective Date", value: "17 August 2026" },
+      { label: "Last Updated", value: "17 August 2026" },
+      { label: "Governing Law", value: "Laws of India" },
+      { label: "Applies To", value: "Donations & Transactions" }
+    ],
+  },
+  {
+    key: "refund-content",
+    name: "Main Sections",
+    enabled: true,
+    items: [
+      { title: "General Donation Policy", description: "As a charitable organisation, Moksha Sewa depends entirely on voluntary donations to fund our humanitarian services. Because these funds are immediately allocated to active cases, ambulance fuel, ritual materials, and daily operations, donations are generally considered final and non-refundable." },
+      { title: "Accidental Multiple Deductions", description: "If due to a technical error, network issue, or gateway glitch, your account is charged multiple times for a single donation attempt, you are eligible for a refund of the duplicate amount(s)." },
+      { title: "Erroneous Donation Amount", description: "If you accidentally typed a significantly higher amount than intended (e.g., entering ₹10,000 instead of ₹1,000) and notify us immediately within 24 hours, we may review the request on a case-by-case basis." },
+      { title: "How to Request a Refund", description: "To request a refund for an accidental or duplicate transaction, you must write to us at info@mokshasewa.org within 3 days (72 hours) of the transaction." },
+      { title: "Processing Time", description: "Once a refund is approved by our finance committee, it will be initiated back to the original payment source (credit card, debit card, UPI, or bank account). This process typically takes 7-10 working days, depending on your bank or payment provider." },
+      { title: "Tax Exemption (80G) Certificates", description: "If an 80G tax exemption receipt has already been generated and dispatched to you for a specific donation, that donation cannot be refunded under any circumstances, as the transaction has already been legally recorded for tax purposes." }
+    ]
+  },
+  {
+    key: "refund-premium-cards",
+    name: "Premium Cards",
+    enabled: true,
+    items: [
+      { title: "How to Request a Refund", label: "Simple steps to request your refund hassle-free.", description: "To request a refund, contact us within 7 days of the transaction with your:\n• Full name\n• Transaction ID / Receipt\n• Reason for refund\n• Supporting details (if any)" },
+      { title: "Refund Process & Timeline", label: "Know how long it takes to get your refund.", description: "Once your request is reviewed and approved, refunds will be processed within 7–10 working days to the original payment method.", image: "https://images.unsplash.com/photo-1501139083538-0139583c060f?q=80&w=900&auto=format&fit=crop" },
+      { title: "Mode of Refund", label: "Refunds through your original payment method.", description: "Refunds will be made using the same method through which the original payment was made." },
+      { title: "Chargebacks", label: "Understand the impact of chargebacks on future donations.", description: "Initiating a chargeback without contacting us first may affect your ability to make future donations and will incur additional charges, which will be deducted from the refundable amount (if any).", image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=900&auto=format&fit=crop" }
+    ]
+  },
+  {
+    key: "refund-addendum-sections",
+    name: "Addendum Sections",
+    enabled: true,
+    items: [
+      { title: "Partial Refunds", description: "In certain situations, a partial refund may be considered at our sole discretion depending on the nature of the request and the services or benefits provided." },
+      { title: "Changes to This Policy", description: "We may update this Refund Policy from time to time. The updated version will be posted on our website." },
+      { title: "Grievance / Contact", description: "For any refund-related queries or grievances, please contact us." }
+    ]
+  },
+  {
+    key: "refund-contact",
+    name: "Refund Contact Block",
+    enabled: true,
+    title: "Questions About Refunds?",
+    description: "If you have any questions about this Refund Policy, please reach out to us.",
+    buttonLabel: "Contact Us",
+    buttonHref: "/contact"
+  },
+  {
+    key: "refund-intro",
+    name: "Introduction Text",
+    enabled: true,
+    description: "Moksha Sewa (an initiative of Namo Gange Trust) is a non-profit organisation. Donations made to support our humanitarian activities are voluntary and non-refundable except as provided in this Refund Policy."
+  },
+  {
+    key: "refund-sidebar",
+    name: "Sidebar Items",
+    enabled: true,
+    items: [
+      {
+        title: "Note",
+        description: "Refunds are processed only in eligible cases as per this policy.\n\nWe request you to read this policy carefully before making any donation or payment."
+      },
+      {
+        title: "Our Commitment",
+        description: "We are committed to transparency and accountability in managing all donations.\n\nEvery contribution directly supports our mission to serve humanity.",
+        image: "/assets/privacy-policy/our_commitment.webp"
+      }
+    ]
+  }
+];
+
+export function mergeRefundSections(sections?: ExtraSectionContent[]): ExtraSectionContent[] {
+  if (!sections?.length) return defaultRefundSections;
+  const byKey = new Map(sections.map((s) => [s.key, s]));
+  return defaultRefundSections.map((fallback) => {
+    const saved = byKey.get(fallback.key);
+    if (!saved) return fallback;
+    const items = saved.items !== undefined ? saved.items : fallback.items;
+    return normalizeLandingSection({ ...fallback, ...saved, items, enabled: saved.enabled !== false }, fallback);
+  });
+}
+
+export const defaultConductSections: ExtraSectionContent[] = [
+  {
+    key: "conduct-hero",
+    name: "Code of Conduct Hero",
+    enabled: true,
+    eyebrow: "Ethical Standards",
+    title: "Code of Conduct",
+    subtitle: "Principles That Guide Every Action",
+    description: "We uphold strict standards of empathy, privacy, dignity, and zero commercial interest in all our humanitarian activities. This Code applies to all staff, volunteers, and partners.",
+    items: [
+      { label: "Effective Date", value: "17 August 2026" },
+      { label: "Applies To", value: "All Volunteers" },
+      { label: "Governing Law", value: "Laws of India" },
+      { label: "Scope", value: "Field & Online Conduct" }
+    ],
+  },
+  {
+    key: "conduct-content",
+    name: "Code of Conduct Content",
+    enabled: true,
+    items: [
+      { title: "Dignity and Respect", description: "Every individual, regardless of their background, caste, religion, or economic status, must be treated with absolute dignity and respect, especially during their final journey." },
+      { title: "Empathetic Conduct", description: "Be respectful, calm, and patient with grieving families. Ensure that your tone, words, and actions offer comfort and do not add to their distress." },
+      { title: "Strict Confidentiality", description: "Protect family privacy and sensitive case details at all times. Do not share personal information, photos, or details on social media or with unauthorized persons without explicit consent." },
+      { title: "Zero Financial Transactions", description: "Volunteers and ground staff must never demand, request, or accept cash, gifts, or favors directly from families. All donations must be routed through official channels." },
+      { title: "Legal Compliance", description: "Never bypass legal procedures. Ensure that required police clearances, hospital death certificates, and municipal authorizations are obtained before proceeding with any final rites." },
+      { title: "Non-Discrimination", description: "Assistance is provided purely on the basis of humanitarian need. We do not discriminate against any community, faith, gender, or nationality." },
+      { title: "Reporting Violations", description: "Any breach of this Code of Conduct must be reported immediately to the central coordination desk for strict disciplinary action." }
+    ]
+  },
+  {
+    key: "conduct-contact",
+    name: "Code of Conduct Contact",
+    enabled: true,
+    title: "Report a Violation",
+    description: "If you witness a violation of our Code of Conduct, please report it immediately to our Grievance Officer.",
+    buttonLabel: "Contact Us",
+    buttonHref: "/contact"
+  },
+  {
+    key: "conduct-sidebar",
+    name: "Sidebar Items",
+    enabled: true,
+    items: [
+      {
+        title: "Our Commitment",
+        description: "We are committed to maintaining a respectful, safe, and supportive environment.\n\nBy engaging with our community, you agree to uphold these values.",
+        image: "/assets/privacy-policy/our_commitment.webp"
+      }
+    ]
+  }
+];
+
+export function mergeConductSections(sections?: ExtraSectionContent[]): ExtraSectionContent[] {
+  if (!sections?.length) return defaultConductSections;
+  const byKey = new Map(sections.map((s) => [s.key, s]));
+  return defaultConductSections.map((fallback) => {
+    const saved = byKey.get(fallback.key);
+    if (!saved) return fallback;
+    const items = saved.items !== undefined ? saved.items : fallback.items;
+    return normalizeLandingSection({ ...fallback, ...saved, items, enabled: saved.enabled !== false }, fallback);
+  });
+}
