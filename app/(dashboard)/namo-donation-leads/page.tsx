@@ -45,7 +45,7 @@ export default function NamoDonationLeadsPage() {
     <div className="space-y-4">
       <div>
         <h1 className="text-lg font-semibold text-text-primary">Donation Pledges</h1>
-        <p className="text-xs text-text-muted">Submissions from the public donation form — these are pledges/leads, not verified payments (Namo Gange's public site has no payment gateway integration).</p>
+        <p className="text-xs text-text-muted">Submissions from the public donation form — these are pledges/leads, not verified payments (Namo Gange&apos;s public site has no payment gateway integration).</p>
       </div>
       {error && <p className="text-xs font-medium text-red-600">{error}</p>}
       <Table columns={columns} rows={rows} rowKey={(d) => d._id} loading={loading} emptyMessage="No donation pledges found." onRowClick={setSelected} />
