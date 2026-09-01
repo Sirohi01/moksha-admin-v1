@@ -232,14 +232,18 @@ export default function PagesCmsPage() {
   const [selectedPageValue, setSelectedPage] = useState<CmsPage | null>(null);
   const selectedPage = selectedPageValue ?? pages[0] ?? cmsPages[0];
 
+  const [rawSettings, setRawSettings] = useState<Record<string, any> | null>(null);
+
   useEffect(() => {
     let active = true;
     settingsApi.get().then((settings) => {
       if (!active) return;
-      const realPages = cmsPagesFromSettings(settings as unknown as Record<string, unknown>);
+      const raw = settings as unknown as Record<string, any>;
+      setRawSettings(raw);
+      const realPages = cmsPagesFromSettings(raw);
       setPages(realPages);
       setSelectedPage(realPages[0] ?? null);
-      const sections = Object.entries(settings as unknown as Record<string, unknown>).reduce((count, [key, value]) => {
+      const sections = Object.entries(raw).reduce((count, [key, value]) => {
         if (!key.toLowerCase().endsWith("page") || !value || typeof value !== "object") return count;
         const page = value as { sections?: unknown[] };
         return count + (page.sections?.length ?? 0);
@@ -253,6 +257,66 @@ export default function PagesCmsPage() {
     });
     return () => { active = false; };
   }, []);
+
+  const selectedPageConfig = selectedPage.configKey && rawSettings ? rawSettings[selectedPage.configKey] : undefined;
+
+  const selectedPageHasInternalLinks = Boolean(
+    selectedPageConfig?.sections?.some((section: Record<string, any>) => {
+      const hrefs = [section.buttonHref, section.secondaryButtonHref, section.tertiaryButtonHref, ...(section.items ?? []).map((item: Record<string, any>) => item.href)];
+      return hrefs.some((href) => typeof href === "string" && href.trim().startsWith("/"));
+    }),
+  );
+
+  const selectedPageHasImages = Boolean(
+    selectedPageConfig?.sections?.some((section: Record<string, any>) => {
+      const images = [section.image, section.logoImage, section.secondaryImage, section.partnerLogoImage, ...(section.items ?? []).map((item: Record<string, any>) => item.image)];
+      return images.some((image) => typeof image === "string" && image.trim().length > 0);
+    }),
+  );
+
+  const IMAGE_FIELD_PATTERN = /image|logo/i;
+  const BUTTON_LABEL_FIELD_PATTERN = /buttonLabel$/i;
+  const TEXT_FIELD_SKIP_PATTERN = /^(_id|key|name|enabled)$/i;
+
+  const contentStats = useMemo(() => {
+    const sections: Array<Record<string, any>> = selectedPageConfig?.sections ?? [];
+    let textBlocks = 0;
+    let images = 0;
+    let ctaBlocks = 0;
+
+    sections.forEach((section) => {
+      Object.entries(section).forEach(([key, value]) => {
+        if (TEXT_FIELD_SKIP_PATTERN.test(key) || key === "items" || key === "slides") return;
+        if (IMAGE_FIELD_PATTERN.test(key)) {
+          if (typeof value === "string" && value.trim()) images += 1;
+          return;
+        }
+        if (BUTTON_LABEL_FIELD_PATTERN.test(key)) {
+          if (typeof value === "string" && value.trim()) ctaBlocks += 1;
+          return;
+        }
+        if (typeof value === "string" && value.trim()) textBlocks += 1;
+      });
+
+      (section.items ?? []).forEach((item: Record<string, any>) => {
+        Object.entries(item).forEach(([key, value]) => {
+          if (key === "_id") return;
+          if (IMAGE_FIELD_PATTERN.test(key) && typeof value === "string" && value.trim()) {
+            images += 1;
+          } else if (typeof value === "string" && value.trim()) {
+            textBlocks += 1;
+          }
+        });
+      });
+    });
+
+    return {
+      sections: sections.length,
+      textBlocks,
+      images,
+      ctaBlocks,
+    };
+  }, [selectedPageConfig]);
 
   const [activeTab, setActiveTab] =
     useState<DetailTab>("SEO");
@@ -312,6 +376,9 @@ export default function PagesCmsPage() {
   const publishedCount = pages.filter((page) => page.status === "Published").length;
   const draftCount = pages.filter((page) => page.status === "Draft").length;
   const averageSeo = pages.length ? Math.round(pages.reduce((sum, page) => sum + page.seoScore, 0) / pages.length) : 0;
+  const averageSeoRating = averageSeo >= 90 ? "Excellent" : averageSeo >= 75 ? "Good" : averageSeo >= 50 ? "Needs Work" : "Poor";
+  const averageSeoColor = averageSeo >= 75 ? "#1a864d" : averageSeo >= 50 ? "#d99b18" : "#c0392b";
+  const lastUpdatedPage = pages[0] ?? null;
   const totalPaginationPages = Math.max(1, Math.ceil(filteredPages.length / pageSize));
   const safePage = Math.min(activePagination, totalPaginationPages);
   const paginatedPages = filteredPages.slice((safePage - 1) * pageSize, safePage * pageSize);
@@ -439,11 +506,11 @@ export default function PagesCmsPage() {
                 </p>
 
                 <p className="mt-[4px] text-[12px] font-bold leading-[1.2] text-[#19243b]">
-                  Today, 10:45 AM
+                  {lastUpdatedPage?.updated ?? "—"}
                 </p>
 
                 <p className="mt-[7px] text-[8.5px] font-medium text-[#606b7e]">
-                  By Admin User
+                  By {lastUpdatedPage?.updatedBy ?? "—"}
                 </p>
               </div>
 
@@ -457,16 +524,15 @@ export default function PagesCmsPage() {
                     {averageSeo}/100
                   </p>
 
-                  <p className="mt-[7px] text-[8.5px] font-semibold text-[#258052]">
-                    Good
+                  <p className="mt-[7px] text-[8.5px] font-semibold" style={{ color: averageSeoColor }}>
+                    {averageSeoRating}
                   </p>
                 </div>
 
                 <div
                   className="relative h-[42px] w-[42px] shrink-0 rounded-full"
                   style={{
-                    background:
-                      "conic-gradient(#1a864d 0deg 298deg,#d7a02d 298deg 342deg,#eef1ed 342deg 360deg)",
+                    background: `conic-gradient(${averageSeoColor} 0deg ${averageSeo * 3.6}deg, #eef1ed ${averageSeo * 3.6}deg 360deg)`,
                   }}
                 >
                   <div className="absolute inset-[4px] rounded-full bg-white" />
@@ -1066,8 +1132,8 @@ export default function PagesCmsPage() {
                       ["Meta Description", Boolean(selectedPage.seo?.metaDescription)],
                       ["Headings", Boolean(selectedPage.seo?.h1Tag)],
                       ["Content Quality", selectedPage.seoScore >= 70],
-                      ["Internal Linking", false],
-                      ["Images (ALT Text)", false],
+                      ["Internal Linking", selectedPageHasInternalLinks],
+                      ["Images (ALT Text)", selectedPageHasImages],
                       ["Schema Markup", Boolean(selectedPage.seo?.schemaMarkup)],
                     ] as Array<[string, boolean]>).map(([label, isGood]) => (
                       <div
@@ -1211,10 +1277,10 @@ export default function PagesCmsPage() {
 
                 <div className="mt-[11px] grid grid-cols-2 gap-[8px]">
                   {[
-                    ["Sections", "12"],
-                    ["Text Blocks", "28"],
-                    ["Images", "14"],
-                    ["CTA Blocks", "6"],
+                    ["Sections", String(contentStats.sections)],
+                    ["Text Blocks", String(contentStats.textBlocks)],
+                    ["Images", String(contentStats.images)],
+                    ["CTA Blocks", String(contentStats.ctaBlocks)],
                   ].map(([label, value]) => (
                     <div
                       key={label}
@@ -1243,27 +1309,9 @@ export default function PagesCmsPage() {
                   Page Performance
                 </h3>
 
-                <div className="mt-[11px] grid grid-cols-2 gap-[8px]">
-                  {[
-                    ["LCP", "2.1s"],
-                    ["INP", "128ms"],
-                    ["CLS", "0.06"],
-                    ["Performance", "91"],
-                  ].map(([label, value]) => (
-                    <div
-                      key={label}
-                      className="rounded-[6px] bg-[#f8f9f6] p-[11px]"
-                    >
-                      <p className="text-[8px] font-medium text-[#667184]">
-                        {label}
-                      </p>
-
-                      <p className="mt-[4px] text-[16px] font-bold text-[#263149]">
-                        {value}
-                      </p>
-                    </div>
-                  ))}
-                </div>
+                <p className="mt-[11px] text-[9px] font-medium leading-[1.5] text-[#7a8391]">
+                  Real Core Web Vitals (LCP, INP, CLS) aren&apos;t tracked yet — this needs a real-user-monitoring or Lighthouse integration on the backend, which doesn&apos;t exist currently. Not showing placeholder numbers here to avoid implying this is measured.
+                </p>
               </div>
             )}
 
@@ -1278,42 +1326,24 @@ export default function PagesCmsPage() {
                 </h3>
 
                 <div className="mt-[11px] space-y-[9px]">
-                  {[
-                    [
-                      "Today, 10:45 AM",
-                      "SEO meta information updated",
-                    ],
-                    [
-                      "30 May 2026",
-                      "Hero content updated",
-                    ],
-                    [
-                      "28 May 2026",
-                      "Gallery section edited",
-                    ],
-                    [
-                      "20 May 2026",
-                      "Page published",
-                    ],
-                  ].map(([date, activity]) => (
-                    <div
-                      key={date}
-                      className="flex gap-[7px] border-b border-[#eeeeea] pb-[8px]"
-                    >
-                      <span className="mt-[4px] h-[6px] w-[6px] shrink-0 rounded-full bg-[#b68a28]" />
+                  <div className="flex gap-[7px] border-b border-[#eeeeea] pb-[8px]">
+                    <span className="mt-[4px] h-[6px] w-[6px] shrink-0 rounded-full bg-[#b68a28]" />
 
-                      <div>
-                        <p className="text-[8px] font-semibold text-[#465168]">
-                          {activity}
-                        </p>
+                    <div>
+                      <p className="text-[8px] font-semibold text-[#465168]">
+                        Last updated by {selectedPage.updatedBy}
+                      </p>
 
-                        <p className="mt-[2px] text-[7px] font-normal text-[#7a8391]">
-                          {date}
-                        </p>
-                      </div>
+                      <p className="mt-[2px] text-[7px] font-normal text-[#7a8391]">
+                        {selectedPage.updated}
+                      </p>
                     </div>
-                  ))}
+                  </div>
                 </div>
+
+                <p className="mt-[10px] text-[8.5px] font-medium leading-[1.5] text-[#7a8391]">
+                  Detailed per-change history isn&apos;t tracked yet — the backend only stores current page state, not a revision log. Only the last-updated timestamp above is real.
+                </p>
               </div>
             )}
           </aside>
