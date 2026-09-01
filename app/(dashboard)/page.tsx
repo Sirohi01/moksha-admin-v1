@@ -1,7 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Children, isValidElement, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
+import typography from "./DashboardTypography.module.css";
 import {
   Activity,
   AlertCircle,
@@ -290,11 +292,20 @@ function Panel({
   children: React.ReactNode;
   className?: string;
 }) {
+  const items = Children.toArray(children);
+  const lastItem = items.at(-1);
+  const hasFooter = isValidElement(lastItem) && lastItem.type === FooterButton;
+
   return (
     <section
-      className={`min-h-0 overflow-hidden rounded-[11px] border border-[#e5e7e6] bg-white ${className}`}
+      className={`relative min-h-0 rounded-[11px] border border-[#e5e7e6] bg-white ${hasFooter ? "flex flex-col overflow-hidden" : "overflow-auto"} ${className}`}
     >
-      {children}
+      {hasFooter ? (
+        <>
+          <div className="min-h-0 flex-1 overflow-auto pb-1">{items.slice(0, -1)}</div>
+          {lastItem}
+        </>
+      ) : children}
     </section>
   );
 }
@@ -311,7 +322,7 @@ function PanelTitle({
   right?: React.ReactNode;
 }) {
   return (
-    <div className="flex h-[34px] items-center justify-between px-3">
+    <div className="sticky top-0 z-20 flex h-[38px] shrink-0 items-center justify-between border-b border-slate-100 bg-white/95 px-3 backdrop-blur-sm">
       <h2 className="text-[12px] font-extrabold tracking-[-0.01em] text-[#13213d]">
         {children}
       </h2>
@@ -325,11 +336,11 @@ function PanelTitle({
    FOOTER BUTTON
 ========================================================= */
 
-function FooterButton({ children }: { children: React.ReactNode }) {
+function FooterButton({ children, dark = false }: { children: React.ReactNode; dark?: boolean }) {
   return (
     <button
       type="button"
-      className="mx-3 mb-2 mt-1 flex h-[27px] w-[calc(100%-24px)] items-center justify-center gap-2 rounded-md border border-[#eee8dc] bg-[#fffdf8] text-[9.5px] font-bold text-[#27344c] transition hover:bg-[#fff9ed]"
+      className={`mx-3 mb-2 mt-1 flex h-[30px] shrink-0 items-center justify-center gap-2 rounded-md text-[9.5px] font-bold transition ${dark ? "bg-[#071d3c] text-white hover:bg-[#0b2a55]" : "border border-[#eee8dc] bg-[#fffdf8] text-[#27344c] hover:bg-[#fff9ed]"}`}
     >
       {children}
 
@@ -358,6 +369,28 @@ function RangeDropdown({
   options: string[];
 }) {
   const isOpen = openDropdown === dropdownKey;
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const [menuPosition, setMenuPosition] = useState({ top: 0, right: 0 });
+
+  const updateMenuPosition = () => {
+    const rect = buttonRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    setMenuPosition({
+      top: rect.bottom + 7,
+      right: Math.max(8, window.innerWidth - rect.right),
+    });
+  };
+
+  useEffect(() => {
+    if (!isOpen) return;
+    updateMenuPosition();
+    window.addEventListener("resize", updateMenuPosition);
+    window.addEventListener("scroll", updateMenuPosition, true);
+    return () => {
+      window.removeEventListener("resize", updateMenuPosition);
+      window.removeEventListener("scroll", updateMenuPosition, true);
+    };
+  }, [isOpen]);
 
   return (
     <div
@@ -365,8 +398,10 @@ function RangeDropdown({
       data-dashboard-dropdown
     >
       <button
+        ref={buttonRef}
         type="button"
         onClick={() => {
+          updateMenuPosition();
           setOpenDropdown(isOpen ? null : dropdownKey);
         }}
         className="flex items-center gap-1 text-[8px] font-bold"
@@ -380,8 +415,12 @@ function RangeDropdown({
         />
       </button>
 
-      {isOpen && (
-        <div className="absolute right-0 top-[calc(100%+7px)] z-[100] min-w-[142px] overflow-hidden rounded-[9px] border border-[#e5e2da] bg-white p-1.5 shadow-[0_10px_30px_rgba(15,23,42,0.14)]">
+      {isOpen && typeof document !== "undefined" && createPortal(
+        <div
+          data-dashboard-dropdown
+          className="fixed z-[9999] min-w-[142px] overflow-hidden rounded-[9px] border border-[#e5e2da] bg-white p-1.5 shadow-[0_10px_30px_rgba(15,23,42,0.14)]"
+          style={{ top: menuPosition.top, right: menuPosition.right }}
+        >
           {options.map((option) => (
             <button
               type="button"
@@ -401,7 +440,8 @@ function RangeDropdown({
               {value === option && <Check className="h-3 w-3" />}
             </button>
           ))}
-        </div>
+        </div>,
+        document.body,
       )}
     </div>
   );
@@ -479,8 +519,8 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="h-dvh w-full overflow-hidden bg-white text-[#13213d]">
-      <div className="flex h-full min-h-0 flex-col overflow-hidden">
+    <div className={`${typography.dashboard} min-h-full w-full overflow-visible bg-white text-[#13213d]`}>
+      <div className="flex min-h-full flex-col overflow-visible">
 
         {/* ===================================================
             HEADER
@@ -900,8 +940,8 @@ export default function DashboardPage() {
             MAIN
         =================================================== */}
 
-        <main className="min-h-0 flex-1 overflow-hidden px-1.5 py-2">
-          <div className="grid h-full min-h-0 w-full grid-rows-[116px_minmax(0,1.22fr)_minmax(0,1.08fr)_minmax(0,0.76fr)] gap-2">
+        <main className="min-h-0 flex-1 overflow-visible px-1.5 py-2">
+          <div className="grid h-full min-h-0 w-full grid-rows-[145px_minmax(0,1.22fr)_minmax(0,1.08fr)_minmax(0,0.76fr)] gap-2">
 
             {/* =================================================
                 TOP STATS
@@ -914,7 +954,7 @@ export default function DashboardPage() {
                 return (
                   <Panel
                     key={item.title}
-                    className="p-2.5"
+                    className="flex flex-col !overflow-hidden p-2.5 !pb-9"
                   >
                     <div className="flex items-start gap-2">
                       <div
@@ -965,11 +1005,7 @@ export default function DashboardPage() {
                       </div>
                     )}
 
-                    <div
-                      className={`${
-                        item.spark ? "mt-0" : "mt-3"
-                      } flex items-center justify-center gap-1.5 text-[8.5px] font-extrabold text-[#293957]`}
-                    >
+                    <div className="absolute bottom-2 left-2.5 right-2.5 flex items-center justify-center gap-1.5 text-[8.5px] font-extrabold text-[#293957]">
                       {item.footer}
 
                       <ArrowRight className="h-3 w-3" />
@@ -1185,7 +1221,8 @@ export default function DashboardPage() {
                     <text
                       x="38"
                       y="113"
-                      fontSize="8"
+                      fontSize="12"
+                      fontWeight="600"
                       fill="#68748a"
                     >
                       03 May
@@ -1194,7 +1231,8 @@ export default function DashboardPage() {
                     <text
                       x="145"
                       y="113"
-                      fontSize="8"
+                      fontSize="12"
+                      fontWeight="600"
                       fill="#68748a"
                     >
                       10 May
@@ -1203,7 +1241,8 @@ export default function DashboardPage() {
                     <text
                       x="254"
                       y="113"
-                      fontSize="8"
+                      fontSize="12"
+                      fontWeight="600"
                       fill="#68748a"
                     >
                       17 May
@@ -1212,7 +1251,8 @@ export default function DashboardPage() {
                     <text
                       x="365"
                       y="113"
-                      fontSize="8"
+                      fontSize="12"
+                      fontWeight="600"
                       fill="#68748a"
                     >
                       24 May
@@ -1221,7 +1261,8 @@ export default function DashboardPage() {
                     <text
                       x="468"
                       y="113"
-                      fontSize="8"
+                      fontSize="12"
+                      fontWeight="600"
                       fill="#68748a"
                     >
                       31 May
@@ -1295,13 +1336,9 @@ export default function DashboardPage() {
                   )}
                 </div>
 
-                <button
-                  type="button"
-                  className="mx-3 mb-2 mt-1 flex h-[28px] w-[calc(100%-24px)] items-center justify-center gap-2 rounded-md bg-[#071d3c] text-[9px] font-extrabold text-white"
-                >
+                <FooterButton dark>
                   Fix Issues Now
-                  <ArrowRight className="h-3 w-3" />
-                </button>
+                </FooterButton>
               </Panel>
             </div>
 

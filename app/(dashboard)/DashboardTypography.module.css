@@ -1,0 +1,17 @@
+.dashboard :global(.text-\[6px\]),
+.dashboard :global(.text-\[6\.5px\]),
+.dashboard :global(.text-\[6\.8px\]) { font-size: 9px !important; }
+
+.dashboard :global(.text-\[7px\]) { font-size: 10px !important; }
+
+.dashboard :global(.text-\[8px\]),
+.dashboard :global(.text-\[8\.2px\]),
+.dashboard :global(.text-\[8\.5px\]) { font-size: 11px !important; }
+
+.dashboard :global(.text-\[9px\]),
+.dashboard :global(.text-\[9\.5px\]) { font-size: 12px !important; }
+
+.dashboard :global(.text-\[10px\]),
+.dashboard :global(.text-\[11px\]) { font-size: 13px !important; }
+
+.dashboard :global(.text-\[12px\]) { font-size: 14px !important; }
