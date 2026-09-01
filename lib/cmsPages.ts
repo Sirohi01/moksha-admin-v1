@@ -1,8 +1,11 @@
+export const PUBLIC_SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://mokshasewa.org").replace(/\/$/, "");
+
 export type PageStatus = "Published" | "Draft";
 
 export type PageType = "home" | "page" | "people";
 
 export interface CmsPage {
+  configKey?: string;
   id: number;
   title: string;
   slug: string;
@@ -13,6 +16,99 @@ export interface CmsPage {
   updated: string;
   updatedBy: string;
   type: PageType;
+  seo?: {
+    metaTitle?: string;
+    metaDescription?: string;
+    metaKeywords?: string;
+    canonicalUrl?: string;
+    h1Tag?: string;
+    schemaMarkup?: string;
+    robotsIndex?: boolean;
+  };
+}
+
+type SettingsPageConfig = {
+  seo?: {
+    metaTitle?: string;
+    metaDescription?: string;
+    metaKeywords?: string;
+    canonicalUrl?: string;
+    h1Tag?: string;
+    schemaMarkup?: string;
+    robotsIndex?: boolean;
+  };
+  sections?: Array<{ enabled?: boolean }>;
+};
+
+const pageDefinitions = [
+  ["landingPage", "Home", "/", "home"],
+  ["aboutPage", "About Us", "/about", "page"],
+  ["servicesPage", "Our Services", "/our-services", "page"],
+  ["ambulancePage", "Ambulance Sewa", "/ambulanceservices", "page"],
+  ["panditPage", "Vedic Pandit", "/panditservices", "page"],
+  ["funeralPage", "Funeral Management", "/furalservices", "page"],
+  ["funeralDecorationPage", "Funeral Decoration", "/furaldecoration", "page"],
+  ["prayerHallPage", "Prayer Hall", "/prayerhallservices", "page"],
+  ["specialServicePage", "Special Services", "/specialservices", "page"],
+  ["callingRelativesPage", "Calling Relatives", "/callingrelativesservices", "page"],
+  ["harsevanPage", "Harsevan Support", "/harsevanservices", "page"],
+  ["unclaimedBodyPage", "Unclaimed Body Sewa", "/unclaimed-body-sewa", "people"],
+  ["volunteerPage", "Volunteer", "/volunteer/register", "people"],
+  ["partnershipPage", "Partnership", "/partnership", "people"],
+  ["csrPage", "CSR", "/csr", "people"],
+  ["requestHelpPage", "Request Sewa Help", "/request-help", "people"],
+  ["donationPage", "Donation", "/donation", "page"],
+  ["contactPage", "Contact Us", "/contact", "page"],
+  ["trackPage", "Track Status", "/track", "page"],
+  ["privacyPage", "Privacy Policy", "/privacy-policy", "page"],
+  ["termsPage", "Terms & Conditions", "/terms", "page"],
+  ["refundPage", "Refund Policy", "/refund-policy", "page"],
+  ["conductPage", "Code of Conduct", "/code-of-conduct", "page"],
+] as const;
+
+function seoScore(config: SettingsPageConfig): number {
+  const seo = config.seo ?? {};
+  const checks = [
+    Boolean(seo.metaTitle?.trim()),
+    Boolean(seo.metaDescription?.trim()),
+    Boolean(seo.h1Tag?.trim()),
+    Boolean(seo.schemaMarkup?.trim()),
+    seo.robotsIndex !== false,
+    Boolean(config.sections?.length),
+    Boolean(config.sections?.some((section) => section.enabled !== false)),
+  ];
+  return Math.round((checks.filter(Boolean).length / checks.length) * 100);
+}
+
+export function cmsPagesFromSettings(settings: Record<string, unknown>): CmsPage[] {
+  const updatedAt = typeof settings.updatedAt === "string" ? new Date(settings.updatedAt) : new Date();
+  return pageDefinitions.flatMap(([key, title, slug, type], index) => {
+    const config = settings[key] as SettingsPageConfig | undefined;
+    if (!config) return [];
+    const score = seoScore(config);
+    const status: PageStatus = config.sections?.some((section) => section.enabled !== false) ? "Published" : "Draft";
+    return [{
+      id: index + 1,
+      configKey: key,
+      title,
+      slug,
+      author: "Admin User",
+      status,
+      seoScore: score,
+      rating: score >= 90 ? "Excellent" : score >= 75 ? "Good" : "Needs Work",
+      updated: updatedAt.toLocaleString("en-IN", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" }),
+      updatedBy: "Admin User",
+      type,
+      seo: config.seo,
+    }];
+  });
+}
+
+export function getCmsPageDefinition(id: number) {
+  const definition = pageDefinitions[id - 1];
+  if (!definition) return null;
+  const [configKey, title, slug, type] = definition;
+  return { configKey, title, slug, type };
 }
 
 export const cmsPages: CmsPage[] = [

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 
@@ -35,8 +35,12 @@ import {
 
 import {
   cmsPages,
+  cmsPagesFromSettings,
+  PUBLIC_SITE_URL,
   type PageType,
 } from "@/lib/cmsPages";
+import { settingsApi } from "@/lib/settingsApi";
+import { dashboardApi } from "@/lib/dashboardApi";
 
 /* =========================================================
    ASSETS
@@ -590,7 +594,8 @@ function WebsitePreview() {
    SEO CIRCLE
 ========================================================= */
 
-function SeoScoreCircle() {
+function SeoScoreCircle({ score }: { score: number }) {
+  const circumference = 307.87;
   return (
     <div className="relative h-[102px] w-[102px] shrink-0">
       <svg
@@ -615,14 +620,14 @@ function SeoScoreCircle() {
           strokeWidth="9"
           strokeLinecap="round"
           strokeDasharray="307.87"
-          strokeDashoffset="24.63"
+          strokeDashoffset={circumference * (1 - score / 100)}
         />
       </svg>
 
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         <div className="flex items-end">
           <span className="text-[27px] font-bold tracking-[-0.04em] text-[#14233b]">
-            92
+            {score}
           </span>
 
           <span className="mb-[4px] text-[8px] font-semibold text-[#667183]">
@@ -631,7 +636,7 @@ function SeoScoreCircle() {
         </div>
 
         <span className="mt-[-2px] text-[8.5px] font-semibold text-[#167044]">
-          Excellent
+          {score >= 90 ? "Excellent" : score >= 75 ? "Good" : "Needs Work"}
         </span>
       </div>
     </div>
@@ -767,11 +772,25 @@ export default function CmsPageDetailPage() {
   const pageId =
     Number(params.id);
 
+  const [pages, setPages] = useState(cmsPages);
+  const [performance, setPerformance] = useState({ views: 0, visitors: 0, averageSessionSeconds: 0, bounceRate: 0 });
+
   const page =
-    cmsPages.find(
+    pages.find(
       (item) =>
         item.id === pageId,
-    ) ?? cmsPages[0];
+    ) ?? pages[0] ?? cmsPages[0];
+
+  useEffect(() => {
+    settingsApi.get().then((settings) => setPages(cmsPagesFromSettings(settings as unknown as Record<string, unknown>))).catch(() => undefined);
+  }, []);
+
+  useEffect(() => {
+    dashboardApi.overview().then((overview) => {
+      const metric = overview.sources.analytics.data?.pages?.find((item) => item.path.replace(/\/$/, "") === page.slug.replace(/\/$/, ""));
+      if (metric) setPerformance(metric);
+    }).catch(() => undefined);
+  }, [page.slug]);
 
   const [
     previewMode,
@@ -785,17 +804,46 @@ export default function CmsPageDetailPage() {
     setPreviewScale,
   ] = useState("100%");
 
-  const pageHref =
-    page.slug === "/"
-      ? "/"
-      : page.slug;
+  const pageHref = `${PUBLIC_SITE_URL}${page.slug === "/" ? "" : page.slug}`;
 
-  const previewWidth =
+  const deviceWidthPx =
     previewMode === "desktop"
-      ? "100%"
+      ? 1340
       : previewMode === "tablet"
-        ? "74%"
-        : "42%";
+        ? 768
+        : 390;
+
+  const previewViewportRef = useRef<HTMLDivElement>(null);
+  const [
+    viewportSize,
+    setViewportSize,
+  ] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    const el = previewViewportRef.current;
+    if (!el) return;
+    const observer = new ResizeObserver(([entry]) => {
+      const { width, height } = entry.contentRect;
+      setViewportSize({ width, height });
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  // Fit the fixed device width into the available panel width (never zoom in past 100%),
+  // then apply the manual zoom-out dropdown on top of that.
+  const fitScale =
+    viewportSize.width > 0
+      ? Math.min(1, viewportSize.width / deviceWidthPx)
+      : 1;
+  const manualScale = parseInt(previewScale, 10) / 100;
+  const previewScaleFactor = fitScale * manualScale;
+  const scaledFrameWidth = deviceWidthPx * previewScaleFactor;
+  const scaledFrameHeight = viewportSize.height;
+  const unscaledFrameHeight =
+    previewScaleFactor > 0
+      ? scaledFrameHeight / previewScaleFactor
+      : scaledFrameHeight;
 
   return (
     <div className="h-full min-h-0 w-full overflow-hidden bg-[#fffefb] text-[#172238]">
@@ -932,7 +980,7 @@ export default function CmsPageDetailPage() {
                 </div>
 
                 <p className="mt-[7px] text-[10.5px] font-medium text-[#657186]">
-                  https://mokshasewa.org
+                  {PUBLIC_SITE_URL}
                   {page.slug === "/"
                     ? "/"
                     : page.slug}
@@ -951,7 +999,7 @@ export default function CmsPageDetailPage() {
                   </p>
 
                   <p className="mt-[2px] text-[10.5px] font-semibold text-[#5c6575]">
-                    20 May 2026, 10:45 AM
+                    {page.updated}
                   </p>
 
                   <p className="mt-[3px] text-[9.2px] font-medium text-[#697384]">
@@ -963,15 +1011,33 @@ export default function CmsPageDetailPage() {
 
             {/* PREVIEW */}
 
-            <div className="flex min-h-0 flex-1 justify-center overflow-hidden bg-[#f8f8f5] px-[10px] pt-[8px]">
+            <div
+              ref={previewViewportRef}
+              className="flex min-h-0 flex-1 items-start justify-center overflow-hidden bg-[#f8f8f5] px-[10px] pt-[8px]"
+            >
               <div
-                className="h-full overflow-hidden rounded-t-[6px] border border-[#e9e6df] bg-white transition-all duration-200"
+                className="shrink-0 overflow-hidden rounded-t-[6px] border border-[#e9e6df] bg-white transition-all duration-200"
                 style={{
-                  width:
-                    previewWidth,
+                  width: scaledFrameWidth,
+                  height: scaledFrameHeight,
                 }}
               >
-                <WebsitePreview />
+                <div
+                  style={{
+                    width: deviceWidthPx,
+                    height: unscaledFrameHeight,
+                    transform: `scale(${previewScaleFactor})`,
+                    transformOrigin: "top left",
+                  }}
+                >
+                  <iframe
+                    title={`${page.title} live website preview`}
+                    src={`${PUBLIC_SITE_URL}${page.slug === "/" ? "" : page.slug}`}
+                    width={deviceWidthPx}
+                    height={unscaledFrameHeight}
+                    className="border-0 bg-white"
+                  />
+                </div>
               </div>
             </div>
 
@@ -1127,7 +1193,7 @@ export default function CmsPageDetailPage() {
                   <span className="inline-flex items-center gap-[5px]">
                     <Clock3 className="h-[11px] w-[11px]" />
 
-                    20 May 2026, 10:30 AM
+                    {page.updated}
                   </span>
                 </InfoRow>
 
@@ -1135,12 +1201,12 @@ export default function CmsPageDetailPage() {
                   <span className="inline-flex items-center gap-[5px]">
                     <Clock3 className="h-[11px] w-[11px]" />
 
-                    20 May 2026, 10:45 AM
+                    {page.updated}
                   </span>
                 </InfoRow>
 
                 <InfoRow label="Page ID">
-                  #MSP-0001
+                  #MSP-{String(page.id).padStart(4, "0")}
                 </InfoRow>
               </dl>
 
@@ -1163,7 +1229,7 @@ export default function CmsPageDetailPage() {
 
               <div className="mt-[10px] grid grid-cols-[120px_1fr] items-center gap-[11px]">
                 <div className="flex justify-center">
-                  <SeoScoreCircle />
+                  <SeoScoreCircle score={page.seoScore} />
                 </div>
 
                 <div className="space-y-[1px] border-l border-[#eeeeea] pl-[12px]">
@@ -1207,7 +1273,7 @@ export default function CmsPageDetailPage() {
                   </p>
 
                   <p className="mt-[1px] text-[14px] font-bold text-[#27364e]">
-                    12,842
+                    {performance.views.toLocaleString("en-IN")}
                   </p>
 
                   <p className="mt-[1px] text-[8px] font-semibold text-[#249153]">
@@ -1221,7 +1287,7 @@ export default function CmsPageDetailPage() {
                   </p>
 
                   <p className="mt-[1px] text-[14px] font-bold text-[#27364e]">
-                    8,651
+                    {performance.visitors.toLocaleString("en-IN")}
                   </p>
 
                   <p className="mt-[1px] text-[8px] font-semibold text-[#249153]">
@@ -1235,7 +1301,7 @@ export default function CmsPageDetailPage() {
                   </p>
 
                   <p className="mt-[1px] text-[14px] font-bold text-[#27364e]">
-                    02:45
+                    {`${Math.floor(performance.averageSessionSeconds / 60).toString().padStart(2, "0")}:${Math.round(performance.averageSessionSeconds % 60).toString().padStart(2, "0")}`}
                   </p>
 
                   <p className="mt-[1px] text-[8px] font-semibold text-[#249153]">
@@ -1249,7 +1315,7 @@ export default function CmsPageDetailPage() {
                   </p>
 
                   <p className="mt-[1px] text-[14px] font-bold text-[#27364e]">
-                    32.6%
+                    {performance.bounceRate.toFixed(1)}%
                   </p>
 
                   <p className="mt-[1px] text-[8px] font-semibold text-[#d04d4d]">
@@ -1284,7 +1350,7 @@ export default function CmsPageDetailPage() {
                   type="button"
                   onClick={() =>
                     navigator.clipboard?.writeText(
-                      `https://mokshasewa.org${page.slug === "/"
+                      `${PUBLIC_SITE_URL}${page.slug === "/"
                         ? "/"
                         : page.slug
                       }`,

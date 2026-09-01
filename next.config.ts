@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const apiOrigin = new URL(process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000").origin;
+const siteOrigin = new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://mokshasewa.org").origin;
 const scriptSrcEval = process.env.NODE_ENV === "production" ? "" : " 'unsafe-eval'";
 
 const csp = [
@@ -12,7 +13,8 @@ const csp = [
   "media-src 'self' https://res.cloudinary.com",
   "font-src 'self' data:",
   `connect-src 'self' ${apiOrigin} https://res.cloudinary.com`,
-  "frame-src 'none'",
+  // Live-preview iframe embeds the public site (moksha_clone_voyage).
+  `frame-src ${siteOrigin}`,
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",

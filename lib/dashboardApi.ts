@@ -29,6 +29,7 @@ export interface LiveDashboardOverview {
       averageSessionSeconds: number;
       bounceRate: number;
       conversions: number;
+      pages: Array<{ path: string; views: number; visitors: number; averageSessionSeconds: number; bounceRate: number }>;
       growth: { users: number | null; sessions: number | null; pageViews: number | null; averageSession: number | null; bounceRate: number | null; conversionRate: number | null };
     }>;
     searchConsole: DashboardSource<{

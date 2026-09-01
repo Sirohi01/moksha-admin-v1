@@ -36,6 +36,7 @@ import {
   UploadCloud,
   Video,
 } from "lucide-react";
+import { PUBLIC_SITE_URL } from "@/lib/cmsPages";
 
 /* =========================================================
    TYPES
@@ -567,7 +568,7 @@ export default function AddNewPage() {
 
                   <div className="flex h-[32px] overflow-hidden rounded-[5px] border border-[#dedfdb] bg-white">
                     <div className="flex shrink-0 items-center border-r border-[#e5e6e2] bg-[#fafaf8] px-[8px] text-[9.5px] font-medium text-[#647082]">
-                      https://mokshasewa.org/
+                      {PUBLIC_SITE_URL}/
                     </div>
 
                     <input
@@ -1083,7 +1084,7 @@ export default function AddNewPage() {
                         value,
                       )
                     }
-                    placeholder={`https://mokshasewa.org/${form.slug ||
+                    placeholder={`${PUBLIC_SITE_URL}/${form.slug ||
                       "enter-page-slug"
                       }`}
                   />

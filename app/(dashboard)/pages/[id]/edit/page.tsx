@@ -1,6 +1,7 @@
 "use client";
 
 import React, {
+  useEffect,
   useMemo,
   useState,
   type ReactNode,
@@ -47,7 +48,10 @@ import {
 
 import {
   cmsPages,
+  cmsPagesFromSettings,
+  PUBLIC_SITE_URL,
 } from "@/lib/cmsPages";
+import { settingsApi } from "@/lib/settingsApi";
 
 /* =========================================================
    FEATURED IMAGE
@@ -74,6 +78,9 @@ type FormState = {
   template: string;
   parent: string;
   metaTitle: string;
+  metaDescription: string;
+  contentTitle: string;
+  contentDescription: string;
   status: Status;
   visibility: Visibility;
   author: string;
@@ -539,11 +546,26 @@ export default function CmsEditPage() {
   const pageId =
     Number(params.id);
 
+  const [pages, setPages] = useState(cmsPages);
+  const [settings, setSettings] = useState<Record<string, any> | null>(null);
+  const [saving, setSaving] = useState(false);
+
   const page =
-    cmsPages.find(
+    pages.find(
       (item) =>
         item.id === pageId,
-    ) ?? cmsPages[0];
+    ) ?? pages[0] ?? cmsPages[0];
+
+  useEffect(() => {
+    settingsApi.get().then((value) => {
+      const raw = value as unknown as Record<string, any>;
+      setSettings(raw);
+      setPages(cmsPagesFromSettings(raw));
+    }).catch(() => undefined);
+  }, []);
+
+  const pageConfig = page.configKey && settings ? settings[page.configKey] : undefined;
+  const firstContentSection = pageConfig?.sections?.find((section: any) => section.enabled !== false) ?? pageConfig?.sections?.[0];
 
   const initialForm =
     useMemo<FormState>(
@@ -574,6 +596,10 @@ export default function CmsEditPage() {
             ? "Moksha Sewa – Dignity in Every Final Journey"
             : `${page.title} – Moksha Sewa`,
 
+        metaDescription: page.seo?.metaDescription ?? "",
+        contentTitle: firstContentSection?.title ?? "",
+        contentDescription: firstContentSection?.description ?? "",
+
         status:
           page.status,
 
@@ -591,7 +617,7 @@ export default function CmsEditPage() {
             ? "1"
             : "4",
       }),
-      [page],
+      [page, firstContentSection],
     );
 
   const [
@@ -601,6 +627,17 @@ export default function CmsEditPage() {
     useState<FormState>(
       initialForm,
     );
+
+  useEffect(() => {
+    if (!settings) return;
+    setForm({
+      ...initialForm,
+      metaTitle: page.seo?.metaTitle ?? "",
+      metaDescription: page.seo?.metaDescription ?? "",
+      contentTitle: firstContentSection?.title ?? "",
+      contentDescription: firstContentSection?.description ?? "",
+    });
+  }, [settings, initialForm]);
 
   const [
     activeFormats,
@@ -639,6 +676,29 @@ export default function CmsEditPage() {
             format,
           ],
     );
+  };
+
+  const savePage = async () => {
+    if (!settings || !page.configKey) return;
+    setSaving(true);
+    try {
+      const current = settings[page.configKey] ?? {};
+      const sections = [...(current.sections ?? [])];
+      const sectionIndex = Math.max(0, sections.findIndex((section: any) => section.enabled !== false));
+      if (sections.length) sections[sectionIndex] = { ...sections[sectionIndex], title: form.contentTitle, description: form.contentDescription };
+      const updated = await settingsApi.update({
+        [page.configKey]: {
+          ...current,
+          sections,
+          seo: { ...current.seo, metaTitle: form.metaTitle, metaDescription: form.metaDescription },
+        },
+      } as any);
+      const raw = updated as unknown as Record<string, any>;
+      setSettings(raw);
+      setPages(cmsPagesFromSettings(raw));
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -761,6 +821,8 @@ export default function CmsEditPage() {
           >
             <button
               type="button"
+              onClick={savePage}
+              disabled={saving}
               onClick={() =>
                 router.push(
                   "/pages",
@@ -831,7 +893,7 @@ export default function CmsEditPage() {
             >
               <Save className="h-[13px] w-[13px]" />
 
-              Update Page
+              {saving ? "Updating..." : "Update Page"}
             </button>
 
             <button
@@ -966,7 +1028,7 @@ export default function CmsEditPage() {
                         text-[#5f6a7c]
                       "
                     >
-                      https://mokshasewa.org/
+                      {PUBLIC_SITE_URL}/
                     </div>
 
                     <input
@@ -1337,7 +1399,9 @@ export default function CmsEditPage() {
                       pt-[9px]
                     "
                   >
-                    <h2
+                    <input
+                      value={form.contentTitle}
+                      onChange={(event) => updateField("contentTitle", event.target.value)}
                       className="
                         shrink-0
                         font-serif
@@ -1346,13 +1410,11 @@ export default function CmsEditPage() {
                         leading-[24px]
                         text-[#174a31]
                       "
-                    >
-                      No One Should Leave
-                      This World Without
-                      Dignity
-                    </h2>
+                    />
 
-                    <p
+                    <textarea
+                      value={form.contentDescription}
+                      onChange={(event) => updateField("contentDescription", event.target.value)}
                       className="
                         mt-[6px]
                         shrink-0
@@ -1362,17 +1424,7 @@ export default function CmsEditPage() {
                         leading-[17px]
                         text-[#4d596c]
                       "
-                    >
-                      Moksha Sewa provides
-                      free last rites,
-                      cremation, rituals
-                      and support for
-                      unclaimed and
-                      financially weak
-                      families with
-                      compassion, respect
-                      and responsibility.
-                    </p>
+                    />
 
                     <div
                       className="
@@ -2011,7 +2063,7 @@ export default function CmsEditPage() {
                     navigator
                       .clipboard
                       ?.writeText(
-                        `https://mokshasewa.org/${form.slug}`,
+                        `${PUBLIC_SITE_URL}/${form.slug}`,
                       )
                   }
                   className="

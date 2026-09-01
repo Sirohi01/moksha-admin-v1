@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import typography from "./PagesTypography.module.css";
 import {
@@ -25,10 +25,13 @@ import {
 } from "lucide-react";
 import {
   cmsPages,
+  cmsPagesFromSettings,
+  PUBLIC_SITE_URL,
   type CmsPage,
   type PageStatus,
   type PageType,
 } from "@/lib/cmsPages";
+import { settingsApi } from "@/lib/settingsApi";
 
 /* =========================================================
    TYPES
@@ -39,8 +42,6 @@ type DetailTab =
   | "Content"
   | "Performance"
   | "History";
-
-const pages: CmsPage[] = cmsPages;
 
 /* =========================================================
    SEO RING — SMALLER + LIGHTER
@@ -88,7 +89,7 @@ function LargeSeoRing({
 }) {
   return (
     <div
-      className="relative grid h-[96px] w-[96px] shrink-0 place-items-center rounded-full"
+      className="relative grid h-[108px] w-[108px] shrink-0 place-items-center rounded-full"
       style={{
         background: `conic-gradient(
           #18844c 0deg ${score * 3.6}deg,
@@ -96,7 +97,7 @@ function LargeSeoRing({
         )`,
       }}
     >
-      <div className="grid h-[78px] w-[78px] place-items-center rounded-full bg-white">
+      <div className="grid h-[88px] w-[88px] place-items-center rounded-full bg-white">
         <div className="text-center">
           <div className="text-[23px] font-bold leading-none tracking-[-0.025em] text-[#17223a]">
             {score}
@@ -105,8 +106,8 @@ function LargeSeoRing({
             </span>
           </div>
 
-          <p className="mt-[5px] text-[9px] font-semibold text-[#18844c]">
-            Excellent
+          <p className="mt-[5px] whitespace-nowrap font-semibold text-[#18844c]" style={{ fontSize: "10px" }}>
+            {score >= 90 ? "Excellent" : score >= 75 ? "Good" : "Needs Work"}
           </p>
         </div>
       </div>
@@ -215,6 +216,8 @@ function FilterSelect({
 
 export default function PagesCmsPage() {
   const router = useRouter();
+  const [pages, setPages] = useState<CmsPage[]>([]);
+  const [totalSections, setTotalSections] = useState(0);
   const [search, setSearch] = useState("");
 
   const [pageFilter, setPageFilter] =
@@ -226,14 +229,37 @@ export default function PagesCmsPage() {
   const [authorFilter, setAuthorFilter] =
     useState("All Authors");
 
-  const [selectedPage, setSelectedPage] =
-    useState<CmsPage>(pages[0]);
+  const [selectedPageValue, setSelectedPage] = useState<CmsPage | null>(null);
+  const selectedPage = selectedPageValue ?? pages[0] ?? cmsPages[0];
+
+  useEffect(() => {
+    let active = true;
+    settingsApi.get().then((settings) => {
+      if (!active) return;
+      const realPages = cmsPagesFromSettings(settings as unknown as Record<string, unknown>);
+      setPages(realPages);
+      setSelectedPage(realPages[0] ?? null);
+      const sections = Object.entries(settings as unknown as Record<string, unknown>).reduce((count, [key, value]) => {
+        if (!key.toLowerCase().endsWith("page") || !value || typeof value !== "object") return count;
+        const page = value as { sections?: unknown[] };
+        return count + (page.sections?.length ?? 0);
+      }, 0);
+      setTotalSections(sections);
+    }).catch(() => {
+      if (active) {
+        setPages([]);
+        setSelectedPage(null);
+      }
+    });
+    return () => { active = false; };
+  }, []);
 
   const [activeTab, setActiveTab] =
     useState<DetailTab>("SEO");
 
   const [activePagination, setActivePagination] =
     useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
   const [actionMenu, setActionMenu] =
     useState<number | null>(null);
@@ -280,7 +306,19 @@ export default function PagesCmsPage() {
     pageFilter,
     statusFilter,
     authorFilter,
+    pages,
   ]);
+
+  const publishedCount = pages.filter((page) => page.status === "Published").length;
+  const draftCount = pages.filter((page) => page.status === "Draft").length;
+  const averageSeo = pages.length ? Math.round(pages.reduce((sum, page) => sum + page.seoScore, 0) / pages.length) : 0;
+  const totalPaginationPages = Math.max(1, Math.ceil(filteredPages.length / pageSize));
+  const safePage = Math.min(activePagination, totalPaginationPages);
+  const paginatedPages = filteredPages.slice((safePage - 1) * pageSize, safePage * pageSize);
+
+  useEffect(() => {
+    setActivePagination(1);
+  }, [search, pageFilter, statusFilter, authorFilter, pageSize]);
 
   return (
     <div className={`${typography.pages} h-full min-h-0 w-full overflow-hidden bg-[#fffefb] text-[#182238]`}>
@@ -352,18 +390,18 @@ export default function PagesCmsPage() {
                 STATS
             ============================================= */}
 
-            <div className="grid h-[84px] shrink-0 grid-cols-5 gap-[11px]">
+            <div className="grid h-[104px] shrink-0 grid-cols-5 gap-[11px]">
               <div className="rounded-[7px] border border-[#e7e7e3] bg-white px-[13px] py-[9px]">
                 <p className="text-[9px] font-semibold text-[#5e697d]">
                   Total Pages
                 </p>
 
                 <p className="mt-[4px] text-[18px] font-bold leading-none text-[#19243b]">
-                  48
+                  {pages.length}
                 </p>
 
                 <p className="mt-[8px] text-[8.5px] font-medium text-[#606b7e]">
-                  Published: 43
+                  Published: {publishedCount}
                 </p>
               </div>
 
@@ -373,7 +411,7 @@ export default function PagesCmsPage() {
                 </p>
 
                 <p className="mt-[4px] text-[18px] font-bold leading-none text-[#19243b]">
-                  3
+                  {draftCount}
                 </p>
 
                 <p className="mt-[8px] text-[8.5px] font-medium text-[#606b7e]">
@@ -387,7 +425,7 @@ export default function PagesCmsPage() {
                 </p>
 
                 <p className="mt-[4px] text-[18px] font-bold leading-none text-[#19243b]">
-                  156
+                  {totalSections}
                 </p>
 
                 <p className="mt-[8px] text-[8.5px] font-medium text-[#606b7e]">
@@ -416,7 +454,7 @@ export default function PagesCmsPage() {
                   </p>
 
                   <p className="mt-[4px] text-[17px] font-bold leading-none text-[#19243b]">
-                    86/100
+                    {averageSeo}/100
                   </p>
 
                   <p className="mt-[7px] text-[8.5px] font-semibold text-[#258052]">
@@ -440,7 +478,7 @@ export default function PagesCmsPage() {
                 FILTER ROW
             ============================================= */}
 
-            <div className="mt-[13px] flex h-[36px] shrink-0 items-center gap-[9px]">
+            <div className="mt-[10px] flex h-[36px] shrink-0 items-center gap-[9px]">
               <div className="relative min-w-[250px] flex-1">
                 <Search
                   className="absolute left-[11px] top-1/2 h-[12px] w-[12px] -translate-y-1/2 text-[#7a818d]"
@@ -544,8 +582,8 @@ export default function PagesCmsPage() {
 
               {/* ROWS */}
 
-              <div className="grid min-h-0 flex-1 grid-rows-10">
-                {filteredPages.map((page) => {
+              <div className="min-h-0 flex-1 overflow-y-auto">
+                {paginatedPages.map((page) => {
                   const selected =
                     selectedPage.id === page.id;
 
@@ -565,7 +603,7 @@ export default function PagesCmsPage() {
                           setActionMenu(null);
                         }
                       }}
-                      className={`grid min-h-0 w-full grid-cols-[2.35fr_1.7fr_1.3fr_1.02fr_1.15fr_1.55fr_76px] items-center border-b border-[#f0f0ec] px-[10px] text-left transition last:border-b-0 ${selected
+                      className={`grid min-h-[44px] w-full grid-cols-[2.35fr_1.7fr_1.3fr_1.02fr_1.15fr_1.55fr_76px] items-center border-b border-[#f0f0ec] px-[10px] text-left transition last:border-b-0 ${selected
                         ? "bg-[#fffefa]"
                         : "bg-white hover:bg-[#fffefa]"
                         }`}
@@ -746,12 +784,12 @@ export default function PagesCmsPage() {
                 {Array.from({
                   length: Math.max(
                     0,
-                    10 - filteredPages.length,
+                    pageSize - paginatedPages.length,
                   ),
                 }).map((_, index) => (
                   <div
                     key={`blank-${index}`}
-                    className="border-b border-[#f0f0ec] last:border-b-0"
+                    className="min-h-[44px] border-b border-[#f0f0ec] last:border-b-0"
                   />
                 ))}
               </div>
@@ -760,12 +798,14 @@ export default function PagesCmsPage() {
 
               <div className="flex h-[44px] shrink-0 items-center justify-between border-t border-[#e9e9e5] px-[10px]">
                 <p className="whitespace-nowrap text-[8px] font-medium text-[#657084]">
-                  Showing 1 to 10 of 48 pages
+                  Showing {filteredPages.length ? (safePage - 1) * pageSize + 1 : 0} to {Math.min(safePage * pageSize, filteredPages.length)} of {filteredPages.length} pages
                 </p>
 
                 <div className="flex items-center gap-[4px]">
                   <button
                     type="button"
+                    onClick={() => setActivePagination(1)}
+                    disabled={safePage === 1}
                     className="grid h-[25px] w-[25px] place-items-center rounded-[5px] border border-[#e4e5e1] text-[#9298a1]"
                   >
                     <ChevronsLeft
@@ -776,6 +816,8 @@ export default function PagesCmsPage() {
 
                   <button
                     type="button"
+                    onClick={() => setActivePagination(Math.max(1, safePage - 1))}
+                    disabled={safePage === 1}
                     className="grid h-[25px] w-[25px] place-items-center rounded-[5px] border border-[#e4e5e1] text-[#727b89]"
                   >
                     <ChevronLeft
@@ -784,7 +826,7 @@ export default function PagesCmsPage() {
                     />
                   </button>
 
-                  {[1, 2, 3, 4, 5].map(
+                  {Array.from({ length: totalPaginationPages }, (_, index) => index + 1).map(
                     (pageNumber) => (
                       <button
                         type="button"
@@ -805,12 +847,10 @@ export default function PagesCmsPage() {
                     ),
                   )}
 
-                  <span className="px-[2px] text-[8px] text-[#7c8490]">
-                    ...
-                  </span>
-
                   <button
                     type="button"
+                    onClick={() => setActivePagination(Math.min(totalPaginationPages, safePage + 1))}
+                    disabled={safePage === totalPaginationPages}
                     className="grid h-[25px] w-[25px] place-items-center rounded-[5px] border border-[#e4e5e1] text-[#727b89]"
                   >
                     <ChevronRight
@@ -821,6 +861,8 @@ export default function PagesCmsPage() {
 
                   <button
                     type="button"
+                    onClick={() => setActivePagination(totalPaginationPages)}
+                    disabled={safePage === totalPaginationPages}
                     className="grid h-[25px] w-[25px] place-items-center rounded-[5px] border border-[#e4e5e1] text-[#727b89]"
                   >
                     <ChevronsRight
@@ -831,8 +873,8 @@ export default function PagesCmsPage() {
                 </div>
 
                 <FilterSelect
-                  value="10 / page"
-                  onChange={() => { }}
+                  value={`${pageSize} / page`}
+                  onChange={(value) => setPageSize(Number(value.split(" ")[0]))}
                   options={[
                     "10 / page",
                     "20 / page",
@@ -865,7 +907,7 @@ export default function PagesCmsPage() {
 
             {/* SELECTED PAGE */}
 
-            <div className="h-[148px] shrink-0 border-b border-[#ebebe7] px-[13px] py-[10px]">
+            <div className="h-[160px] shrink-0 border-b border-[#ebebe7] px-[13px] py-[10px]">
               <p className="text-[8px] font-bold uppercase tracking-[0.02em] text-[#566177]">
                 SELECTED PAGE
               </p>
@@ -917,7 +959,7 @@ export default function PagesCmsPage() {
                   </div>
 
                   <p className="mt-[5px] text-[7.8px] font-medium text-[#606b7e]">
-                    Published on 20 May 2026
+                    Last updated {selectedPage.updated}
                   </p>
 
                   <p className="mt-[3px] text-[7.8px] font-medium text-[#606b7e]">
@@ -1003,11 +1045,11 @@ export default function PagesCmsPage() {
             ============================================= */}
 
             {activeTab === "SEO" && (
-              <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+              <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
 
                 {/* SEO SCORE */}
 
-                <div className="grid h-[162px] shrink-0 grid-cols-[124px_1fr] border-b border-[#ebebe7]">
+                <div className="grid h-[190px] shrink-0 grid-cols-[140px_1fr] border-b border-[#ebebe7]">
                   <div className="flex flex-col items-center justify-center border-r border-[#ebebe7] px-[10px]">
                     <p className="mb-[5px] w-full text-left text-[8px] font-semibold text-[#59647a]">
                       SEO Score
@@ -1018,22 +1060,22 @@ export default function PagesCmsPage() {
                     />
                   </div>
 
-                  <div className="flex flex-col justify-center gap-[6px] px-[12px]">
-                    {[
-                      "Meta Title",
-                      "Meta Description",
-                      "Headings",
-                      "Content Quality",
-                      "Internal Linking",
-                      "Images (ALT Text)",
-                      "Schema Markup",
-                    ].map((label) => (
+                  <div className="flex flex-col justify-center gap-[8px] px-[12px]">
+                    {([
+                      ["Meta Title", Boolean(selectedPage.seo?.metaTitle)],
+                      ["Meta Description", Boolean(selectedPage.seo?.metaDescription)],
+                      ["Headings", Boolean(selectedPage.seo?.h1Tag)],
+                      ["Content Quality", selectedPage.seoScore >= 70],
+                      ["Internal Linking", false],
+                      ["Images (ALT Text)", false],
+                      ["Schema Markup", Boolean(selectedPage.seo?.schemaMarkup)],
+                    ] as Array<[string, boolean]>).map(([label, isGood]) => (
                       <div
                         key={label}
                         className="grid grid-cols-[12px_1fr_auto] items-center gap-[5px]"
                       >
                         <CheckCircle2
-                          className="h-[10px] w-[10px] fill-[#26844e] text-white"
+                          className={`h-[10px] w-[10px] ${isGood ? "fill-[#26844e] text-white" : "text-amber-500"}`}
                           strokeWidth={1.5}
                         />
 
@@ -1041,8 +1083,8 @@ export default function PagesCmsPage() {
                           {label}
                         </span>
 
-                        <span className="text-[7px] font-semibold text-[#47805d]">
-                          Good
+                        <span className={`text-[7px] font-semibold ${isGood ? "text-[#47805d]" : "text-amber-600"}`}>
+                          {isGood ? "Good" : "Needs Work"}
                         </span>
                       </div>
                     ))}
@@ -1051,7 +1093,7 @@ export default function PagesCmsPage() {
 
                 {/* META */}
 
-                <div className="min-h-0 flex-1 overflow-hidden px-[13px] py-[8px]">
+                <div className="min-h-0 flex-1 overflow-visible px-[13px] py-[8px]">
                   <div className="flex items-center justify-between">
                     <h3 className="text-[9px] font-bold text-[#465168]">
                       Meta Information
@@ -1074,12 +1116,11 @@ export default function PagesCmsPage() {
 
                     <div className="mt-[3px] flex items-end justify-between gap-[8px]">
                       <p className="text-[7.5px] font-medium leading-[1.3] text-[#465168]">
-                        Moksha Sewa – Dignity in Every Final
-                        Journey
+                        {selectedPage.seo?.metaTitle || "Not added yet"}
                       </p>
 
                       <span className="shrink-0 text-[6.8px] font-medium text-[#737d8e]">
-                        52 / 60
+                        {selectedPage.seo?.metaTitle?.length ?? 0} / 60
                       </span>
                     </div>
                   </div>
@@ -1092,15 +1133,11 @@ export default function PagesCmsPage() {
                     </p>
 
                     <p className="mt-[3px] text-[7.2px] font-normal leading-[1.3] text-[#4c5669]">
-                      Moksha Sewa provides free last rites,
-                      cremation, rituals and support for
-                      unclaimed and financially weak families
-                      in Delhi, Ghaziabad and Noida with
-                      dignity and compassion.
+                      {selectedPage.seo?.metaDescription || "Not added yet"}
                     </p>
 
                     <p className="mt-[2px] text-right text-[6.8px] font-semibold text-[#37805a]">
-                      148 / 160
+                      {selectedPage.seo?.metaDescription?.length ?? 0} / 160
                     </p>
                   </div>
 
@@ -1112,7 +1149,7 @@ export default function PagesCmsPage() {
                     </p>
 
                     <span className="mt-[3px] inline-flex rounded-full bg-[#f2f3f1] px-[7px] py-[3px] text-[6.8px] font-medium text-[#626b7a]">
-                      moksha sewa
+                      {selectedPage.seo?.metaKeywords || "Not added yet"}
                     </span>
                   </div>
 
@@ -1125,7 +1162,7 @@ export default function PagesCmsPage() {
 
                     <div className="mt-[2px] flex items-center gap-[4px]">
                       <span className="text-[7px] font-normal text-[#4f596a]">
-                        https://mokshasewa.org/
+                        {selectedPage.seo?.canonicalUrl || `${PUBLIC_SITE_URL}${selectedPage.slug === "/" ? "/" : selectedPage.slug}`}
                       </span>
 
                       <ExternalLink
@@ -1143,7 +1180,7 @@ export default function PagesCmsPage() {
                     </span>
 
                     <span className="text-[7px] font-semibold text-[#3c815b]">
-                      Index
+                      {selectedPage.seo?.robotsIndex === false ? "No Index" : "Index"}
                     </span>
                   </div>
 
