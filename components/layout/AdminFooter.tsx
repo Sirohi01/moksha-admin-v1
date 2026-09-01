@@ -7,7 +7,7 @@ export default function AdminFooter() {
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-6 bg-gradient-to-t from-emerald-50/60 to-transparent" />
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-[18px] right-0 hidden h-[58px] w-[460px] bg-no-repeat 2xl:block"
+        className="pointer-events-none absolute -top-[7px] right-0 hidden h-[47px] w-[460px] bg-no-repeat 2xl:block"
         style={{ backgroundImage: 'url("/assets/footer-tug-of-war.png")', backgroundSize: "460px 47px", backgroundPosition: "right bottom" }}
       />
 
