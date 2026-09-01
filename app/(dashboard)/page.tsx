@@ -4,6 +4,7 @@ import { Children, isValidElement, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import typography from "./DashboardTypography.module.css";
+import { dashboardApi, type LiveDashboardOverview } from "@/lib/dashboardApi";
 import {
   Activity,
   AlertCircle,
@@ -61,7 +62,7 @@ interface DashboardIssue {
   tone: IssueTone;
 }
 
-const topStats = [
+const defaultTopStats = [
   {
     title: "SEO HEALTH SCORE",
     value: "92",
@@ -468,6 +469,7 @@ function RangeDropdown({
 }
 
 export default function DashboardPage() {
+  const [liveDashboard, setLiveDashboard] = useState<LiveDashboardOverview | null>(null);
   const [openDropdown, setOpenDropdown] =
     useState<DropdownKey>(null);
 
@@ -475,6 +477,45 @@ export default function DashboardPage() {
   const [selectedDate, setSelectedDate] = useState("31 May 2026");
   const [activeMenuItem, setActiveMenuItem] = useState("Dashboard");
   const [notificationCount, setNotificationCount] = useState(8);
+
+  useEffect(() => {
+    let active = true;
+    dashboardApi.overview().then((data) => {
+      if (active) setLiveDashboard(data);
+    }).catch(() => {
+      if (active) setLiveDashboard(null);
+    });
+    return () => { active = false; };
+  }, []);
+
+  const internal = liveDashboard?.sources.internal.data;
+  const analytics = liveDashboard?.sources.analytics.data;
+  const searchConsole = liveDashboard?.sources.searchConsole.data;
+  const pageSpeed = liveDashboard?.sources.pageSpeed.data;
+  const number = (value: number) => new Intl.NumberFormat("en-IN").format(Math.round(value));
+  const duration = (seconds: number) => `${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(Math.round(seconds % 60)).padStart(2, "0")}`;
+  const growthText = (value: number | null | undefined, inverse = false) => {
+    if (value == null) return "—";
+    const adjusted = inverse ? -value : value;
+    return `${adjusted >= 0 ? "↑" : "↓"} ${Math.abs(value).toFixed(1)}%`;
+  };
+  const locationRows = internal?.topLocations.length
+    ? internal.topLocations.map((item) => [item.city, item.count, `${internal.totalEnquiries > 0 ? ((item.count / internal.totalEnquiries) * 100).toFixed(1) : "0.0"}%`] as [string, number, string])
+    : locations;
+  const submissionRows = internal?.recentSubmissions.length
+    ? internal.recentSubmissions.map((item) => [item.name, item.type.replaceAll("_", " "), new Date(item.createdAt).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })])
+    : submissions;
+  const topStats = defaultTopStats.map((item) => {
+    if (item.title === "SEO HEALTH SCORE" && pageSpeed) return { ...item, value: String(pageSpeed.seoScore), note: pageSpeed.seoScore >= 90 ? "Excellent" : pageSpeed.seoScore >= 70 ? "Good" : "Needs Work" };
+    if (item.title === "TOTAL PAGES" && internal) return { ...item, value: String(internal.totalPages), note: "Live from CMS" };
+    if (item.title === "TOTAL POSTS" && internal) return { ...item, value: String(internal.totalPosts), note: growthText(internal.growth.posts) };
+    if (item.title === "SEWA ENQUIRIES (MTD)" && internal) return { ...item, value: String(internal.enquiriesMtd), note: growthText(internal.growth.enquiriesMtd) };
+    if (item.title === "CONVERSION RATE" && analytics) {
+      const rate = analytics.sessions > 0 ? (analytics.conversions / analytics.sessions) * 100 : 0;
+      return { ...item, value: `${rate.toFixed(1)}%`, note: growthText(analytics.growth.conversionRate) };
+    }
+    return item;
+  });
 
   const toggleDropdown = (key: DropdownKey) => {
     setOpenDropdown((current) => current === key ? null : key);
@@ -1176,23 +1217,23 @@ export default function DashboardPage() {
                   {[
                     [
                       "Total Clicks",
-                      "3.62K",
-                      "↑ 18.6%",
+                      searchConsole ? number(searchConsole.clicks) : "3.62K",
+                      searchConsole ? growthText(searchConsole.growth.clicks) : "↑ 18.6%",
                     ],
                     [
                       "Total Impressions",
-                      "85.7K",
-                      "↑ 20.4%",
+                      searchConsole ? number(searchConsole.impressions) : "85.7K",
+                      searchConsole ? growthText(searchConsole.growth.impressions) : "↑ 20.4%",
                     ],
                     [
                       "Average CTR",
-                      "4.23%",
-                      "↑ 8.7%",
+                      searchConsole ? `${searchConsole.ctr.toFixed(2)}%` : "4.23%",
+                      searchConsole ? growthText(searchConsole.growth.ctr) : "↑ 8.7%",
                     ],
                     [
                       "Average Position",
-                      "12.6",
-                      "",
+                      searchConsole ? searchConsole.position.toFixed(1) : "12.6",
+                      searchConsole ? growthText(searchConsole.growth.position, true) : "",
                     ],
                   ].map(
                     ([label, value, change]) => (
@@ -1412,32 +1453,32 @@ export default function DashboardPage() {
                   {[
                     [
                       "Users",
-                      "12,842",
-                      "↑ 18.7%",
+                      analytics ? number(analytics.users) : "12,842",
+                      analytics ? growthText(analytics.growth.users) : "↑ 18.7%",
                       true,
                     ],
                     [
                       "Sessions",
-                      "18,942",
-                      "↑ 21.3%",
+                      analytics ? number(analytics.sessions) : "18,942",
+                      analytics ? growthText(analytics.growth.sessions) : "↑ 21.3%",
                       true,
                     ],
                     [
                       "Page Views",
-                      "28,561",
-                      "↑ 22.4%",
+                      analytics ? number(analytics.pageViews) : "28,561",
+                      analytics ? growthText(analytics.growth.pageViews) : "↑ 22.4%",
                       true,
                     ],
                     [
                       "Avg. Session",
-                      "02:45",
-                      "↑ 8.3%",
+                      analytics ? duration(analytics.averageSessionSeconds) : "02:45",
+                      analytics ? growthText(analytics.growth.averageSession) : "↑ 8.3%",
                       true,
                     ],
                     [
                       "Bounce Rate",
-                      "32.6%",
-                      "↓ 5.1%",
+                      analytics ? `${analytics.bounceRate.toFixed(1)}%` : "32.6%",
+                      analytics ? growthText(analytics.growth.bounceRate, true) : "↓ 5.1%",
                       false,
                     ],
                   ].map(
@@ -1527,19 +1568,19 @@ export default function DashboardPage() {
                   {[
                     [
                       "Largest Contentful Paint (LCP)",
-                      "2.1s",
+                      pageSpeed?.lcp != null ? `${(pageSpeed.lcp / 1000).toFixed(1)}s` : "2.1s",
                       "Good",
                       "90%",
                     ],
                     [
                       "Interaction to Next Paint (INP)",
-                      "128ms",
+                      pageSpeed?.inp != null ? `${Math.round(pageSpeed.inp)}ms` : "128ms",
                       "Good",
                       "92%",
                     ],
                     [
                       "Cumulative Layout Shift (CLS)",
-                      "0.06",
+                      pageSpeed?.cls != null ? pageSpeed.cls.toFixed(2) : "0.06",
                       "Good",
                       "94%",
                     ],
@@ -1599,7 +1640,7 @@ export default function DashboardPage() {
                     {[
                       [
                         "First Contentful Paint (FCP)",
-                        "1.5s",
+                        pageSpeed?.fcp != null ? `${(pageSpeed.fcp / 1000).toFixed(1)}s` : "1.5s",
                         "0.9s",
                       ],
                       [
@@ -1609,7 +1650,7 @@ export default function DashboardPage() {
                       ],
                       [
                         "Total Blocking Time (TBT)",
-                        "120ms",
+                        pageSpeed?.tbt != null ? `${Math.round(pageSpeed.tbt)}ms` : "120ms",
                         "80ms",
                       ],
                     ].map((row) => (
@@ -1863,7 +1904,7 @@ export default function DashboardPage() {
                 </PanelTitle>
 
                 <div className="space-y-[6px] px-3 pt-1">
-                  {locations.map(
+                  {locationRows.map(
                     (
                       [
                         name,
@@ -1925,7 +1966,7 @@ export default function DashboardPage() {
                 </PanelTitle>
 
                 <div className="px-3">
-                  {submissions.map(
+                  {submissionRows.map(
                     (row, index) => (
                       <div
                         key={row[0]}

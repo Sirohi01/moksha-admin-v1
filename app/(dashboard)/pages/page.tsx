@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import typography from "./PagesTypography.module.css";
 import {
   CheckCircle2,
   ChevronDown,
@@ -282,7 +283,7 @@ export default function PagesCmsPage() {
   ]);
 
   return (
-    <div className="h-full min-h-0 w-full overflow-hidden bg-[#fffefb] text-[#182238]">
+    <div className={`${typography.pages} h-full min-h-0 w-full overflow-hidden bg-[#fffefb] text-[#182238]`}>
       <div className="flex h-full min-h-0 flex-col overflow-hidden px-[18px] pb-[10px] pt-[14px]">
 
         {/* =================================================
