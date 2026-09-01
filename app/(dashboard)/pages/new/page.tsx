@@ -448,8 +448,8 @@ export default function AddNewPage() {
   };
 
   return (
-    <div className="h-full min-h-0 w-full overflow-hidden bg-[#fffefb] text-[#172238]">
-      <div className="flex h-full min-h-0 flex-col overflow-hidden px-[16px] pb-[8px] pt-[10px]">
+    <div className="w-full bg-[#fffefb] text-[#172238]">
+      <div className="flex flex-col px-[16px] pb-[8px] pt-[10px]">
 
         {/* =================================================
             TOP HEADING
@@ -526,17 +526,17 @@ export default function AddNewPage() {
             MAIN GRID
         ================================================= */}
 
-        <div className="grid min-h-0 flex-1 grid-cols-[minmax(0,2.12fr)_1fr] gap-[10px]">
+        <div className="grid items-start grid-cols-[minmax(0,2.12fr)_1fr] gap-[10px]">
 
           {/* =================================================
               LEFT COLUMN
           ================================================= */}
 
-          <div className="grid min-h-0 grid-rows-[188px_minmax(185px,1fr)_218px_32px] gap-[8px]">
+          <div className="flex flex-col gap-[8px]">
 
             {/* BASIC INFORMATION */}
 
-            <section className="overflow-hidden rounded-[7px] border border-[#e7e7e3] bg-white px-[14px] py-[10px]">
+            <section className="shrink-0 rounded-[7px] border border-[#e7e7e3] bg-white px-[14px] py-[10px]">
               <SectionHeader
                 number={1}
                 title="Basic Information"
@@ -669,7 +669,7 @@ export default function AddNewPage() {
 
             {/* PAGE CONTENT */}
 
-            <section className="flex min-h-0 flex-col overflow-hidden rounded-[7px] border border-[#e7e7e3] bg-white px-[14px] py-[10px]">
+            <section className="flex shrink-0 flex-col rounded-[7px] border border-[#e7e7e3] bg-white px-[14px] py-[10px]">
               <SectionHeader
                 number={2}
                 title="Page Content"
@@ -689,12 +689,12 @@ export default function AddNewPage() {
                 }
               />
 
-              <div className="mt-[7px] flex min-h-0 flex-1 flex-col">
+              <div className="mt-[7px] flex flex-col">
                 <FieldLabel>
                   Content Editor
                 </FieldLabel>
 
-                <div className="flex min-h-[106px] flex-1 flex-col overflow-hidden rounded-[5px] border border-[#dedfdb] bg-white">
+                <div className="flex min-h-[106px] flex-col rounded-[5px] border border-[#dedfdb] bg-white">
 
                   <div className="flex h-[31px] shrink-0 items-center overflow-hidden border-b border-[#e3e4e0] px-[6px]">
                     <div className="relative mr-[5px] shrink-0">
@@ -825,7 +825,7 @@ export default function AddNewPage() {
 
             {/* PAGE SETTINGS */}
 
-            <section className="overflow-hidden rounded-[7px] border border-[#e7e7e3] bg-white px-[14px] py-[10px]">
+            <section className="shrink-0 rounded-[7px] border border-[#e7e7e3] bg-white px-[14px] py-[10px]">
               <SectionHeader
                 number={3}
                 title="Page Settings"
@@ -979,11 +979,11 @@ export default function AddNewPage() {
               RIGHT COLUMN
           ================================================= */}
 
-          <div className="grid min-h-0 grid-rows-[minmax(0,1fr)_272px] gap-[8px]">
+          <div className="flex flex-col gap-[8px]">
 
             {/* SEO SETTINGS */}
 
-            <section className="flex min-h-0 flex-col overflow-hidden rounded-[7px] border border-[#e7e7e3] bg-white px-[14px] py-[10px]">
+            <section className="flex shrink-0 flex-col rounded-[7px] border border-[#e7e7e3] bg-white px-[14px] py-[10px]">
               <SectionHeader
                 number={4}
                 title="SEO Settings"
@@ -1001,7 +1001,7 @@ export default function AddNewPage() {
                 }
               />
 
-              <div className="mt-[9px] grid min-h-0 flex-1 grid-rows-[auto_auto_auto_auto_auto] content-between gap-[6px]">
+              <div className="mt-[9px] flex flex-col gap-[6px]">
                 <div>
                   <FieldLabel>
                     SEO Title

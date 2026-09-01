@@ -704,10 +704,7 @@ export default function CmsEditPage() {
   return (
     <div
       className="
-        h-full
-        min-h-0
         w-full
-        overflow-hidden
         bg-[#fffefb]
         text-[#172238]
       "
@@ -719,8 +716,6 @@ export default function CmsEditPage() {
       <div
         className="
           flex
-          h-full
-          min-h-0
           flex-col
           px-[16px]
           pb-[86px]
@@ -821,8 +816,6 @@ export default function CmsEditPage() {
           >
             <button
               type="button"
-              onClick={savePage}
-              disabled={saving}
               onClick={() =>
                 router.push(
                   "/pages",
@@ -877,6 +870,8 @@ export default function CmsEditPage() {
 
             <button
               type="button"
+              onClick={savePage}
+              disabled={saving}
               className="
                 flex
                 h-[37px]
@@ -922,8 +917,7 @@ export default function CmsEditPage() {
         <div
           className="
             grid
-            min-h-0
-            flex-1
+            items-start
             grid-cols-[minmax(0,2.35fr)_minmax(330px,1fr)]
             gap-[10px]
           "
@@ -934,9 +928,8 @@ export default function CmsEditPage() {
 
           <div
             className="
-              grid
-              min-h-0
-              grid-rows-[180px_minmax(286px,1fr)_178px]
+              flex
+              flex-col
               gap-[8px]
             "
           >
@@ -946,7 +939,7 @@ export default function CmsEditPage() {
 
             <section
               className="
-                overflow-hidden
+                shrink-0
                 rounded-[8px]
                 border
                 border-[#e7e7e3]
@@ -1164,9 +1157,8 @@ export default function CmsEditPage() {
             <section
               className="
                 flex
-                min-h-0
+                shrink-0
                 flex-col
-                overflow-hidden
                 rounded-[8px]
                 border
                 border-[#e7e7e3]
@@ -1215,8 +1207,6 @@ export default function CmsEditPage() {
                 className="
                   mt-[6px]
                   flex
-                  min-h-0
-                  flex-1
                   flex-col
                 "
               >
@@ -1228,9 +1218,7 @@ export default function CmsEditPage() {
                   className="
                     flex
                     min-h-[176px]
-                    flex-1
                     flex-col
-                    overflow-hidden
                     rounded-[6px]
                     border
                     border-[#dedfdb]
@@ -1390,10 +1378,7 @@ export default function CmsEditPage() {
                   <div
                     className="
                       flex
-                      min-h-0
-                      flex-1
                       flex-col
-                      overflow-hidden
                       px-[17px]
                       pb-[8px]
                       pt-[9px]
@@ -1579,7 +1564,7 @@ export default function CmsEditPage() {
 
             <section
               className="
-                overflow-hidden
+                shrink-0
                 rounded-[8px]
                 border
                 border-[#e7e7e3]
@@ -1788,9 +1773,8 @@ export default function CmsEditPage() {
 
           <div
             className="
-              grid
-              min-h-0
-              grid-rows-[248px_252px_minmax(138px,1fr)]
+              flex
+              flex-col
               gap-[8px]
             "
           >
@@ -1800,7 +1784,7 @@ export default function CmsEditPage() {
 
             <section
               className="
-                overflow-hidden
+                shrink-0
                 rounded-[8px]
                 border
                 border-[#e7e7e3]
@@ -1944,7 +1928,7 @@ export default function CmsEditPage() {
 
             <section
               className="
-                overflow-hidden
+                shrink-0
                 rounded-[8px]
                 border
                 border-[#e7e7e3]
@@ -2014,7 +1998,7 @@ export default function CmsEditPage() {
 
             <section
               className="
-                overflow-hidden
+                shrink-0
                 rounded-[8px]
                 border
                 border-[#e7e7e3]

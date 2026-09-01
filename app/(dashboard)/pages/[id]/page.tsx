@@ -1151,11 +1151,11 @@ export default function CmsPageDetailPage() {
               RIGHT COLUMN
           ================================================= */}
 
-          <div className="grid min-h-0 grid-rows-[235px_230px_minmax(154px,1fr)_76px] gap-[8px]">
+          <div className="flex h-full min-h-0 flex-col gap-[8px] overflow-y-auto pr-[2px]">
 
             {/* PAGE OVERVIEW */}
 
-            <section className="overflow-hidden rounded-[7px] border border-[#e6e7e2] bg-white px-[14px] py-[11px]">
+            <section className="shrink-0 rounded-[7px] border border-[#e6e7e2] bg-white px-[14px] py-[11px]">
               <h2 className="text-[14px] font-bold text-[#263148]">
                 Page Overview
               </h2>
@@ -1222,7 +1222,7 @@ export default function CmsPageDetailPage() {
 
             {/* SEO */}
 
-            <section className="overflow-hidden rounded-[7px] border border-[#e6e7e2] bg-white px-[14px] py-[10px]">
+            <section className="shrink-0 rounded-[7px] border border-[#e6e7e2] bg-white px-[14px] py-[10px]">
               <h2 className="text-[14px] font-bold text-[#263148]">
                 SEO Score
               </h2>
@@ -1257,7 +1257,7 @@ export default function CmsPageDetailPage() {
 
             {/* PERFORMANCE */}
 
-            <section className="overflow-hidden rounded-[7px] border border-[#e6e7e2] bg-white px-[14px] py-[10px]">
+            <section className="shrink-0 rounded-[7px] border border-[#e6e7e2] bg-white px-[14px] py-[10px]">
               <h2 className="text-[12px] font-bold text-[#263148]">
                 Page Performance
 
@@ -1331,7 +1331,7 @@ export default function CmsPageDetailPage() {
 
             {/* QUICK ACTIONS */}
 
-            <section className="overflow-hidden rounded-[7px] border border-[#e6e7e2] bg-white px-[14px] py-[8px]">
+            <section className="shrink-0 rounded-[7px] border border-[#e6e7e2] bg-white px-[14px] py-[8px]">
               <h2 className="text-[12px] font-bold text-[#263148]">
                 Quick Actions
               </h2>
