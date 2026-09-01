@@ -115,11 +115,11 @@ function InfoRow({
 }) {
   return (
     <div className="grid min-h-[27px] grid-cols-[124px_1fr] items-center gap-[8px]">
-      <dt className="text-[11.5px] font-semibold text-[#5d6677]">
+      <dt className="text-[10.5px] font-medium text-[#5d6677]">
         {label}
       </dt>
 
-      <dd className="min-w-0 text-[11.5px] font-medium text-[#3e495b]">
+      <dd className="min-w-0 text-[10.5px] font-normal text-[#3e495b]">
         {children}
       </dd>
     </div>
@@ -145,12 +145,12 @@ function SeoRow({
           />
         </span>
 
-        <span className="truncate text-[10px] font-medium text-[#435066]">
+        <span className="truncate text-[9.5px] font-normal text-[#435066]">
           {label}
         </span>
       </div>
 
-      <span className="text-[9.5px] font-semibold text-[#28854e]">
+      <span className="text-[9px] font-medium text-[#28854e]">
         Good
       </span>
     </div>
@@ -1156,7 +1156,7 @@ export default function CmsPageDetailPage() {
             {/* PAGE OVERVIEW */}
 
             <section className="shrink-0 rounded-[7px] border border-[#e6e7e2] bg-white px-[14px] py-[11px]">
-              <h2 className="text-[14px] font-bold text-[#263148]">
+              <h2 className="text-[12.5px] font-semibold text-[#263148]">
                 Page Overview
               </h2>
 
@@ -1223,7 +1223,7 @@ export default function CmsPageDetailPage() {
             {/* SEO */}
 
             <section className="shrink-0 rounded-[7px] border border-[#e6e7e2] bg-white px-[14px] py-[10px]">
-              <h2 className="text-[14px] font-bold text-[#263148]">
+              <h2 className="text-[12.5px] font-semibold text-[#263148]">
                 SEO Score
               </h2>
 
@@ -1258,10 +1258,10 @@ export default function CmsPageDetailPage() {
             {/* PERFORMANCE */}
 
             <section className="shrink-0 rounded-[7px] border border-[#e6e7e2] bg-white px-[14px] py-[10px]">
-              <h2 className="text-[12px] font-bold text-[#263148]">
+              <h2 className="text-[12px] font-semibold text-[#263148]">
                 Page Performance
 
-                <span className="ml-[4px] text-[10px] font-medium text-[#6c7688]">
+                <span className="ml-[4px] text-[9.5px] font-medium text-[#6c7688]">
                   (Last 30 Days)
                 </span>
               </h2>
@@ -1332,7 +1332,7 @@ export default function CmsPageDetailPage() {
             {/* QUICK ACTIONS */}
 
             <section className="shrink-0 rounded-[7px] border border-[#e6e7e2] bg-white px-[14px] py-[8px]">
-              <h2 className="text-[12px] font-bold text-[#263148]">
+              <h2 className="text-[12px] font-semibold text-[#263148]">
                 Quick Actions
               </h2>
 

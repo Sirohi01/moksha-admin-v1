@@ -550,32 +550,32 @@ export default function PagesCmsPage() {
 
               {/* TABLE HEADER */}
 
-              <div className="grid h-[34px] shrink-0 grid-cols-[2.35fr_1.7fr_1.3fr_1.02fr_1.15fr_1.55fr_76px] items-center border-b border-[#e8e5df] bg-[#fbf9f5] px-[10px]">
-                <div className="px-[4px] text-[8px] font-bold text-[#445067]">
+              <div className="grid h-[34px] shrink-0 grid-cols-[minmax(0,2.7fr)_minmax(0,1.8fr)_minmax(0,1.25fr)_minmax(0,1fr)_minmax(0,1.15fr)_minmax(0,1.45fr)_88px] items-center border-b border-[#e8e5df] bg-[#fbf9f5] px-[10px]">
+                <div className="min-w-0 overflow-hidden px-[4px] text-[8px] font-bold text-[#445067]">
                   PAGE TITLE
                 </div>
 
-                <div className="px-[4px] text-[8px] font-bold text-[#445067]">
+                <div className="min-w-0 overflow-hidden px-[4px] text-[8px] font-bold text-[#445067]">
                   URL
                 </div>
 
-                <div className="px-[4px] text-[8px] font-bold text-[#445067]">
+                <div className="min-w-0 overflow-hidden px-[4px] text-[8px] font-bold text-[#445067]">
                   AUTHOR
                 </div>
 
-                <div className="px-[4px] text-[8px] font-bold text-[#445067]">
+                <div className="min-w-0 overflow-hidden px-[4px] text-[8px] font-bold text-[#445067]">
                   STATUS
                 </div>
 
-                <div className="px-[4px] text-[8px] font-bold text-[#445067]">
+                <div className="min-w-0 overflow-hidden px-[4px] text-[8px] font-bold text-[#445067]">
                   SEO SCORE
                 </div>
 
-                <div className="px-[4px] text-[8px] font-bold text-[#445067]">
+                <div className="min-w-0 overflow-hidden px-[4px] text-[8px] font-bold text-[#445067]">
                   LAST UPDATED
                 </div>
 
-                <div className="text-center text-[8px] font-bold text-[#445067]">
+                <div className="overflow-hidden text-center text-[8px] font-bold text-[#445067]">
                   ACTIONS
                 </div>
               </div>
@@ -603,7 +603,7 @@ export default function PagesCmsPage() {
                           setActionMenu(null);
                         }
                       }}
-                      className={`grid min-h-[44px] w-full grid-cols-[2.35fr_1.7fr_1.3fr_1.02fr_1.15fr_1.55fr_76px] items-center border-b border-[#f0f0ec] px-[10px] text-left transition last:border-b-0 ${selected
+                      className={`grid min-h-[44px] w-full grid-cols-[minmax(0,2.7fr)_minmax(0,1.8fr)_minmax(0,1.25fr)_minmax(0,1fr)_minmax(0,1.15fr)_minmax(0,1.45fr)_88px] items-center border-b border-[#f0f0ec] px-[10px] text-left transition last:border-b-0 ${selected
                         ? "bg-[#fffefa]"
                         : "bg-white hover:bg-[#fffefa]"
                         }`}
@@ -614,8 +614,8 @@ export default function PagesCmsPage() {
                       <div className="flex min-w-0 items-center gap-[7px] px-[4px]">
                         <PageTypeIcon type={page.type} />
 
-                        <div className="flex min-w-0 items-center gap-[5px]">
-                          <span className="whitespace-nowrap text-[9.5px] font-bold text-[#303a4f]">
+                        <div className="flex min-w-0 max-w-full items-center gap-[5px] overflow-hidden">
+                          <span className="truncate text-[9.5px] font-bold text-[#303a4f]">
                             {page.title}
                           </span>
 
@@ -629,8 +629,8 @@ export default function PagesCmsPage() {
 
                       {/* URL */}
 
-                      <div className="flex min-w-0 items-center gap-[5px] px-[4px]">
-                        <span className="whitespace-nowrap text-[8px] font-medium text-[#626e81]">
+                      <div className="flex min-w-0 items-center gap-[5px] overflow-hidden px-[4px]">
+                        <span className="truncate text-[8px] font-medium text-[#626e81]">
                           {page.slug}
                         </span>
 
@@ -642,19 +642,19 @@ export default function PagesCmsPage() {
 
                       {/* AUTHOR */}
 
-                      <div className="flex min-w-0 items-center gap-[6px] px-[4px]">
+                      <div className="flex min-w-0 items-center gap-[6px] overflow-hidden px-[4px]">
                         <AuthorIcon />
 
-                        <span className="whitespace-nowrap text-[8px] font-medium text-[#465168]">
+                        <span className="truncate text-[8px] font-medium text-[#465168]">
                           {page.author}
                         </span>
                       </div>
 
                       {/* STATUS */}
 
-                      <div className="px-[4px]">
+                      <div className="min-w-0 px-[4px]">
                         <span
-                          className={`inline-flex items-center gap-[4px] whitespace-nowrap rounded-[4px] px-[6px] py-[3px] text-[7.5px] font-semibold ${page.status === "Published"
+                          className={`inline-flex max-w-full items-center gap-[4px] whitespace-nowrap rounded-[4px] px-[6px] py-[3px] text-[7.5px] font-semibold ${page.status === "Published"
                             ? "bg-[#edf6ee] text-[#327d50]"
                             : "bg-[#fff3de] text-[#bf8120]"
                             }`}
@@ -672,16 +672,16 @@ export default function PagesCmsPage() {
 
                       {/* SCORE */}
 
-                      <div className="flex items-center gap-[6px] px-[4px]">
+                      <div className="flex min-w-0 items-center gap-[6px] px-[4px]">
                         <SeoRing score={page.seoScore} />
 
-                        <div>
+                        <div className="min-w-0">
                           <p className="text-[12px] font-bold leading-none text-[#2c374c]">
                             {page.seoScore}
                           </p>
 
                           <p
-                            className={`mt-[3px] whitespace-nowrap text-[7px] font-semibold leading-none ${page.rating === "Needs Work"
+                            className={`mt-[3px] truncate whitespace-nowrap text-[7px] font-semibold leading-none ${page.rating === "Needs Work"
                               ? "text-[#d98b1f]"
                               : "text-[#38805a]"
                               }`}
@@ -693,12 +693,12 @@ export default function PagesCmsPage() {
 
                       {/* UPDATED */}
 
-                      <div className="min-w-0 px-[4px]">
-                        <p className="whitespace-nowrap text-[7.7px] font-medium leading-[1.3] text-[#465168]">
+                      <div className="min-w-0 overflow-hidden px-[4px]">
+                        <p className="truncate text-[7.7px] font-medium leading-[1.3] text-[#465168]">
                           {page.updated}
                         </p>
 
-                        <p className="mt-[2px] whitespace-nowrap text-[7px] font-normal leading-[1.3] text-[#6d7789]">
+                        <p className="mt-[2px] truncate text-[7px] font-normal leading-[1.3] text-[#6d7789]">
                           by {page.updatedBy}
                         </p>
                       </div>
@@ -706,7 +706,7 @@ export default function PagesCmsPage() {
                       {/* ACTIONS */}
 
                       <div
-                        className="relative flex items-center justify-center gap-[5px]"
+                        className="relative flex min-w-0 items-center justify-center gap-[5px] overflow-hidden"
                         onClick={(event) =>
                           event.stopPropagation()
                         }
