@@ -486,7 +486,7 @@ export default function DashboardPage() {
             HEADER
         =================================================== */}
 
-        <header className="relative z-[80] h-[66px] shrink-0 border-b border-[#e8e8e3] bg-white px-2.5">
+        <header className="hidden">
           <div className="flex h-full items-center justify-between gap-3">
 
             {/* LEFT */}
@@ -1846,7 +1846,7 @@ export default function DashboardPage() {
             FOOTER
         =================================================== */}
 
-        <footer className="relative h-[64px] shrink-0 overflow-hidden border-t border-[#e7e4dc] bg-[#faf9f6]">
+        <footer className="hidden">
 
           {/* SOFT LANDSCAPE TINT */}
 

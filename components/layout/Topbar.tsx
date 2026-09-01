@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { Menu, LogOut, ChevronDown, KeyRound, Bell, AlertTriangle, HeartHandshake, Mail, FolderKanban, HandHeart, CheckCheck } from "lucide-react";
+import { Menu, LogOut, ChevronDown, KeyRound, Bell, AlertTriangle, HeartHandshake, Mail, FolderKanban, HandHeart, CheckCheck, Globe2, CalendarDays, Check, ArrowUpRight } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { logout } from "@/store/slices/authSlice";
 import { authApi } from "@/lib/authApi";
@@ -57,6 +57,9 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
   const [newPassword, setNewPassword] = useState("");
   const [passwordSaving, setPasswordSaving] = useState(false);
   const [passwordError, setPasswordError] = useState("");
+  const [websiteOpen, setWebsiteOpen] = useState(false);
+  const [dateOpen, setDateOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState("31 May 2026");
 
   const isInternal = admin?.userType === "INTERNAL";
 
@@ -141,10 +144,36 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
         >
           <Menu className="h-[18px] w-[18px]" />
         </button>
-        <h1 className="text-base font-semibold text-slate-900 tracking-tight">{currentPageTitle(pathname)}</h1>
+        {pathname === "/" ? (
+          <div className="min-w-0">
+            <h1 className="truncate text-[18px] font-normal leading-tight tracking-tight text-slate-900">Welcome back, <strong className="font-bold">{firstName || "Admin"}!</strong> <span aria-hidden>👋</span></h1>
+            <p className="hidden truncate text-[13px] font-normal leading-tight text-slate-500 sm:block">Here&apos;s an overview of your website <strong className="font-bold text-slate-700">mokshasewa.org</strong></p>
+          </div>
+        ) : (
+          <h1 className="text-base font-semibold text-slate-900 tracking-tight">{currentPageTitle(pathname)}</h1>
+        )}
       </div>
 
       <div className="flex items-center gap-1.5">
+        <div className="relative hidden md:block">
+          <button type="button" onClick={() => { setWebsiteOpen((v) => !v); setDateOpen(false); }} className="flex h-9 items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 text-[11px] font-semibold text-slate-800 hover:bg-slate-50">
+            <Globe2 className="h-4 w-4" /> mokshasewa.org <ChevronDown className={`h-3.5 w-3.5 transition ${websiteOpen ? "rotate-180" : ""}`} />
+          </button>
+          {websiteOpen && <><button className="fixed inset-0 z-10 cursor-default" aria-label="Close website menu" onClick={() => setWebsiteOpen(false)} /><div className="absolute right-0 top-full z-20 mt-2 w-52 border border-slate-200 bg-white p-1.5 shadow-xl">
+            <div className="flex items-center justify-between bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-900"><span className="flex items-center gap-2"><Globe2 className="h-4 w-4" />mokshasewa.org</span><Check className="h-4 w-4 text-teal-700" /></div>
+            <a href="https://mokshasewa.org" target="_blank" rel="noreferrer" className="mt-1 flex items-center gap-2 px-3 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50"><ArrowUpRight className="h-4 w-4" />Open live website</a>
+          </div></>}
+        </div>
+
+        <div className="relative hidden md:block">
+          <button type="button" onClick={() => { setDateOpen((v) => !v); setWebsiteOpen(false); }} className="flex h-9 items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 text-[11px] font-semibold text-slate-800 hover:bg-slate-50">
+            <CalendarDays className="h-4 w-4" /> {selectedDate} <ChevronDown className={`h-3.5 w-3.5 transition ${dateOpen ? "rotate-180" : ""}`} />
+          </button>
+          {dateOpen && <><button className="fixed inset-0 z-10 cursor-default" aria-label="Close date menu" onClick={() => setDateOpen(false)} /><div className="absolute right-0 top-full z-20 mt-2 w-44 border border-slate-200 bg-white p-1.5 shadow-xl">
+            {["31 May 2026", "30 May 2026", "29 May 2026", "28 May 2026", "27 May 2026"].map((date) => <button key={date} type="button" onClick={() => { setSelectedDate(date); setDateOpen(false); }} className={`flex w-full items-center justify-between px-3 py-2 text-left text-xs font-medium ${selectedDate === date ? "bg-slate-50 text-slate-900" : "text-slate-600 hover:bg-slate-50"}`}>{date}{selectedDate === date && <Check className="h-4 w-4 text-teal-700" />}</button>)}
+          </div></>}
+        </div>
+
         <div className="relative">
           <button
             onClick={handleBellClick}
