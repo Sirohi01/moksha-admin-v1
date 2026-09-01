@@ -23,13 +23,22 @@ export default function BlogsPage() {
     tags: "",
   });
   const [error, setError] = useState("");
+  const [loadError, setLoadError] = useState("");
 
   const loadData = async () => {
+    setLoading(true);
+    setLoadError("");
     try {
       const data = await blogsApi.getAll();
       setBlogs(data);
-    } catch (err) {
-      console.error(err);
+    } catch (err: unknown) {
+      setLoadError(
+        err instanceof TypeError
+          ? "Unable to connect to the API. Please check that the backend is running."
+          : err instanceof Error
+            ? err.message
+            : "Unable to load blog posts.",
+      );
     } finally {
       setLoading(false);
     }
@@ -64,9 +73,8 @@ export default function BlogsPage() {
       try {
         await blogsApi.delete(id);
         loadData();
-      } catch (err) {
-        console.error(err);
-        alert("Failed to delete.");
+      } catch (err: unknown) {
+        alert(err instanceof Error ? err.message : "Failed to delete.");
       }
     }
   };
@@ -142,6 +150,15 @@ export default function BlogsPage() {
           <Plus className="h-3.5 w-3.5 mr-1" /> Add Post
         </Button>
       </div>
+
+      {loadError && (
+        <div className="flex items-center justify-between gap-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          <span>{loadError}</span>
+          <Button variant="secondary" size="sm" onClick={loadData}>
+            Retry
+          </Button>
+        </div>
+      )}
 
       <div className="bg-surface rounded-xl border border-surface-border shadow-sm overflow-hidden">
         <Table<BlogPost> columns={columns} rows={blogs} rowKey={(r) => r._id} loading={loading} />
