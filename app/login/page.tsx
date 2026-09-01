@@ -10,6 +10,7 @@ import { authApi } from "@/lib/authApi";
 import { ApiRequestError } from "@/lib/api";
 import { Input } from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 type Step = "credentials" | "totp" | "2fa-setup" | "backup-codes" | "forgot-password" | "forgot-password-sent";
 
@@ -17,6 +18,8 @@ export default function LoginPage() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { admin, hydrated } = useAppSelector((state) => state.auth);
+  const { language, setLanguage, translations } = useLanguage();
+  const text = translations.login;
 
   const [step, setStep] = useState<Step>("credentials");
   const [email, setEmail] = useState("");
@@ -35,6 +38,7 @@ export default function LoginPage() {
   const [copied, setCopied] = useState(false);
 
   const [forgotEmail, setForgotEmail] = useState("");
+  const [languageOpen, setLanguageOpen] = useState(false);
 
   useEffect(() => {
     if (!provisioningUri) {
@@ -140,7 +144,12 @@ export default function LoginPage() {
   return (
     <main className="login-page">
       <div className="login-bg" aria-hidden />
-      <button type="button" className="language-switch"><Globe2 /> English <ChevronDown /></button>
+      <div className="absolute right-[2.5%] top-4 z-[6]">
+        <button type="button" className="language-switch !static" onClick={() => setLanguageOpen((open) => !open)} aria-expanded={languageOpen} aria-haspopup="listbox"><Globe2 /> {language === "en" ? translations.language.english : translations.language.hindi} <ChevronDown className={languageOpen ? "rotate-180" : ""} /></button>
+        {languageOpen && <div role="listbox" className="absolute right-0 top-12 w-36 overflow-hidden rounded-lg border border-slate-200 bg-white py-1 shadow-xl">
+          {(["en", "hi"] as const).map((code) => <button key={code} type="button" role="option" aria-selected={language === code} onClick={() => { setLanguage(code); setLanguageOpen(false); }} className="flex w-full items-center justify-between px-3 py-2 text-sm text-slate-700 hover:bg-teal-50">{code === "en" ? translations.language.english : translations.language.hindi}{language === code && <Check className="h-4 w-4 text-teal-700" />}</button>)}
+        </div>}
+      </div>
 
       <section className="login-brand md:translate-y-10 xl:translate-y-14" aria-label="Moksha Sewa values">
         <div className="brand-emblem !h-[170px] !w-[170px] xl:!h-[195px] xl:!w-[195px]">
@@ -148,39 +157,39 @@ export default function LoginPage() {
           <img src="/moksha-sewa-logo.png" alt="Moksha Sewa" />
         </div>
         <div className="gold-ornament"><i /><b>◆</b><i /></div>
-        <p className="brand-initiative !text-[18px] xl:!text-[20px]">An Initiative of Namo Gange Trust</p>
+        <p className="brand-initiative !text-[18px] xl:!text-[20px]">{text.initiative}</p>
         <div className="gold-ornament"><i /><b>◆</b><i /></div>
-        <h1>Moksha Sewa<br /><span>CRM &amp; Operations Portal</span></h1>
+        <h1>Moksha Sewa<br /><span>{text.portalTitle}</span></h1>
         <div className="gold-ornament"><i /><b>◆</b><i /></div>
-        <p className="brand-message">Serving with Compassion.<br />Honoring every life.<br />Upholding dignity in every final journey.</p>
+        <p className="brand-message">{text.compassionLine}<br />{text.honorLine}<br />{text.dignityLine}</p>
         <div className="value-grid !rounded-none !border-0">
-          {[[HeartHandshake,"Compassion","We serve with care and respect"],[ShieldCheck,"Dignity","Every life deserves dignity"],[UsersRound,"Service","End-to-end support for every need"],[Flower2,"Trust","Transparent actions, lasting impact"]].map(([Icon,title,copy]) => {
+          {[[HeartHandshake,text.values.compassion,text.values.compassionCopy],[ShieldCheck,text.values.dignity,text.values.dignityCopy],[UsersRound,text.values.service,text.values.serviceCopy],[Flower2,text.values.trust,text.values.trustCopy]].map(([Icon,title,copy]) => {
             const ValueIcon = Icon as typeof ShieldCheck;
             return <article key={String(title)}><ValueIcon /><strong>{String(title)}</strong><small>{String(copy)}</small></article>;
           })}
         </div>
-        <div className="trust-card !ml-[7%] !w-fit !self-start !rounded-none !border-0"><span><Lock /></span><p><strong>Secure. Confidential. Accountable.</strong><br />Your trust is our responsibility.</p></div>
+        <div className="trust-card !ml-[7%] !w-fit !self-start !rounded-none !border-0"><span><Lock /></span><p><strong>{text.secureTitle}</strong><br />{text.secureCopy}</p></div>
       </section>
 
       <section className="login-auth">
         <div className="auth-card !rounded-none !border-0">
-          <div className="auth-heading"><span><ShieldCheck /></span><h2>Welcome Back!</h2><p>Please login to continue to<br /><strong>Moksha Sewa CRM &amp; Operations Portal</strong></p><div className="gold-ornament"><i /><b>◆</b><i /></div></div>
+          <div className="auth-heading"><span><ShieldCheck /></span><h2>{text.welcome}</h2><p>{text.continue}<br /><strong>{text.portalName}</strong></p><div className="gold-ornament"><i /><b>◆</b><i /></div></div>
 
           {step === "credentials" && (
             <form onSubmit={handleSubmit} className="credentials-form relative space-y-4">
               <div className="space-y-5">
                 <Input
-                  label="Email / Mobile / User ID"
+                  label={text.identifier}
                   type="text"
                   required
                   autoFocus
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter email, mobile number or user id"
+                  placeholder={text.identifierPlaceholder}
                 />
                 <div className="relative">
                   <div className="mb-1 flex items-center justify-between">
-                    <label className="text-[11px] font-semibold uppercase tracking-wide text-text-secondary">Password</label>
+                    <label className="text-[11px] font-semibold uppercase tracking-wide text-text-secondary">{text.password}</label>
                     <button
                       type="button"
                       onClick={() => {
@@ -190,7 +199,7 @@ export default function LoginPage() {
                       }}
                       className="text-[11px] font-semibold text-blue-600 hover:text-blue-700"
                     >
-                      Forgot Password?
+                      {text.forgot}
                     </button>
                   </div>
                   <Input
@@ -212,7 +221,7 @@ export default function LoginPage() {
                 </div>
               </div>
 
-              <label className="remember-option"><input type="checkbox" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} /> Remember Me</label>
+              <label className="remember-option"><input type="checkbox" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} /> {text.remember}</label>
 
               {error && (
                 <div className="flex items-start gap-3 rounded-xl border border-red-100 bg-red-50/80 p-3.5 text-sm text-red-700">
@@ -222,11 +231,11 @@ export default function LoginPage() {
               )}
 
               <Button type="submit" loading={isSubmitting} className="h-12 w-full text-[15px] shadow-sm">
-                Login Securely
+                {isSubmitting ? text.signingIn : text.loginSecurely}
               </Button>
-              <div className="login-divider"><i />OR<i /></div>
-              <button type="button" onClick={() => setStep("totp")} className="otp-login"><ShieldCheck /> Login with OTP (2FA)</button>
-              <div className="access-notice !rounded-none [&>svg]:!h-[17px] [&>svg]:!w-[17px] [&>p]:!text-[11px] [&>p]:!leading-[1.45]"><Lock /><p><strong>Authorized Access Only.</strong> This system is for authorized users only. All activities are monitored and logged for operational accountability.</p></div>
+              <div className="login-divider"><i />{text.or}<i /></div>
+              <button type="button" onClick={() => setStep("totp")} className="otp-login"><ShieldCheck /> {text.otpLogin}</button>
+              <div className="access-notice !rounded-none [&>svg]:!h-[17px] [&>svg]:!w-[17px] [&>p]:!text-[11px] [&>p]:!leading-[1.45]"><Lock /><p><strong>{text.authorizedTitle}</strong> {text.authorizedCopy}</p></div>
             </form>
           )}
 
@@ -236,14 +245,14 @@ export default function LoginPage() {
                 <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 shadow-sm ring-1 ring-blue-100">
                   <Mail className="h-7 w-7" />
                 </div>
-                <h3 className="mt-5 text-xl font-semibold text-slate-900">Reset your password</h3>
+                    <h3 className="mt-5 text-xl font-semibold text-slate-900">{text.resetTitle}</h3>
                 <p className="mt-2 text-sm text-slate-500">
-                  Enter your admin account email and we&apos;ll send you a link to choose a new password.
+                      {text.resetCopy}
                 </p>
               </div>
 
               <Input
-                label="Email Address"
+                label={text.email}
                 type="email"
                 required
                 autoFocus
@@ -260,7 +269,7 @@ export default function LoginPage() {
               )}
 
               <Button type="submit" loading={isSubmitting} className="h-12 w-full text-[15px] shadow-sm">
-                Send Reset Link
+                {text.sendReset}
               </Button>
 
               <button
@@ -271,7 +280,7 @@ export default function LoginPage() {
                 }}
                 className="flex w-full items-center justify-center gap-2 text-sm font-medium text-slate-500 transition-colors hover:text-slate-800"
               >
-                ← Back to Sign In
+                ← {text.back}
               </button>
             </form>
           )}
@@ -282,10 +291,9 @@ export default function LoginPage() {
                 <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 shadow-sm ring-1 ring-emerald-100">
                   <MailCheck className="h-7 w-7" />
                 </div>
-                <h3 className="mt-5 text-xl font-semibold text-slate-900">Check your inbox</h3>
+                <h3 className="mt-5 text-xl font-semibold text-slate-900">{text.inboxTitle}</h3>
                 <p className="mt-2 text-sm text-slate-500">
-                  If an account exists for <span className="font-semibold text-slate-700">{forgotEmail}</span>, a
-                  password reset link is on its way. The link expires in 30 minutes.
+                  <span className="font-semibold text-slate-700">{forgotEmail}</span> — {text.inboxCopy}
                 </p>
               </div>
 
@@ -297,7 +305,7 @@ export default function LoginPage() {
                 }}
                 className="flex w-full items-center justify-center gap-2 text-sm font-medium text-slate-500 transition-colors hover:text-slate-800"
               >
-                ← Back to Sign In
+                ← {text.back}
               </button>
             </div>
           )}
@@ -308,13 +316,13 @@ export default function LoginPage() {
                 <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 shadow-sm ring-1 ring-blue-100">
                   <ShieldCheck className="h-7 w-7" />
                 </div>
-                <h3 className="mt-5 text-xl font-semibold text-slate-900">Two-Step Verification</h3>
-                <p className="mt-2 text-sm text-slate-500">Enter the 6-digit code from your authenticator app.</p>
+                <h3 className="mt-5 text-xl font-semibold text-slate-900">{text.twoStepTitle}</h3>
+                <p className="mt-2 text-sm text-slate-500">{text.twoStepCopy}</p>
               </div>
 
               <div>
                 <Input
-                  label="Authentication Code"
+                  label={text.authCode}
                   required
                   autoFocus
                   inputMode="numeric"
@@ -334,7 +342,7 @@ export default function LoginPage() {
               )}
 
               <Button type="submit" loading={isSubmitting} className="h-12 w-full text-[15px] shadow-sm">
-                Verify Code
+                {text.verify}
               </Button>
 
               <button
@@ -346,7 +354,7 @@ export default function LoginPage() {
                 }}
                 className="flex w-full items-center justify-center gap-2 text-sm font-medium text-slate-500 transition-colors hover:text-slate-800"
               >
-                ← Back to Sign In
+                ← {text.back}
               </button>
             </form>
           )}
@@ -357,9 +365,9 @@ export default function LoginPage() {
                 <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 shadow-sm ring-1 ring-blue-100">
                   <KeyRound className="h-7 w-7" />
                 </div>
-                <h3 className="mt-5 text-xl font-semibold text-slate-900">Secure Your Account</h3>
+                <h3 className="mt-5 text-xl font-semibold text-slate-900">{text.setupTitle}</h3>
                 <p className="mt-2 text-sm text-slate-500">
-                  Scan the QR code below with an authenticator app (e.g. Google Authenticator).
+                  {text.setupCopy}
                 </p>
               </div>
 
@@ -374,7 +382,7 @@ export default function LoginPage() {
 
               <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50/50">
                 <div className="border-b border-slate-200 bg-slate-100/50 p-2.5 text-center">
-                  <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">Can&apos;t scan? Manual Key</p>
+                    <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">{text.manualKey}</p>
                 </div>
                 <div className="flex items-center justify-between p-3 pl-4">
                   <code className="text-sm font-semibold tracking-wide text-slate-800">{secret}</code>
@@ -386,7 +394,7 @@ export default function LoginPage() {
 
               <div>
                 <Input
-                  label="Confirm with 6-digit code"
+                  label={text.confirmCode}
                   required
                   autoFocus
                   inputMode="numeric"
@@ -406,7 +414,7 @@ export default function LoginPage() {
               )}
 
               <Button type="submit" loading={isSubmitting} className="h-12 w-full text-[15px] shadow-sm">
-                Enable 2FA
+                {text.enable2fa}
               </Button>
             </form>
           )}
@@ -417,9 +425,9 @@ export default function LoginPage() {
                 <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 shadow-sm ring-1 ring-emerald-100">
                   <CheckCircle2 className="h-7 w-7" />
                 </div>
-                <h3 className="mt-5 text-xl font-semibold text-slate-900">2FA Enabled</h3>
+                <h3 className="mt-5 text-xl font-semibold text-slate-900">{text.enabledTitle}</h3>
                 <p className="mt-2 text-sm text-slate-500">
-                  Save these emergency backup codes. They will not be shown again.
+                  {text.backupCopy}
                 </p>
               </div>
 
@@ -432,16 +440,16 @@ export default function LoginPage() {
               </div>
 
               <Button onClick={() => router.push("/")} className="h-12 w-full text-[15px] shadow-sm">
-                I&apos;ve Saved These
+                {text.savedCodes}
               </Button>
             </div>
           )}
-          <div className="auth-help !text-[13px] [&>svg]:!h-4 [&>svg]:!w-4"><Headphones /> Need help? Contact <a href="mailto:support@mokshasewa.com">IT Support</a></div>
+          <div className="auth-help !text-[13px] [&>svg]:!h-4 [&>svg]:!w-4"><Headphones /> {text.needHelp} {text.contact} <a href="mailto:support@mokshasewa.com">{text.itSupport}</a></div>
         </div>
       </section>
 
       <footer className="security-strip">
-        {[[ShieldCheck,"Role Based Access","Access only what you need"],[Lock,"Data Security","Industry standard encryption"],[Clock3,"Audit & Logs","Every action is recorded"],[MonitorCheck,"Reliable & Secure","99.9% uptime commitment"]].map(([Icon,title,copy]) => {
+        {[[ShieldCheck,text.footer.access,text.footer.accessCopy],[Lock,text.footer.security,text.footer.securityCopy],[Clock3,text.footer.audit,text.footer.auditCopy],[MonitorCheck,text.footer.reliable,text.footer.reliableCopy]].map(([Icon,title,copy]) => {
           const StripIcon = Icon as typeof ShieldCheck;
           return <div key={String(title)}><StripIcon /><p><strong>{String(title)}</strong><small>{String(copy)}</small></p></div>;
         })}
