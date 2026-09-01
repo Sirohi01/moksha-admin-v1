@@ -3,333 +3,1926 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
-  FolderKanban,
-  ClipboardList,
-  HandHeart,
-  HeartHandshake,
-  Mail,
-  AlertTriangle,
-  Loader2,
+  Activity,
+  AlertCircle,
   ArrowRight,
-  Flame,
-  Wallet,
-  Siren,
-  History,
-  UserPlus,
-  Truck,
-  Megaphone,
-  Receipt,
-  Trophy,
+  BadgeCheck,
+  Bell,
+  CalendarDays,
+  Check,
+  CheckCircle2,
+  ChevronDown,
+  CircleGauge,
+  FileSearch,
+  FileText,
+  Globe2,
+  ImageIcon,
+  Link2,
+  LockKeyhole,
+  Menu,
+  MousePointerClick,
+  Search,
+  ShieldCheck,
+  Target,
+  Timer,
+  TrendingDown,
+  TrendingUp,
+  UserRound,
+  Users,
+  Wrench,
+  X,
+  type LucideIcon,
 } from "lucide-react";
-import StatCard from "@/components/ui/StatCard";
-import Card from "@/components/ui/Card";
-import Badge from "@/components/ui/Badge";
-import { MagnitudeBarChart, MagnitudeDatum } from "@/components/charts/MagnitudeBarChart";
-import { DonutChart, DonutDatum } from "@/components/charts/DonutChart";
-import { CAUSE_LABELS, CAUSE_COLORS, CAUSE_COLOR_FALLBACK, KPI_COLORS, PIPELINE_COLORS } from "@/lib/chartColors";
-import { reportsApi, ReportsOverview } from "@/lib/reportsApi";
-import { enquiriesApi } from "@/lib/enquiriesApi";
-import { auditApi } from "@/lib/auditApi";
-import { casesApi, SlaBreach } from "@/lib/casesApi";
-import { volunteersApi } from "@/lib/volunteersApi";
-import { formatCurrency, formatDateTime, CASE_STATUS_META } from "@/lib/statusMeta";
-import { CaseStatus, AuditLogEntry, VolunteerSummary, Enquiry } from "@/lib/types";
-import { useAppSelector } from "@/store/hooks";
 
-interface DashboardData {
-  overview: ReportsOverview;
-  enquiries: Enquiry[];
-  breaches: SlaBreach[];
-  activity: AuditLogEntry[];
-  topVolunteers: VolunteerSummary[];
+/* =========================================================
+   TYPES
+========================================================= */
+
+type DropdownKey =
+  | "menu"
+  | "website"
+  | "date"
+  | "notifications"
+  | "profile"
+  | "search-console-range"
+  | "analytics-range"
+  | "web-vitals-range"
+  | "top-pages-range"
+  | "keyword-range"
+  | "location-range"
+  | null;
+
+type IssueTone = "rose" | "amber" | "violet";
+type IssueLevel = "High" | "Medium" | "Low";
+
+interface DashboardIssue {
+  label: string;
+  level: IssueLevel;
+  count: number;
+  icon: LucideIcon;
+  tone: IssueTone;
 }
 
-const STATUS_ORDER: CaseStatus[] = [
-  "NEW",
-  "UNDER_VERIFICATION",
-  "APPROVED",
-  "VOLUNTEER_ASSIGNED",
-  "TRANSPORT_ARRANGED",
-  "CREMATION_IN_PROGRESS",
-  "CREMATION_COMPLETED",
-  "DOCS_UPLOADED",
+/* =========================================================
+   DATA
+========================================================= */
+
+const topStats = [
+  {
+    title: "SEO HEALTH SCORE",
+    value: "92",
+    suffix: "/100",
+    note: "Excellent",
+    icon: TrendingUp,
+    tone: "emerald",
+    footer: "View full SEO report",
+    spark: [18, 14, 17, 12, 20, 24, 19, 22, 26, 23, 30, 36],
+  },
+  {
+    title: "TOTAL PAGES",
+    value: "48",
+    note: "↑ 5 this month",
+    icon: FileText,
+    tone: "violet",
+    footer: "View all pages",
+  },
+  {
+    title: "TOTAL POSTS",
+    value: "32",
+    note: "↑ 6 this month",
+    icon: FileSearch,
+    tone: "amber",
+    footer: "View all posts",
+  },
+  {
+    title: "INDEXED PAGES",
+    value: "43",
+    suffix: "/48",
+    note: "89.6% Indexed",
+    icon: Search,
+    tone: "blue",
+    footer: "View details",
+  },
+  {
+    title: "SEWA ENQUIRIES (MTD)",
+    value: "58",
+    note: "↑ 18.4% this month",
+    icon: Users,
+    tone: "rose",
+    footer: "View all submissions",
+  },
+  {
+    title: "CONVERSION RATE",
+    value: "4.8%",
+    note: "↑ 1.2% this month",
+    icon: Target,
+    tone: "emerald",
+    footer: "View analytics",
+  },
 ];
 
-const QUICK_ACTIONS = [
-  { label: "New Requests", href: "/requests", icon: ClipboardList },
-  { label: "Record Donation", href: "/donations", icon: HeartHandshake },
-  { label: "New Campaign", href: "/campaigns", icon: Megaphone },
-  { label: "Invite Staff", href: "/staff", icon: UserPlus },
-  { label: "Add Vehicle", href: "/vehicles", icon: Truck },
-  { label: "Review Expenses", href: "/cases", icon: Receipt },
+const issues: DashboardIssue[] = [
+  {
+    label: "3 pages are missing meta description",
+    level: "High",
+    count: 3,
+    icon: FileText,
+    tone: "rose",
+  },
+  {
+    label: "2 pages are not indexed",
+    level: "High",
+    count: 2,
+    icon: FileText,
+    tone: "rose",
+  },
+  {
+    label: "Home page LCP issue detected",
+    level: "High",
+    count: 1,
+    icon: CircleGauge,
+    tone: "amber",
+  },
+  {
+    label: "7 images missing ALT text",
+    level: "Medium",
+    count: 7,
+    icon: ImageIcon,
+    tone: "amber",
+  },
+  {
+    label: "4 broken internal links found",
+    level: "Medium",
+    count: 4,
+    icon: Link2,
+    tone: "amber",
+  },
+  {
+    label: "About page traffic dropped by 21%",
+    level: "Low",
+    count: 1,
+    icon: TrendingDown,
+    tone: "violet",
+  },
+  {
+    label: "New keyword opportunities found",
+    level: "Low",
+    count: 12,
+    icon: MousePointerClick,
+    tone: "violet",
+  },
 ];
+
+const topPages = [
+  ["Home", "/", "5,842"],
+  ["Our Services", "/our-services", "3,214"],
+  ["About Us", "/about-us", "2,189"],
+  ["How We Help", "/how-we-help", "1,876"],
+  ["Contact Us", "/contact-us", "1,421"],
+];
+
+const keywordRows = [
+  ["moksha sewa", "652", "4,812", "8.3"],
+  ["free antim sanskar", "421", "3,210", "6.7"],
+  ["final journey help", "312", "2,102", "9.1"],
+  ["unclaimed body sewa", "289", "1,987", "7.8"],
+  ["last rites support", "254", "1,456", "10.2"],
+];
+
+const locations = [
+  ["Delhi", 24, "41.4%"],
+  ["Ghaziabad", 18, "31.0%"],
+  ["Noida", 11, "19.9%"],
+  ["Faridabad", 3, "5.2%"],
+  ["Gurugram", 2, "3.4%"],
+];
+
+const submissions = [
+  ["Rahul Sharma", "Sewa Help Request", "10 mins ago"],
+  ["Neha Verma", "Volunteer Registration", "1 hour ago"],
+  ["Amit Gupta", "CSR Enquiry", "2 hours ago"],
+  ["Pooja Singh", "Partnership Enquiry", "3 hours ago"],
+  ["Sandeep Kumar", "Contact Us", "4 hours ago"],
+];
+
+const toneClass = {
+  emerald: "bg-emerald-50 text-emerald-700 ring-emerald-100",
+  violet: "bg-violet-50 text-violet-700 ring-violet-100",
+  amber: "bg-amber-50 text-amber-700 ring-amber-100",
+  blue: "bg-blue-50 text-blue-700 ring-blue-100",
+  rose: "bg-rose-50 text-rose-700 ring-rose-100",
+} as const;
+
+const searchConsoleRanges = [
+  "Last 7 Days",
+  "Last 28 Days",
+  "Last 3 Months",
+  "Last 6 Months",
+  "Last 12 Months",
+];
+
+const analyticsRanges = [
+  "Last 7 Days",
+  "Last 30 Days",
+  "Last 90 Days",
+  "This Month",
+  "Previous Month",
+];
+
+const webVitalsRanges = [
+  "Last 7 Days",
+  "Last 28 Days",
+  "Last 3 Months",
+];
+
+const monthlyRanges = [
+  "This Month",
+  "Previous Month",
+  "Last 3 Months",
+  "Last 6 Months",
+];
+
+/* =========================================================
+   MINI SPARKLINE
+========================================================= */
+
+function MiniSparkline({ points }: { points: number[] }) {
+  const max = Math.max(...points);
+  const min = Math.min(...points);
+  const width = 148;
+  const height = 27;
+  const pad = 2;
+
+  const path = points
+    .map((v, i) => {
+      const x = pad + (i / (points.length - 1)) * (width - pad * 2);
+
+      const y =
+        height -
+        pad -
+        ((v - min) / Math.max(1, max - min)) * (height - pad * 2);
+
+      return `${i === 0 ? "M" : "L"} ${x.toFixed(1)} ${y.toFixed(1)}`;
+    })
+    .join(" ");
+
+  return (
+    <svg viewBox={`0 0 ${width} ${height}`} className="h-[27px] w-full">
+      <path
+        d={path}
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        className="text-emerald-700"
+      />
+    </svg>
+  );
+}
+
+/* =========================================================
+   PANEL
+========================================================= */
+
+function Panel({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <section
+      className={`min-h-0 overflow-hidden rounded-[11px] border border-[#e5e7e6] bg-white ${className}`}
+    >
+      {children}
+    </section>
+  );
+}
+
+/* =========================================================
+   PANEL TITLE
+========================================================= */
+
+function PanelTitle({
+  children,
+  right,
+}: {
+  children: React.ReactNode;
+  right?: React.ReactNode;
+}) {
+  return (
+    <div className="flex h-[34px] items-center justify-between px-3">
+      <h2 className="text-[12px] font-extrabold tracking-[-0.01em] text-[#13213d]">
+        {children}
+      </h2>
+
+      {right}
+    </div>
+  );
+}
+
+/* =========================================================
+   FOOTER BUTTON
+========================================================= */
+
+function FooterButton({ children }: { children: React.ReactNode }) {
+  return (
+    <button
+      type="button"
+      className="mx-3 mb-2 mt-1 flex h-[27px] w-[calc(100%-24px)] items-center justify-center gap-2 rounded-md border border-[#eee8dc] bg-[#fffdf8] text-[9.5px] font-bold text-[#27344c] transition hover:bg-[#fff9ed]"
+    >
+      {children}
+
+      <ArrowRight className="h-3 w-3" />
+    </button>
+  );
+}
+
+/* =========================================================
+   SMALL RANGE DROPDOWN
+========================================================= */
+
+function RangeDropdown({
+  dropdownKey,
+  openDropdown,
+  setOpenDropdown,
+  value,
+  setValue,
+  options,
+}: {
+  dropdownKey: DropdownKey;
+  openDropdown: DropdownKey;
+  setOpenDropdown: React.Dispatch<React.SetStateAction<DropdownKey>>;
+  value: string;
+  setValue: (value: string) => void;
+  options: string[];
+}) {
+  const isOpen = openDropdown === dropdownKey;
+
+  return (
+    <div
+      className="relative"
+      data-dashboard-dropdown
+    >
+      <button
+        type="button"
+        onClick={() => {
+          setOpenDropdown(isOpen ? null : dropdownKey);
+        }}
+        className="flex items-center gap-1 text-[8px] font-bold"
+      >
+        {value}
+
+        <ChevronDown
+          className={`h-3 w-3 transition-transform ${
+            isOpen ? "rotate-180" : ""
+          }`}
+        />
+      </button>
+
+      {isOpen && (
+        <div className="absolute right-0 top-[calc(100%+7px)] z-[100] min-w-[142px] overflow-hidden rounded-[9px] border border-[#e5e2da] bg-white p-1.5 shadow-[0_10px_30px_rgba(15,23,42,0.14)]">
+          {options.map((option) => (
+            <button
+              type="button"
+              key={option}
+              onClick={() => {
+                setValue(option);
+                setOpenDropdown(null);
+              }}
+              className={`flex w-full items-center justify-between rounded-[6px] px-2.5 py-2 text-left text-[8px] font-bold transition ${
+                value === option
+                  ? "bg-[#f2f5f2] text-[#26372b]"
+                  : "text-[#465168] hover:bg-[#f7f7f4]"
+              }`}
+            >
+              <span>{option}</span>
+
+              {value === option && <Check className="h-3 w-3" />}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
 
 export default function DashboardPage() {
-  const admin = useAppSelector((state) => state.auth.admin);
-  const [data, setData] = useState<DashboardData | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [openDropdown, setOpenDropdown] = useState<DropdownKey>(null);
+
+  const [selectedWebsite, setSelectedWebsite] =
+    useState("mokshasewa.org");
+
+  const [selectedDate, setSelectedDate] =
+    useState("31 May 2026");
+
+  const [searchConsoleRange, setSearchConsoleRange] =
+    useState("Last 28 Days");
+
+  const [analyticsRange, setAnalyticsRange] =
+    useState("Last 30 Days");
+
+  const [webVitalsRange, setWebVitalsRange] =
+    useState("Last 28 Days");
+
+  const [topPagesRange, setTopPagesRange] =
+    useState("This Month");
+
+  const [keywordRange, setKeywordRange] =
+    useState("This Month");
+
+  const [locationRange, setLocationRange] =
+    useState("This Month");
+
+  const [activeMenuItem, setActiveMenuItem] =
+    useState("Dashboard");
+
+  const [notificationCount, setNotificationCount] =
+    useState(8);
+
+  /* =======================================================
+     OUTSIDE CLICK + ESC CLOSE
+  ======================================================= */
 
   useEffect(() => {
-    let cancelled = false;
+    const handleMouseDown = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
 
-    Promise.all([
-      reportsApi.overview(),
-      enquiriesApi.list(),
-      casesApi.slaBreaches(),
-      auditApi.list(),
-      volunteersApi.list({ status: "ACTIVE" }),
-    ])
-      .then(([overview, enquiries, breaches, activity, volunteers]) => {
-        if (cancelled) return;
-        const topVolunteers = [...volunteers].sort((a, b) => b.totalAssignments - a.totalAssignments).slice(0, 5);
-        setData({ overview, enquiries, breaches, activity: activity.slice(0, 8), topVolunteers });
-      })
-      .catch(() => {
-        // A rejected fetch here is almost always an expired/invalid session — RequireAdminAuth's
-        // own check (and lib/api.ts's refresh-failure handler) already redirects to /login.
-        // Swallow it so an unhandled rejection doesn't surface as a scary dev-overlay crash.
-      })
-      .finally(() => !cancelled && setLoading(false));
+      if (!target.closest("[data-dashboard-dropdown]")) {
+        setOpenDropdown(null);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpenDropdown(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleMouseDown);
+    document.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      cancelled = true;
+      document.removeEventListener("mousedown", handleMouseDown);
+      document.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
 
-  if (loading || !data) {
-    return (
-      <div className="flex min-h-[60vh] items-center justify-center text-text-muted">
-        <Loader2 className="h-5 w-5 animate-spin" />
-      </div>
+  const toggleDropdown = (key: DropdownKey) => {
+    setOpenDropdown((current) =>
+      current === key ? null : key
     );
-  }
-
-  const { overview } = data;
-  const activePipeline = STATUS_ORDER.filter((s) => overview.cases.byStatus[s] > 0);
-  const pipelineData: DonutDatum[] = activePipeline.map((status) => ({
-    key: status,
-    label: CASE_STATUS_META[status].label,
-    value: overview.cases.byStatus[status],
-  }));
-  const causeEntries = Object.entries(overview.donations.byCause).filter(([, v]) => v > 0);
-  const causeData: DonutDatum[] = causeEntries.map(([cause, amount]) => ({
-    key: cause,
-    label: CAUSE_LABELS[cause] ?? cause,
-    value: amount,
-  }));
-  const topVolunteerData: MagnitudeDatum[] = data.topVolunteers.map((v) => ({
-    label: v.name ?? "—",
-    value: v.totalAssignments,
-  }));
-  const newEnquiries = data.enquiries.filter((e) => e.status === "new").slice(0, 5);
-  const firstName = admin?.name?.split(" ")[0] ?? "there";
+  };
 
   return (
-    <div className="space-y-1">
-      {/* Welcome banner */}
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-none border border-white/60 bg-white/40 backdrop-blur-xl py-2 px-4 shadow-sm">
-        <div>
-          <h1 className="text-xl font-semibold tracking-tight text-slate-900">Welcome back, {firstName}!</h1>
-          <p className="mt-1 text-[13px] font-medium text-slate-600">
-            Here&apos;s what&apos;s happening across cases, requests, volunteers and donations today.
-          </p>
-        </div>
-        <Link
-          href="/reports"
-          className="flex items-center gap-1.5 rounded-xl bg-slate-900 px-4 py-2 text-xs font-semibold text-white hover:bg-slate-800 transition-colors shadow-sm"
-        >
-          Full Reports <ArrowRight className="h-3 w-3" />
-        </Link>
-      </div>
+    <div className="h-dvh w-full overflow-hidden bg-white text-[#13213d]">
+      <div className="flex h-full min-h-0 flex-col overflow-hidden">
 
-      {/* KPI row — each metric family keeps one fixed identity color (reused from the donut
-          palettes above) so the row reads as distinct metrics; an active problem (critical
-          cases, expenses awaiting approval) always overrides to the reserved danger color. */}
-      <div className="grid grid-cols-2 gap-1 sm:grid-cols-4 lg:grid-cols-4">
-        <StatCard
-          icon={FolderKanban}
-          label="Open Cases"
-          value={overview.cases.open}
-          hint={`${overview.cases.total} total`}
-          accentColor={KPI_COLORS.cases}
-        />
-        <StatCard
-          icon={Siren}
-          label="Critical Cases"
-          value={overview.cases.critical}
-          tone={overview.cases.critical > 0 ? "danger" : "neutral"}
-        />
-        <StatCard
-          icon={ClipboardList}
-          label="Pending Requests"
-          value={overview.requests.pending}
-          hint={`${overview.requests.total} total`}
-          accentColor={KPI_COLORS.requests}
-        />
-        <StatCard
-          icon={HandHeart}
-          label="Active Volunteers"
-          value={overview.volunteers.active}
-          hint={`${overview.volunteers.total} total`}
-          accentColor={KPI_COLORS.volunteers}
-        />
-        <StatCard
-          icon={HeartHandshake}
-          label="Raised This Month"
-          value={formatCurrency(overview.donations.thisMonthRaised)}
-          hint={`${overview.donations.thisMonthDonations} donations`}
-          accentColor={KPI_COLORS.donations}
-        />
-        <StatCard
-          icon={Flame}
-          label="Total Raised"
-          value={formatCurrency(overview.donations.totalRaised)}
-          hint={`${overview.donations.totalDonations} donations`}
-          accentColor={KPI_COLORS.donations}
-        />
-        <StatCard
-          icon={Wallet}
-          label="Expenses Pending"
-          value={formatCurrency(overview.expenses.pendingAmount)}
-          hint={`${overview.expenses.pendingCount} to approve`}
-          tone={overview.expenses.pendingCount > 0 ? "danger" : "neutral"}
-        />
-        <StatCard
-          icon={Mail}
-          label="New Enquiries"
-          value={newEnquiries.length}
-          hint={`${data.enquiries.length} total`}
-          accentColor={KPI_COLORS.requests}
-        />
-      </div>
+        {/* ===================================================
+            HEADER
+        =================================================== */}
 
-      {/* Row: pipeline / SLA breaches / donations by cause */}
-      <div className="grid gap-1 lg:grid-cols-3">
-        <Card padding="sm">
-          <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-text-muted">Case Pipeline</h2>
-          <DonutChart
-            data={pipelineData}
-            colorFor={(key) => PIPELINE_COLORS[key as CaseStatus] ?? CAUSE_COLOR_FALLBACK}
-            emptyLabel="No active cases right now."
-          />
-        </Card>
+        <header className="relative z-[80] h-[66px] shrink-0 border-b border-[#e8e8e3] bg-white px-2.5">
+          <div className="flex h-full items-center justify-between gap-3">
 
-        <Card padding="sm">
-          <div className="mb-2 flex items-center justify-between">
-            <h2 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-text-muted">
-              <AlertTriangle className="h-3.5 w-3.5 text-amber-500" />
-              SLA Breaches
-            </h2>
-            {data.breaches.length > 0 && <Badge tone="danger">{data.breaches.length}</Badge>}
-          </div>
-          {data.breaches.length === 0 ? (
-            <p className="text-sm text-text-muted">Nothing breaching SLA right now.</p>
-          ) : (
-            <div className="space-y-1">
-              {data.breaches.slice(0, 5).map((b) => (
-                <Link
-                  key={`${b._id}-${b.breachReason}`}
-                  href={`/cases/${b._id}`}
-                  className="flex items-center justify-between rounded-lg px-2 py-1.5 text-xs hover:bg-surface-sunken"
+            {/* LEFT */}
+
+            <div className="flex min-w-0 items-center gap-2.5">
+
+              {/* MENU */}
+
+              <div
+                className="relative shrink-0"
+                data-dashboard-dropdown
+              >
+                <button
+                  type="button"
+                  onClick={() => toggleDropdown("menu")}
+                  className="grid h-10 w-10 shrink-0 place-items-center rounded-[12px] bg-[#30392d] text-white transition hover:bg-[#222b20]"
                 >
-                  <span className="font-medium text-text-primary">{b.caseId}</span>
-                  <span className="truncate text-text-muted">{b.breachReason}</span>
-                </Link>
-              ))}
-            </div>
-          )}
-        </Card>
+                  {openDropdown === "menu" ? (
+                    <X className="h-5 w-5" />
+                  ) : (
+                    <Menu className="h-5 w-5" />
+                  )}
+                </button>
 
-        <Card padding="sm">
-          <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-text-muted">Donations by Cause</h2>
-          <DonutChart
-            data={causeData}
-            colorFor={(key) => CAUSE_COLORS[key] ?? CAUSE_COLOR_FALLBACK}
-            valueFormatter={formatCurrency}
-            emptyLabel="No donations recorded yet."
-          />
-        </Card>
-      </div>
+                {openDropdown === "menu" && (
+                  <div className="absolute left-0 top-[48px] z-[120] w-[210px] overflow-hidden rounded-[12px] border border-[#e5e2da] bg-white p-2 shadow-[0_14px_40px_rgba(15,23,42,0.16)]">
 
-      {/* Row: recent activity / quick actions / top volunteers */}
-      <div className="grid gap-1 lg:grid-cols-3">
-        <Card padding="sm">
-          <h2 className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-text-muted">
-            <History className="h-3.5 w-3.5" />
-            Recent Activity
-          </h2>
-          {data.activity.length === 0 ? (
-            <p className="text-sm text-text-muted">No activity logged yet.</p>
-          ) : (
-            <div className="max-h-44 space-y-2 overflow-y-auto">
-              {data.activity.map((entry) => (
-                <div key={entry._id} className="text-xs">
-                  <p className="text-text-primary">
-                    <span className="font-semibold">{entry.actorName}</span>{" "}
-                    <span className="text-text-secondary">{entry.action.replace(/\./g, " ").replace(/_/g, " ")}</span>
-                  </p>
-                  <p className="text-[10px] text-text-muted">{formatDateTime(entry.at)}</p>
-                </div>
-              ))}
-            </div>
-          )}
-          <Link href="/audit-log" className="mt-2 flex items-center gap-1 text-[11px] font-semibold text-accent hover:underline">
-            View Full Log <ArrowRight className="h-3 w-3" />
-          </Link>
-        </Card>
+                    <div className="border-b border-[#ecece7] px-2.5 pb-2 pt-1">
+                      <p className="text-[9px] font-extrabold uppercase tracking-[0.08em] text-[#8a92a0]">
+                        Navigation
+                      </p>
+                    </div>
 
-        <Card padding="sm">
-          <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-text-muted">Quick Actions</h2>
-          <div className="grid grid-cols-2 gap-1.5">
-            {QUICK_ACTIONS.map((action) => {
-              const Icon = action.icon;
-              return (
-                <Link
-                  key={action.href}
-                  href={action.href}
-                  className="flex flex-col items-center gap-1.5 border border-surface-border p-2.5 text-center hover:border-accent hover:bg-accent-soft"
-                >
-                  <Icon className="h-4 w-4 text-accent" />
-                  <span className="text-[11px] font-medium text-text-secondary">{action.label}</span>
-                </Link>
-              );
-            })}
-          </div>
-        </Card>
+                    {[
+                      "Dashboard",
+                      "Website Pages",
+                      "Blog Posts",
+                      "SEO Manager",
+                      "Analytics",
+                      "Form Submissions",
+                      "Media Library",
+                      "Settings",
+                    ].map((item) => (
+                      <button
+                        key={item}
+                        type="button"
+                        onClick={() => {
+                          setActiveMenuItem(item);
+                          setOpenDropdown(null);
+                        }}
+                        className={`mt-1 flex w-full items-center justify-between rounded-[8px] px-3 py-2 text-left text-[10px] font-bold transition ${
+                          activeMenuItem === item
+                            ? "bg-[#30392d] text-white"
+                            : "text-[#33415a] hover:bg-[#f5f6f3]"
+                        }`}
+                      >
+                        {item}
 
-        <Card padding="sm">
-          <h2 className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-text-muted">
-            <Trophy className="h-3.5 w-3.5 text-amber-500" />
-            Top Volunteers
-          </h2>
-          <MagnitudeBarChart
-            data={topVolunteerData}
-            valueFormatter={(v) => `${v} assignment${v === 1 ? "" : "s"}`}
-            emptyLabel="No active volunteers yet."
-          />
-        </Card>
-      </div>
-
-      {/* Row: new enquiries needing follow-up */}
-      {newEnquiries.length > 0 && (
-        <Card padding="sm">
-          <div className="mb-2 flex items-center justify-between">
-            <h2 className="text-xs font-semibold uppercase tracking-wide text-text-muted">New Enquiries Needing Follow-up</h2>
-            <Link href="/enquiries" className="flex items-center gap-1 text-[11px] font-semibold text-accent hover:underline">
-              View All <ArrowRight className="h-3 w-3" />
-            </Link>
-          </div>
-          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-            {newEnquiries.map((e) => (
-              <div key={e._id} className="rounded-xl border border-white/60 bg-white/50 p-3 text-xs shadow-sm">
-                <p className="font-semibold text-slate-900">{e.name}</p>
-                <p className="font-medium text-slate-500">{e.phone}</p>
-                <p className="mt-1 line-clamp-2 text-slate-700">{e.message}</p>
+                        {activeMenuItem === item && (
+                          <Check className="h-3.5 w-3.5" />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
-            ))}
+
+              {/* TITLE */}
+
+              <div className="min-w-0">
+                <h1 className="truncate text-[20px] font-extrabold leading-tight tracking-[-0.025em]">
+                  Welcome back, Admin!{" "}
+                  <span className="text-[18px]">👋</span>
+                </h1>
+
+                <p className="truncate text-[11px] font-medium leading-tight text-[#4a5261]">
+                  Here&apos;s an overview of your website{" "}
+                  <b className="font-extrabold">
+                    mokshasewa.org
+                  </b>
+                </p>
+              </div>
+            </div>
+
+            {/* RIGHT */}
+
+            <div className="hidden items-center gap-2 xl:flex">
+
+              {/* WEBSITE DROPDOWN */}
+
+              <div
+                className="relative"
+                data-dashboard-dropdown
+              >
+                <button
+                  type="button"
+                  onClick={() =>
+                    toggleDropdown("website")
+                  }
+                  className="flex h-9 items-center gap-2 rounded-[10px] border border-[#e5e2da] bg-[#fffdfa] px-3 text-[10px] font-bold transition hover:bg-[#fff8eb]"
+                >
+                  <Globe2 className="h-3.5 w-3.5" />
+
+                  {selectedWebsite}
+
+                  <ChevronDown
+                    className={`h-3 w-3 transition-transform ${
+                      openDropdown === "website"
+                        ? "rotate-180"
+                        : ""
+                    }`}
+                  />
+                </button>
+
+                {openDropdown === "website" && (
+                  <div className="absolute right-0 top-[44px] z-[120] w-[205px] overflow-hidden rounded-[10px] border border-[#e5e2da] bg-white p-2 shadow-[0_12px_35px_rgba(15,23,42,0.15)]">
+
+                    <p className="px-2 pb-2 text-[8px] font-extrabold uppercase tracking-[0.08em] text-[#8b93a2]">
+                      Select Website
+                    </p>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedWebsite(
+                          "mokshasewa.org"
+                        );
+                        setOpenDropdown(null);
+                      }}
+                      className="flex w-full items-center justify-between rounded-[7px] bg-[#f4f6f2] px-3 py-2.5 text-[9px] font-bold text-[#26372b]"
+                    >
+                      <span className="flex items-center gap-2">
+                        <Globe2 className="h-3.5 w-3.5" />
+                        mokshasewa.org
+                      </span>
+
+                      <Check className="h-3.5 w-3.5" />
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        window.open(
+                          "https://mokshasewa.org",
+                          "_blank",
+                          "noopener,noreferrer"
+                        );
+                        setOpenDropdown(null);
+                      }}
+                      className="mt-1 flex w-full items-center gap-2 rounded-[7px] px-3 py-2.5 text-left text-[9px] font-bold text-[#465168] transition hover:bg-[#f7f7f4]"
+                    >
+                      <ArrowRight className="h-3.5 w-3.5" />
+                      Open Live Website
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* DATE DROPDOWN */}
+
+              <div
+                className="relative"
+                data-dashboard-dropdown
+              >
+                <button
+                  type="button"
+                  onClick={() => toggleDropdown("date")}
+                  className="flex h-9 items-center gap-2 rounded-[10px] border border-[#e5e2da] bg-[#fffdfa] px-3 text-[10px] font-bold transition hover:bg-[#fff8eb]"
+                >
+                  <CalendarDays className="h-3.5 w-3.5" />
+
+                  {selectedDate}
+
+                  <ChevronDown
+                    className={`h-3 w-3 transition-transform ${
+                      openDropdown === "date"
+                        ? "rotate-180"
+                        : ""
+                    }`}
+                  />
+                </button>
+
+                {openDropdown === "date" && (
+                  <div className="absolute right-0 top-[44px] z-[120] w-[175px] overflow-hidden rounded-[10px] border border-[#e5e2da] bg-white p-2 shadow-[0_12px_35px_rgba(15,23,42,0.15)]">
+
+                    <p className="px-2 pb-2 text-[8px] font-extrabold uppercase tracking-[0.08em] text-[#8b93a2]">
+                      Select Date
+                    </p>
+
+                    {[
+                      "31 May 2026",
+                      "30 May 2026",
+                      "29 May 2026",
+                      "28 May 2026",
+                      "27 May 2026",
+                    ].map((date) => (
+                      <button
+                        type="button"
+                        key={date}
+                        onClick={() => {
+                          setSelectedDate(date);
+                          setOpenDropdown(null);
+                        }}
+                        className={`flex w-full items-center justify-between rounded-[7px] px-3 py-2 text-left text-[9px] font-bold transition ${
+                          selectedDate === date
+                            ? "bg-[#f4f6f2] text-[#26372b]"
+                            : "text-[#465168] hover:bg-[#f7f7f4]"
+                        }`}
+                      >
+                        {date}
+
+                        {selectedDate === date && (
+                          <Check className="h-3.5 w-3.5" />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* NOTIFICATION */}
+
+              <div
+                className="relative"
+                data-dashboard-dropdown
+              >
+                <button
+                  type="button"
+                  onClick={() =>
+                    toggleDropdown("notifications")
+                  }
+                  className="relative grid h-9 w-9 place-items-center rounded-[9px] transition hover:bg-[#f5f6f3]"
+                >
+                  <Bell className="h-[18px] w-[18px]" />
+
+                  {notificationCount > 0 && (
+                    <span className="absolute right-0 top-0 grid h-[16px] min-w-[16px] place-items-center rounded-full bg-red-600 px-1 text-[8px] font-extrabold text-white">
+                      {notificationCount}
+                    </span>
+                  )}
+                </button>
+
+                {openDropdown ===
+                  "notifications" && (
+                  <div className="absolute right-0 top-[44px] z-[120] w-[320px] overflow-hidden rounded-[12px] border border-[#e5e2da] bg-white shadow-[0_14px_40px_rgba(15,23,42,0.16)]">
+
+                    <div className="flex items-center justify-between border-b border-[#ecece7] px-4 py-3">
+                      <div>
+                        <p className="text-[11px] font-extrabold">
+                          Notifications
+                        </p>
+
+                        <p className="mt-0.5 text-[8px] font-medium text-[#7b8494]">
+                          Recent website alerts
+                        </p>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setNotificationCount(0);
+                        }}
+                        className="text-[8px] font-extrabold text-[#18745c]"
+                      >
+                        Mark all read
+                      </button>
+                    </div>
+
+                    <div className="max-h-[290px] overflow-y-auto p-2">
+                      {[
+                        [
+                          "SEO Issue",
+                          "3 pages are missing meta descriptions.",
+                          "5 mins ago",
+                        ],
+                        [
+                          "Performance",
+                          "Home page LCP issue detected.",
+                          "20 mins ago",
+                        ],
+                        [
+                          "New Submission",
+                          "A new Sewa Help Request was received.",
+                          "35 mins ago",
+                        ],
+                        [
+                          "SEO Opportunity",
+                          "12 new keyword opportunities found.",
+                          "1 hour ago",
+                        ],
+                      ].map(
+                        ([title, description, time]) => (
+                          <button
+                            type="button"
+                            key={title}
+                            onClick={() =>
+                              setOpenDropdown(null)
+                            }
+                            className="flex w-full gap-3 rounded-[8px] px-2.5 py-2.5 text-left transition hover:bg-[#f7f8f6]"
+                          >
+                            <div className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-[#f0f4f1]">
+                              <Bell className="h-3.5 w-3.5 text-[#315340]" />
+                            </div>
+
+                            <div className="min-w-0">
+                              <p className="text-[9px] font-extrabold text-[#24324a]">
+                                {title}
+                              </p>
+
+                              <p className="mt-0.5 text-[8px] font-medium leading-[1.4] text-[#647083]">
+                                {description}
+                              </p>
+
+                              <p className="mt-1 text-[7px] font-bold text-[#9aa2af]">
+                                {time}
+                              </p>
+                            </div>
+                          </button>
+                        )
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* PROFILE */}
+
+              <div
+                className="relative"
+                data-dashboard-dropdown
+              >
+                <button
+                  type="button"
+                  onClick={() =>
+                    toggleDropdown("profile")
+                  }
+                  className="flex items-center gap-2 rounded-[9px] px-1.5 py-1 transition hover:bg-[#f7f7f4]"
+                >
+                  <div className="grid h-8 w-8 place-items-center rounded-full bg-[#edf3f6]">
+                    <UserRound className="h-4.5 w-4.5" />
+                  </div>
+
+                  <div className="text-left leading-tight">
+                    <p className="text-[10px] font-extrabold">
+                      Admin User
+                    </p>
+
+                    <p className="text-[8px] font-semibold text-[#5f6774]">
+                      Super Admin
+                    </p>
+                  </div>
+
+                  <ChevronDown
+                    className={`h-3 w-3 transition-transform ${
+                      openDropdown === "profile"
+                        ? "rotate-180"
+                        : ""
+                    }`}
+                  />
+                </button>
+
+                {openDropdown === "profile" && (
+                  <div className="absolute right-0 top-[46px] z-[120] w-[190px] overflow-hidden rounded-[10px] border border-[#e5e2da] bg-white p-2 shadow-[0_12px_35px_rgba(15,23,42,0.15)]">
+
+                    <div className="border-b border-[#ecece7] px-2.5 pb-2 pt-1">
+                      <p className="text-[9px] font-extrabold">
+                        Admin User
+                      </p>
+
+                      <p className="mt-0.5 text-[8px] font-medium text-[#7a8494]">
+                        Super Admin
+                      </p>
+                    </div>
+
+                    {[
+                      "My Profile",
+                      "Account Settings",
+                      "Security Settings",
+                    ].map((item) => (
+                      <button
+                        type="button"
+                        key={item}
+                        onClick={() =>
+                          setOpenDropdown(null)
+                        }
+                        className="mt-1 flex w-full rounded-[7px] px-3 py-2 text-left text-[9px] font-bold text-[#465168] transition hover:bg-[#f7f7f4]"
+                      >
+                        {item}
+                      </button>
+                    ))}
+
+                    <div className="my-1 border-t border-[#ecece7]" />
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setOpenDropdown(null)
+                      }
+                      className="flex w-full rounded-[7px] px-3 py-2 text-left text-[9px] font-extrabold text-red-600 transition hover:bg-red-50"
+                    >
+                      Sign Out
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
-        </Card>
-      )}
+        </header>
+
+        {/* ===================================================
+            MAIN
+        =================================================== */}
+
+        <main className="min-h-0 flex-1 overflow-hidden px-1.5 py-2">
+          <div className="grid h-full min-h-0 w-full grid-rows-[116px_minmax(0,1.22fr)_minmax(0,1.08fr)_minmax(0,0.76fr)] gap-2">
+
+            {/* =================================================
+                TOP STATS
+            ================================================= */}
+
+            <div className="grid min-h-0 grid-cols-6 gap-2">
+              {topStats.map((item) => {
+                const Icon = item.icon;
+
+                return (
+                  <Panel
+                    key={item.title}
+                    className="p-2.5"
+                  >
+                    <div className="flex items-start gap-2">
+                      <div
+                        className={`grid h-10 w-10 shrink-0 place-items-center rounded-full ring-1 ${
+                          toneClass[
+                            item.tone as keyof typeof toneClass
+                          ]
+                        }`}
+                      >
+                        <Icon className="h-[19px] w-[19px]" />
+                      </div>
+
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-[8.5px] font-extrabold tracking-[0.01em] text-[#29406a]">
+                          {item.title}
+                        </p>
+
+                        <div className="mt-1 flex items-end gap-1">
+                          <span className="text-[23px] font-extrabold leading-none tracking-[-0.04em]">
+                            {item.value}
+                          </span>
+
+                          {item.suffix && (
+                            <span className="mb-0.5 text-[9px] font-bold">
+                              {item.suffix}
+                            </span>
+                          )}
+                        </div>
+
+                        <p
+                          className={`mt-1 text-[8.5px] font-bold ${
+                            item.title ===
+                            "INDEXED PAGES"
+                              ? "text-blue-600"
+                              : "text-emerald-700"
+                          }`}
+                        >
+                          {item.note}
+                        </p>
+                      </div>
+                    </div>
+
+                    {item.spark && (
+                      <div className="mt-0.5">
+                        <MiniSparkline
+                          points={item.spark}
+                        />
+                      </div>
+                    )}
+
+                    <div
+                      className={`${
+                        item.spark ? "mt-0" : "mt-3"
+                      } flex items-center justify-center gap-1.5 text-[8.5px] font-extrabold text-[#293957]`}
+                    >
+                      {item.footer}
+
+                      <ArrowRight className="h-3 w-3" />
+                    </div>
+                  </Panel>
+                );
+              })}
+            </div>
+
+            {/* =================================================
+                ROW 2
+            ================================================= */}
+
+            <div className="grid min-h-0 grid-cols-[0.92fr_1.12fr_1.06fr] gap-2">
+
+              {/* SEO HEALTH */}
+
+              <Panel>
+                <PanelTitle>
+                  SEO Health Overview
+                </PanelTitle>
+
+                <div className="grid min-h-0 grid-cols-[132px_1fr] items-center gap-2 px-3">
+                  <div className="relative mx-auto h-[116px] w-[116px] rounded-full bg-[conic-gradient(#148151_0deg_255deg,#e9a11c_255deg_331deg,#edf0ea_331deg_360deg)]">
+                    <div className="absolute inset-[11px] grid place-items-center rounded-full bg-white text-center">
+                      <div>
+                        <div className="text-[36px] font-extrabold leading-none">
+                          92
+                        </div>
+
+                        <div className="mt-1 text-[10px] font-bold text-emerald-700">
+                          Excellent
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-[5px] text-[8.5px] font-bold">
+                    {[
+                      ["Meta Title", "Good", true],
+                      [
+                        "Meta Description",
+                        "Good",
+                        true,
+                      ],
+                      ["Headings", "Good", true],
+                      [
+                        "Content Quality",
+                        "Good",
+                        true,
+                      ],
+                      [
+                        "Internal Linking",
+                        "Needs Work",
+                        false,
+                      ],
+                      [
+                        "Images (ALT Text)",
+                        "Needs Work",
+                        false,
+                      ],
+                      [
+                        "Schema Markup",
+                        "Good",
+                        true,
+                      ],
+                      [
+                        "Mobile Friendliness",
+                        "Good",
+                        true,
+                      ],
+                      [
+                        "Page Speed",
+                        "Good",
+                        true,
+                      ],
+                    ].map(
+                      ([name, status, ok]) => (
+                        <div
+                          key={String(name)}
+                          className="grid grid-cols-[13px_1fr_auto] items-center gap-1"
+                        >
+                          {ok ? (
+                            <CheckCircle2 className="h-3 w-3 text-emerald-700" />
+                          ) : (
+                            <AlertCircle className="h-3 w-3 text-amber-500" />
+                          )}
+
+                          <span>{name}</span>
+
+                          <span
+                            className={
+                              ok
+                                ? "text-emerald-700"
+                                : "text-amber-500"
+                            }
+                          >
+                            {status}
+                          </span>
+                        </div>
+                      )
+                    )}
+                  </div>
+                </div>
+
+                <FooterButton>
+                  View Full SEO Report
+                </FooterButton>
+              </Panel>
+
+              {/* SEARCH CONSOLE */}
+
+              <Panel>
+                <PanelTitle
+                  right={
+                    <RangeDropdown
+                      dropdownKey="search-console-range"
+                      openDropdown={openDropdown}
+                      setOpenDropdown={
+                        setOpenDropdown
+                      }
+                      value={searchConsoleRange}
+                      setValue={
+                        setSearchConsoleRange
+                      }
+                      options={
+                        searchConsoleRanges
+                      }
+                    />
+                  }
+                >
+                  Google Search Console Summary
+                </PanelTitle>
+
+                <div className="grid grid-cols-4 gap-1.5 px-3">
+                  {[
+                    [
+                      "Total Clicks",
+                      "3.62K",
+                      "↑ 18.6%",
+                    ],
+                    [
+                      "Total Impressions",
+                      "85.7K",
+                      "↑ 20.4%",
+                    ],
+                    [
+                      "Average CTR",
+                      "4.23%",
+                      "↑ 8.7%",
+                    ],
+                    [
+                      "Average Position",
+                      "12.6",
+                      "",
+                    ],
+                  ].map(
+                    ([label, value, change]) => (
+                      <div
+                        key={label}
+                        className="rounded-[7px] bg-[#f5f7fb] px-2 py-1.5"
+                      >
+                        <p className="text-[7px] font-bold text-[#334666]">
+                          {label}
+                        </p>
+
+                        <p className="mt-1 text-[17px] font-extrabold">
+                          {value}
+                        </p>
+
+                        {change && (
+                          <p className="mt-0.5 text-[7px] font-bold text-emerald-700">
+                            {change}
+                          </p>
+                        )}
+                      </div>
+                    )
+                  )}
+                </div>
+
+                <div className="min-h-0 flex-1 px-3 pt-1">
+                  <svg
+                    viewBox="0 0 520 118"
+                    preserveAspectRatio="none"
+                    className="h-[90px] w-full"
+                  >
+                    {[22, 52, 82].map((y) => (
+                      <line
+                        key={y}
+                        x1="34"
+                        x2="508"
+                        y1={y}
+                        y2={y}
+                        stroke="#edf0f4"
+                        strokeWidth="1"
+                      />
+                    ))}
+
+                    <path
+                      d="M42 80 C60 58,72 72,88 50 S115 72,130 56 S160 80,175 60 S200 79,218 56 S244 73,259 48 S292 84,310 63 S342 76,360 49 S387 75,402 56 S430 78,448 55 S478 70,500 44"
+                      fill="none"
+                      stroke="#22a06b"
+                      strokeWidth="2.4"
+                    />
+
+                    <path
+                      d="M42 92 C58 72,77 86,90 64 S116 84,134 69 S163 91,181 70 S211 88,226 69 S258 89,276 63 S305 90,321 74 S353 91,369 66 S400 88,416 70 S448 89,464 69 S484 77,500 61"
+                      fill="none"
+                      stroke="#3d7bda"
+                      strokeWidth="2.4"
+                    />
+
+                    <text
+                      x="38"
+                      y="113"
+                      fontSize="8"
+                      fill="#68748a"
+                    >
+                      03 May
+                    </text>
+
+                    <text
+                      x="145"
+                      y="113"
+                      fontSize="8"
+                      fill="#68748a"
+                    >
+                      10 May
+                    </text>
+
+                    <text
+                      x="254"
+                      y="113"
+                      fontSize="8"
+                      fill="#68748a"
+                    >
+                      17 May
+                    </text>
+
+                    <text
+                      x="365"
+                      y="113"
+                      fontSize="8"
+                      fill="#68748a"
+                    >
+                      24 May
+                    </text>
+
+                    <text
+                      x="468"
+                      y="113"
+                      fontSize="8"
+                      fill="#68748a"
+                    >
+                      31 May
+                    </text>
+                  </svg>
+                </div>
+
+                <FooterButton>
+                  View Full Search Console
+                </FooterButton>
+              </Panel>
+
+              {/* ACTION REQUIRED */}
+
+              <Panel>
+                <PanelTitle
+                  right={
+                    <button
+                      type="button"
+                      className="flex items-center gap-1 text-[8px] font-bold"
+                    >
+                      View All Issues
+                      <ArrowRight className="h-3 w-3" />
+                    </button>
+                  }
+                >
+                  Action Required
+                </PanelTitle>
+
+                <div className="px-3">
+                  {issues.map(
+                    ({
+                      label,
+                      level,
+                      count,
+                      icon: Icon,
+                      tone,
+                    }) => (
+                      <div
+                        key={String(label)}
+                        className="grid grid-cols-[22px_1fr_auto_20px] items-center gap-2 border-b border-[#f0f0ec] py-[5px] text-[8.2px] last:border-b-0"
+                      >
+                        <div
+                          className={`grid h-[22px] w-[22px] place-items-center rounded-[6px] ${toneClass[tone]}`}
+                        >
+                          <Icon className="h-3 w-3" />
+                        </div>
+
+                        <span className="truncate font-bold text-[#2e3c58]">
+                          {label}
+                        </span>
+
+                        <span
+                          className={`font-bold ${
+                            level === "High"
+                              ? "text-rose-600"
+                              : level ===
+                                  "Medium"
+                                ? "text-amber-600"
+                                : "text-emerald-700"
+                          }`}
+                        >
+                          {level}
+                        </span>
+
+                        <span className="grid h-[18px] min-w-[18px] place-items-center rounded-full bg-[#f8f2ee] px-1 font-extrabold text-[#695b50]">
+                          {count}
+                        </span>
+                      </div>
+                    )
+                  )}
+                </div>
+
+                <button
+                  type="button"
+                  className="mx-3 mb-2 mt-1 flex h-[28px] w-[calc(100%-24px)] items-center justify-center gap-2 rounded-md bg-[#071d3c] text-[9px] font-extrabold text-white"
+                >
+                  Fix Issues Now
+                  <ArrowRight className="h-3 w-3" />
+                </button>
+              </Panel>
+            </div>
+
+            {/* =================================================
+                ROW 3
+            ================================================= */}
+
+            <div className="grid min-h-0 grid-cols-[0.92fr_1.12fr_1.06fr] gap-2">
+
+              {/* ANALYTICS */}
+
+              <Panel>
+                <PanelTitle
+                  right={
+                    <RangeDropdown
+                      dropdownKey="analytics-range"
+                      openDropdown={openDropdown}
+                      setOpenDropdown={
+                        setOpenDropdown
+                      }
+                      value={analyticsRange}
+                      setValue={setAnalyticsRange}
+                      options={analyticsRanges}
+                    />
+                  }
+                >
+                  Analytics Overview
+                </PanelTitle>
+
+                <div className="grid grid-cols-5 gap-1 px-3">
+                  {[
+                    [
+                      "Users",
+                      "12,842",
+                      "↑ 18.7%",
+                      true,
+                    ],
+                    [
+                      "Sessions",
+                      "18,942",
+                      "↑ 21.3%",
+                      true,
+                    ],
+                    [
+                      "Page Views",
+                      "28,561",
+                      "↑ 22.4%",
+                      true,
+                    ],
+                    [
+                      "Avg. Session",
+                      "02:45",
+                      "↑ 8.3%",
+                      true,
+                    ],
+                    [
+                      "Bounce Rate",
+                      "32.6%",
+                      "↓ 5.1%",
+                      false,
+                    ],
+                  ].map(
+                    ([label, value, delta, good]) => (
+                      <div
+                        key={String(label)}
+                        className="rounded-[6px] bg-[#f7f8fb] p-1.5"
+                      >
+                        <p className="text-[6.8px] font-bold text-[#394867]">
+                          {label}
+                        </p>
+
+                        <p className="mt-0.5 text-[13px] font-extrabold">
+                          {value}
+                        </p>
+
+                        <p
+                          className={`mt-0.5 text-[6.8px] font-bold ${
+                            good
+                              ? "text-emerald-700"
+                              : "text-rose-600"
+                          }`}
+                        >
+                          {delta}
+                        </p>
+                      </div>
+                    )
+                  )}
+                </div>
+
+                <div className="px-3 pt-1">
+                  <svg
+                    viewBox="0 0 430 85"
+                    preserveAspectRatio="none"
+                    className="h-[62px] w-full"
+                  >
+                    <path
+                      d="M8 70 L35 57 L58 61 L84 49 L110 46 L138 54 L164 35 L193 49 L219 54 L246 39 L272 58 L300 51 L327 33 L354 55 L383 48 L418 31"
+                      fill="none"
+                      stroke="#317f62"
+                      strokeWidth="2"
+                    />
+
+                    <path
+                      d="M8 70 L35 57 L58 61 L84 49 L110 46 L138 54 L164 35 L193 49 L219 54 L246 39 L272 58 L300 51 L327 33 L354 55 L383 48 L418 31 L418 79 L8 79 Z"
+                      fill="#e9f4ef"
+                    />
+                  </svg>
+                </div>
+
+                <FooterButton>
+                  View Full Analytics Report
+                </FooterButton>
+              </Panel>
+
+              {/* WEB VITALS */}
+
+              <Panel>
+                <PanelTitle
+                  right={
+                    <RangeDropdown
+                      dropdownKey="web-vitals-range"
+                      openDropdown={openDropdown}
+                      setOpenDropdown={
+                        setOpenDropdown
+                      }
+                      value={webVitalsRange}
+                      setValue={setWebVitalsRange}
+                      options={webVitalsRanges}
+                    />
+                  }
+                >
+                  Core Web Vitals (Field Data)
+                </PanelTitle>
+
+                <div className="grid grid-cols-3 gap-1.5 px-3">
+                  {[
+                    [
+                      "Largest Contentful Paint (LCP)",
+                      "2.1s",
+                      "Good",
+                      "90%",
+                    ],
+                    [
+                      "Interaction to Next Paint (INP)",
+                      "128ms",
+                      "Good",
+                      "92%",
+                    ],
+                    [
+                      "Cumulative Layout Shift (CLS)",
+                      "0.06",
+                      "Good",
+                      "94%",
+                    ],
+                  ].map(
+                    ([
+                      label,
+                      value,
+                      status,
+                      score,
+                    ]) => (
+                      <div
+                        key={String(label)}
+                        className="rounded-[6px] bg-[#f7f8fb] p-1.5"
+                      >
+                        <p className="text-[6.5px] font-bold text-[#34435f]">
+                          {label}
+                        </p>
+
+                        <p className="mt-0.5 text-[14px] font-extrabold">
+                          {value}
+                        </p>
+
+                        <p className="text-[7px] font-bold text-emerald-700">
+                          {status}
+                        </p>
+                        
+
+                        <div className="mt-1 h-1 overflow-hidden rounded-full bg-[#e5ece8]">
+                          <div className="h-full w-[92%] rounded-full bg-emerald-700" />
+                        </div>
+
+                        <p className="mt-0.5 text-right text-[6px] font-bold text-emerald-700">
+                          {score}
+                        </p>
+                      </div>
+                    )
+                  )}
+                </div>
+
+                <div className="px-3 pt-1.5">
+                  <p className="mb-0.5 text-[8px] font-extrabold">
+                    Other Performance Metrics
+                  </p>
+
+                  <div className="grid grid-cols-[1fr_64px_64px] gap-x-2 text-[6.8px] font-bold">
+                    <div className="bg-[#f7f8fb] px-2 py-0.5">
+                      Metric
+                    </div>
+
+                    <div className="bg-[#f7f8fb] px-2 py-0.5 text-center">
+                      Mobile
+                    </div>
+
+                    <div className="bg-[#f7f8fb] px-2 py-0.5 text-center">
+                      Desktop
+                    </div>
+
+                    {[
+                      [
+                        "First Contentful Paint (FCP)",
+                        "1.5s",
+                        "0.9s",
+                      ],
+                      [
+                        "Time to First Byte (TTFB)",
+                        "0.7s",
+                        "0.4s",
+                      ],
+                      [
+                        "Total Blocking Time (TBT)",
+                        "120ms",
+                        "80ms",
+                      ],
+                    ].map((r) => (
+                      <div
+                        key={r[0]}
+                        className="contents"
+                      >
+                        <div className="px-2 py-0.5">
+                          {r[0]}
+                        </div>
+
+                        <div className="px-2 py-0.5 text-center text-emerald-700">
+                          {r[1]}
+                        </div>
+
+                        <div className="px-2 py-0.5 text-center text-emerald-700">
+                          {r[2]}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <FooterButton>
+                  View Performance Center
+                </FooterButton>
+              </Panel>
+
+              {/* SITE STATUS */}
+
+              <Panel>
+                <PanelTitle>
+                  Site Status
+                </PanelTitle>
+
+                <div className="px-3">
+                  {[
+                    [
+                      LockKeyhole,
+                      "SSL Certificate",
+                      "Valid",
+                    ],
+                    [
+                      ShieldCheck,
+                      "Security Status",
+                      "Secure",
+                    ],
+                    [
+                      Timer,
+                      "Uptime (Last 30 days)",
+                      "99.9%",
+                    ],
+                    [
+                      Activity,
+                      "Last Backup",
+                      "30 May 2026, 02:30 AM",
+                    ],
+                    [
+                      Globe2,
+                      "WordPress Version",
+                      "6.5.3",
+                    ],
+                    [
+                      Wrench,
+                      "PHP Version",
+                      "8.2.14",
+                    ],
+                  ].map(([Icon, label, value]) => (
+                    <div
+                      key={String(label)}
+                      className="grid grid-cols-[18px_1fr_auto_16px] items-center gap-2 border-b border-[#f0f0ec] py-[6px] text-[8px] last:border-b-0"
+                    >
+                      <Icon className="h-3.5 w-3.5 text-[#3b4d70]" />
+
+                      <span className="font-bold">
+                        {label as string}
+                      </span>
+
+                      <span className="font-bold text-emerald-700">
+                        {value as string}
+                      </span>
+
+                      <CheckCircle2 className="h-3.5 w-3.5 text-emerald-700" />
+                    </div>
+                  ))}
+                </div>
+
+                <FooterButton>
+                  View Site Health
+                </FooterButton>
+              </Panel>
+            </div>
+
+            {/* =================================================
+                BOTTOM ROW
+            ================================================= */}
+
+            <div className="grid min-h-0 grid-cols-[1.02fr_1fr_1fr_1.12fr] gap-2">
+
+              {/* TOP PAGES */}
+
+              <Panel>
+                <PanelTitle
+                  right={
+                    <RangeDropdown
+                      dropdownKey="top-pages-range"
+                      openDropdown={openDropdown}
+                      setOpenDropdown={
+                        setOpenDropdown
+                      }
+                      value={topPagesRange}
+                      setValue={setTopPagesRange}
+                      options={monthlyRanges}
+                    />
+                  }
+                >
+                  Top Pages by Traffic
+                </PanelTitle>
+
+                <div className="px-3 text-[7px]">
+                  {topPages.map((row, i) => (
+                    <div
+                      key={row[0]}
+                      className="grid grid-cols-[16px_1fr_76px_42px_12px] items-center gap-1 py-[3px] font-bold"
+                    >
+                      <span>{i + 1}.</span>
+
+                      <span>{row[0]}</span>
+
+                      <span className="truncate text-[#5f6b7e]">
+                        {row[1]}
+                      </span>
+
+                      <span className="text-right">
+                        {row[2]}
+                      </span>
+
+                      <Search className="h-2.5 w-2.5 text-[#9aa5b4]" />
+                    </div>
+                  ))}
+                </div>
+
+                <FooterButton>
+                  View All Pages Analytics
+                </FooterButton>
+              </Panel>
+
+              {/* KEYWORDS */}
+
+              <Panel>
+                <PanelTitle
+                  right={
+                    <RangeDropdown
+                      dropdownKey="keyword-range"
+                      openDropdown={openDropdown}
+                      setOpenDropdown={
+                        setOpenDropdown
+                      }
+                      value={keywordRange}
+                      setValue={setKeywordRange}
+                      options={monthlyRanges}
+                    />
+                  }
+                >
+                  Keyword Performance
+                </PanelTitle>
+
+                <div className="grid grid-cols-[1fr_38px_54px_45px] gap-1 px-3 text-[6.8px] font-bold">
+                  <span>Keyword</span>
+                  <span>Clicks</span>
+                  <span>Impressions</span>
+                  <span>Position</span>
+
+                  {keywordRows.map((r) => (
+                    <div
+                      className="contents"
+                      key={r[0]}
+                    >
+                      <span className="py-[3px]">
+                        {r[0]}
+                      </span>
+
+                      <span className="py-[3px]">
+                        {r[1]}
+                      </span>
+
+                      <span className="py-[3px]">
+                        {r[2]}
+                      </span>
+
+                      <span className="py-[3px] text-emerald-700">
+                        {r[3]} ↑
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                <FooterButton>
+                  View All Keyword Data
+                </FooterButton>
+              </Panel>
+
+              {/* LOCATIONS */}
+
+              <Panel>
+                <PanelTitle
+                  right={
+                    <RangeDropdown
+                      dropdownKey="location-range"
+                      openDropdown={openDropdown}
+                      setOpenDropdown={
+                        setOpenDropdown
+                      }
+                      value={locationRange}
+                      setValue={setLocationRange}
+                      options={monthlyRanges}
+                    />
+                  }
+                >
+                  Top Sewa Help Locations
+                </PanelTitle>
+
+                <div className="space-y-[6px] px-3 pt-1">
+                  {locations.map(
+                    ([name, count, pct], i) => (
+                      <div
+                        key={String(name)}
+                        className="grid grid-cols-[56px_1fr_24px_38px] items-center gap-1.5 text-[7px] font-bold"
+                      >
+                        <span>{name}</span>
+
+                        <div className="h-1.5 rounded-full bg-[#edf2f8]">
+                          <div
+                            className="h-full rounded-full bg-[#2f77d7]"
+                            style={{
+                              width: `${
+                                88 - i * 14
+                              }%`,
+                            }}
+                          />
+                        </div>
+
+                        <span className="text-right">
+                          {count}
+                        </span>
+
+                        <span className="text-right text-[#6b7280]">
+                          ({pct})
+                        </span>
+                      </div>
+                    )
+                  )}
+                </div>
+
+                <FooterButton>
+                  View Full Location Report
+                </FooterButton>
+              </Panel>
+
+              {/* FORM SUBMISSIONS */}
+
+              <Panel>
+                <PanelTitle
+                  right={
+                    <button
+                      type="button"
+                      className="flex items-center gap-1 text-[7px] font-bold"
+                    >
+                      View All
+
+                      <ArrowRight className="h-3 w-3" />
+                    </button>
+                  }
+                >
+                  Recent Form Submissions
+                </PanelTitle>
+
+                <div className="px-3">
+                  {submissions.map((r, i) => (
+                    <div
+                      key={r[0]}
+                      className="grid grid-cols-[18px_1fr_1.1fr_auto] items-center gap-1.5 py-[3px] text-[6.8px] font-bold"
+                    >
+                      <div
+                        className={`grid h-[18px] w-[18px] place-items-center rounded-full ${
+                          i === 0
+                            ? "bg-emerald-50 text-emerald-700"
+                            : i === 1
+                              ? "bg-violet-50 text-violet-700"
+                              : i === 2
+                                ? "bg-amber-50 text-amber-700"
+                                : i === 3
+                                  ? "bg-rose-50 text-rose-700"
+                                  : "bg-blue-50 text-blue-700"
+                        }`}
+                      >
+                        <FileText className="h-2.5 w-2.5" />
+                      </div>
+
+                      <span className="truncate">
+                        {r[0]}
+                      </span>
+
+                      <span className="truncate text-[#43526d]">
+                        {r[1]}
+                      </span>
+
+                      <span className="whitespace-nowrap text-[#43526d]">
+                        {r[2]}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </Panel>
+            </div>
+          </div>
+        </main>
+
+        {/* ===================================================
+            FOOTER
+        =================================================== */}
+
+        <footer className="relative h-[64px] shrink-0 overflow-hidden border-t border-[#e7e4dc] bg-[#faf9f6]">
+
+          {/* SOFT LANDSCAPE TINT */}
+
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[22px] bg-[linear-gradient(to_top,rgba(214,230,220,0.48),rgba(250,249,246,0))]" />
+
+          {/* FOOTER ARTWORK */}
+
+          <div
+            className="pointer-events-none absolute bottom-0 right-0 z-0 h-full w-[370px] bg-no-repeat"
+            style={{
+              backgroundImage:
+                'url("/assets/footer-moksha-scene.png")',
+              backgroundSize: "370px 64px",
+              backgroundPosition: "right bottom",
+            }}
+          />
+
+          {/* FOOTER CONTENT */}
+
+          <div className="relative z-10 flex h-full items-center px-4 pr-[390px] text-[8px] font-semibold text-[#4d596b]">
+            <div className="flex min-w-0 flex-1 items-center gap-4">
+
+              <div className="flex items-center gap-2">
+                <div className="grid h-8 w-8 shrink-0 place-items-center text-[#d29b38]">
+                  <BadgeCheck className="h-[19px] w-[19px]" />
+                </div>
+
+                <span className="whitespace-nowrap">
+                  Together, we bring dignity to every
+                  final journey.
+                </span>
+              </div>
+
+              <span className="h-5 w-px shrink-0 bg-[#d9d8d2]" />
+
+              <span className="whitespace-nowrap">
+                © 2026 Moksha Sewa. All rights
+                reserved.
+              </span>
+
+              <span className="h-5 w-px shrink-0 bg-[#d9d8d2]" />
+
+              <span className="whitespace-nowrap">
+                An Initiative of Namo Gange Trust
+              </span>
+
+              <span className="h-5 w-px shrink-0 bg-[#d9d8d2]" />
+
+              <Link
+                href="/privacy-policy"
+                className="whitespace-nowrap transition-colors hover:text-[#13213d]"
+              >
+                Privacy Policy
+              </Link>
+
+              <span className="h-5 w-px shrink-0 bg-[#d9d8d2]" />
+
+              <Link
+                href="/terms"
+                className="whitespace-nowrap transition-colors hover:text-[#13213d]"
+              >
+                Terms &amp; Conditions
+              </Link>
+
+              <span className="h-5 w-px shrink-0 bg-[#d9d8d2]" />
+
+              <Link
+                href="/support"
+                className="whitespace-nowrap transition-colors hover:text-[#13213d]"
+              >
+                Support
+              </Link>
+            </div>
+          </div>
+        </footer>
+      </div>
     </div>
   );
 }

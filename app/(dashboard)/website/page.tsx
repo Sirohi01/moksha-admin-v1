@@ -1,7 +1,7 @@
 "use client";
 import { ChangeEvent, useEffect, useMemo, useState, useRef } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { ImagePlus, Plus, Save, Trash2 } from "lucide-react";
+import { ImagePlus, Plus, Save, Trash2, ChevronDown, ChevronUp } from "lucide-react";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import { Input, Textarea } from "@/components/ui/Input";
@@ -37,7 +37,32 @@ import {
   defaultConductSections,
 } from "@/lib/extraPagesContent";
 
+
+export function CollapsibleCard({ title, defaultOpen = false, children, headerAction }: { title: React.ReactNode, defaultOpen?: boolean, children: React.ReactNode, headerAction?: React.ReactNode }) {
+  const [isOpen, setIsOpen] = useState(defaultOpen);
+  return (
+    <div className="rounded-lg border border-surface-border bg-surface-sunken/40 overflow-hidden mb-3">
+      <div 
+        className="flex items-center justify-between p-3 cursor-pointer select-none hover:bg-surface-sunken transition-colors"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <p className="text-xs font-semibold text-text-primary flex items-center gap-2">
+          {isOpen ? <ChevronUp className="h-4 w-4 text-text-muted" /> : <ChevronDown className="h-4 w-4 text-text-muted" />}
+          {title}
+        </p>
+        {headerAction && <div onClick={e => e.stopPropagation()}>{headerAction}</div>}
+      </div>
+      {isOpen && (
+        <div className="p-3 border-t border-surface-border">
+          {children}
+        </div>
+      )}
+    </div>
+  );
+}
+
 const FOLDER = "moksha-sewa/website";
+
 
 const baseRenderedFields = new Set<keyof LandingSectionContent>([
   "key",
@@ -842,8 +867,7 @@ export default function WebsitePage() {
                 </Button>
                 <div className="space-y-3">
                   {(activeSection.slides ?? []).map((slide: LandingHeroSlide, slideIndex: number) => (
-                    <div key={`hero-slide-${slideIndex}`} className="rounded-lg border border-surface-border bg-surface-sunken/40 p-3">
-                      <p className="mb-3 text-xs font-semibold text-text-primary">Slide {slideIndex + 1}</p>
+                    <CollapsibleCard key={`hero-slide-${slideIndex}`} title={`Slide ${slideIndex + 1}`}>
                       <div className="grid gap-3 sm:grid-cols-2">
                         <div className="sm:col-span-2">
                           <TextField label="H1 (Slide Title)" value={slide.title} multiline maxLength={getSlideFieldLimit(slideIndex, "title")} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, slides: updateAt(section.slides ?? [], slideIndex, (current) => ({ ...current, title: value })) }))} />
@@ -869,7 +893,7 @@ export default function WebsitePage() {
                           <TextField label="Secondary Button Link" value={slide.secondaryButtonHref} onChange={(value) => setSection(activeSection.key, (section) => ({ ...section, slides: updateAt(section.slides ?? [], slideIndex, (current) => ({ ...current, secondaryButtonHref: value })) }))} />
                         </div>
                       </div>
-                    </div>
+                    </CollapsibleCard>
                   ))}
                 </div>
               </div>
@@ -986,9 +1010,7 @@ export default function WebsitePage() {
 
               <div className="space-y-3">
                 {(activeSection.items ?? []).map((item: LandingSectionItem, itemIndex: number) => (
-                  <div key={`${activeSection.key}-${itemIndex}`} className="rounded-lg border border-surface-border bg-surface-sunken/40 p-3">
-                    <div className="mb-3 flex items-center justify-between">
-                      <p className="text-xs font-semibold text-text-primary">Item {itemIndex + 1}</p>
+                  <CollapsibleCard key={`${activeSection.key}-${itemIndex}`} title={`Item ${itemIndex + 1}`} headerAction={<div className="flex items-center justify-between">
                       <Button
                         type="button"
                         size="sm"
@@ -1001,9 +1023,7 @@ export default function WebsitePage() {
                         }
                       >
                         <Trash2 className="h-3.5 w-3.5" />
-                      </Button>
-                    </div>
-                    <div className="grid gap-3 sm:grid-cols-2">
+                      </Button></div>}><div className="grid gap-3 sm:grid-cols-2">
                       <TextField
                         label="Title / Question"
                         value={item.title}
@@ -1187,12 +1207,7 @@ export default function WebsitePage() {
                           }
                         />
                       </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </Card>
+                    </div></CollapsibleCard>))}</div></div></Card>
         </div>
       )}
     </div>
