@@ -21,9 +21,14 @@ export interface CmsPage {
     metaDescription?: string;
     metaKeywords?: string;
     canonicalUrl?: string;
+    ogTitle?: string;
+    ogDescription?: string;
+    ogImage?: string;
     h1Tag?: string;
+    breadcrumbName?: string;
     schemaMarkup?: string;
     robotsIndex?: boolean;
+    robotsFollow?: boolean;
   };
 }
 
@@ -33,9 +38,14 @@ type SettingsPageConfig = {
     metaDescription?: string;
     metaKeywords?: string;
     canonicalUrl?: string;
+    ogTitle?: string;
+    ogDescription?: string;
+    ogImage?: string;
     h1Tag?: string;
+    breadcrumbName?: string;
     schemaMarkup?: string;
     robotsIndex?: boolean;
+    robotsFollow?: boolean;
   };
   sections?: Array<{ enabled?: boolean }>;
 };

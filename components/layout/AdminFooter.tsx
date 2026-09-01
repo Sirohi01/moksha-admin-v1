@@ -3,12 +3,12 @@ import { BadgeCheck } from "lucide-react";
 
 export default function AdminFooter() {
   return (
-    <footer className="relative h-16 shrink-0 overflow-hidden border-t border-[#e7e4dc] bg-[#faf9f6]">
+    <footer className="relative h-10 shrink-0 overflow-hidden border-t border-[#e7e4dc] bg-[#faf9f6]">
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-6 bg-gradient-to-t from-emerald-50/60 to-transparent" />
       <div
         aria-hidden
         className="pointer-events-none absolute bottom-0 right-0 hidden h-full w-[370px] bg-no-repeat 2xl:block"
-        style={{ backgroundImage: 'url("/assets/footer-moksha-scene.png")', backgroundSize: "370px 64px", backgroundPosition: "right bottom" }}
+        style={{ backgroundImage: 'url("/assets/footer-moksha-scene.png")', backgroundSize: "370px 40px", backgroundPosition: "right bottom" }}
       />
 
       <div className="relative z-10 flex h-full items-center overflow-x-auto px-3 text-[10px] font-medium text-slate-600 2xl:pr-[390px]">
