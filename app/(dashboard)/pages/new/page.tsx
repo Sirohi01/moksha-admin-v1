@@ -967,8 +967,8 @@ export default function AddNewPage() {
               </div>
             </section>
 
-            <div className="flex items-center gap-[8px] rounded-[5px] bg-[#eef6ec] px-[13px] text-[9.5px] font-medium text-[#39744f]">
-              <Info className="h-[12px] w-[12px] shrink-0" />
+            <div className="flex items-center gap-[8px] rounded-[5px] bg-[#eef6ec] px-[13px] py-[8px] text-[11.5px] font-medium text-[#39744f]">
+              <Info className="h-[14px] w-[14px] shrink-0" />
 
               You can save this page as draft and
               publish it later when you&apos;re ready.
@@ -1125,7 +1125,7 @@ export default function AddNewPage() {
 
             {/* ADDITIONAL OPTIONS */}
 
-            <section className="flex min-h-0 flex-col overflow-hidden rounded-[7px] border border-[#e7e7e3] bg-white px-[14px] py-[10px]">
+            <section className="flex shrink-0 flex-col rounded-[7px] border border-[#e7e7e3] bg-white px-[14px] py-[10px]">
               <SectionHeader
                 number={5}
                 title="Additional Options"
@@ -1134,7 +1134,7 @@ export default function AddNewPage() {
                 }
               />
 
-              <div className="mt-[9px] grid min-h-0 flex-1 grid-rows-5 content-between">
+              <div className="mt-[9px] flex flex-col gap-[6px]">
                 <CheckOption
                   checked={form.noIndex}
                   onChange={(value) =>
