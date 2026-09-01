@@ -4,8 +4,8 @@ import { AdminUser, AuthTokens } from "@/store/slices/authSlice";
 type LoginResult = { user: AdminUser; twoFactorSetupRequired: boolean } & AuthTokens;
 
 export const authApi = {
-  login: (email: string, password: string, totpCode?: string) =>
-    api.post<LoginResult>("/auth/login", { email, password, totpCode }),
+  login: (identifier: string, password: string, totpCode?: string) =>
+    api.post<LoginResult>("/auth/login", { identifier, password, totpCode }),
   logout: (refreshToken: string) => api.post("/auth/logout", { refreshToken }).catch(() => undefined),
   changePassword: (currentPassword: string, newPassword: string) =>
     api.patch("/auth/change-password", { currentPassword, newPassword }),

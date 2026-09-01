@@ -16,7 +16,7 @@ import { ApiRequestError } from "@/lib/api";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { updateAdmin } from "@/store/slices/authSlice";
 
-const EMPTY_FORM: InviteStaffInput = { name: "", email: "", phone: "", roleId: "" };
+const EMPTY_FORM: InviteStaffInput = { name: "", email: "", phone: "", employeeId: "", roleId: "" };
 
 const STATUS_TONE: Record<StaffStatus, "success" | "neutral" | "danger"> = {
   ACTIVE: "success",
@@ -63,7 +63,7 @@ export default function StaffPage() {
 
   const openEdit = (member: StaffMember) => {
     setEditingId(member._id);
-    setForm({ name: member.name, email: member.email ?? "", phone: member.phone, roleId: member.roleId ?? "" });
+    setForm({ name: member.name, email: member.email ?? "", phone: member.phone, employeeId: member.employeeId ?? "", roleId: member.roleId ?? "" });
     setError("");
     setCreatedCredential(null);
     setModalOpen(true);
@@ -141,6 +141,7 @@ export default function StaffPage() {
     { key: "name", header: "Name", render: (s) => <span className="font-medium">{s.name}</span> },
     { key: "email", header: "Email", render: (s) => s.email ?? "—" },
     { key: "phone", header: "Phone", render: (s) => s.phone },
+    { key: "employeeId", header: "Employee ID", render: (s) => s.employeeId ?? "—" },
     { key: "role", header: "Role", render: (s) => s.roleName ?? "—" },
     {
       key: "status",
@@ -242,6 +243,7 @@ export default function StaffPage() {
             <Input label="Name" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
             <Input label="Email" required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
             <Input label="Phone" required value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+            <Input label="Employee ID" required value={form.employeeId} onChange={(e) => setForm({ ...form, employeeId: e.target.value.toUpperCase() })} placeholder="e.g. MS-1001" />
             <Select label="Role" required value={form.roleId} onChange={(e) => setForm({ ...form, roleId: e.target.value })}>
               <option value="">Select a role…</option>
               {roles.map((r) => (

@@ -506,6 +506,7 @@ export interface StaffMember {
   name: string;
   email?: string;
   phone: string;
+  employeeId?: string;
   avatarUrl?: string;
   roleId?: string;
   roleName?: string;

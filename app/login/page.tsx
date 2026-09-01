@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import QRCode from "qrcode";
-import { ShieldCheck, Eye, EyeOff, Lock, Copy, Check, AlertTriangle, KeyRound, CheckCircle2, Mail, MailCheck } from "lucide-react";
+import { ShieldCheck, Eye, EyeOff, Lock, Copy, Check, AlertTriangle, KeyRound, CheckCircle2, Mail, MailCheck, HeartHandshake, UsersRound, Flower2, Globe2, ChevronDown, UserRound, ArrowRight, Headphones, Clock3, MonitorCheck } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setCredentials } from "@/store/slices/authSlice";
 import { authApi } from "@/lib/authApi";
@@ -22,6 +22,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const [totpCode, setTotpCode] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -137,59 +138,45 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="relative flex min-h-screen flex-col justify-center overflow-hidden bg-slate-50 py-12 sm:px-6 lg:px-8">
-      {/* Premium Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-[20%] -left-[10%] h-[50%] w-[50%] rounded-full bg-orange-400/10 blur-[120px]" />
-        <div className="absolute top-[20%] -right-[10%] h-[60%] w-[50%] rounded-full bg-blue-500/10 blur-[120px]" />
-        <div className="absolute -bottom-[20%] left-[20%] h-[50%] w-[50%] rounded-full bg-teal-400/10 blur-[100px]" />
-        {/* Subtle grid pattern for texture */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
-      </div>
+    <main className="login-page">
+      <div className="login-bg" aria-hidden />
+      <button type="button" className="language-switch"><Globe2 /> English <ChevronDown /></button>
 
-      {/* Top Header Logos (Left & Right) */}
-      <div className="absolute top-0 left-0 w-full p-4 sm:p-8 lg:p-12 flex items-start justify-between z-20 pointer-events-none">
-        {/* Left Logo: Namo Gange */}
-        <div className="pointer-events-auto flex flex-col items-start gap-1 sm:gap-2">
-          <span className="text-[9px] sm:text-[10px] md:text-xs font-black uppercase tracking-[0.2em] text-slate-500">An Initiative By</span>
+      <section className="login-brand md:translate-y-10 xl:translate-y-14" aria-label="Moksha Sewa values">
+        <div className="brand-emblem !h-[170px] !w-[170px] xl:!h-[195px] xl:!w-[195px]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.webp" alt="Namo Gange Trust" className="h-14 sm:h-20 md:h-28 lg:h-32 w-auto object-contain drop-shadow-md" />
+          <img src="/moksha-sewa-logo.png" alt="Moksha Sewa" />
         </div>
-
-        {/* Right Logo: Moksha Sewa */}
-        <div className="pointer-events-auto">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/moksha-sewa-logo.png" alt="Moksha Sewa" className="h-12 sm:h-16 md:h-24 lg:h-28 w-auto object-contain drop-shadow-md mt-2 sm:mt-4" />
+        <div className="gold-ornament"><i /><b>◆</b><i /></div>
+        <p className="brand-initiative !text-[18px] xl:!text-[20px]">An Initiative of Namo Gange Trust</p>
+        <div className="gold-ornament"><i /><b>◆</b><i /></div>
+        <h1>Moksha Sewa<br /><span>CRM &amp; Operations Portal</span></h1>
+        <div className="gold-ornament"><i /><b>◆</b><i /></div>
+        <p className="brand-message">Serving with Compassion.<br />Honoring every life.<br />Upholding dignity in every final journey.</p>
+        <div className="value-grid !rounded-none !border-0">
+          {[[HeartHandshake,"Compassion","We serve with care and respect"],[ShieldCheck,"Dignity","Every life deserves dignity"],[UsersRound,"Service","End-to-end support for every need"],[Flower2,"Trust","Transparent actions, lasting impact"]].map(([Icon,title,copy]) => {
+            const ValueIcon = Icon as typeof ShieldCheck;
+            return <article key={String(title)}><ValueIcon /><strong>{String(title)}</strong><small>{String(copy)}</small></article>;
+          })}
         </div>
-      </div>
+        <div className="trust-card !ml-[7%] !w-fit !self-start !rounded-none !border-0"><span><Lock /></span><p><strong>Secure. Confidential. Accountable.</strong><br />Your trust is our responsibility.</p></div>
+      </section>
 
-      <div className="relative mx-auto w-full px-4 sm:px-0 sm:max-w-md z-10 pt-24 sm:pt-5">
-
-        <h2 className="text-center text-2xl sm:text-3xl font-semibold tracking-tight text-slate-900">
-          Admin Panel
-        </h2>
-        <p className="mt-2 text-center text-sm font-medium text-slate-500">
-          Sign in to manage Moksha Sewa operations
-        </p>
-      </div>
-
-      <div className="relative mt-6 sm:mt-8 mx-auto w-full px-4 sm:px-0 sm:max-w-md z-10">
-        <div className="overflow-hidden rounded-2xl sm:rounded-3xl border border-white/50 bg-white/20 px-5 py-8 shadow-[0_8px_30px_rgb(0,0,0,0.12)] backdrop-blur-2xl sm:px-10">
-
-          {/* Subtle gradient line at the top of the card */}
-          <div className="absolute left-0 top-0 h-1 w-full bg-gradient-to-r from-orange-400 via-blue-500 to-teal-400 opacity-80"></div>
+      <section className="login-auth">
+        <div className="auth-card !rounded-none !border-0">
+          <div className="auth-heading"><span><ShieldCheck /></span><h2>Welcome Back!</h2><p>Please login to continue to<br /><strong>Moksha Sewa CRM &amp; Operations Portal</strong></p><div className="gold-ornament"><i /><b>◆</b><i /></div></div>
 
           {step === "credentials" && (
-            <form onSubmit={handleSubmit} className="relative space-y-6">
+            <form onSubmit={handleSubmit} className="credentials-form relative space-y-4">
               <div className="space-y-5">
                 <Input
-                  label="Email Address"
-                  type="email"
+                  label="Email / Mobile / User ID"
+                  type="text"
                   required
                   autoFocus
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@mokshasewa.com"
+                  placeholder="Enter email, mobile number or user id"
                 />
                 <div className="relative">
                   <div className="mb-1 flex items-center justify-between">
@@ -203,7 +190,7 @@ export default function LoginPage() {
                       }}
                       className="text-[11px] font-semibold text-blue-600 hover:text-blue-700"
                     >
-                      Forgot password?
+                      Forgot Password?
                     </button>
                   </div>
                   <Input
@@ -225,6 +212,8 @@ export default function LoginPage() {
                 </div>
               </div>
 
+              <label className="remember-option"><input type="checkbox" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} /> Remember Me</label>
+
               {error && (
                 <div className="flex items-start gap-3 rounded-xl border border-red-100 bg-red-50/80 p-3.5 text-sm text-red-700">
                   <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-600" />
@@ -233,8 +222,11 @@ export default function LoginPage() {
               )}
 
               <Button type="submit" loading={isSubmitting} className="h-12 w-full text-[15px] shadow-sm">
-                Sign in securely
+                Login Securely
               </Button>
+              <div className="login-divider"><i />OR<i /></div>
+              <button type="button" onClick={() => setStep("totp")} className="otp-login"><ShieldCheck /> Login with OTP (2FA)</button>
+              <div className="access-notice !rounded-none [&>svg]:!h-[17px] [&>svg]:!w-[17px] [&>p]:!text-[11px] [&>p]:!leading-[1.45]"><Lock /><p><strong>Authorized Access Only.</strong> This system is for authorized users only. All activities are monitored and logged for operational accountability.</p></div>
             </form>
           )}
 
@@ -444,15 +436,16 @@ export default function LoginPage() {
               </Button>
             </div>
           )}
+          <div className="auth-help !text-[13px] [&>svg]:!h-4 [&>svg]:!w-4"><Headphones /> Need help? Contact <a href="mailto:support@mokshasewa.com">IT Support</a></div>
         </div>
+      </section>
 
-        <div className="mt-8 flex items-center justify-center gap-2.5 text-[13px] font-medium text-slate-500">
-          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-200/60">
-            <Lock className="h-3.5 w-3.5 text-slate-600" />
-          </div>
-          <span>Secured with enterprise-grade encryption</span>
-        </div>
-      </div>
-    </div>
+      <footer className="security-strip">
+        {[[ShieldCheck,"Role Based Access","Access only what you need"],[Lock,"Data Security","Industry standard encryption"],[Clock3,"Audit & Logs","Every action is recorded"],[MonitorCheck,"Reliable & Secure","99.9% uptime commitment"]].map(([Icon,title,copy]) => {
+          const StripIcon = Icon as typeof ShieldCheck;
+          return <div key={String(title)}><StripIcon /><p><strong>{String(title)}</strong><small>{String(copy)}</small></p></div>;
+        })}
+      </footer>
+    </main>
   );
 }

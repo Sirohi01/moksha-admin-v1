@@ -5,6 +5,7 @@ export interface InviteStaffInput {
   name: string;
   email: string;
   phone: string;
+  employeeId: string;
   roleId: string;
   avatarUrl?: string;
 }
