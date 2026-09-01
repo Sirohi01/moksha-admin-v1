@@ -21,6 +21,7 @@ import {
   Globe2,
   Route,
   MessageSquare,
+  FileText,
 } from "lucide-react";
 
 export interface NavItem {
@@ -59,6 +60,7 @@ export const NAV_SECTIONS: NavSection[] = [
     items: [
       { label: "Gallery Media", href: "/gallery", icon: Images },
       { label: "Blog Posts", href: "/blogs", icon: Route },
+      { label: "Pages & CMS", href: "/pages", icon: FileText },
       {
         label: "Website",
         href: "/website",

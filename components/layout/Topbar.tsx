@@ -7,55 +7,117 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { logout } from "@/store/slices/authSlice";
 import { authApi } from "@/lib/authApi";
 import { casesApi, SlaBreach } from "@/lib/casesApi";
-import { adminNotificationsApi, AdminNotificationItem, AdminNotificationType } from "@/lib/adminNotificationsApi";
+import {
+  adminNotificationsApi,
+  AdminNotificationItem,
+  AdminNotificationType,
+} from "@/lib/adminNotificationsApi";
 import { ApiRequestError } from "@/lib/api";
 import { NAV_SECTIONS } from "./navigation";
 import Modal from "@/components/ui/Modal";
 import Button from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 
-const NOTIFICATION_ICONS: Record<AdminNotificationType, typeof HeartHandshake> = {
+const NOTIFICATION_ICONS: Record<
+  AdminNotificationType,
+  typeof HeartHandshake
+> = {
   DONATION: HeartHandshake,
   ENQUIRY: Mail,
   CASE: FolderKanban,
   VOLUNTEER: HandHeart,
 };
 
+const WEBSITE_OPTIONS = ["mokshasewa.org"];
+
+const DATE_OPTIONS = [
+  "31 May 2026",
+  "30 May 2026",
+  "29 May 2026",
+  "28 May 2026",
+  "27 May 2026",
+];
+
 function timeAgo(iso: string): string {
-  const minutes = Math.floor((Date.now() - new Date(iso).getTime()) / 60000);
+  const minutes = Math.floor(
+    (Date.now() - new Date(iso).getTime()) / 60000
+  );
+
   if (minutes < 1) return "just now";
-  if (minutes < 60) return `${minutes}m ago`;
+
+  if (minutes < 60) {
+    return `${minutes}m ago`;
+  }
+
   const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours}h ago`;
+
+  if (hours < 24) {
+    return `${hours}h ago`;
+  }
+
   return `${Math.floor(hours / 24)}d ago`;
 }
 
 function currentPageTitle(pathname: string): string {
   for (const section of NAV_SECTIONS) {
     for (const item of section.items) {
-      if (item.href === "/" ? pathname === "/" : pathname === item.href || pathname.startsWith(`${item.href}/`)) {
+      if (
+        item.href === "/"
+          ? pathname === "/"
+          : pathname === item.href ||
+          pathname.startsWith(`${item.href}/`)
+      ) {
         return item.label;
       }
     }
   }
+
   return "Moksha Sewa Admin";
 }
 
-export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
+export default function Topbar({
+  onMenuClick,
+}: {
+  onMenuClick: () => void;
+}) {
   const router = useRouter();
   const pathname = usePathname();
   const dispatch = useAppDispatch();
+
   const admin = useAppSelector((state) => state.auth.admin);
-  const refreshToken = useAppSelector((state) => state.auth.refreshToken);
+  const refreshToken = useAppSelector(
+    (state) => state.auth.refreshToken
+  );
+
   const [menuOpen, setMenuOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
+
+  const [websiteOpen, setWebsiteOpen] = useState(false);
+  const [dateOpen, setDateOpen] = useState(false);
+
+  const [selectedWebsite, setSelectedWebsite] =
+    useState("mokshasewa.org");
+
+  const [selectedDate, setSelectedDate] =
+    useState("31 May 2026");
+
   const [breaches, setBreaches] = useState<SlaBreach[]>([]);
-  const [notifications, setNotifications] = useState<AdminNotificationItem[]>([]);
+
+  const [notifications, setNotifications] = useState<
+    AdminNotificationItem[]
+  >([]);
+
   const [unreadCount, setUnreadCount] = useState(0);
-  const [passwordModalOpen, setPasswordModalOpen] = useState(false);
+
+  const [passwordModalOpen, setPasswordModalOpen] =
+    useState(false);
+
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [passwordSaving, setPasswordSaving] = useState(false);
+
+  const [passwordSaving, setPasswordSaving] =
+    useState(false);
+
   const [passwordError, setPasswordError] = useState("");
   const [websiteOpen, setWebsiteOpen] = useState(false);
   const [dateOpen, setDateOpen] = useState(false);
@@ -63,8 +125,36 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
 
   const isInternal = admin?.userType === "INTERNAL";
 
+  const isDashboard = pathname === "/";
+
+  const firstName =
+    admin?.name?.split(" ")[0] || "Admin";
+
+  const initials = admin?.name
+    ?.split(" ")
+    .map((part) => part[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+
+  const displayName = admin?.name || "Admin User";
+
+  const displayRole =
+    admin?.roleSlug
+      ?.replace(/_/g, " ")
+      .replace(/\b\w/g, (char) => char.toUpperCase()) ||
+    "Super Admin";
+
+  const closeHeaderDropdowns = () => {
+    setWebsiteOpen(false);
+    setDateOpen(false);
+    setNotifOpen(false);
+    setMenuOpen(false);
+  };
+
   const loadNotifications = useCallback(() => {
     if (!isInternal) return;
+
     adminNotificationsApi
       .list()
       .then(({ notifications, unreadCount }) => {
@@ -80,60 +170,121 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
   useEffect(() => {
     if (!isInternal) return;
 
-    casesApi.slaBreaches().then(setBreaches).catch(() => setBreaches([]));
+    casesApi
+      .slaBreaches()
+      .then(setBreaches)
+      .catch(() => setBreaches([]));
+
     loadNotifications();
   }, [isInternal, loadNotifications]);
 
+  const handleWebsiteClick = () => {
+    setWebsiteOpen((value) => !value);
+
+    setDateOpen(false);
+    setNotifOpen(false);
+    setMenuOpen(false);
+  };
+
+  const handleDateClick = () => {
+    setDateOpen((value) => !value);
+
+    setWebsiteOpen(false);
+    setNotifOpen(false);
+    setMenuOpen(false);
+  };
+
   const handleBellClick = () => {
-    setNotifOpen((v) => {
-      if (!v) loadNotifications();
-      return !v;
+    setWebsiteOpen(false);
+    setDateOpen(false);
+    setMenuOpen(false);
+
+    setNotifOpen((value) => {
+      if (!value) {
+        loadNotifications();
+      }
+
+      return !value;
     });
   };
 
-  const handleNotificationClick = async (n: AdminNotificationItem) => {
+  const handleProfileClick = () => {
+    setWebsiteOpen(false);
+    setDateOpen(false);
     setNotifOpen(false);
-    setNotifications((prev) => prev.filter((x) => x._id !== n._id));
-    setUnreadCount((prev) => Math.max(0, prev - 1));
-    adminNotificationsApi.markRead(n._id).catch(() => { });
-    if (n.link) router.push(n.link);
+
+    setMenuOpen((value) => !value);
+  };
+
+  const handleNotificationClick = async (
+    notification: AdminNotificationItem
+  ) => {
+    setNotifOpen(false);
+
+    setNotifications((previous) =>
+      previous.filter(
+        (item) => item._id !== notification._id
+      )
+    );
+
+    setUnreadCount((previous) =>
+      Math.max(0, previous - 1)
+    );
+
+    adminNotificationsApi
+      .markRead(notification._id)
+      .catch(() => { });
+
+    if (notification.link) {
+      router.push(notification.link);
+    }
   };
 
   const handleMarkAllRead = async () => {
     setNotifications([]);
     setUnreadCount(0);
-    adminNotificationsApi.markAllRead().catch(() => { });
+
+    adminNotificationsApi
+      .markAllRead()
+      .catch(() => { });
   };
 
-  const bellBadgeCount = breaches.length + unreadCount;
+  const bellBadgeCount =
+    breaches.length + unreadCount;
 
   const handleLogout = async () => {
-    if (refreshToken) await authApi.logout(refreshToken);
+    if (refreshToken) {
+      await authApi.logout(refreshToken);
+    }
+
     dispatch(logout());
+
     router.push("/login");
   };
 
   const handleChangePassword = async () => {
     setPasswordSaving(true);
     setPasswordError("");
+
     try {
-      await authApi.changePassword(currentPassword, newPassword);
+      await authApi.changePassword(
+        currentPassword,
+        newPassword
+      );
+
       dispatch(logout());
+
       router.push("/login?passwordChanged=1");
     } catch (err) {
-      setPasswordError(err instanceof ApiRequestError ? err.message : "Could not change password.");
+      setPasswordError(
+        err instanceof ApiRequestError
+          ? err.message
+          : "Could not change password."
+      );
     } finally {
       setPasswordSaving(false);
     }
   };
-
-  const firstName = admin?.name?.split(" ")[0];
-  const initials = admin?.name
-    ?.split(" ")
-    .map((part) => part[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
 
   return (
     <header className="relative z-30 flex h-14 shrink-0 items-center justify-between border-b border-white/80 bg-white/75 backdrop-blur-xl px-4 shadow-md">
@@ -190,25 +341,47 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
 
           {notifOpen && (
             <>
-              <div className="fixed inset-0 z-10" onClick={() => setNotifOpen(false)} />
-              <div className="absolute right-0 top-full z-20 mt-2 w-80 rounded-none border border-white/60 bg-white/80 backdrop-blur-xl py-1.5 shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
+              <button
+                type="button"
+                aria-label="Close notifications"
+                className="fixed inset-0 z-10 cursor-default"
+                onClick={() => setNotifOpen(false)}
+              />
+
+              <div className="absolute right-0 top-full z-20 mt-2 w-80 overflow-hidden rounded-[10px] border border-[#e5e2da] bg-white shadow-[0_12px_35px_rgba(15,23,42,0.15)]">
+
                 <div className="max-h-[28rem] overflow-y-auto">
+
                   {breaches.length > 0 && (
                     <div className="border-b border-slate-200/70 pb-1">
-                      <p className="px-3 py-2 text-[10px] font-semibold uppercase tracking-wider text-slate-500">SLA Breaches</p>
-                      {breaches.map((b) => (
+
+                      <p className="px-3 py-2 text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+                        SLA Breaches
+                      </p>
+
+                      {breaches.map((breach) => (
                         <button
-                          key={`${b._id}-${b.breachReason}`}
+                          type="button"
+                          key={`${breach._id}-${breach.breachReason}`}
                           onClick={() => {
                             setNotifOpen(false);
-                            router.push(`/cases/${b._id}`);
+
+                            router.push(
+                              `/cases/${breach._id}`
+                            );
                           }}
-                          className="flex w-full items-start gap-2 px-3 py-2.5 text-left text-xs hover:bg-slate-900/5 transition-colors"
+                          className="flex w-full items-start gap-2 px-3 py-2.5 text-left text-xs transition-colors hover:bg-slate-900/5"
                         >
                           <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-500" />
+
                           <span>
-                            <span className="font-semibold text-slate-900">{b.caseId}</span>
-                            <span className="block text-[11px] font-medium text-slate-500 mt-0.5">{b.breachReason}</span>
+                            <span className="font-semibold text-slate-900">
+                              {breach.caseId}
+                            </span>
+
+                            <span className="mt-0.5 block text-[11px] font-medium text-slate-500">
+                              {breach.breachReason}
+                            </span>
                           </span>
                         </button>
                       ))}
@@ -216,35 +389,66 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
                   )}
 
                   <div className="flex items-center justify-between px-3 py-2">
-                    <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">Activity</p>
+
+                    <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+                      Activity
+                    </p>
+
                     {notifications.length > 0 && (
                       <button
+                        type="button"
                         onClick={handleMarkAllRead}
                         className="flex items-center gap-1 text-[10px] font-semibold text-accent hover:underline"
                       >
-                        <CheckCheck className="h-3 w-3" /> Mark all read
+                        <CheckCheck className="h-3 w-3" />
+                        Mark all read
                       </button>
                     )}
                   </div>
+
                   {notifications.length === 0 ? (
-                    <p className="px-3 pb-3 text-xs font-medium text-slate-600">Nothing new right now.</p>
+                    <p className="px-3 pb-3 text-xs font-medium text-slate-600">
+                      Nothing new right now.
+                    </p>
                   ) : (
-                    notifications.map((n) => {
-                      const Icon = NOTIFICATION_ICONS[n.type];
+                    notifications.map((notification) => {
+                      const Icon =
+                        NOTIFICATION_ICONS[
+                        notification.type
+                        ];
+
                       return (
                         <button
-                          key={n._id}
-                          onClick={() => handleNotificationClick(n)}
+                          type="button"
+                          key={notification._id}
+                          onClick={() =>
+                            handleNotificationClick(
+                              notification
+                            )
+                          }
                           className="flex w-full items-start gap-2 bg-accent-soft/40 px-3 py-2.5 text-left text-xs transition-colors hover:bg-slate-900/5"
                         >
                           <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-soft text-accent">
                             <Icon className="h-3 w-3" />
                           </span>
+
                           <span className="min-w-0 flex-1">
-                            <span className="block font-semibold text-slate-900">{n.title}</span>
-                            <span className="block truncate text-[11px] font-medium text-slate-500">{n.message}</span>
-                            <span className="mt-0.5 block text-[10px] text-slate-400">{timeAgo(n.createdAt)}</span>
+
+                            <span className="block font-semibold text-slate-900">
+                              {notification.title}
+                            </span>
+
+                            <span className="block truncate text-[11px] font-medium text-slate-500">
+                              {notification.message}
+                            </span>
+
+                            <span className="mt-0.5 block text-[10px] text-slate-400">
+                              {timeAgo(
+                                notification.createdAt
+                              )}
+                            </span>
                           </span>
+
                           <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
                         </button>
                       );
@@ -256,33 +460,85 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
           )}
         </div>
 
+        {/* ============================
+                ADMIN PROFILE
+            ============================ */}
+
         <div className="relative">
+
           <button
-            onClick={() => setMenuOpen((v) => !v)}
-            className="flex items-center gap-2.5 rounded-lg px-2 py-1.5 text-sm hover:bg-slate-900/5 transition-colors"
+            type="button"
+            onClick={handleProfileClick}
+            className={`flex items-center gap-2 rounded-[9px] transition-colors hover:bg-slate-900/5 ${isDashboard
+                ? "px-1.5 py-1"
+                : "px-2 py-1.5"
+              }`}
           >
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white text-[11px] font-semibold text-accent border border-white/60 shadow-sm">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full border border-white/60 bg-[#edf3f6] text-[11px] font-semibold text-accent shadow-sm">
+
               {admin?.avatarUrl ? (
-                // eslint-disable-next-line @next/next/no-img-element -- user-supplied Cloudinary URL, not a local/static asset
-                <img src={admin.avatarUrl} alt="" className="h-full w-full object-cover" />
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={admin.avatarUrl}
+                  alt=""
+                  className="h-full w-full object-cover"
+                />
               ) : (
-                initials
+                initials || "AU"
               )}
             </span>
+
             <span className="hidden text-left sm:block">
-              <span className="block text-[13px] font-semibold leading-tight text-slate-900 tracking-tight">Hello, {firstName}!</span>
-              <span className="block text-[10px] font-semibold capitalize leading-tight text-slate-500 mt-0.5">
-                {admin?.roleSlug?.replace(/_/g, " ")}
+
+              <span
+                className={`block font-extrabold leading-tight tracking-tight text-slate-900 ${isDashboard
+                    ? "text-[10px]"
+                    : "text-[13px]"
+                  }`}
+              >
+                {displayName}
+              </span>
+
+              <span
+                className={`mt-0.5 block capitalize leading-tight text-slate-500 ${isDashboard
+                    ? "text-[8px] font-semibold"
+                    : "text-[10px] font-semibold"
+                  }`}
+              >
+                {displayRole}
               </span>
             </span>
-            <ChevronDown className="h-4 w-4 text-slate-400 ml-1" />
+
+            <ChevronDown
+              className={`ml-1 h-3.5 w-3.5 text-slate-400 transition-transform duration-200 ${menuOpen ? "rotate-180" : ""
+                }`}
+            />
           </button>
 
           {menuOpen && (
             <>
-              <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
-              <div className="absolute right-0 top-full z-20 mt-2 w-48 rounded-none border border-white/60 bg-white/80 backdrop-blur-xl py-1 shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
+              <button
+                type="button"
+                aria-label="Close profile menu"
+                className="fixed inset-0 z-10 cursor-default"
+                onClick={() => setMenuOpen(false)}
+              />
+
+              <div className="absolute right-0 top-full z-20 mt-2 w-52 overflow-hidden rounded-[10px] border border-[#e5e2da] bg-white py-1 shadow-[0_12px_35px_rgba(15,23,42,0.15)]">
+
+                <div className="border-b border-slate-100 px-3 py-2.5">
+
+                  <p className="truncate text-[11px] font-extrabold text-slate-900">
+                    {displayName}
+                  </p>
+
+                  <p className="mt-0.5 text-[9px] font-semibold capitalize text-slate-500">
+                    {displayRole}
+                  </p>
+                </div>
+
                 <button
+                  type="button"
                   onClick={() => {
                     setMenuOpen(false);
                     setCurrentPassword("");
@@ -290,14 +546,16 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
                     setPasswordError("");
                     setPasswordModalOpen(true);
                   }}
-                  className="flex w-full items-center gap-2.5 px-3 py-2.5 text-left text-xs font-semibold text-slate-600 hover:bg-slate-900/5 hover:text-slate-900 transition-colors"
+                  className="flex w-full items-center gap-2.5 px-3 py-2.5 text-left text-xs font-semibold text-slate-600 transition-colors hover:bg-slate-900/5 hover:text-slate-900"
                 >
                   <KeyRound className="h-4 w-4" />
                   Change Password
                 </button>
+
                 <button
+                  type="button"
                   onClick={handleLogout}
-                  className="flex w-full items-center gap-2.5 border-t border-white/40 px-3 py-2.5 text-left text-xs font-semibold text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors"
+                  className="flex w-full items-center gap-2.5 border-t border-slate-100 px-3 py-2.5 text-left text-xs font-semibold text-red-600 transition-colors hover:bg-red-50 hover:text-red-700"
                 >
                   <LogOut className="h-4 w-4" />
                   Logout
@@ -307,41 +565,70 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
           )}
         </div>
       </div>
+    </div>
+      </header >
 
-      <Modal
-        isOpen={passwordModalOpen}
-        onClose={() => setPasswordModalOpen(false)}
-        title="Change Password"
-        footer={
+  {/* ==========================================
+          CHANGE PASSWORD MODAL
+      ========================================== */}
+
+    < Modal
+  isOpen = { passwordModalOpen }
+  onClose = {() => setPasswordModalOpen(false)
+}
+title = "Change Password"
+footer = {
           <>
-            <Button variant="secondary" size="sm" onClick={() => setPasswordModalOpen(false)}>
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() =>
+                setPasswordModalOpen(false)
+              }
+            >
               Cancel
             </Button>
-            <Button size="sm" onClick={handleChangePassword} loading={passwordSaving}>
+
+            <Button
+              size="sm"
+              onClick={handleChangePassword}
+              loading={passwordSaving}
+            >
               Change Password
             </Button>
           </>
         }
       >
-        <div className="space-y-3">
-          <Input
-            label="Current Password"
-            type="password"
-            required
-            value={currentPassword}
-            onChange={(e) => setCurrentPassword(e.target.value)}
-          />
-          <Input
-            label="New Password"
-            type="password"
-            required
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            hint="At least 8 characters. You'll be signed out of every session after this."
-          />
-          {passwordError && <p className="text-xs font-medium text-red-600">{passwordError}</p>}
-        </div>
-      </Modal>
-    </header>
+  <div className="space-y-3">
+
+    <Input
+      label="Current Password"
+      type="password"
+      required
+      value={currentPassword}
+      onChange={(event) =>
+        setCurrentPassword(event.target.value)
+      }
+    />
+
+    <Input
+      label="New Password"
+      type="password"
+      required
+      value={newPassword}
+      onChange={(event) =>
+        setNewPassword(event.target.value)
+      }
+      hint="At least 8 characters. You'll be signed out of every session after this."
+    />
+
+    {passwordError && (
+      <p className="text-xs font-medium text-red-600">
+        {passwordError}
+      </p>
+    )}
+  </div>
+      </Modal >
+    </>
   );
 }
