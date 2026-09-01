@@ -346,7 +346,7 @@ function PanelTitle({
 }) {
   return (
     <div className="sticky top-0 z-20 flex h-[38px] shrink-0 items-center justify-between border-b border-slate-100 bg-white/95 px-3 backdrop-blur-sm">
-      <h2 className="text-[12px] font-extrabold tracking-[-0.01em] text-[#13213d]">
+      <h2 className="text-[12px] font-semibold tracking-[-0.01em] text-[#13213d]">
         {children}
       </h2>
 
