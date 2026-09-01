@@ -1,8 +1,34 @@
+import Link from "next/link";
+import { BadgeCheck } from "lucide-react";
+
 export default function AdminFooter() {
   return (
-    <footer className="shrink-0 border-t border-white/20 bg-white/10 backdrop-blur-md px-4 py-3 text-center text-[11px] font-medium text-slate-600">
-      &copy; {new Date().getFullYear()} <span className="font-semibold text-slate-900">Namo Gange Trust</span> — Free Cremation
-      Assistance. Admin Panel. All rights reserved.
+    <footer className="relative h-16 shrink-0 overflow-hidden border-t border-[#e7e4dc] bg-[#faf9f6]">
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-6 bg-gradient-to-t from-emerald-50/60 to-transparent" />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute bottom-0 right-0 hidden h-full w-[370px] bg-no-repeat 2xl:block"
+        style={{ backgroundImage: 'url("/assets/footer-moksha-scene.png")', backgroundSize: "370px 64px", backgroundPosition: "right bottom" }}
+      />
+
+      <div className="relative z-10 flex h-full items-center overflow-x-auto px-3 text-[10px] font-medium text-slate-600 2xl:pr-[390px]">
+        <div className="flex min-w-0 items-center gap-2">
+          <span className="flex items-center gap-2 whitespace-nowrap">
+            <BadgeCheck className="h-4 w-4 text-amber-500" />
+            Together, we bring dignity to every final journey.
+          </span>
+          <span className="h-5 w-px bg-slate-300" />
+          <span className="whitespace-nowrap">© {new Date().getFullYear()} Moksha Sewa. All rights reserved.</span>
+          <span className="h-6 w-px bg-slate-300" />
+          <span className="whitespace-nowrap">An Initiative of Namo Gange Trust</span>
+          <span className="h-6 w-px bg-slate-300" />
+          <Link href="https://mokshasewa.org/privacy-policy" target="_blank" rel="noopener noreferrer" className="whitespace-nowrap hover:text-slate-900">Privacy Policy</Link>
+          <span className="h-6 w-px bg-slate-300" />
+          <Link href="https://mokshasewa.org/terms" target="_blank" rel="noopener noreferrer" className="whitespace-nowrap hover:text-slate-900">Terms &amp; Conditions</Link>
+          <span className="h-6 w-px bg-slate-300" />
+          <a href="mailto:info@mokshasewa.org" className="whitespace-nowrap hover:text-slate-900">Support</a>
+        </div>
+      </div>
     </footer>
   );
 }

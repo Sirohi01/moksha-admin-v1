@@ -268,18 +268,17 @@ function MiniSparkline({
       const x =
         pad +
         (index / (points.length - 1)) *
-          (width - pad * 2);
+        (width - pad * 2);
 
       const y =
         height -
         pad -
         ((value - min) /
           Math.max(1, max - min)) *
-          (height - pad * 2);
+        (height - pad * 2);
 
-      return `${
-        index === 0 ? "M" : "L"
-      } ${x.toFixed(1)} ${y.toFixed(1)}`;
+      return `${index === 0 ? "M" : "L"
+        } ${x.toFixed(1)} ${y.toFixed(1)}`;
     })
     .join(" ");
 
@@ -387,9 +386,8 @@ function RangeDropdown({
         {value}
 
         <ChevronDown
-          className={`h-3.5 w-3.5 transition-transform ${
-            isOpen ? "rotate-180" : ""
-          }`}
+          className={`h-3.5 w-3.5 transition-transform ${isOpen ? "rotate-180" : ""
+            }`}
         />
       </button>
 
@@ -403,11 +401,10 @@ function RangeDropdown({
                 setValue(option);
                 setOpenDropdown(null);
               }}
-              className={`flex w-full items-center justify-between rounded-[6px] px-2.5 py-2 text-left text-[10px] font-bold transition ${
-                value === option
+              className={`flex w-full items-center justify-between rounded-[6px] px-2.5 py-2 text-left text-[10px] font-bold transition ${value === option
                   ? "bg-[#f2f5f2] text-[#26372b]"
                   : "text-[#465168] hover:bg-[#f7f7f4]"
-              }`}
+                }`}
             >
               <span>{option}</span>
 
@@ -507,9 +504,418 @@ export default function DashboardPage() {
     <div className="h-full min-h-0 w-full overflow-hidden bg-white text-[#13213d]">
       <div className="flex h-full min-h-0 flex-col overflow-hidden">
 
-        {/* ================================
+        {/* ===================================================
+            HEADER
+        =================================================== */}
+
+        <header className="hidden">
+          <div className="flex h-full items-center justify-between gap-3">
+
+            {/* LEFT */}
+
+            <div className="flex min-w-0 items-center gap-2.5">
+
+              {/* MENU */}
+
+              <div
+                className="relative shrink-0"
+                data-dashboard-dropdown
+              >
+                <button
+                  type="button"
+                  onClick={() => toggleDropdown("menu")}
+                  className="grid h-10 w-10 shrink-0 place-items-center rounded-[12px] bg-[#30392d] text-white transition hover:bg-[#222b20]"
+                >
+                  {openDropdown === "menu" ? (
+                    <X className="h-5 w-5" />
+                  ) : (
+                    <Menu className="h-5 w-5" />
+                  )}
+                </button>
+
+                {openDropdown === "menu" && (
+                  <div className="absolute left-0 top-[48px] z-[120] w-[210px] overflow-hidden rounded-[12px] border border-[#e5e2da] bg-white p-2 shadow-[0_14px_40px_rgba(15,23,42,0.16)]">
+
+                    <div className="border-b border-[#ecece7] px-2.5 pb-2 pt-1">
+                      <p className="text-[9px] font-extrabold uppercase tracking-[0.08em] text-[#8a92a0]">
+                        Navigation
+                      </p>
+                    </div>
+
+                    {[
+                      "Dashboard",
+                      "Website Pages",
+                      "Blog Posts",
+                      "SEO Manager",
+                      "Analytics",
+                      "Form Submissions",
+                      "Media Library",
+                      "Settings",
+                    ].map((item) => (
+                      <button
+                        key={item}
+                        type="button"
+                        onClick={() => {
+                          setActiveMenuItem(item);
+                          setOpenDropdown(null);
+                        }}
+                        className={`mt-1 flex w-full items-center justify-between rounded-[8px] px-3 py-2 text-left text-[10px] font-bold transition ${activeMenuItem === item
+                            ? "bg-[#30392d] text-white"
+                            : "text-[#33415a] hover:bg-[#f5f6f3]"
+                          }`}
+                      >
+                        {item}
+
+                        {activeMenuItem === item && (
+                          <Check className="h-3.5 w-3.5" />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* TITLE */}
+
+              <div className="min-w-0">
+                <h1 className="truncate text-[20px] font-extrabold leading-tight tracking-[-0.025em]">
+                  Welcome back, Admin!{" "}
+                  <span className="text-[18px]">👋</span>
+                </h1>
+
+                <p className="truncate text-[11px] font-medium leading-tight text-[#4a5261]">
+                  Here&apos;s an overview of your website{" "}
+                  <b className="font-extrabold">
+                    mokshasewa.org
+                  </b>
+                </p>
+              </div>
+            </div>
+
+            {/* RIGHT */}
+
+            <div className="hidden items-center gap-2 xl:flex">
+
+              {/* WEBSITE DROPDOWN */}
+
+              <div
+                className="relative"
+                data-dashboard-dropdown
+              >
+                <button
+                  type="button"
+                  onClick={() =>
+                    toggleDropdown("website")
+                  }
+                  className="flex h-9 items-center gap-2 rounded-[10px] border border-[#e5e2da] bg-[#fffdfa] px-3 text-[10px] font-bold transition hover:bg-[#fff8eb]"
+                >
+                  <Globe2 className="h-3.5 w-3.5" />
+
+                  {selectedWebsite}
+
+                  <ChevronDown
+                    className={`h-3 w-3 transition-transform ${openDropdown === "website"
+                        ? "rotate-180"
+                        : ""
+                      }`}
+                  />
+                </button>
+
+                {openDropdown === "website" && (
+                  <div className="absolute right-0 top-[44px] z-[120] w-[205px] overflow-hidden rounded-[10px] border border-[#e5e2da] bg-white p-2 shadow-[0_12px_35px_rgba(15,23,42,0.15)]">
+
+                    <p className="px-2 pb-2 text-[8px] font-extrabold uppercase tracking-[0.08em] text-[#8b93a2]">
+                      Select Website
+                    </p>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedWebsite(
+                          "mokshasewa.org"
+                        );
+                        setOpenDropdown(null);
+                      }}
+                      className="flex w-full items-center justify-between rounded-[7px] bg-[#f4f6f2] px-3 py-2.5 text-[9px] font-bold text-[#26372b]"
+                    >
+                      <span className="flex items-center gap-2">
+                        <Globe2 className="h-3.5 w-3.5" />
+                        mokshasewa.org
+                      </span>
+
+                      <Check className="h-3.5 w-3.5" />
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        window.open(
+                          "https://mokshasewa.org",
+                          "_blank",
+                          "noopener,noreferrer"
+                        );
+                        setOpenDropdown(null);
+                      }}
+                      className="mt-1 flex w-full items-center gap-2 rounded-[7px] px-3 py-2.5 text-left text-[9px] font-bold text-[#465168] transition hover:bg-[#f7f7f4]"
+                    >
+                      <ArrowRight className="h-3.5 w-3.5" />
+                      Open Live Website
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* DATE DROPDOWN */}
+
+              <div
+                className="relative"
+                data-dashboard-dropdown
+              >
+                <button
+                  type="button"
+                  onClick={() => toggleDropdown("date")}
+                  className="flex h-9 items-center gap-2 rounded-[10px] border border-[#e5e2da] bg-[#fffdfa] px-3 text-[10px] font-bold transition hover:bg-[#fff8eb]"
+                >
+                  <CalendarDays className="h-3.5 w-3.5" />
+
+                  {selectedDate}
+
+                  <ChevronDown
+                    className={`h-3 w-3 transition-transform ${openDropdown === "date"
+                        ? "rotate-180"
+                        : ""
+                      }`}
+                  />
+                </button>
+
+                {openDropdown === "date" && (
+                  <div className="absolute right-0 top-[44px] z-[120] w-[175px] overflow-hidden rounded-[10px] border border-[#e5e2da] bg-white p-2 shadow-[0_12px_35px_rgba(15,23,42,0.15)]">
+
+                    <p className="px-2 pb-2 text-[8px] font-extrabold uppercase tracking-[0.08em] text-[#8b93a2]">
+                      Select Date
+                    </p>
+
+                    {[
+                      "31 May 2026",
+                      "30 May 2026",
+                      "29 May 2026",
+                      "28 May 2026",
+                      "27 May 2026",
+                    ].map((date) => (
+                      <button
+                        type="button"
+                        key={date}
+                        onClick={() => {
+                          setSelectedDate(date);
+                          setOpenDropdown(null);
+                        }}
+                        className={`flex w-full items-center justify-between rounded-[7px] px-3 py-2 text-left text-[9px] font-bold transition ${selectedDate === date
+                            ? "bg-[#f4f6f2] text-[#26372b]"
+                            : "text-[#465168] hover:bg-[#f7f7f4]"
+                          }`}
+                      >
+                        {date}
+
+                        {selectedDate === date && (
+                          <Check className="h-3.5 w-3.5" />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* NOTIFICATION */}
+
+              <div
+                className="relative"
+                data-dashboard-dropdown
+              >
+                <button
+                  type="button"
+                  onClick={() =>
+                    toggleDropdown("notifications")
+                  }
+                  className="relative grid h-9 w-9 place-items-center rounded-[9px] transition hover:bg-[#f5f6f3]"
+                >
+                  <Bell className="h-[18px] w-[18px]" />
+
+                  {notificationCount > 0 && (
+                    <span className="absolute right-0 top-0 grid h-[16px] min-w-[16px] place-items-center rounded-full bg-red-600 px-1 text-[8px] font-extrabold text-white">
+                      {notificationCount}
+                    </span>
+                  )}
+                </button>
+
+                {openDropdown ===
+                  "notifications" && (
+                    <div className="absolute right-0 top-[44px] z-[120] w-[320px] overflow-hidden rounded-[12px] border border-[#e5e2da] bg-white shadow-[0_14px_40px_rgba(15,23,42,0.16)]">
+
+                      <div className="flex items-center justify-between border-b border-[#ecece7] px-4 py-3">
+                        <div>
+                          <p className="text-[11px] font-extrabold">
+                            Notifications
+                          </p>
+
+                          <p className="mt-0.5 text-[8px] font-medium text-[#7b8494]">
+                            Recent website alerts
+                          </p>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setNotificationCount(0);
+                          }}
+                          className="text-[8px] font-extrabold text-[#18745c]"
+                        >
+                          Mark all read
+                        </button>
+                      </div>
+
+                      <div className="max-h-[290px] overflow-y-auto p-2">
+                        {[
+                          [
+                            "SEO Issue",
+                            "3 pages are missing meta descriptions.",
+                            "5 mins ago",
+                          ],
+                          [
+                            "Performance",
+                            "Home page LCP issue detected.",
+                            "20 mins ago",
+                          ],
+                          [
+                            "New Submission",
+                            "A new Sewa Help Request was received.",
+                            "35 mins ago",
+                          ],
+                          [
+                            "SEO Opportunity",
+                            "12 new keyword opportunities found.",
+                            "1 hour ago",
+                          ],
+                        ].map(
+                          ([title, description, time]) => (
+                            <button
+                              type="button"
+                              key={title}
+                              onClick={() =>
+                                setOpenDropdown(null)
+                              }
+                              className="flex w-full gap-3 rounded-[8px] px-2.5 py-2.5 text-left transition hover:bg-[#f7f8f6]"
+                            >
+                              <div className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-[#f0f4f1]">
+                                <Bell className="h-3.5 w-3.5 text-[#315340]" />
+                              </div>
+
+                              <div className="min-w-0">
+                                <p className="text-[9px] font-extrabold text-[#24324a]">
+                                  {title}
+                                </p>
+
+                                <p className="mt-0.5 text-[8px] font-medium leading-[1.4] text-[#647083]">
+                                  {description}
+                                </p>
+
+                                <p className="mt-1 text-[7px] font-bold text-[#9aa2af]">
+                                  {time}
+                                </p>
+                              </div>
+                            </button>
+                          )
+                        )}
+                      </div>
+                    </div>
+                  )}
+              </div>
+
+              {/* PROFILE */}
+
+              <div
+                className="relative"
+                data-dashboard-dropdown
+              >
+                <button
+                  type="button"
+                  onClick={() =>
+                    toggleDropdown("profile")
+                  }
+                  className="flex items-center gap-2 rounded-[9px] px-1.5 py-1 transition hover:bg-[#f7f7f4]"
+                >
+                  <div className="grid h-8 w-8 place-items-center rounded-full bg-[#edf3f6]">
+                    <UserRound className="h-4.5 w-4.5" />
+                  </div>
+
+                  <div className="text-left leading-tight">
+                    <p className="text-[10px] font-extrabold">
+                      Admin User
+                    </p>
+
+                    <p className="text-[8px] font-semibold text-[#5f6774]">
+                      Super Admin
+                    </p>
+                  </div>
+
+                  <ChevronDown
+                    className={`h-3 w-3 transition-transform ${openDropdown === "profile"
+                        ? "rotate-180"
+                        : ""
+                      }`}
+                  />
+                </button>
+
+                {openDropdown === "profile" && (
+                  <div className="absolute right-0 top-[46px] z-[120] w-[190px] overflow-hidden rounded-[10px] border border-[#e5e2da] bg-white p-2 shadow-[0_12px_35px_rgba(15,23,42,0.15)]">
+
+                    <div className="border-b border-[#ecece7] px-2.5 pb-2 pt-1">
+                      <p className="text-[9px] font-extrabold">
+                        Admin User
+                      </p>
+
+                      <p className="mt-0.5 text-[8px] font-medium text-[#7a8494]">
+                        Super Admin
+                      </p>
+                    </div>
+
+                    {[
+                      "My Profile",
+                      "Account Settings",
+                      "Security Settings",
+                    ].map((item) => (
+                      <button
+                        type="button"
+                        key={item}
+                        onClick={() =>
+                          setOpenDropdown(null)
+                        }
+                        className="mt-1 flex w-full rounded-[7px] px-3 py-2 text-left text-[9px] font-bold text-[#465168] transition hover:bg-[#f7f7f4]"
+                      >
+                        {item}
+                      </button>
+                    ))}
+
+                    <div className="my-1 border-t border-[#ecece7]" />
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setOpenDropdown(null)
+                      }
+                      className="flex w-full rounded-[7px] px-3 py-2 text-left text-[9px] font-extrabold text-red-600 transition hover:bg-red-50"
+                    >
+                      Sign Out
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* ===================================================
             MAIN
-        ================================= */}
+        =================================================== */}
 
         <main className="min-h-0 flex-1 overflow-hidden px-1.5 py-2">
           <div className="grid h-full min-h-0 w-full grid-rows-[116px_minmax(0,1.22fr)_minmax(0,1.08fr)_minmax(0,0.76fr)] gap-2">
@@ -529,11 +935,10 @@ export default function DashboardPage() {
                   >
                     <div className="flex items-start gap-2">
                       <div
-                        className={`grid h-10 w-10 shrink-0 place-items-center rounded-full ring-1 ${
-                          toneClass[
-                            item.tone as keyof typeof toneClass
+                        className={`grid h-10 w-10 shrink-0 place-items-center rounded-full ring-1 ${toneClass[
+                          item.tone as keyof typeof toneClass
                           ]
-                        }`}
+                          }`}
                       >
                         <Icon className="h-[20px] w-[20px]" />
                       </div>
@@ -556,12 +961,11 @@ export default function DashboardPage() {
                         </div>
 
                         <p
-                          className={`mt-1 text-[10px] font-bold ${
-                            item.title ===
-                            "INDEXED PAGES"
+                          className={`mt-1 text-[10px] font-bold ${item.title ===
+                              "INDEXED PAGES"
                               ? "text-blue-600"
                               : "text-emerald-700"
-                          }`}
+                            }`}
                         >
                           {item.note}
                         </p>
@@ -577,11 +981,10 @@ export default function DashboardPage() {
                     )}
 
                     <div
-                      className={`${
-                        item.spark
+                      className={`${item.spark
                           ? "mt-0"
                           : "mt-2.5"
-                      } flex items-center justify-center gap-1.5 text-[10px] font-extrabold text-[#293957]`}
+                        } flex items-center justify-center gap-1.5 text-[10px] font-extrabold text-[#293957]`}
                     >
                       {item.footer}
 
@@ -891,14 +1294,13 @@ export default function DashboardPage() {
                         </span>
 
                         <span
-                          className={`font-bold ${
-                            level === "High"
+                          className={`font-bold ${level === "High"
                               ? "text-rose-600"
                               : level ===
-                                  "Medium"
+                                "Medium"
                                 ? "text-amber-600"
                                 : "text-emerald-700"
-                          }`}
+                            }`}
                         >
                           {level}
                         </span>
@@ -1006,11 +1408,10 @@ export default function DashboardPage() {
                         </p>
 
                         <p
-                          className={`mt-0.5 text-[9px] font-bold ${
-                            good
+                          className={`mt-0.5 text-[9px] font-bold ${good
                               ? "text-emerald-700"
                               : "text-rose-600"
-                          }`}
+                            }`}
                         >
                           {delta}
                         </p>
@@ -1429,10 +1830,9 @@ export default function DashboardPage() {
                           <div
                             className="h-full rounded-full bg-[#2f77d7]"
                             style={{
-                              width: `${
-                                88 -
+                              width: `${88 -
                                 index * 14
-                              }%`,
+                                }%`,
                             }}
                           />
                         </div>
@@ -1480,18 +1880,17 @@ export default function DashboardPage() {
                         className="grid grid-cols-[20px_1fr_1.1fr_auto] items-center gap-1.5 py-[3px] text-[9px] font-bold"
                       >
                         <div
-                          className={`grid h-[20px] w-[20px] place-items-center rounded-full ${
-                            index === 0
+                          className={`grid h-[20px] w-[20px] place-items-center rounded-full ${index === 0
                               ? "bg-emerald-50 text-emerald-700"
                               : index === 1
                                 ? "bg-violet-50 text-violet-700"
                                 : index === 2
                                   ? "bg-amber-50 text-amber-700"
                                   : index ===
-                                      3
+                                    3
                                     ? "bg-rose-50 text-rose-700"
                                     : "bg-blue-50 text-blue-700"
-                          }`}
+                            }`}
                         >
                           <FileText className="h-3 w-3" />
                         </div>
@@ -1520,7 +1919,7 @@ export default function DashboardPage() {
             FOOTER
         ================================== */}
 
-        <footer className="relative h-[64px] shrink-0 overflow-hidden border-t border-[#e7e4dc] bg-[#faf9f6]">
+        <footer className="hidden">
 
           {/* SAME SOFT COLOR COMBINATION */}
 

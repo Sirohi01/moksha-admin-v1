@@ -176,7 +176,7 @@ export default function LoginPage() {
           <div className="auth-heading"><span><ShieldCheck /></span><h2>{text.welcome}</h2><p>{text.continue}<br /><strong>{text.portalName}</strong></p><div className="gold-ornament"><i /><b>◆</b><i /></div></div>
 
           {step === "credentials" && (
-            <form onSubmit={handleSubmit} className="credentials-form relative space-y-4">
+            <form onSubmit={handleSubmit} className="credentials-form relative space-y-4 [&_label]:!text-[13px]">
               <div className="space-y-5">
                 <Input
                   label={text.identifier}
@@ -189,7 +189,7 @@ export default function LoginPage() {
                 />
                 <div className="relative">
                   <div className="mb-1 flex items-center justify-between">
-                    <label className="text-[11px] font-semibold uppercase tracking-wide text-text-secondary">{text.password}</label>
+                    <label className="font-semibold tracking-wide text-text-secondary">{text.password}<span className="ml-0.5 text-red-500">*</span></label>
                     <button
                       type="button"
                       onClick={() => {
@@ -233,9 +233,8 @@ export default function LoginPage() {
               <Button type="submit" loading={isSubmitting} className="h-12 w-full text-[15px] shadow-sm">
                 {isSubmitting ? text.signingIn : text.loginSecurely}
               </Button>
-              <div className="login-divider"><i />{text.or}<i /></div>
-              <button type="button" onClick={() => setStep("totp")} className="otp-login"><ShieldCheck /> {text.otpLogin}</button>
-              <div className="access-notice !rounded-none [&>svg]:!h-[17px] [&>svg]:!w-[17px] [&>p]:!text-[11px] [&>p]:!leading-[1.45]"><Lock /><p><strong>{text.authorizedTitle}</strong> {text.authorizedCopy}</p></div>
+              <p className="flex items-center justify-center gap-1.5 text-[13px] font-semibold text-teal-800"><ShieldCheck className="h-4 w-4" /> {text.twoFactorProtected}</p>
+              <div className="access-notice !rounded-none [&>svg]:!h-[18px] [&>svg]:!w-[18px] [&>p]:!text-[13px] [&>p]:!leading-[1.45]"><Lock /><p><strong>{text.authorizedTitle}</strong> {text.authorizedCopy}</p></div>
             </form>
           )}
 
@@ -444,7 +443,7 @@ export default function LoginPage() {
               </Button>
             </div>
           )}
-          <div className="auth-help !text-[13px] [&>svg]:!h-4 [&>svg]:!w-4"><Headphones /> {text.needHelp} {text.contact} <a href="mailto:support@mokshasewa.com">{text.itSupport}</a></div>
+          <div className="auth-help !text-[14px] [&>svg]:!h-[18px] [&>svg]:!w-[18px]"><Headphones /> {text.needHelp} {text.contact} <a href="mailto:support@mokshasewa.com">{text.itSupport}</a></div>
         </div>
       </section>
 
