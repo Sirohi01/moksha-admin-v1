@@ -13,10 +13,6 @@ import {
   type NavItem,
 } from "./navigation";
 
-/* =========================================================
-   ACTIVE ROUTE
-========================================================= */
-
 function isActive(
   pathname: string,
   href?: string,
@@ -28,8 +24,7 @@ function isActive(
     return pathname === "/";
   }
 
-  const [basePath, query = ""] =
-    href.split("?");
+  const [basePath, query = ""] = href.split("?");
 
   if (
     pathname !== basePath &&
@@ -40,13 +35,10 @@ function isActive(
 
   if (!query) return true;
 
-  const expected =
-    new URLSearchParams(query);
+  const expected = new URLSearchParams(query);
 
   for (const [key, value] of expected.entries()) {
-    if (
-      searchParams?.get(key) !== value
-    ) {
+    if (searchParams?.get(key) !== value) {
       return false;
     }
   }
@@ -54,28 +46,15 @@ function isActive(
   return true;
 }
 
-/* =========================================================
-   SIDEBAR
-========================================================= */
-
 export default function Sidebar({
   onNavigate,
 }: {
   onNavigate?: () => void;
 }) {
-  const pathname =
-    usePathname();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-  const searchParams =
-    useSearchParams();
-
-  /* =======================================================
-     RENDER ITEM
-  ======================================================= */
-
-  const renderItem = (
-    item: NavItem,
-  ) => {
+  const renderItem = (item: NavItem) => {
     const Icon = item.icon;
 
     const active = isActive(
@@ -86,8 +65,6 @@ export default function Sidebar({
 
     const content = (
       <>
-        {/* ICON */}
-
         <span
           className="
             grid
@@ -103,13 +80,9 @@ export default function Sidebar({
           />
         </span>
 
-        {/* LABEL */}
-
         <span className="min-w-0 flex-1 truncate">
           {item.label}
         </span>
-
-        {/* NUMBER BADGE */}
 
         {item.badge &&
           item.badge !== "NEW" && (
@@ -135,8 +108,6 @@ export default function Sidebar({
             </span>
           )}
 
-        {/* NEW BADGE */}
-
         {item.badge === "NEW" && (
           <span
             className="
@@ -160,10 +131,6 @@ export default function Sidebar({
         )}
       </>
     );
-
-    /* =====================================================
-       DISABLED
-    ===================================================== */
 
     if (
       item.disabled ||
@@ -191,10 +158,6 @@ export default function Sidebar({
         </div>
       );
     }
-
-    /* =====================================================
-       ACTIVE / NORMAL
-    ===================================================== */
 
     return (
       <Link
@@ -264,13 +227,7 @@ export default function Sidebar({
         shadow-[4px_0_18px_rgba(0,0,0,0.20)]
       "
     >
-      {/* =================================================
-          SIDEBAR BACKGROUND
-
-          actual file:
-          public/sidebar/sidebar-background.png
-      ================================================= */}
-
+      {/* BACKGROUND IMAGE */}
       <div
         className="
           pointer-events-none
@@ -284,19 +241,13 @@ export default function Sidebar({
         style={{
           backgroundImage:
             'url("/sidebar/sidebar-background.png")',
-          backgroundPosition:
-            "center bottom",
-          backgroundRepeat:
-            "no-repeat",
-          backgroundSize:
-            "cover",
+          backgroundPosition: "center bottom",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
         }}
       />
 
-      {/* =================================================
-          LIGHT OVERLAY
-      ================================================= */}
-
+      {/* LIGHT OVERLAY */}
       <div
         className="
           pointer-events-none
@@ -312,62 +263,64 @@ export default function Sidebar({
         "
       />
 
-      {/* =================================================
-          LOGO AREA
-      ================================================= */}
-
+      {/* LOGO AREA */}
       <div
         className="
           relative
           z-10
-          h-[164px]
+          h-[188px]
           shrink-0
           px-[16px]
-          pt-[7px]
+          pt-[6px]
           text-center
         "
       >
-        {/* =================================================
-            LOGO GRAPHIC
-            lower baked text is clipped
-        ================================================= */}
-
+        {/* LOGO
+            FIX:
+            - wrapper height bada ki
+            - crop kam kiya
+            - waves ab cut nahi hongi
+        */}
         <div
           className="
+            relative
             mx-auto
-            flex
-            h-[68px]
+            h-[94px]
             w-full
-            items-start
-            justify-center
             overflow-hidden
           "
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/moksha-sewa-logo.png"
-            alt="Moksha Sewa"
+            alt="Moksha Sewa Logo"
             className="
-              h-[94px]
+              absolute
+              left-1/2
+              top-[-2px]
+              h-[102px]
               w-full
+              max-w-[188px]
+              -translate-x-1/2
               object-contain
               object-top
             "
+            style={{
+              clipPath:
+                "inset(0px 0px 10px 0px)",
+            }}
           />
         </div>
 
-        {/* =================================================
-            MOKSHA SEWA - WHITE
-        ================================================= */}
-
-        <div className="mt-[1px] text-center">
+        {/* MOKSHA SEWA */}
+        <div className="mt-[6px] text-center">
           <p
             className="
               font-serif
               text-[19px]
               font-semibold
               leading-[22px]
-              tracking-[0.035em]
+              tracking-[0.04em]
               text-white
               drop-shadow-[0_1px_2px_rgba(0,0,0,0.30)]
             "
@@ -375,22 +328,32 @@ export default function Sidebar({
             MOKSHA SEWA
           </p>
 
-          {/* decorative underline */}
-
-          <div className="mx-auto mt-[3px] flex w-[108px] items-center justify-center gap-[4px]">
+          <div
+            className="
+              mx-auto
+              mt-[3px]
+              flex
+              w-[112px]
+              items-center
+              justify-center
+              gap-[5px]
+            "
+          >
             <span className="h-px flex-1 bg-[#D9A72E]" />
-
-            <span className="h-[4px] w-[4px] rotate-45 bg-[#D9A72E]" />
-
+            <span
+              className="
+                h-[4px]
+                w-[4px]
+                rotate-45
+                bg-[#D9A72E]
+              "
+            />
             <span className="h-px flex-1 bg-[#D9A72E]" />
           </div>
         </div>
 
-        {/* =================================================
-            INITIATIVE TEXT
-        ================================================= */}
-
-        <div className="mt-[5px] text-center">
+        {/* INITIATIVE */}
+        <div className="mt-[7px] text-center">
           <p
             className="
               font-serif
@@ -419,10 +382,7 @@ export default function Sidebar({
         </div>
       </div>
 
-      {/* =================================================
-          NAVIGATION
-      ================================================= */}
-
+      {/* NAVIGATION */}
       <nav
         className="
           relative
@@ -447,15 +407,12 @@ export default function Sidebar({
               key={section.title}
               className={`
                 mb-[7px]
-
                 ${index > 0
                   ? "border-t border-[#668196]/40 pt-[7px]"
                   : ""
                 }
               `}
             >
-              {/* SECTION TITLE */}
-
               <div
                 className="
                   mb-[4px]
@@ -488,8 +445,6 @@ export default function Sidebar({
                 />
               </div>
 
-              {/* ITEMS */}
-
               <div className="space-y-[1px]">
                 {section.items.map(
                   renderItem,
@@ -500,10 +455,7 @@ export default function Sidebar({
         )}
       </nav>
 
-      {/* =================================================
-          HELP BOX
-      ================================================= */}
-
+      {/* HELP BOX */}
       <div
         className="
           relative
@@ -534,8 +486,6 @@ export default function Sidebar({
             hover:brightness-110
           "
         >
-          {/* SHINE */}
-
           <span
             className="
               pointer-events-none
@@ -544,8 +494,6 @@ export default function Sidebar({
               bg-[linear-gradient(180deg,rgba(255,255,255,0.08),transparent)]
             "
           />
-
-          {/* ICON */}
 
           <Headphones
             className="
@@ -557,8 +505,6 @@ export default function Sidebar({
             "
             strokeWidth={1.45}
           />
-
-          {/* TEXT */}
 
           <span className="relative z-10 min-w-0">
             <span
