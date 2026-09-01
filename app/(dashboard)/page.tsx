@@ -8,6 +8,8 @@ import {
   Activity,
   AlertCircle,
   ArrowRight,
+  Bell,
+  CalendarDays,
   Check,
   CheckCircle2,
   ChevronDown,
@@ -18,6 +20,7 @@ import {
   ImageIcon,
   Link2,
   LockKeyhole,
+  Menu,
   MousePointerClick,
   Search,
   ShieldCheck,
@@ -25,12 +28,19 @@ import {
   Timer,
   TrendingDown,
   TrendingUp,
+  UserRound,
   Users,
   Wrench,
+  X,
   type LucideIcon,
 } from "lucide-react";
 
 type DropdownKey =
+  | "menu"
+  | "website"
+  | "date"
+  | "notifications"
+  | "profile"
   | "search-console-range"
   | "analytics-range"
   | "web-vitals-range"
@@ -460,6 +470,15 @@ function RangeDropdown({
 export default function DashboardPage() {
   const [openDropdown, setOpenDropdown] =
     useState<DropdownKey>(null);
+
+  const [selectedWebsite, setSelectedWebsite] = useState("mokshasewa.org");
+  const [selectedDate, setSelectedDate] = useState("31 May 2026");
+  const [activeMenuItem, setActiveMenuItem] = useState("Dashboard");
+  const [notificationCount, setNotificationCount] = useState(8);
+
+  const toggleDropdown = (key: DropdownKey) => {
+    setOpenDropdown((current) => current === key ? null : key);
+  };
 
   const [
     searchConsoleRange,
@@ -956,7 +975,7 @@ export default function DashboardPage() {
         =================================================== */}
 
         <main className="min-h-0 flex-1 overflow-visible px-1.5 py-2">
-          <div className="grid h-full min-h-0 w-full grid-rows-[145px_minmax(0,1.22fr)_minmax(0,1.08fr)_minmax(0,0.76fr)] gap-2">
+          <div className="grid h-full min-h-0 w-full grid-rows-[145px_310px_minmax(0,1.08fr)_minmax(0,0.76fr)] gap-2">
 
             {/* =============================
                 TOP STATS
@@ -1032,7 +1051,7 @@ export default function DashboardPage() {
                 ROW 2
             ============================== */}
 
-            <div className="grid min-h-0 grid-cols-[0.92fr_1.12fr_1.06fr] gap-2">
+            <div className="grid h-[310px] min-h-0 grid-cols-[0.92fr_1.12fr_1.06fr] gap-2">
 
               {/* SEO HEALTH */}
 

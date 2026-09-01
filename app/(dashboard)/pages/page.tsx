@@ -685,12 +685,20 @@ export default function PagesCmsPage() {
                     selectedPage.id === page.id;
 
                   return (
-                    <button
-                      type="button"
+                    <div
                       key={page.id}
+                      role="button"
+                      tabIndex={0}
                       onClick={() => {
                         setSelectedPage(page);
                         setActionMenu(null);
+                      }}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault();
+                          setSelectedPage(page);
+                          setActionMenu(null);
+                        }
                       }}
                       className={`grid min-h-0 w-full grid-cols-[2.35fr_1.7fr_1.3fr_1.02fr_1.15fr_1.55fr_76px] items-center border-b border-[#f0f0ec] px-[10px] text-left transition last:border-b-0 ${selected
                         ? "bg-[#fffefa]"
@@ -855,7 +863,7 @@ export default function PagesCmsPage() {
                           </div>
                         )}
                       </div>
-                    </button>
+                    </div>
                   );
                 })}
 

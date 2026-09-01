@@ -119,9 +119,6 @@ export default function Topbar({
     useState(false);
 
   const [passwordError, setPasswordError] = useState("");
-  const [websiteOpen, setWebsiteOpen] = useState(false);
-  const [dateOpen, setDateOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState("31 May 2026");
 
   const isInternal = admin?.userType === "INTERNAL";
 
@@ -287,6 +284,7 @@ export default function Topbar({
   };
 
   return (
+    <>
     <header className="relative z-30 flex h-14 shrink-0 items-center justify-between border-b border-white/80 bg-white/75 backdrop-blur-xl px-4 shadow-md">
       <div className="flex items-center gap-3">
         <button
@@ -565,19 +563,17 @@ export default function Topbar({
           )}
         </div>
       </div>
-    </div>
-      </header >
+    </header>
 
   {/* ==========================================
           CHANGE PASSWORD MODAL
       ========================================== */}
 
-    < Modal
-  isOpen = { passwordModalOpen }
-  onClose = {() => setPasswordModalOpen(false)
-}
-title = "Change Password"
-footer = {
+    <Modal
+      isOpen={passwordModalOpen}
+      onClose={() => setPasswordModalOpen(false)}
+      title="Change Password"
+      footer={
           <>
             <Button
               variant="secondary"
@@ -598,8 +594,8 @@ footer = {
             </Button>
           </>
         }
-      >
-  <div className="space-y-3">
+    >
+      <div className="space-y-3">
 
     <Input
       label="Current Password"
@@ -627,8 +623,8 @@ footer = {
         {passwordError}
       </p>
     )}
-  </div>
-      </Modal >
+      </div>
+    </Modal>
     </>
   );
 }

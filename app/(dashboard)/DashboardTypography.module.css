@@ -15,3 +15,7 @@
 .dashboard :global(.text-\[11px\]) { font-size: 13px !important; }
 
 .dashboard :global(.text-\[12px\]) { font-size: 14px !important; }
+
+.dashboard :global(*) {
+  font-weight: 400 !important;
+}
