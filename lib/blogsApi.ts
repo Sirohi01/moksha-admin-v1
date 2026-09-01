@@ -34,15 +34,15 @@ export interface BlogPost {
 
 export const blogsApi = {
   getAll: async () => {
-    return await api.get<BlogPost[]>("/blogs/admin");
+    return await api.get<BlogPost[]>("/blog/admin");
   },
   create: async (data: Partial<BlogPost>) => {
-    return await api.post<BlogPost>("/blogs/admin", data);
+    return await api.post<BlogPost>("/blog/admin", data);
   },
   update: async (id: string, data: Partial<BlogPost>) => {
-    return await api.put<BlogPost>(`/blogs/admin/${id}`, data);
+    return await api.put<BlogPost>(`/blog/admin/${id}`, data);
   },
   delete: async (id: string) => {
-    return await api.delete<void>(`/blogs/admin/${id}`);
+    return await api.delete<void>(`/blog/admin/${id}`);
   },
 };
