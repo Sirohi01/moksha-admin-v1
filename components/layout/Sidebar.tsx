@@ -63,8 +63,11 @@ export default function Sidebar({
 }: {
   onNavigate?: () => void;
 }) {
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const pathname =
+    usePathname();
+
+  const searchParams =
+    useSearchParams();
 
   /* =======================================================
      RENDER ITEM
@@ -159,7 +162,7 @@ export default function Sidebar({
     );
 
     /* =====================================================
-       DISABLED ITEM
+       DISABLED
     ===================================================== */
 
     if (
@@ -190,7 +193,7 @@ export default function Sidebar({
     }
 
     /* =====================================================
-       ACTIVE / NORMAL LINK
+       ACTIVE / NORMAL
     ===================================================== */
 
     return (
@@ -226,8 +229,6 @@ export default function Sidebar({
           }
         `}
       >
-        {/* ACTIVE SHINE */}
-
         {active && (
           <span
             className="
@@ -264,9 +265,9 @@ export default function Sidebar({
       "
     >
       {/* =================================================
-          FULL SIDEBAR BACKGROUND IMAGE
-          
-          YOUR FILE:
+          SIDEBAR BACKGROUND
+
+          actual file:
           public/sidebar/sidebar-background.png
       ================================================= */}
 
@@ -293,8 +294,7 @@ export default function Sidebar({
       />
 
       {/* =================================================
-          VERY LIGHT OVERLAY
-          IMAGE KO HIDE NAHI KAREGA
+          LIGHT OVERLAY
       ================================================= */}
 
       <div
@@ -320,22 +320,25 @@ export default function Sidebar({
         className="
           relative
           z-10
-          h-[154px]
+          h-[164px]
           shrink-0
           px-[16px]
           pt-[7px]
           text-center
         "
       >
-        {/* LOGO */}
+        {/* =================================================
+            LOGO GRAPHIC
+            lower baked text is clipped
+        ================================================= */}
 
         <div
           className="
             mx-auto
             flex
-            h-[96px]
+            h-[68px]
             w-full
-            items-center
+            items-start
             justify-center
             overflow-hidden
           "
@@ -345,20 +348,49 @@ export default function Sidebar({
             src="/moksha-sewa-logo.png"
             alt="Moksha Sewa"
             className="
-              h-full
+              h-[94px]
               w-full
               object-contain
-              object-center
+              object-top
             "
           />
+        </div>
+
+        {/* =================================================
+            MOKSHA SEWA - WHITE
+        ================================================= */}
+
+        <div className="mt-[1px] text-center">
+          <p
+            className="
+              font-serif
+              text-[19px]
+              font-semibold
+              leading-[22px]
+              tracking-[0.035em]
+              text-white
+              drop-shadow-[0_1px_2px_rgba(0,0,0,0.30)]
+            "
+          >
+            MOKSHA SEWA
+          </p>
+
+          {/* decorative underline */}
+
+          <div className="mx-auto mt-[3px] flex w-[108px] items-center justify-center gap-[4px]">
+            <span className="h-px flex-1 bg-[#D9A72E]" />
+
+            <span className="h-[4px] w-[4px] rotate-45 bg-[#D9A72E]" />
+
+            <span className="h-px flex-1 bg-[#D9A72E]" />
+          </div>
         </div>
 
         {/* =================================================
             INITIATIVE TEXT
         ================================================= */}
 
-        <div className="-mt-[1px] text-center">
-
+        <div className="mt-[5px] text-center">
           <p
             className="
               font-serif
@@ -422,9 +454,7 @@ export default function Sidebar({
                 }
               `}
             >
-              {/* ===========================================
-                  SECTION TITLE
-              =========================================== */}
+              {/* SECTION TITLE */}
 
               <div
                 className="
@@ -531,7 +561,6 @@ export default function Sidebar({
           {/* TEXT */}
 
           <span className="relative z-10 min-w-0">
-
             <span
               className="
                 block
