@@ -1,14 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import {
   Activity,
   AlertCircle,
   ArrowRight,
-  BadgeCheck,
-  Bell,
-  CalendarDays,
   Check,
   CheckCircle2,
   ChevronDown,
@@ -19,7 +15,6 @@ import {
   ImageIcon,
   Link2,
   LockKeyhole,
-  Menu,
   MousePointerClick,
   Search,
   ShieldCheck,
@@ -27,23 +22,12 @@ import {
   Timer,
   TrendingDown,
   TrendingUp,
-  UserRound,
   Users,
   Wrench,
-  X,
   type LucideIcon,
 } from "lucide-react";
 
-/* =========================================================
-   TYPES
-========================================================= */
-
 type DropdownKey =
-  | "menu"
-  | "website"
-  | "date"
-  | "notifications"
-  | "profile"
   | "search-console-range"
   | "analytics-range"
   | "web-vitals-range"
@@ -53,6 +37,7 @@ type DropdownKey =
   | null;
 
 type IssueTone = "rose" | "amber" | "violet";
+
 type IssueLevel = "High" | "Medium" | "Low";
 
 interface DashboardIssue {
@@ -63,10 +48,6 @@ interface DashboardIssue {
   tone: IssueTone;
 }
 
-/* =========================================================
-   DATA
-========================================================= */
-
 const topStats = [
   {
     title: "SEO HEALTH SCORE",
@@ -76,7 +57,10 @@ const topStats = [
     icon: TrendingUp,
     tone: "emerald",
     footer: "View full SEO report",
-    spark: [18, 14, 17, 12, 20, 24, 19, 22, 26, 23, 30, 36],
+    spark: [
+      18, 14, 17, 12, 20, 24,
+      19, 22, 26, 23, 30, 36,
+    ],
   },
   {
     title: "TOTAL PAGES",
@@ -198,19 +182,44 @@ const locations = [
 ];
 
 const submissions = [
-  ["Rahul Sharma", "Sewa Help Request", "10 mins ago"],
-  ["Neha Verma", "Volunteer Registration", "1 hour ago"],
-  ["Amit Gupta", "CSR Enquiry", "2 hours ago"],
-  ["Pooja Singh", "Partnership Enquiry", "3 hours ago"],
-  ["Sandeep Kumar", "Contact Us", "4 hours ago"],
+  [
+    "Rahul Sharma",
+    "Sewa Help Request",
+    "10 mins ago",
+  ],
+  [
+    "Neha Verma",
+    "Volunteer Registration",
+    "1 hour ago",
+  ],
+  [
+    "Amit Gupta",
+    "CSR Enquiry",
+    "2 hours ago",
+  ],
+  [
+    "Pooja Singh",
+    "Partnership Enquiry",
+    "3 hours ago",
+  ],
+  [
+    "Sandeep Kumar",
+    "Contact Us",
+    "4 hours ago",
+  ],
 ];
 
 const toneClass = {
-  emerald: "bg-emerald-50 text-emerald-700 ring-emerald-100",
-  violet: "bg-violet-50 text-violet-700 ring-violet-100",
-  amber: "bg-amber-50 text-amber-700 ring-amber-100",
-  blue: "bg-blue-50 text-blue-700 ring-blue-100",
-  rose: "bg-rose-50 text-rose-700 ring-rose-100",
+  emerald:
+    "bg-emerald-50 text-emerald-700 ring-emerald-100",
+  violet:
+    "bg-violet-50 text-violet-700 ring-violet-100",
+  amber:
+    "bg-amber-50 text-amber-700 ring-amber-100",
+  blue:
+    "bg-blue-50 text-blue-700 ring-blue-100",
+  rose:
+    "bg-rose-50 text-rose-700 ring-rose-100",
 } as const;
 
 const searchConsoleRanges = [
@@ -242,46 +251,53 @@ const monthlyRanges = [
   "Last 6 Months",
 ];
 
-/* =========================================================
-   MINI SPARKLINE
-========================================================= */
-
-function MiniSparkline({ points }: { points: number[] }) {
+function MiniSparkline({
+  points,
+}: {
+  points: number[];
+}) {
   const max = Math.max(...points);
   const min = Math.min(...points);
+
   const width = 148;
   const height = 27;
   const pad = 2;
 
   const path = points
-    .map((v, i) => {
-      const x = pad + (i / (points.length - 1)) * (width - pad * 2);
+    .map((value, index) => {
+      const x =
+        pad +
+        (index / (points.length - 1)) *
+          (width - pad * 2);
 
       const y =
         height -
         pad -
-        ((v - min) / Math.max(1, max - min)) * (height - pad * 2);
+        ((value - min) /
+          Math.max(1, max - min)) *
+          (height - pad * 2);
 
-      return `${i === 0 ? "M" : "L"} ${x.toFixed(1)} ${y.toFixed(1)}`;
+      return `${
+        index === 0 ? "M" : "L"
+      } ${x.toFixed(1)} ${y.toFixed(1)}`;
     })
     .join(" ");
 
   return (
-    <svg viewBox={`0 0 ${width} ${height}`} className="h-[27px] w-full">
+    <svg
+      viewBox={`0 0 ${width} ${height}`}
+      className="h-[27px] w-full"
+    >
       <path
         d={path}
         fill="none"
         stroke="currentColor"
-        strokeWidth="2"
+        strokeWidth="2.2"
         className="text-emerald-700"
       />
     </svg>
   );
 }
-
-/* =========================================================
-   PANEL
-========================================================= */
 
 function Panel({
   children,
@@ -299,10 +315,6 @@ function Panel({
   );
 }
 
-/* =========================================================
-   PANEL TITLE
-========================================================= */
-
 function PanelTitle({
   children,
   right,
@@ -311,8 +323,8 @@ function PanelTitle({
   right?: React.ReactNode;
 }) {
   return (
-    <div className="flex h-[34px] items-center justify-between px-3">
-      <h2 className="text-[12px] font-extrabold tracking-[-0.01em] text-[#13213d]">
+    <div className="flex h-[36px] items-center justify-between px-3">
+      <h2 className="text-[14px] font-extrabold tracking-[-0.01em] text-[#13213d]">
         {children}
       </h2>
 
@@ -321,26 +333,22 @@ function PanelTitle({
   );
 }
 
-/* =========================================================
-   FOOTER BUTTON
-========================================================= */
-
-function FooterButton({ children }: { children: React.ReactNode }) {
+function FooterButton({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <button
       type="button"
-      className="mx-3 mb-2 mt-1 flex h-[27px] w-[calc(100%-24px)] items-center justify-center gap-2 rounded-md border border-[#eee8dc] bg-[#fffdf8] text-[9.5px] font-bold text-[#27344c] transition hover:bg-[#fff9ed]"
+      className="mx-3 mb-2 mt-1 flex h-[29px] w-[calc(100%-24px)] items-center justify-center gap-2 rounded-md border border-[#eee8dc] bg-[#fffdf8] text-[11px] font-bold text-[#27344c] transition-colors hover:bg-[#fff8eb]"
     >
       {children}
 
-      <ArrowRight className="h-3 w-3" />
+      <ArrowRight className="h-3.5 w-3.5" />
     </button>
   );
 }
-
-/* =========================================================
-   SMALL RANGE DROPDOWN
-========================================================= */
 
 function RangeDropdown({
   dropdownKey,
@@ -352,12 +360,15 @@ function RangeDropdown({
 }: {
   dropdownKey: DropdownKey;
   openDropdown: DropdownKey;
-  setOpenDropdown: React.Dispatch<React.SetStateAction<DropdownKey>>;
+  setOpenDropdown: React.Dispatch<
+    React.SetStateAction<DropdownKey>
+  >;
   value: string;
   setValue: (value: string) => void;
   options: string[];
 }) {
-  const isOpen = openDropdown === dropdownKey;
+  const isOpen =
+    openDropdown === dropdownKey;
 
   return (
     <div
@@ -366,22 +377,24 @@ function RangeDropdown({
     >
       <button
         type="button"
-        onClick={() => {
-          setOpenDropdown(isOpen ? null : dropdownKey);
-        }}
-        className="flex items-center gap-1 text-[8px] font-bold"
+        onClick={() =>
+          setOpenDropdown(
+            isOpen ? null : dropdownKey
+          )
+        }
+        className="flex items-center gap-1.5 text-[10px] font-bold text-[#27344c]"
       >
         {value}
 
         <ChevronDown
-          className={`h-3 w-3 transition-transform ${
+          className={`h-3.5 w-3.5 transition-transform ${
             isOpen ? "rotate-180" : ""
           }`}
         />
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-[calc(100%+7px)] z-[100] min-w-[142px] overflow-hidden rounded-[9px] border border-[#e5e2da] bg-white p-1.5 shadow-[0_10px_30px_rgba(15,23,42,0.14)]">
+        <div className="absolute right-0 top-[calc(100%+7px)] z-[100] min-w-[150px] overflow-hidden rounded-[9px] border border-[#e5e2da] bg-white p-1.5 shadow-[0_10px_30px_rgba(15,23,42,0.14)]">
           {options.map((option) => (
             <button
               type="button"
@@ -390,7 +403,7 @@ function RangeDropdown({
                 setValue(option);
                 setOpenDropdown(null);
               }}
-              className={`flex w-full items-center justify-between rounded-[6px] px-2.5 py-2 text-left text-[8px] font-bold transition ${
+              className={`flex w-full items-center justify-between rounded-[6px] px-2.5 py-2 text-left text-[10px] font-bold transition ${
                 value === option
                   ? "bg-[#f2f5f2] text-[#26372b]"
                   : "text-[#465168] hover:bg-[#f7f7f4]"
@@ -398,7 +411,9 @@ function RangeDropdown({
             >
               <span>{option}</span>
 
-              {value === option && <Check className="h-3 w-3" />}
+              {value === option && (
+                <Check className="h-3.5 w-3.5" />
+              )}
             </button>
           ))}
         </div>
@@ -407,505 +422,101 @@ function RangeDropdown({
   );
 }
 
-/* =========================================================
-   DASHBOARD
-========================================================= */
-
 export default function DashboardPage() {
-  const [openDropdown, setOpenDropdown] = useState<DropdownKey>(null);
+  const [openDropdown, setOpenDropdown] =
+    useState<DropdownKey>(null);
 
-  const [selectedWebsite, setSelectedWebsite] =
-    useState("mokshasewa.org");
+  const [
+    searchConsoleRange,
+    setSearchConsoleRange,
+  ] = useState("Last 28 Days");
 
-  const [selectedDate, setSelectedDate] =
-    useState("31 May 2026");
+  const [
+    analyticsRange,
+    setAnalyticsRange,
+  ] = useState("Last 30 Days");
 
-  const [searchConsoleRange, setSearchConsoleRange] =
-    useState("Last 28 Days");
+  const [
+    webVitalsRange,
+    setWebVitalsRange,
+  ] = useState("Last 28 Days");
 
-  const [analyticsRange, setAnalyticsRange] =
-    useState("Last 30 Days");
+  const [
+    topPagesRange,
+    setTopPagesRange,
+  ] = useState("This Month");
 
-  const [webVitalsRange, setWebVitalsRange] =
-    useState("Last 28 Days");
+  const [
+    keywordRange,
+    setKeywordRange,
+  ] = useState("This Month");
 
-  const [topPagesRange, setTopPagesRange] =
-    useState("This Month");
-
-  const [keywordRange, setKeywordRange] =
-    useState("This Month");
-
-  const [locationRange, setLocationRange] =
-    useState("This Month");
-
-  const [activeMenuItem, setActiveMenuItem] =
-    useState("Dashboard");
-
-  const [notificationCount, setNotificationCount] =
-    useState(8);
-
-  /* =======================================================
-     OUTSIDE CLICK + ESC CLOSE
-  ======================================================= */
+  const [
+    locationRange,
+    setLocationRange,
+  ] = useState("This Month");
 
   useEffect(() => {
-    const handleMouseDown = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
+    const handleMouseDown = (
+      event: MouseEvent
+    ) => {
+      const target =
+        event.target as HTMLElement;
 
-      if (!target.closest("[data-dashboard-dropdown]")) {
+      if (
+        !target.closest(
+          "[data-dashboard-dropdown]"
+        )
+      ) {
         setOpenDropdown(null);
       }
     };
 
-    const handleKeyDown = (event: KeyboardEvent) => {
+    const handleKeyDown = (
+      event: KeyboardEvent
+    ) => {
       if (event.key === "Escape") {
         setOpenDropdown(null);
       }
     };
 
-    document.addEventListener("mousedown", handleMouseDown);
-    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener(
+      "mousedown",
+      handleMouseDown
+    );
+
+    document.addEventListener(
+      "keydown",
+      handleKeyDown
+    );
 
     return () => {
-      document.removeEventListener("mousedown", handleMouseDown);
-      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener(
+        "mousedown",
+        handleMouseDown
+      );
+
+      document.removeEventListener(
+        "keydown",
+        handleKeyDown
+      );
     };
   }, []);
 
-  const toggleDropdown = (key: DropdownKey) => {
-    setOpenDropdown((current) =>
-      current === key ? null : key
-    );
-  };
-
   return (
-    <div className="h-dvh w-full overflow-hidden bg-white text-[#13213d]">
+    <div className="h-full min-h-0 w-full overflow-hidden bg-white text-[#13213d]">
       <div className="flex h-full min-h-0 flex-col overflow-hidden">
 
-        {/* ===================================================
-            HEADER
-        =================================================== */}
-
-        <header className="relative z-[80] h-[66px] shrink-0 border-b border-[#e8e8e3] bg-white px-2.5">
-          <div className="flex h-full items-center justify-between gap-3">
-
-            {/* LEFT */}
-
-            <div className="flex min-w-0 items-center gap-2.5">
-
-              {/* MENU */}
-
-              <div
-                className="relative shrink-0"
-                data-dashboard-dropdown
-              >
-                <button
-                  type="button"
-                  onClick={() => toggleDropdown("menu")}
-                  className="grid h-10 w-10 shrink-0 place-items-center rounded-[12px] bg-[#30392d] text-white transition hover:bg-[#222b20]"
-                >
-                  {openDropdown === "menu" ? (
-                    <X className="h-5 w-5" />
-                  ) : (
-                    <Menu className="h-5 w-5" />
-                  )}
-                </button>
-
-                {openDropdown === "menu" && (
-                  <div className="absolute left-0 top-[48px] z-[120] w-[210px] overflow-hidden rounded-[12px] border border-[#e5e2da] bg-white p-2 shadow-[0_14px_40px_rgba(15,23,42,0.16)]">
-
-                    <div className="border-b border-[#ecece7] px-2.5 pb-2 pt-1">
-                      <p className="text-[9px] font-extrabold uppercase tracking-[0.08em] text-[#8a92a0]">
-                        Navigation
-                      </p>
-                    </div>
-
-                    {[
-                      "Dashboard",
-                      "Website Pages",
-                      "Blog Posts",
-                      "SEO Manager",
-                      "Analytics",
-                      "Form Submissions",
-                      "Media Library",
-                      "Settings",
-                    ].map((item) => (
-                      <button
-                        key={item}
-                        type="button"
-                        onClick={() => {
-                          setActiveMenuItem(item);
-                          setOpenDropdown(null);
-                        }}
-                        className={`mt-1 flex w-full items-center justify-between rounded-[8px] px-3 py-2 text-left text-[10px] font-bold transition ${
-                          activeMenuItem === item
-                            ? "bg-[#30392d] text-white"
-                            : "text-[#33415a] hover:bg-[#f5f6f3]"
-                        }`}
-                      >
-                        {item}
-
-                        {activeMenuItem === item && (
-                          <Check className="h-3.5 w-3.5" />
-                        )}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* TITLE */}
-
-              <div className="min-w-0">
-                <h1 className="truncate text-[20px] font-extrabold leading-tight tracking-[-0.025em]">
-                  Welcome back, Admin!{" "}
-                  <span className="text-[18px]">👋</span>
-                </h1>
-
-                <p className="truncate text-[11px] font-medium leading-tight text-[#4a5261]">
-                  Here&apos;s an overview of your website{" "}
-                  <b className="font-extrabold">
-                    mokshasewa.org
-                  </b>
-                </p>
-              </div>
-            </div>
-
-            {/* RIGHT */}
-
-            <div className="hidden items-center gap-2 xl:flex">
-
-              {/* WEBSITE DROPDOWN */}
-
-              <div
-                className="relative"
-                data-dashboard-dropdown
-              >
-                <button
-                  type="button"
-                  onClick={() =>
-                    toggleDropdown("website")
-                  }
-                  className="flex h-9 items-center gap-2 rounded-[10px] border border-[#e5e2da] bg-[#fffdfa] px-3 text-[10px] font-bold transition hover:bg-[#fff8eb]"
-                >
-                  <Globe2 className="h-3.5 w-3.5" />
-
-                  {selectedWebsite}
-
-                  <ChevronDown
-                    className={`h-3 w-3 transition-transform ${
-                      openDropdown === "website"
-                        ? "rotate-180"
-                        : ""
-                    }`}
-                  />
-                </button>
-
-                {openDropdown === "website" && (
-                  <div className="absolute right-0 top-[44px] z-[120] w-[205px] overflow-hidden rounded-[10px] border border-[#e5e2da] bg-white p-2 shadow-[0_12px_35px_rgba(15,23,42,0.15)]">
-
-                    <p className="px-2 pb-2 text-[8px] font-extrabold uppercase tracking-[0.08em] text-[#8b93a2]">
-                      Select Website
-                    </p>
-
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setSelectedWebsite(
-                          "mokshasewa.org"
-                        );
-                        setOpenDropdown(null);
-                      }}
-                      className="flex w-full items-center justify-between rounded-[7px] bg-[#f4f6f2] px-3 py-2.5 text-[9px] font-bold text-[#26372b]"
-                    >
-                      <span className="flex items-center gap-2">
-                        <Globe2 className="h-3.5 w-3.5" />
-                        mokshasewa.org
-                      </span>
-
-                      <Check className="h-3.5 w-3.5" />
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => {
-                        window.open(
-                          "https://mokshasewa.org",
-                          "_blank",
-                          "noopener,noreferrer"
-                        );
-                        setOpenDropdown(null);
-                      }}
-                      className="mt-1 flex w-full items-center gap-2 rounded-[7px] px-3 py-2.5 text-left text-[9px] font-bold text-[#465168] transition hover:bg-[#f7f7f4]"
-                    >
-                      <ArrowRight className="h-3.5 w-3.5" />
-                      Open Live Website
-                    </button>
-                  </div>
-                )}
-              </div>
-
-              {/* DATE DROPDOWN */}
-
-              <div
-                className="relative"
-                data-dashboard-dropdown
-              >
-                <button
-                  type="button"
-                  onClick={() => toggleDropdown("date")}
-                  className="flex h-9 items-center gap-2 rounded-[10px] border border-[#e5e2da] bg-[#fffdfa] px-3 text-[10px] font-bold transition hover:bg-[#fff8eb]"
-                >
-                  <CalendarDays className="h-3.5 w-3.5" />
-
-                  {selectedDate}
-
-                  <ChevronDown
-                    className={`h-3 w-3 transition-transform ${
-                      openDropdown === "date"
-                        ? "rotate-180"
-                        : ""
-                    }`}
-                  />
-                </button>
-
-                {openDropdown === "date" && (
-                  <div className="absolute right-0 top-[44px] z-[120] w-[175px] overflow-hidden rounded-[10px] border border-[#e5e2da] bg-white p-2 shadow-[0_12px_35px_rgba(15,23,42,0.15)]">
-
-                    <p className="px-2 pb-2 text-[8px] font-extrabold uppercase tracking-[0.08em] text-[#8b93a2]">
-                      Select Date
-                    </p>
-
-                    {[
-                      "31 May 2026",
-                      "30 May 2026",
-                      "29 May 2026",
-                      "28 May 2026",
-                      "27 May 2026",
-                    ].map((date) => (
-                      <button
-                        type="button"
-                        key={date}
-                        onClick={() => {
-                          setSelectedDate(date);
-                          setOpenDropdown(null);
-                        }}
-                        className={`flex w-full items-center justify-between rounded-[7px] px-3 py-2 text-left text-[9px] font-bold transition ${
-                          selectedDate === date
-                            ? "bg-[#f4f6f2] text-[#26372b]"
-                            : "text-[#465168] hover:bg-[#f7f7f4]"
-                        }`}
-                      >
-                        {date}
-
-                        {selectedDate === date && (
-                          <Check className="h-3.5 w-3.5" />
-                        )}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* NOTIFICATION */}
-
-              <div
-                className="relative"
-                data-dashboard-dropdown
-              >
-                <button
-                  type="button"
-                  onClick={() =>
-                    toggleDropdown("notifications")
-                  }
-                  className="relative grid h-9 w-9 place-items-center rounded-[9px] transition hover:bg-[#f5f6f3]"
-                >
-                  <Bell className="h-[18px] w-[18px]" />
-
-                  {notificationCount > 0 && (
-                    <span className="absolute right-0 top-0 grid h-[16px] min-w-[16px] place-items-center rounded-full bg-red-600 px-1 text-[8px] font-extrabold text-white">
-                      {notificationCount}
-                    </span>
-                  )}
-                </button>
-
-                {openDropdown ===
-                  "notifications" && (
-                  <div className="absolute right-0 top-[44px] z-[120] w-[320px] overflow-hidden rounded-[12px] border border-[#e5e2da] bg-white shadow-[0_14px_40px_rgba(15,23,42,0.16)]">
-
-                    <div className="flex items-center justify-between border-b border-[#ecece7] px-4 py-3">
-                      <div>
-                        <p className="text-[11px] font-extrabold">
-                          Notifications
-                        </p>
-
-                        <p className="mt-0.5 text-[8px] font-medium text-[#7b8494]">
-                          Recent website alerts
-                        </p>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setNotificationCount(0);
-                        }}
-                        className="text-[8px] font-extrabold text-[#18745c]"
-                      >
-                        Mark all read
-                      </button>
-                    </div>
-
-                    <div className="max-h-[290px] overflow-y-auto p-2">
-                      {[
-                        [
-                          "SEO Issue",
-                          "3 pages are missing meta descriptions.",
-                          "5 mins ago",
-                        ],
-                        [
-                          "Performance",
-                          "Home page LCP issue detected.",
-                          "20 mins ago",
-                        ],
-                        [
-                          "New Submission",
-                          "A new Sewa Help Request was received.",
-                          "35 mins ago",
-                        ],
-                        [
-                          "SEO Opportunity",
-                          "12 new keyword opportunities found.",
-                          "1 hour ago",
-                        ],
-                      ].map(
-                        ([title, description, time]) => (
-                          <button
-                            type="button"
-                            key={title}
-                            onClick={() =>
-                              setOpenDropdown(null)
-                            }
-                            className="flex w-full gap-3 rounded-[8px] px-2.5 py-2.5 text-left transition hover:bg-[#f7f8f6]"
-                          >
-                            <div className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-[#f0f4f1]">
-                              <Bell className="h-3.5 w-3.5 text-[#315340]" />
-                            </div>
-
-                            <div className="min-w-0">
-                              <p className="text-[9px] font-extrabold text-[#24324a]">
-                                {title}
-                              </p>
-
-                              <p className="mt-0.5 text-[8px] font-medium leading-[1.4] text-[#647083]">
-                                {description}
-                              </p>
-
-                              <p className="mt-1 text-[7px] font-bold text-[#9aa2af]">
-                                {time}
-                              </p>
-                            </div>
-                          </button>
-                        )
-                      )}
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* PROFILE */}
-
-              <div
-                className="relative"
-                data-dashboard-dropdown
-              >
-                <button
-                  type="button"
-                  onClick={() =>
-                    toggleDropdown("profile")
-                  }
-                  className="flex items-center gap-2 rounded-[9px] px-1.5 py-1 transition hover:bg-[#f7f7f4]"
-                >
-                  <div className="grid h-8 w-8 place-items-center rounded-full bg-[#edf3f6]">
-                    <UserRound className="h-4.5 w-4.5" />
-                  </div>
-
-                  <div className="text-left leading-tight">
-                    <p className="text-[10px] font-extrabold">
-                      Admin User
-                    </p>
-
-                    <p className="text-[8px] font-semibold text-[#5f6774]">
-                      Super Admin
-                    </p>
-                  </div>
-
-                  <ChevronDown
-                    className={`h-3 w-3 transition-transform ${
-                      openDropdown === "profile"
-                        ? "rotate-180"
-                        : ""
-                    }`}
-                  />
-                </button>
-
-                {openDropdown === "profile" && (
-                  <div className="absolute right-0 top-[46px] z-[120] w-[190px] overflow-hidden rounded-[10px] border border-[#e5e2da] bg-white p-2 shadow-[0_12px_35px_rgba(15,23,42,0.15)]">
-
-                    <div className="border-b border-[#ecece7] px-2.5 pb-2 pt-1">
-                      <p className="text-[9px] font-extrabold">
-                        Admin User
-                      </p>
-
-                      <p className="mt-0.5 text-[8px] font-medium text-[#7a8494]">
-                        Super Admin
-                      </p>
-                    </div>
-
-                    {[
-                      "My Profile",
-                      "Account Settings",
-                      "Security Settings",
-                    ].map((item) => (
-                      <button
-                        type="button"
-                        key={item}
-                        onClick={() =>
-                          setOpenDropdown(null)
-                        }
-                        className="mt-1 flex w-full rounded-[7px] px-3 py-2 text-left text-[9px] font-bold text-[#465168] transition hover:bg-[#f7f7f4]"
-                      >
-                        {item}
-                      </button>
-                    ))}
-
-                    <div className="my-1 border-t border-[#ecece7]" />
-
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setOpenDropdown(null)
-                      }
-                      className="flex w-full rounded-[7px] px-3 py-2 text-left text-[9px] font-extrabold text-red-600 transition hover:bg-red-50"
-                    >
-                      Sign Out
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </header>
-
-        {/* ===================================================
+        {/* ================================
             MAIN
-        =================================================== */}
+        ================================= */}
 
         <main className="min-h-0 flex-1 overflow-hidden px-1.5 py-2">
           <div className="grid h-full min-h-0 w-full grid-rows-[116px_minmax(0,1.22fr)_minmax(0,1.08fr)_minmax(0,0.76fr)] gap-2">
 
-            {/* =================================================
+            {/* =============================
                 TOP STATS
-            ================================================= */}
+            ============================== */}
 
             <div className="grid min-h-0 grid-cols-6 gap-2">
               {topStats.map((item) => {
@@ -924,28 +535,28 @@ export default function DashboardPage() {
                           ]
                         }`}
                       >
-                        <Icon className="h-[19px] w-[19px]" />
+                        <Icon className="h-[20px] w-[20px]" />
                       </div>
 
                       <div className="min-w-0 flex-1">
-                        <p className="truncate text-[8.5px] font-extrabold tracking-[0.01em] text-[#29406a]">
+                        <p className="truncate text-[10px] font-extrabold tracking-[0.01em] text-[#29406a]">
                           {item.title}
                         </p>
 
                         <div className="mt-1 flex items-end gap-1">
-                          <span className="text-[23px] font-extrabold leading-none tracking-[-0.04em]">
+                          <span className="text-[24px] font-extrabold leading-none tracking-[-0.04em]">
                             {item.value}
                           </span>
 
                           {item.suffix && (
-                            <span className="mb-0.5 text-[9px] font-bold">
+                            <span className="mb-0.5 text-[11px] font-bold">
                               {item.suffix}
                             </span>
                           )}
                         </div>
 
                         <p
-                          className={`mt-1 text-[8.5px] font-bold ${
+                          className={`mt-1 text-[10px] font-bold ${
                             item.title ===
                             "INDEXED PAGES"
                               ? "text-blue-600"
@@ -967,21 +578,23 @@ export default function DashboardPage() {
 
                     <div
                       className={`${
-                        item.spark ? "mt-0" : "mt-3"
-                      } flex items-center justify-center gap-1.5 text-[8.5px] font-extrabold text-[#293957]`}
+                        item.spark
+                          ? "mt-0"
+                          : "mt-2.5"
+                      } flex items-center justify-center gap-1.5 text-[10px] font-extrabold text-[#293957]`}
                     >
                       {item.footer}
 
-                      <ArrowRight className="h-3 w-3" />
+                      <ArrowRight className="h-3.5 w-3.5" />
                     </div>
                   </Panel>
                 );
               })}
             </div>
 
-            {/* =================================================
+            {/* =============================
                 ROW 2
-            ================================================= */}
+            ============================== */}
 
             <div className="grid min-h-0 grid-cols-[0.92fr_1.12fr_1.06fr] gap-2">
 
@@ -1000,14 +613,14 @@ export default function DashboardPage() {
                           92
                         </div>
 
-                        <div className="mt-1 text-[10px] font-bold text-emerald-700">
+                        <div className="mt-1 text-[11px] font-bold text-emerald-700">
                           Excellent
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  <div className="space-y-[5px] text-[8.5px] font-bold">
+                  <div className="space-y-[4px] text-[10px] font-bold">
                     {[
                       ["Meta Title", "Good", true],
                       [
@@ -1041,21 +654,17 @@ export default function DashboardPage() {
                         "Good",
                         true,
                       ],
-                      [
-                        "Page Speed",
-                        "Good",
-                        true,
-                      ],
+                      ["Page Speed", "Good", true],
                     ].map(
                       ([name, status, ok]) => (
                         <div
                           key={String(name)}
-                          className="grid grid-cols-[13px_1fr_auto] items-center gap-1"
+                          className="grid grid-cols-[14px_1fr_auto] items-center gap-1"
                         >
                           {ok ? (
-                            <CheckCircle2 className="h-3 w-3 text-emerald-700" />
+                            <CheckCircle2 className="h-3.5 w-3.5 text-emerald-700" />
                           ) : (
-                            <AlertCircle className="h-3 w-3 text-amber-500" />
+                            <AlertCircle className="h-3.5 w-3.5 text-amber-500" />
                           )}
 
                           <span>{name}</span>
@@ -1087,11 +696,15 @@ export default function DashboardPage() {
                   right={
                     <RangeDropdown
                       dropdownKey="search-console-range"
-                      openDropdown={openDropdown}
+                      openDropdown={
+                        openDropdown
+                      }
                       setOpenDropdown={
                         setOpenDropdown
                       }
-                      value={searchConsoleRange}
+                      value={
+                        searchConsoleRange
+                      }
                       setValue={
                         setSearchConsoleRange
                       }
@@ -1132,16 +745,16 @@ export default function DashboardPage() {
                         key={label}
                         className="rounded-[7px] bg-[#f5f7fb] px-2 py-1.5"
                       >
-                        <p className="text-[7px] font-bold text-[#334666]">
+                        <p className="text-[9px] font-bold text-[#334666]">
                           {label}
                         </p>
 
-                        <p className="mt-1 text-[17px] font-extrabold">
+                        <p className="mt-1 text-[18px] font-extrabold">
                           {value}
                         </p>
 
                         {change && (
-                          <p className="mt-0.5 text-[7px] font-bold text-emerald-700">
+                          <p className="mt-0.5 text-[9px] font-bold text-emerald-700">
                             {change}
                           </p>
                         )}
@@ -1156,17 +769,19 @@ export default function DashboardPage() {
                     preserveAspectRatio="none"
                     className="h-[90px] w-full"
                   >
-                    {[22, 52, 82].map((y) => (
-                      <line
-                        key={y}
-                        x1="34"
-                        x2="508"
-                        y1={y}
-                        y2={y}
-                        stroke="#edf0f4"
-                        strokeWidth="1"
-                      />
-                    ))}
+                    {[22, 52, 82].map(
+                      (y) => (
+                        <line
+                          key={y}
+                          x1="34"
+                          x2="508"
+                          y1={y}
+                          y2={y}
+                          stroke="#edf0f4"
+                          strokeWidth="1"
+                        />
+                      )
+                    )}
 
                     <path
                       d="M42 80 C60 58,72 72,88 50 S115 72,130 56 S160 80,175 60 S200 79,218 56 S244 73,259 48 S292 84,310 63 S342 76,360 49 S387 75,402 56 S430 78,448 55 S478 70,500 44"
@@ -1185,7 +800,7 @@ export default function DashboardPage() {
                     <text
                       x="38"
                       y="113"
-                      fontSize="8"
+                      fontSize="10"
                       fill="#68748a"
                     >
                       03 May
@@ -1194,7 +809,7 @@ export default function DashboardPage() {
                     <text
                       x="145"
                       y="113"
-                      fontSize="8"
+                      fontSize="10"
                       fill="#68748a"
                     >
                       10 May
@@ -1203,7 +818,7 @@ export default function DashboardPage() {
                     <text
                       x="254"
                       y="113"
-                      fontSize="8"
+                      fontSize="10"
                       fill="#68748a"
                     >
                       17 May
@@ -1212,7 +827,7 @@ export default function DashboardPage() {
                     <text
                       x="365"
                       y="113"
-                      fontSize="8"
+                      fontSize="10"
                       fill="#68748a"
                     >
                       24 May
@@ -1221,7 +836,7 @@ export default function DashboardPage() {
                     <text
                       x="468"
                       y="113"
-                      fontSize="8"
+                      fontSize="10"
                       fill="#68748a"
                     >
                       31 May
@@ -1241,10 +856,11 @@ export default function DashboardPage() {
                   right={
                     <button
                       type="button"
-                      className="flex items-center gap-1 text-[8px] font-bold"
+                      className="flex items-center gap-1 text-[10px] font-bold"
                     >
                       View All Issues
-                      <ArrowRight className="h-3 w-3" />
+
+                      <ArrowRight className="h-3.5 w-3.5" />
                     </button>
                   }
                 >
@@ -1261,13 +877,13 @@ export default function DashboardPage() {
                       tone,
                     }) => (
                       <div
-                        key={String(label)}
-                        className="grid grid-cols-[22px_1fr_auto_20px] items-center gap-2 border-b border-[#f0f0ec] py-[5px] text-[8.2px] last:border-b-0"
+                        key={label}
+                        className="grid grid-cols-[24px_1fr_auto_22px] items-center gap-2 border-b border-[#f0f0ec] py-[5px] text-[10px] last:border-b-0"
                       >
                         <div
-                          className={`grid h-[22px] w-[22px] place-items-center rounded-[6px] ${toneClass[tone]}`}
+                          className={`grid h-[24px] w-[24px] place-items-center rounded-[6px] ${toneClass[tone]}`}
                         >
-                          <Icon className="h-3 w-3" />
+                          <Icon className="h-3.5 w-3.5" />
                         </div>
 
                         <span className="truncate font-bold text-[#2e3c58]">
@@ -1287,7 +903,7 @@ export default function DashboardPage() {
                           {level}
                         </span>
 
-                        <span className="grid h-[18px] min-w-[18px] place-items-center rounded-full bg-[#f8f2ee] px-1 font-extrabold text-[#695b50]">
+                        <span className="grid h-[20px] min-w-[20px] place-items-center rounded-full bg-[#f8f2ee] px-1 font-extrabold text-[#695b50]">
                           {count}
                         </span>
                       </div>
@@ -1297,17 +913,18 @@ export default function DashboardPage() {
 
                 <button
                   type="button"
-                  className="mx-3 mb-2 mt-1 flex h-[28px] w-[calc(100%-24px)] items-center justify-center gap-2 rounded-md bg-[#071d3c] text-[9px] font-extrabold text-white"
+                  className="mx-3 mb-2 mt-1 flex h-[30px] w-[calc(100%-24px)] items-center justify-center gap-2 rounded-md bg-[#071d3c] text-[11px] font-extrabold text-white"
                 >
                   Fix Issues Now
-                  <ArrowRight className="h-3 w-3" />
+
+                  <ArrowRight className="h-3.5 w-3.5" />
                 </button>
               </Panel>
             </div>
 
-            {/* =================================================
+            {/* =============================
                 ROW 3
-            ================================================= */}
+            ============================== */}
 
             <div className="grid min-h-0 grid-cols-[0.92fr_1.12fr_1.06fr] gap-2">
 
@@ -1318,13 +935,19 @@ export default function DashboardPage() {
                   right={
                     <RangeDropdown
                       dropdownKey="analytics-range"
-                      openDropdown={openDropdown}
+                      openDropdown={
+                        openDropdown
+                      }
                       setOpenDropdown={
                         setOpenDropdown
                       }
                       value={analyticsRange}
-                      setValue={setAnalyticsRange}
-                      options={analyticsRanges}
+                      setValue={
+                        setAnalyticsRange
+                      }
+                      options={
+                        analyticsRanges
+                      }
                     />
                   }
                 >
@@ -1364,21 +987,26 @@ export default function DashboardPage() {
                       false,
                     ],
                   ].map(
-                    ([label, value, delta, good]) => (
+                    ([
+                      label,
+                      value,
+                      delta,
+                      good,
+                    ]) => (
                       <div
                         key={String(label)}
                         className="rounded-[6px] bg-[#f7f8fb] p-1.5"
                       >
-                        <p className="text-[6.8px] font-bold text-[#394867]">
+                        <p className="text-[9px] font-bold text-[#394867]">
                           {label}
                         </p>
 
-                        <p className="mt-0.5 text-[13px] font-extrabold">
+                        <p className="mt-0.5 text-[15px] font-extrabold">
                           {value}
                         </p>
 
                         <p
-                          className={`mt-0.5 text-[6.8px] font-bold ${
+                          className={`mt-0.5 text-[9px] font-bold ${
                             good
                               ? "text-emerald-700"
                               : "text-rose-600"
@@ -1416,20 +1044,26 @@ export default function DashboardPage() {
                 </FooterButton>
               </Panel>
 
-              {/* WEB VITALS */}
+              {/* CORE WEB VITALS */}
 
               <Panel>
                 <PanelTitle
                   right={
                     <RangeDropdown
                       dropdownKey="web-vitals-range"
-                      openDropdown={openDropdown}
+                      openDropdown={
+                        openDropdown
+                      }
                       setOpenDropdown={
                         setOpenDropdown
                       }
                       value={webVitalsRange}
-                      setValue={setWebVitalsRange}
-                      options={webVitalsRanges}
+                      setValue={
+                        setWebVitalsRange
+                      }
+                      options={
+                        webVitalsRanges
+                      }
                     />
                   }
                 >
@@ -1467,24 +1101,23 @@ export default function DashboardPage() {
                         key={String(label)}
                         className="rounded-[6px] bg-[#f7f8fb] p-1.5"
                       >
-                        <p className="text-[6.5px] font-bold text-[#34435f]">
+                        <p className="text-[9px] font-bold text-[#34435f]">
                           {label}
                         </p>
 
-                        <p className="mt-0.5 text-[14px] font-extrabold">
+                        <p className="mt-0.5 text-[16px] font-extrabold">
                           {value}
                         </p>
 
-                        <p className="text-[7px] font-bold text-emerald-700">
+                        <p className="text-[9px] font-bold text-emerald-700">
                           {status}
                         </p>
-                        
 
                         <div className="mt-1 h-1 overflow-hidden rounded-full bg-[#e5ece8]">
                           <div className="h-full w-[92%] rounded-full bg-emerald-700" />
                         </div>
 
-                        <p className="mt-0.5 text-right text-[6px] font-bold text-emerald-700">
+                        <p className="mt-0.5 text-right text-[8px] font-bold text-emerald-700">
                           {score}
                         </p>
                       </div>
@@ -1493,11 +1126,11 @@ export default function DashboardPage() {
                 </div>
 
                 <div className="px-3 pt-1.5">
-                  <p className="mb-0.5 text-[8px] font-extrabold">
+                  <p className="mb-0.5 text-[10px] font-extrabold">
                     Other Performance Metrics
                   </p>
 
-                  <div className="grid grid-cols-[1fr_64px_64px] gap-x-2 text-[6.8px] font-bold">
+                  <div className="grid grid-cols-[1fr_64px_64px] gap-x-2 text-[9px] font-bold">
                     <div className="bg-[#f7f8fb] px-2 py-0.5">
                       Metric
                     </div>
@@ -1526,21 +1159,21 @@ export default function DashboardPage() {
                         "120ms",
                         "80ms",
                       ],
-                    ].map((r) => (
+                    ].map((row) => (
                       <div
-                        key={r[0]}
+                        key={row[0]}
                         className="contents"
                       >
                         <div className="px-2 py-0.5">
-                          {r[0]}
+                          {row[0]}
                         </div>
 
                         <div className="px-2 py-0.5 text-center text-emerald-700">
-                          {r[1]}
+                          {row[1]}
                         </div>
 
                         <div className="px-2 py-0.5 text-center text-emerald-700">
-                          {r[2]}
+                          {row[2]}
                         </div>
                       </div>
                     ))}
@@ -1591,24 +1224,30 @@ export default function DashboardPage() {
                       "PHP Version",
                       "8.2.14",
                     ],
-                  ].map(([Icon, label, value]) => (
-                    <div
-                      key={String(label)}
-                      className="grid grid-cols-[18px_1fr_auto_16px] items-center gap-2 border-b border-[#f0f0ec] py-[6px] text-[8px] last:border-b-0"
-                    >
-                      <Icon className="h-3.5 w-3.5 text-[#3b4d70]" />
+                  ].map(
+                    ([
+                      Icon,
+                      label,
+                      value,
+                    ]) => (
+                      <div
+                        key={String(label)}
+                        className="grid grid-cols-[19px_1fr_auto_17px] items-center gap-2 border-b border-[#f0f0ec] py-[6px] text-[10px] last:border-b-0"
+                      >
+                        <Icon className="h-4 w-4 text-[#3b4d70]" />
 
-                      <span className="font-bold">
-                        {label as string}
-                      </span>
+                        <span className="font-bold">
+                          {label as string}
+                        </span>
 
-                      <span className="font-bold text-emerald-700">
-                        {value as string}
-                      </span>
+                        <span className="font-bold text-emerald-700">
+                          {value as string}
+                        </span>
 
-                      <CheckCircle2 className="h-3.5 w-3.5 text-emerald-700" />
-                    </div>
-                  ))}
+                        <CheckCircle2 className="h-4 w-4 text-emerald-700" />
+                      </div>
+                    )
+                  )}
                 </div>
 
                 <FooterButton>
@@ -1617,9 +1256,9 @@ export default function DashboardPage() {
               </Panel>
             </div>
 
-            {/* =================================================
+            {/* =============================
                 BOTTOM ROW
-            ================================================= */}
+            ============================== */}
 
             <div className="grid min-h-0 grid-cols-[1.02fr_1fr_1fr_1.12fr] gap-2">
 
@@ -1630,40 +1269,50 @@ export default function DashboardPage() {
                   right={
                     <RangeDropdown
                       dropdownKey="top-pages-range"
-                      openDropdown={openDropdown}
+                      openDropdown={
+                        openDropdown
+                      }
                       setOpenDropdown={
                         setOpenDropdown
                       }
                       value={topPagesRange}
-                      setValue={setTopPagesRange}
-                      options={monthlyRanges}
+                      setValue={
+                        setTopPagesRange
+                      }
+                      options={
+                        monthlyRanges
+                      }
                     />
                   }
                 >
                   Top Pages by Traffic
                 </PanelTitle>
 
-                <div className="px-3 text-[7px]">
-                  {topPages.map((row, i) => (
-                    <div
-                      key={row[0]}
-                      className="grid grid-cols-[16px_1fr_76px_42px_12px] items-center gap-1 py-[3px] font-bold"
-                    >
-                      <span>{i + 1}.</span>
+                <div className="px-3 text-[9px]">
+                  {topPages.map(
+                    (row, index) => (
+                      <div
+                        key={row[0]}
+                        className="grid grid-cols-[16px_1fr_76px_42px_14px] items-center gap-1 py-[3px] font-bold"
+                      >
+                        <span>
+                          {index + 1}.
+                        </span>
 
-                      <span>{row[0]}</span>
+                        <span>{row[0]}</span>
 
-                      <span className="truncate text-[#5f6b7e]">
-                        {row[1]}
-                      </span>
+                        <span className="truncate text-[#5f6b7e]">
+                          {row[1]}
+                        </span>
 
-                      <span className="text-right">
-                        {row[2]}
-                      </span>
+                        <span className="text-right">
+                          {row[2]}
+                        </span>
 
-                      <Search className="h-2.5 w-2.5 text-[#9aa5b4]" />
-                    </div>
-                  ))}
+                        <Search className="h-3 w-3 text-[#9aa5b4]" />
+                      </div>
+                    )
+                  )}
                 </div>
 
                 <FooterButton>
@@ -1671,54 +1320,62 @@ export default function DashboardPage() {
                 </FooterButton>
               </Panel>
 
-              {/* KEYWORDS */}
+              {/* KEYWORD PERFORMANCE */}
 
               <Panel>
                 <PanelTitle
                   right={
                     <RangeDropdown
                       dropdownKey="keyword-range"
-                      openDropdown={openDropdown}
+                      openDropdown={
+                        openDropdown
+                      }
                       setOpenDropdown={
                         setOpenDropdown
                       }
                       value={keywordRange}
-                      setValue={setKeywordRange}
-                      options={monthlyRanges}
+                      setValue={
+                        setKeywordRange
+                      }
+                      options={
+                        monthlyRanges
+                      }
                     />
                   }
                 >
                   Keyword Performance
                 </PanelTitle>
 
-                <div className="grid grid-cols-[1fr_38px_54px_45px] gap-1 px-3 text-[6.8px] font-bold">
+                <div className="grid grid-cols-[1fr_42px_62px_50px] gap-1 px-3 text-[9px] font-bold">
                   <span>Keyword</span>
                   <span>Clicks</span>
                   <span>Impressions</span>
                   <span>Position</span>
 
-                  {keywordRows.map((r) => (
-                    <div
-                      className="contents"
-                      key={r[0]}
-                    >
-                      <span className="py-[3px]">
-                        {r[0]}
-                      </span>
+                  {keywordRows.map(
+                    (row) => (
+                      <div
+                        className="contents"
+                        key={row[0]}
+                      >
+                        <span className="py-[3px]">
+                          {row[0]}
+                        </span>
 
-                      <span className="py-[3px]">
-                        {r[1]}
-                      </span>
+                        <span className="py-[3px]">
+                          {row[1]}
+                        </span>
 
-                      <span className="py-[3px]">
-                        {r[2]}
-                      </span>
+                        <span className="py-[3px]">
+                          {row[2]}
+                        </span>
 
-                      <span className="py-[3px] text-emerald-700">
-                        {r[3]} ↑
-                      </span>
-                    </div>
-                  ))}
+                        <span className="py-[3px] text-emerald-700">
+                          {row[3]} ↑
+                        </span>
+                      </div>
+                    )
+                  )}
                 </div>
 
                 <FooterButton>
@@ -1733,13 +1390,19 @@ export default function DashboardPage() {
                   right={
                     <RangeDropdown
                       dropdownKey="location-range"
-                      openDropdown={openDropdown}
+                      openDropdown={
+                        openDropdown
+                      }
                       setOpenDropdown={
                         setOpenDropdown
                       }
                       value={locationRange}
-                      setValue={setLocationRange}
-                      options={monthlyRanges}
+                      setValue={
+                        setLocationRange
+                      }
+                      options={
+                        monthlyRanges
+                      }
                     />
                   }
                 >
@@ -1748,10 +1411,17 @@ export default function DashboardPage() {
 
                 <div className="space-y-[6px] px-3 pt-1">
                   {locations.map(
-                    ([name, count, pct], i) => (
+                    (
+                      [
+                        name,
+                        count,
+                        pct,
+                      ],
+                      index
+                    ) => (
                       <div
                         key={String(name)}
-                        className="grid grid-cols-[56px_1fr_24px_38px] items-center gap-1.5 text-[7px] font-bold"
+                        className="grid grid-cols-[62px_1fr_28px_42px] items-center gap-1.5 text-[9px] font-bold"
                       >
                         <span>{name}</span>
 
@@ -1760,7 +1430,8 @@ export default function DashboardPage() {
                             className="h-full rounded-full bg-[#2f77d7]"
                             style={{
                               width: `${
-                                88 - i * 14
+                                88 -
+                                index * 14
                               }%`,
                             }}
                           />
@@ -1783,18 +1454,18 @@ export default function DashboardPage() {
                 </FooterButton>
               </Panel>
 
-              {/* FORM SUBMISSIONS */}
+              {/* RECENT SUBMISSIONS */}
 
               <Panel>
                 <PanelTitle
                   right={
                     <button
                       type="button"
-                      className="flex items-center gap-1 text-[7px] font-bold"
+                      className="flex items-center gap-1 text-[10px] font-bold"
                     >
                       View All
 
-                      <ArrowRight className="h-3 w-3" />
+                      <ArrowRight className="h-3.5 w-3.5" />
                     </button>
                   }
                 >
@@ -1802,123 +1473,87 @@ export default function DashboardPage() {
                 </PanelTitle>
 
                 <div className="px-3">
-                  {submissions.map((r, i) => (
-                    <div
-                      key={r[0]}
-                      className="grid grid-cols-[18px_1fr_1.1fr_auto] items-center gap-1.5 py-[3px] text-[6.8px] font-bold"
-                    >
+                  {submissions.map(
+                    (row, index) => (
                       <div
-                        className={`grid h-[18px] w-[18px] place-items-center rounded-full ${
-                          i === 0
-                            ? "bg-emerald-50 text-emerald-700"
-                            : i === 1
-                              ? "bg-violet-50 text-violet-700"
-                              : i === 2
-                                ? "bg-amber-50 text-amber-700"
-                                : i === 3
-                                  ? "bg-rose-50 text-rose-700"
-                                  : "bg-blue-50 text-blue-700"
-                        }`}
+                        key={row[0]}
+                        className="grid grid-cols-[20px_1fr_1.1fr_auto] items-center gap-1.5 py-[3px] text-[9px] font-bold"
                       >
-                        <FileText className="h-2.5 w-2.5" />
+                        <div
+                          className={`grid h-[20px] w-[20px] place-items-center rounded-full ${
+                            index === 0
+                              ? "bg-emerald-50 text-emerald-700"
+                              : index === 1
+                                ? "bg-violet-50 text-violet-700"
+                                : index === 2
+                                  ? "bg-amber-50 text-amber-700"
+                                  : index ===
+                                      3
+                                    ? "bg-rose-50 text-rose-700"
+                                    : "bg-blue-50 text-blue-700"
+                          }`}
+                        >
+                          <FileText className="h-3 w-3" />
+                        </div>
+
+                        <span className="truncate">
+                          {row[0]}
+                        </span>
+
+                        <span className="truncate text-[#43526d]">
+                          {row[1]}
+                        </span>
+
+                        <span className="whitespace-nowrap text-[#43526d]">
+                          {row[2]}
+                        </span>
                       </div>
-
-                      <span className="truncate">
-                        {r[0]}
-                      </span>
-
-                      <span className="truncate text-[#43526d]">
-                        {r[1]}
-                      </span>
-
-                      <span className="whitespace-nowrap text-[#43526d]">
-                        {r[2]}
-                      </span>
-                    </div>
-                  ))}
+                    )
+                  )}
                 </div>
               </Panel>
             </div>
           </div>
         </main>
 
-        {/* ===================================================
+        {/* =================================
             FOOTER
-        =================================================== */}
+        ================================== */}
 
         <footer className="relative h-[64px] shrink-0 overflow-hidden border-t border-[#e7e4dc] bg-[#faf9f6]">
 
-          {/* SOFT LANDSCAPE TINT */}
+          {/* SAME SOFT COLOR COMBINATION */}
 
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[22px] bg-[linear-gradient(to_top,rgba(214,230,220,0.48),rgba(250,249,246,0))]" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[28px] bg-[linear-gradient(to_top,rgba(214,230,220,0.55),rgba(250,249,246,0))]" />
 
-          {/* FOOTER ARTWORK */}
+          {/* SAME RIGHT SIDE IMAGE */}
 
           <div
             className="pointer-events-none absolute bottom-0 right-0 z-0 h-full w-[370px] bg-no-repeat"
             style={{
               backgroundImage:
                 'url("/assets/footer-moksha-scene.png")',
-              backgroundSize: "370px 64px",
-              backgroundPosition: "right bottom",
+              backgroundSize:
+                "370px 64px",
+              backgroundPosition:
+                "right bottom",
             }}
           />
 
-          {/* FOOTER CONTENT */}
+          {/* ADMIN FOOTER CONTENT */}
 
-          <div className="relative z-10 flex h-full items-center px-4 pr-[390px] text-[8px] font-semibold text-[#4d596b]">
-            <div className="flex min-w-0 flex-1 items-center gap-4">
-
-              <div className="flex items-center gap-2">
-                <div className="grid h-8 w-8 shrink-0 place-items-center text-[#d29b38]">
-                  <BadgeCheck className="h-[19px] w-[19px]" />
-                </div>
-
-                <span className="whitespace-nowrap">
-                  Together, we bring dignity to every
-                  final journey.
-                </span>
-              </div>
-
-              <span className="h-5 w-px shrink-0 bg-[#d9d8d2]" />
-
-              <span className="whitespace-nowrap">
-                © 2026 Moksha Sewa. All rights
+          <div className="relative z-10 flex h-full items-center px-4 pr-[390px]">
+            <div className="flex w-full items-center justify-center">
+              <p className="text-center text-[11px] font-medium text-slate-600">
+                &copy;{" "}
+                {new Date().getFullYear()}{" "}
+                <span className="font-semibold text-slate-900">
+                  Namo Gange Trust
+                </span>{" "}
+                — Free Cremation Assistance.
+                Admin Panel. All rights
                 reserved.
-              </span>
-
-              <span className="h-5 w-px shrink-0 bg-[#d9d8d2]" />
-
-              <span className="whitespace-nowrap">
-                An Initiative of Namo Gange Trust
-              </span>
-
-              <span className="h-5 w-px shrink-0 bg-[#d9d8d2]" />
-
-              <Link
-                href="/privacy-policy"
-                className="whitespace-nowrap transition-colors hover:text-[#13213d]"
-              >
-                Privacy Policy
-              </Link>
-
-              <span className="h-5 w-px shrink-0 bg-[#d9d8d2]" />
-
-              <Link
-                href="/terms"
-                className="whitespace-nowrap transition-colors hover:text-[#13213d]"
-              >
-                Terms &amp; Conditions
-              </Link>
-
-              <span className="h-5 w-px shrink-0 bg-[#d9d8d2]" />
-
-              <Link
-                href="/support"
-                className="whitespace-nowrap transition-colors hover:text-[#13213d]"
-              >
-                Support
-              </Link>
+              </p>
             </div>
           </div>
         </footer>
