@@ -36,6 +36,8 @@ import {
 import {
   cmsPages,
   cmsPagesFromSettings,
+  findCmsPageByRouteKey,
+  getCmsPageRouteKey,
   PUBLIC_SITE_URL,
   type PageType,
 } from "@/lib/cmsPages";
@@ -769,17 +771,10 @@ export default function CmsPageDetailPage() {
   const router =
     useRouter();
 
-  const pageId =
-    Number(params.id);
-
   const [pages, setPages] = useState(cmsPages);
   const [performance, setPerformance] = useState({ views: 0, visitors: 0, averageSessionSeconds: 0, bounceRate: 0 });
 
-  const page =
-    pages.find(
-      (item) =>
-        item.id === pageId,
-    ) ?? pages[0] ?? cmsPages[0];
+  const page = findCmsPageByRouteKey(pages, params.id) ?? pages[0] ?? cmsPages[0];
 
   useEffect(() => {
     settingsApi.get().then((settings) => setPages(cmsPagesFromSettings(settings as unknown as Record<string, unknown>))).catch(() => undefined);
@@ -902,7 +897,7 @@ export default function CmsPageDetailPage() {
               type="button"
               onClick={() =>
                 window.open(
-                  `/pages/${page.id}/edit`,
+                  `/pages/${getCmsPageRouteKey(page)}/edit`,
                   "_blank",
                   "noopener,noreferrer",
                 )

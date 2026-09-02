@@ -26,6 +26,7 @@ import {
 import {
   cmsPages,
   cmsPagesFromSettings,
+  getCmsPageRouteKey,
   PUBLIC_SITE_URL,
   type CmsPage,
   type PageStatus,
@@ -774,7 +775,7 @@ export default function PagesCmsPage() {
                           type="button"
                           onClick={() =>
                             window.open(
-                              `/pages/${page.id}/edit`,
+                              `/pages/${getCmsPageRouteKey(page)}/edit`,
                               "_blank",
                               "noopener,noreferrer",
                             )
@@ -810,7 +811,7 @@ export default function PagesCmsPage() {
                               type="button"
                               onClick={() =>
                                 window.open(
-                                  `/pages/${page.id}/edit`,
+                                  `/pages/${getCmsPageRouteKey(page)}/edit`,
                                   "_blank",
                                   "noopener,noreferrer",
                                 )
@@ -1032,7 +1033,7 @@ export default function PagesCmsPage() {
                   type="button"
                   onClick={() =>
                     window.open(
-                      `/pages/${selectedPage.id}/edit`,
+                      `/pages/${getCmsPageRouteKey(selectedPage)}/edit`,
                       "_blank",
                       "noopener,noreferrer",
                     )
@@ -1051,7 +1052,7 @@ export default function PagesCmsPage() {
                   type="button"
                   onClick={() =>
                     window.open(
-                      `/pages/${selectedPage.id}`,
+                      `/pages/${getCmsPageRouteKey(selectedPage)}`,
                       "_blank",
                       "noopener,noreferrer",
                     )
