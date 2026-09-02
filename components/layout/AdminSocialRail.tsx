@@ -1,0 +1,48 @@
+type IconProps = { className?: string };
+
+const XIcon = ({ className }: IconProps) => <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden><path d="M18.24 2.25h3.31l-7.23 8.26 8.5 11.24h-6.65l-5.22-6.82-5.96 6.82H1.68l7.73-8.84L1.25 2.25h6.83l4.71 6.23 5.45-6.23Zm-1.16 17.52h1.84L7.08 4.13H5.12l11.96 15.64Z" /></svg>;
+const FacebookIcon = ({ className }: IconProps) => <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.51 1.5-3.9 3.78-3.9 1.1 0 2.24.2 2.24.2v2.46H15.2c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12Z" /></svg>;
+const InstagramIcon = ({ className }: IconProps) => <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="2" aria-hidden><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" /></svg>;
+const LinkedinIcon = ({ className }: IconProps) => <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden><path d="M6.5 8.25H3.25V21H6.5V8.25ZM4.88 3a1.88 1.88 0 1 0 0 3.75A1.88 1.88 0 0 0 4.88 3ZM21 13.7c0-3.84-2.05-5.62-4.79-5.62-2.2 0-3.19 1.21-3.74 2.06V8.25H9.22V21h3.25v-6.32c0-1.67.32-3.29 2.39-3.29 2.04 0 2.06 1.91 2.06 3.4V21H21v-7.3Z" /></svg>;
+const YoutubeIcon = ({ className }: IconProps) => <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden><path d="M23.5 6.2a3 3 0 0 0-2.1-2.12c-1.85-.5-9.4-.5-9.4-.5s-7.55 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.12c1.85.5 9.4.5 9.4.5s7.55 0 9.4-.5a3 3 0 0 0 2.1-2.12A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.27 3.6-6.27 3.6Z" /></svg>;
+
+const links = [
+  { label: "X", href: "https://x.com/mokshasewa", color: "#000000", icon: XIcon },
+  { label: "Facebook", href: "https://www.facebook.com/mokshasewa/", color: "#1877F2", icon: FacebookIcon },
+  { label: "Instagram", href: "https://www.instagram.com/mokshasewa/", color: "#E4405F", icon: InstagramIcon },
+  { label: "LinkedIn", href: "https://www.linkedin.com/company/moksha-sewaorg/", color: "#0077B5", icon: LinkedinIcon },
+  { label: "YouTube", href: "https://www.youtube.com/@Mokshasewa", color: "#FF0000", icon: YoutubeIcon },
+];
+
+export default function AdminSocialRail() {
+  return (
+    <nav className="fixed right-2 top-1/2 z-30 hidden -translate-y-1/2 md:block" aria-label="Moksha Sewa social media">
+      <div className="relative flex flex-col items-end gap-1 rounded-[22px] border border-white/90 bg-white/80 p-1 shadow-[0_12px_30px_rgba(42,29,20,.14),0_2px_7px_rgba(42,29,20,.07)] backdrop-blur-xl">
+        <span className="pointer-events-none absolute inset-y-5 right-[-4px] w-[3px] rounded-full bg-gradient-to-b from-[#e8c779] via-[#9b743e] to-[#e8c779]" />
+        <div className="flex h-7 w-9 items-center justify-center" aria-hidden>
+          <svg viewBox="0 0 32 32" className="h-5 w-5 text-[#9b743e]" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <path d="M16 25c-5-4-7-9-5-15 4 2 6 5 5 10 0-5 2-8 5-10 2 6 0 11-5 15Z" />
+            <path d="M8 17c4 0 7 3 8 8M24 17c-4 0-7 3-8 8M8 26c5 2 11 2 16 0" />
+          </svg>
+        </div>
+
+        {links.map(({ label, href, color, icon: Icon }) => (
+          <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label} title={label}
+            className="group flex min-h-10 min-w-10 items-center justify-end rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9b743e]">
+            <span
+              className="relative flex h-9 w-9 items-center justify-center overflow-hidden rounded-full border-2 border-white text-white shadow-[0_3px_10px_rgba(0,0,0,.18)] ring-1 ring-black/5 transition-all duration-300 ease-out group-hover:w-[102px] group-hover:justify-between group-hover:px-2.5 group-hover:shadow-[0_7px_20px_rgba(0,0,0,.22)] group-hover:ring-2 group-hover:ring-white"
+              style={{ backgroundColor: color }}
+            >
+              <span className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/25 via-transparent to-black/15" />
+              <span className="relative max-w-0 -translate-x-2 overflow-hidden whitespace-nowrap text-[9px] font-bold uppercase tracking-[.05em] opacity-0 transition-all duration-300 group-hover:max-w-[61px] group-hover:translate-x-0 group-hover:opacity-100">{label}</span>
+              <Icon className="relative h-4 w-4 shrink-0 transition-transform duration-300 group-hover:rotate-[4deg] group-hover:scale-110" />
+            </span>
+          </a>
+        ))}
+
+        <span className="mt-0.5 h-px w-7 bg-gradient-to-r from-transparent via-[#b18a50] to-transparent" aria-hidden />
+        <span className="pb-1 text-[8px] font-bold uppercase tracking-[.18em] text-[#80613a]" aria-hidden>Follow</span>
+      </div>
+    </nav>
+  );
+}
