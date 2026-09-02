@@ -50,6 +50,68 @@ type DropdownKey =
   | "location-range"
   | null;
 
+function AnimatedCounter({
+  value,
+  duration = 1200,
+}: {
+  value: string | number;
+  duration?: number;
+}) {
+  const [displayValue, setDisplayValue] = useState<string | number>("");
+
+  useEffect(() => {
+    const strVal = String(value);
+    const numericMatch = strVal.match(/^([^\d.]*)([\d,.]+)(.*)$/);
+
+    if (!numericMatch) {
+      setDisplayValue(value);
+      return;
+    }
+
+    const prefix = numericMatch[1];
+    const rawNumberStr = numericMatch[2].replace(/,/g, "");
+    const targetNum = parseFloat(rawNumberStr);
+    const suffix = numericMatch[3];
+
+    if (isNaN(targetNum) || targetNum === 0) {
+      setDisplayValue(value);
+      return;
+    }
+
+    const hasComma = numericMatch[2].includes(",");
+    const decimalPlaces = (rawNumberStr.split(".")[1] || "").length;
+
+    let startTime: number | null = null;
+    let animationFrameId: number;
+
+    const step = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      const easeProgress = 1 - Math.pow(1 - progress, 3);
+      const currentNum = targetNum * easeProgress;
+
+      let formattedNum = currentNum.toFixed(decimalPlaces);
+      if (hasComma) {
+        const parts = formattedNum.split(".");
+        parts[0] = parseInt(parts[0], 10).toLocaleString();
+        formattedNum = parts.join(".");
+      }
+
+      setDisplayValue(`${prefix}${formattedNum}${suffix}`);
+
+      if (progress < 1) {
+        animationFrameId = requestAnimationFrame(step);
+      }
+    };
+
+    animationFrameId = requestAnimationFrame(step);
+
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [value, duration]);
+
+  return <>{displayValue || value}</>;
+}
+
 type IssueTone = "rose" | "amber" | "violet";
 
 type IssueLevel = "High" | "Medium" | "Low";
@@ -70,11 +132,9 @@ const defaultTopStats = [
     note: "Excellent",
     icon: TrendingUp,
     tone: "emerald",
+    gradient: "linear-gradient(135deg, #ffffff 0%, #ffffff 55%, #f0fdf4 100%)",
+    numColor: "#047857",
     footer: "View full SEO report",
-    spark: [
-      18, 14, 17, 12, 20, 24,
-      19, 22, 26, 23, 30, 36,
-    ],
   },
   {
     title: "TOTAL PAGES",
@@ -82,6 +142,8 @@ const defaultTopStats = [
     note: "↑ 5 this month",
     icon: FileText,
     tone: "violet",
+    gradient: "linear-gradient(135deg, #ffffff 0%, #ffffff 55%, #f8f5ff 100%)",
+    numColor: "#6d28d9",
     footer: "View all pages",
   },
   {
@@ -90,6 +152,8 @@ const defaultTopStats = [
     note: "↑ 6 this month",
     icon: FileSearch,
     tone: "amber",
+    gradient: "linear-gradient(135deg, #ffffff 0%, #ffffff 55%, #fffdf0 100%)",
+    numColor: "#b45309",
     footer: "View all posts",
   },
   {
@@ -99,6 +163,8 @@ const defaultTopStats = [
     note: "89.6% Indexed",
     icon: Search,
     tone: "blue",
+    gradient: "linear-gradient(135deg, #ffffff 0%, #ffffff 55%, #f0f7ff 100%)",
+    numColor: "#1d4ed8",
     footer: "View details",
   },
   {
@@ -107,6 +173,8 @@ const defaultTopStats = [
     note: "↑ 18.4% this month",
     icon: Users,
     tone: "rose",
+    gradient: "linear-gradient(135deg, #ffffff 0%, #ffffff 55%, #fff5f6 100%)",
+    numColor: "#be123c",
     footer: "View all submissions",
   },
   {
@@ -115,6 +183,8 @@ const defaultTopStats = [
     note: "↑ 1.2% this month",
     icon: Target,
     tone: "emerald",
+    gradient: "linear-gradient(135deg, #ffffff 0%, #ffffff 55%, #f0fdfa 100%)",
+    numColor: "#0f766e",
     footer: "View analytics",
   },
 ];
@@ -315,24 +385,41 @@ function MiniSparkline({
 function Panel({
   children,
   className = "",
+  style,
 }: {
   children: React.ReactNode;
   className?: string;
+  style?: React.CSSProperties;
 }) {
   const items = Children.toArray(children);
+  const firstItem = items[0];
+  const isHeader = isValidElement(firstItem) && firstItem.type === PanelTitle;
   const lastItem = items.at(-1);
   const hasFooter = isValidElement(lastItem) && lastItem.type === FooterButton;
 
+  const bodyItems = isHeader
+    ? hasFooter
+      ? items.slice(1, -1)
+      : items.slice(1)
+    : hasFooter
+    ? items.slice(0, -1)
+    : items;
+
   return (
     <section
-      className={`relative min-h-0 rounded-[11px] border border-[#e5e7e6] bg-white ${hasFooter ? "flex flex-col overflow-hidden" : "overflow-auto"} ${className}`}
+      className={`relative flex flex-col min-h-0 rounded-[11px] border border-[#e5e7e6] bg-white overflow-hidden ${className}`}
+      style={{
+        boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px",
+        ...style,
+      }}
     >
-      {hasFooter ? (
-        <>
-          <div className="min-h-0 flex-1 overflow-auto pb-1">{items.slice(0, -1)}</div>
-          {lastItem}
-        </>
-      ) : children}
+      {isHeader && firstItem}
+
+      <div className="min-h-0 flex-1 flex flex-col justify-between overflow-auto pb-0">
+        {bodyItems}
+      </div>
+
+      {hasFooter && lastItem}
     </section>
   );
 }
@@ -345,8 +432,8 @@ function PanelTitle({
   right?: React.ReactNode;
 }) {
   return (
-    <div className="sticky top-0 z-20 flex h-[38px] shrink-0 items-center justify-between border-b border-slate-100 bg-white/95 px-3 backdrop-blur-sm">
-      <h2 className="text-[12px] font-semibold tracking-[-0.01em] text-[#13213d]">
+    <div className="sticky top-0 z-20 flex h-[32px] shrink-0 items-center justify-between border-b border-slate-200/80 bg-[#f0f3f6] px-2.5 backdrop-blur-sm">
+      <h2 className="text-[10.5px] !font-semibold tracking-[-0.01em] text-slate-900" style={{ fontWeight: 600, color: "#0f172a" }}>
         {children}
       </h2>
 
@@ -363,7 +450,7 @@ function FooterButton({ children, dark = false }: { children: React.ReactNode; d
   return (
     <button
       type="button"
-      className={`mx-3 mb-2 mt-1 flex h-[30px] shrink-0 items-center justify-center gap-2 rounded-md text-[9.5px] font-bold transition ${dark ? "bg-[#071d3c] text-white hover:bg-[#0b2a55]" : "border border-[#eee8dc] bg-[#fffdf8] text-[#27344c] hover:bg-[#fff9ed]"}`}
+      className={`mx-2.5 mb-1.5 mt-0.5 flex h-[26px] shrink-0 items-center justify-center gap-1.5 rounded-md text-[8.5px] font-bold transition ${dark ? "bg-[#071d3c] text-white hover:bg-[#0b2a55]" : "border border-[#eee8dc] bg-[#fffdf8] text-[#27344c] hover:bg-[#fff9ed]"}`}
     >
       {children}
 
@@ -675,14 +762,19 @@ export default function DashboardPage() {
 
               {/* TITLE */}
 
-              <div className="min-w-0">
+              <div
+                className="min-w-0 rounded-md border border-black bg-white px-3 py-1.5"
+                style={{
+                  boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px"
+                }}
+              >
                 <h1 className="truncate text-[20px] font-extrabold leading-tight tracking-[-0.025em]">
-                  Welcome back, Admin!{" "}
+                  Welcome back, Vansh!{" "}
                   <span className="text-[18px]">👋</span>
                 </h1>
 
                 <p className="truncate text-[11px] font-medium leading-tight text-[#4a5261]">
-                  Here&apos;s an overview of your website{" "}
+                  Here&apos;s an overview of your website today{" "}
                   <b className="font-extrabold">
                     mokshasewa.org
                   </b>
@@ -1015,8 +1107,8 @@ export default function DashboardPage() {
             MAIN
         =================================================== */}
 
-        <main className="min-h-0 flex-1 overflow-visible px-1.5 py-2">
-          <div className="grid h-full min-h-0 w-full grid-rows-[145px_310px_minmax(0,1.08fr)_minmax(0,0.76fr)] gap-2">
+        <main className="min-h-0 flex-1 overflow-visible pl-5 pr-1.5 pt-4 pb-2">
+          <div className="grid h-full min-h-0 w-full grid-rows-[98px_270px_minmax(0,1.08fr)_minmax(0,0.76fr)] gap-2">
 
             {/* =============================
                 TOP STATS
@@ -1029,37 +1121,41 @@ export default function DashboardPage() {
                 return (
                   <Panel
                     key={item.title}
-                    className="flex flex-col !overflow-hidden p-2.5 !pb-9"
+                    className="flex flex-col !overflow-hidden p-2 !pb-5.5"
+                    style={{
+                      background: item.gradient,
+                      boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px",
+                    }}
                   >
-                    <div className="flex items-start gap-2">
+                    <div className="flex items-start gap-1.5">
                       <div
-                        className={`grid h-10 w-10 shrink-0 place-items-center rounded-full ring-1 ${toneClass[
+                        className={`grid h-[30px] w-[30px] shrink-0 place-items-center rounded-full ring-1 ${toneClass[
                           item.tone as keyof typeof toneClass
                         ]
                           }`}
                       >
-                        <Icon className="h-[20px] w-[20px]" />
+                        <Icon className="h-4 w-4" />
                       </div>
 
                       <div className="min-w-0 flex-1">
-                        <p className="truncate text-[10px] font-extrabold tracking-[0.01em] text-[#29406a]">
+                        <p className="truncate text-[8.5px] !font-semibold tracking-[0.01em] text-slate-900" style={{ fontWeight: 600, color: "#0f172a" }}>
                           {item.title}
                         </p>
 
-                        <div className="mt-1 flex items-end gap-1">
-                          <span className="text-[24px] font-extrabold leading-none tracking-[-0.04em]">
-                            {item.value}
+                        <div className="mt-1.5 flex items-end gap-1">
+                          <span className="text-[21px] !font-semibold leading-none tracking-[-0.04em]" style={{ color: item.numColor, fontWeight: 600 }}>
+                            <AnimatedCounter value={item.value} />
                           </span>
 
                           {item.suffix && (
-                            <span className="mb-0.5 text-[11px] font-bold">
+                            <span className="mb-0.5 text-[9.5px] font-bold">
                               {item.suffix}
                             </span>
                           )}
                         </div>
 
                         <p
-                          className={`mt-1 text-[10px] font-bold ${item.title ===
+                          className={`mt-0.5 text-[8.5px] font-bold ${item.title ===
                             "INDEXED PAGES"
                             ? "text-blue-600"
                             : "text-emerald-700"
@@ -1070,18 +1166,10 @@ export default function DashboardPage() {
                       </div>
                     </div>
 
-                    {item.spark && (
-                      <div className="mt-0.5">
-                        <MiniSparkline
-                          points={item.spark}
-                        />
-                      </div>
-                    )}
-
-                    <div className="absolute bottom-2 left-2.5 right-2.5 flex items-center justify-center gap-1.5 text-[8.5px] font-extrabold text-[#293957]">
+                    <div className="absolute bottom-1 left-2 right-2 flex items-center justify-center gap-1 text-[8px] font-extrabold text-[#293957]">
                       {item.footer}
 
-                      <ArrowRight className="h-3.5 w-3.5" />
+                      <ArrowRight className="h-3 w-3" />
                     </div>
                   </Panel>
                 );
@@ -1092,31 +1180,66 @@ export default function DashboardPage() {
                 ROW 2
             ============================== */}
 
-            <div className="grid h-[310px] min-h-0 grid-cols-[0.92fr_1.12fr_1.06fr] gap-2">
+            <div className="mt-2 grid h-[248px] min-h-0 grid-cols-[0.92fr_1.12fr_1.06fr] gap-2">
 
               {/* SEO HEALTH */}
 
               <Panel>
-                <PanelTitle>
+                <PanelTitle
+                  right={
+                    <button
+                      type="button"
+                      className="flex items-center gap-1 text-[10px] font-bold text-blue-600 hover:text-blue-700"
+                    >
+                      View Report
+
+                      <ArrowRight className="h-3.5 w-3.5 text-blue-600" />
+                    </button>
+                  }
+                >
                   SEO Health Overview
                 </PanelTitle>
 
-                <div className="grid min-h-0 grid-cols-[132px_1fr] items-center gap-2 px-3">
-                  <div className="relative mx-auto h-[116px] w-[116px] rounded-full bg-[conic-gradient(#148151_0deg_255deg,#e9a11c_255deg_331deg,#edf0ea_331deg_360deg)]">
-                    <div className="absolute inset-[11px] grid place-items-center rounded-full bg-white text-center">
+                <div className="grid min-h-0 grid-cols-[110px_1fr] items-center gap-2 px-3 pt-3">
+                  <div className="relative mx-auto h-[96px] w-[96px]">
+                    <svg className="absolute inset-0 h-full w-full -rotate-90 pointer-events-none z-0">
+                      <defs>
+                        <mask id="seo-donut-mask">
+                          <circle
+                            cx="48"
+                            cy="48"
+                            r="40"
+                            fill="none"
+                            stroke="#ffffff"
+                            strokeWidth="16"
+                            className="animate-donut-fill"
+                          />
+                        </mask>
+                      </defs>
+                    </svg>
+
+                    <div
+                      className="absolute inset-0 rounded-full bg-[conic-gradient(#148151_0deg_255deg,#e9a11c_255deg_331deg,#edf0ea_331deg_360deg)]"
+                      style={{
+                        mask: "url(#seo-donut-mask)",
+                        WebkitMask: "url(#seo-donut-mask)",
+                      }}
+                    />
+
+                    <div className="absolute inset-[9px] z-10 grid place-items-center rounded-full bg-white text-center">
                       <div>
-                        <div className="text-[36px] font-extrabold leading-none">
-                          92
+                        <div className="text-[22px] font-extrabold leading-none text-emerald-600">
+                          <AnimatedCounter value={92} duration={2500} />
                         </div>
 
-                        <div className="mt-1 text-[11px] font-bold text-emerald-700">
+                        <div className="mt-0.5 text-[9px] font-bold text-emerald-700">
                           Excellent
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  <div className="space-y-[4px] text-[10px] font-bold">
+                  <div className="space-y-[5px] text-[11.5px] font-medium text-slate-900" style={{ fontSize: "11.5px", fontWeight: 500, color: "#0f172a" }}>
                     {[
                       ["Meta Title", "Good", true],
                       [
@@ -1163,7 +1286,7 @@ export default function DashboardPage() {
                             <AlertCircle className="h-3.5 w-3.5 text-amber-500" />
                           )}
 
-                          <span>{name}</span>
+                          <span className="font-medium text-slate-900" style={{ color: "#0f172a", fontWeight: 500 }}>{name}</span>
 
                           <span
                             className={
@@ -1179,10 +1302,6 @@ export default function DashboardPage() {
                     )}
                   </div>
                 </div>
-
-                <FooterButton>
-                  View Full SEO Report
-                </FooterButton>
               </Panel>
 
               {/* SEARCH CONSOLE */}
@@ -1190,164 +1309,213 @@ export default function DashboardPage() {
               <Panel>
                 <PanelTitle
                   right={
-                    <RangeDropdown
-                      dropdownKey="search-console-range"
-                      openDropdown={
-                        openDropdown
-                      }
-                      setOpenDropdown={
-                        setOpenDropdown
-                      }
-                      value={
-                        searchConsoleRange
-                      }
-                      setValue={
-                        setSearchConsoleRange
-                      }
-                      options={
-                        searchConsoleRanges
-                      }
-                    />
+                    <div className="flex items-center gap-2">
+                      <RangeDropdown
+                        dropdownKey="search-console-range"
+                        openDropdown={openDropdown}
+                        setOpenDropdown={setOpenDropdown}
+                        value={searchConsoleRange}
+                        setValue={setSearchConsoleRange}
+                        options={searchConsoleRanges}
+                      />
+
+                      <button
+                        type="button"
+                        className="flex items-center gap-1 text-[10px] font-bold text-blue-600 hover:text-blue-700"
+                      >
+                        View Console
+
+                        <ArrowRight className="h-3.5 w-3.5 text-blue-600" />
+                      </button>
+                    </div>
                   }
                 >
                   Google Search Console Summary
                 </PanelTitle>
 
-                <div className="grid grid-cols-4 gap-1.5 px-3">
+                <div className="grid grid-cols-4 gap-1.5 px-3 pt-3">
                   {[
-                    [
-                      "Total Clicks",
-                      searchConsole ? number(searchConsole.clicks) : "3.62K",
-                      searchConsole ? growthText(searchConsole.growth.clicks) : "↑ 18.6%",
-                    ],
-                    [
-                      "Total Impressions",
-                      searchConsole ? number(searchConsole.impressions) : "85.7K",
-                      searchConsole ? growthText(searchConsole.growth.impressions) : "↑ 20.4%",
-                    ],
-                    [
-                      "Average CTR",
-                      searchConsole ? `${searchConsole.ctr.toFixed(2)}%` : "4.23%",
-                      searchConsole ? growthText(searchConsole.growth.ctr) : "↑ 8.7%",
-                    ],
-                    [
-                      "Average Position",
-                      searchConsole ? searchConsole.position.toFixed(1) : "12.6",
-                      searchConsole ? growthText(searchConsole.growth.position, true) : "",
-                    ],
-                  ].map(
-                    ([label, value, change]) => (
-                      <div
-                        key={label}
-                        className="rounded-[7px] bg-[#f5f7fb] px-2 py-1.5"
-                      >
-                        <p className="text-[9px] font-bold text-[#334666]">
-                          {label}
-                        </p>
+                    {
+                      label: "Total Clicks",
+                      value: searchConsole ? number(searchConsole.clicks) : "3.62K",
+                      change: searchConsole ? growthText(searchConsole.growth.clicks) : "↑ 18.6%",
+                      bg: "bg-[#eff6ff] border-[#dbeafe]",
+                      valColor: "text-blue-900",
+                    },
+                    {
+                      label: "Total Impressions",
+                      value: searchConsole ? number(searchConsole.impressions) : "85.7K",
+                      change: searchConsole ? growthText(searchConsole.growth.impressions) : "↑ 20.4%",
+                      bg: "bg-[#f0fdf4] border-[#dcfce7]",
+                      valColor: "text-emerald-900",
+                    },
+                    {
+                      label: "Average CTR",
+                      value: searchConsole ? `${searchConsole.ctr.toFixed(2)}%` : "4.23%",
+                      change: searchConsole ? growthText(searchConsole.growth.ctr) : "↑ 8.7%",
+                      bg: "bg-[#faf5ff] border-[#f3e8ff]",
+                      valColor: "text-purple-900",
+                    },
+                    {
+                      label: "Average Position",
+                      value: searchConsole ? searchConsole.position.toFixed(1) : "12.6",
+                      change: searchConsole ? growthText(searchConsole.growth.position, true) : "",
+                      bg: "bg-[#fff7ed] border-[#ffedd5]",
+                      valColor: "text-amber-900",
+                    },
+                  ].map((item) => (
+                    <div
+                      key={item.label}
+                      className={`rounded-[7px] border px-2 py-1.5 ${item.bg}`}
+                      style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.08) 0px 0px 0px 1px" }}
+                    >
+                      <p className="text-[9px] font-bold text-[#334666]">
+                        {item.label}
+                      </p>
 
-                        <p className="mt-1 text-[18px] font-extrabold">
-                          {value}
-                        </p>
+                      <p className={`mt-1 text-[18px] font-extrabold ${item.valColor}`}>
+                        <AnimatedCounter value={item.value} />
+                      </p>
 
-                        {change && (
-                          <p className="mt-0.5 text-[9px] font-bold text-emerald-700">
-                            {change}
-                          </p>
-                        )}
-                      </div>
-                    )
-                  )}
+                      {item.change && (
+                        <p className="mt-0.5 text-[9px] font-bold text-emerald-700">
+                          {item.change}
+                        </p>
+                      )}
+                    </div>
+                  ))}
                 </div>
 
-                <div className="min-h-0 flex-1 px-3 pt-1">
+                <div className="w-full min-h-0 px-3 pt-2 pb-1">
                   <svg
-                    viewBox="0 0 520 118"
+                    viewBox="0 0 520 120"
                     preserveAspectRatio="none"
-                    className="h-[90px] w-full"
+                    className="h-[90px] w-full block overflow-visible"
+                    style={{ width: "100%", display: "block" }}
                   >
-                    {[22, 52, 82].map(
-                      (y) => (
+                    <defs>
+                      <linearGradient id="sc-green-gradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#10b981" stopOpacity="0.28" />
+                        <stop offset="100%" stopColor="#10b981" stopOpacity="0.0" />
+                      </linearGradient>
+
+                      <linearGradient id="sc-blue-gradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.22" />
+                        <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.0" />
+                      </linearGradient>
+                    </defs>
+
+                    <g className="animate-grow-left">
+                      {[20, 50, 80].map((y) => (
                         <line
                           key={y}
-                          x1="34"
+                          x1="12"
                           x2="508"
                           y1={y}
                           y2={y}
-                          stroke="#edf0f4"
+                          stroke="#e2e8f0"
                           strokeWidth="1"
+                          strokeDasharray="3 3"
                         />
-                      )
-                    )}
+                      ))}
 
-                    <path
-                      d="M42 80 C60 58,72 72,88 50 S115 72,130 56 S160 80,175 60 S200 79,218 56 S244 73,259 48 S292 84,310 63 S342 76,360 49 S387 75,402 56 S430 78,448 55 S478 70,500 44"
-                      fill="none"
-                      stroke="#22a06b"
-                      strokeWidth="2.4"
-                    />
+                      {/* Gradient Area Fills */}
+                      <path
+                        d="M 12 40 C 40 22, 80 34, 136 18 C 180 36, 220 16, 260 28 C 300 14, 340 32, 384 18 C 424 30, 464 14, 508 10 L 508 90 L 12 90 Z"
+                        fill="url(#sc-green-gradient)"
+                      />
 
-                    <path
-                      d="M42 92 C58 72,77 86,90 64 S116 84,134 69 S163 91,181 70 S211 88,226 69 S258 89,276 63 S305 90,321 74 S353 91,369 66 S400 88,416 70 S448 89,464 69 S484 77,500 61"
-                      fill="none"
-                      stroke="#3d7bda"
-                      strokeWidth="2.4"
-                    />
+                      <path
+                        d="M 12 76 C 40 64, 80 74, 136 58 C 180 72, 220 58, 260 68 C 300 58, 340 74, 384 60 C 424 72, 464 58, 508 52 L 508 90 L 12 90 Z"
+                        fill="url(#sc-blue-gradient)"
+                      />
+
+                      {/* Green Clicks Line (Top Curve - Full Width Start to End) */}
+                      <path
+                        d="M 12 40 C 40 22, 80 34, 136 18 C 180 36, 220 16, 260 28 C 300 14, 340 32, 384 18 C 424 30, 464 14, 508 10"
+                        fill="none"
+                        stroke="#059669"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        className="animate-chart-line"
+                      />
+
+                      {/* Blue Impressions Line (Bottom Curve - Full Width Start to End) */}
+                      <path
+                        d="M 12 76 C 40 64, 80 74, 136 58 C 180 72, 220 58, 260 68 C 300 58, 340 74, 384 60 C 424 72, 464 58, 508 52"
+                        fill="none"
+                        stroke="#2563eb"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        className="animate-chart-line"
+                      />
+
+                      {/* Peak Glowing Data Dots */}
+                      {[[12, 40], [136, 18], [260, 28], [384, 18], [508, 10]].map(([cx, cy], i) => (
+                        <circle key={`g-${i}`} cx={cx} cy={cy} r="3" fill="#ffffff" stroke="#059669" strokeWidth="2" />
+                      ))}
+
+                      {[[12, 76], [136, 58], [260, 68], [384, 60], [508, 52]].map(([cx, cy], i) => (
+                        <circle key={`b-${i}`} cx={cx} cy={cy} r="3" fill="#ffffff" stroke="#2563eb" strokeWidth="2" />
+                      ))}
+                    </g>
 
                     <text
-                      x="38"
-                      y="113"
-                      fontSize="12"
+                      x="12"
+                      y="114"
+                      fontSize="11"
                       fontWeight="600"
-                      fill="#68748a"
+                      fill="#2563eb"
+                      textAnchor="start"
                     >
                       03 May
                     </text>
 
                     <text
-                      x="145"
-                      y="113"
-                      fontSize="12"
+                      x="136"
+                      y="114"
+                      fontSize="11"
                       fontWeight="600"
-                      fill="#68748a"
+                      fill="#2563eb"
+                      textAnchor="middle"
                     >
                       10 May
                     </text>
 
                     <text
-                      x="254"
-                      y="113"
-                      fontSize="12"
+                      x="260"
+                      y="114"
+                      fontSize="11"
                       fontWeight="600"
-                      fill="#68748a"
+                      fill="#2563eb"
+                      textAnchor="middle"
                     >
                       17 May
                     </text>
 
                     <text
-                      x="365"
-                      y="113"
-                      fontSize="12"
+                      x="384"
+                      y="114"
+                      fontSize="11"
                       fontWeight="600"
-                      fill="#68748a"
+                      fill="#2563eb"
+                      textAnchor="middle"
                     >
                       24 May
                     </text>
 
                     <text
-                      x="468"
-                      y="113"
-                      fontSize="12"
+                      x="508"
+                      y="114"
+                      fontSize="11"
                       fontWeight="600"
-                      fill="#68748a"
+                      fill="#2563eb"
+                      textAnchor="end"
                     >
                       31 May
                     </text>
                   </svg>
                 </div>
-
-                <FooterButton>
-                  View Full Search Console
-                </FooterButton>
               </Panel>
 
               {/* ACTION REQUIRED */}
@@ -1357,18 +1525,18 @@ export default function DashboardPage() {
                   right={
                     <button
                       type="button"
-                      className="flex items-center gap-1 text-[10px] font-bold"
+                      className="flex items-center gap-1 text-[10px] font-bold text-blue-600 hover:text-blue-700"
                     >
                       View All Issues
 
-                      <ArrowRight className="h-3.5 w-3.5" />
+                      <ArrowRight className="h-3.5 w-3.5 text-blue-600" />
                     </button>
                   }
                 >
                   Action Required
                 </PanelTitle>
 
-                <div className="px-3">
+                <div className="px-3 pt-2">
                   {issues.map(
                     ({
                       label,
@@ -1387,7 +1555,7 @@ export default function DashboardPage() {
                           <Icon className="h-3.5 w-3.5" />
                         </div>
 
-                        <span className="truncate font-bold text-[#2e3c58]">
+                        <span className="truncate font-semibold text-slate-900" style={{ color: "#0f172a", fontWeight: 600 }}>
                           {label}
                         </span>
 
@@ -1410,10 +1578,6 @@ export default function DashboardPage() {
                     )
                   )}
                 </div>
-
-                <FooterButton dark>
-                  Fix Issues Now
-                </FooterButton>
               </Panel>
             </div>
 
@@ -1425,117 +1589,178 @@ export default function DashboardPage() {
 
               {/* ANALYTICS */}
 
-              <Panel>
-                <PanelTitle
-                  right={
-                    <RangeDropdown
-                      dropdownKey="analytics-range"
-                      openDropdown={
-                        openDropdown
-                      }
-                      setOpenDropdown={
-                        setOpenDropdown
-                      }
-                      value={analyticsRange}
-                      setValue={
-                        setAnalyticsRange
-                      }
-                      options={
-                        analyticsRanges
-                      }
-                    />
-                  }
-                >
-                  Analytics Overview
-                </PanelTitle>
+              <Panel className="flex flex-col justify-between h-full">
+                <div>
+                  <PanelTitle
+                    right={
+                      <div className="flex items-center gap-2">
+                        <RangeDropdown
+                          dropdownKey="analytics-range"
+                          openDropdown={openDropdown}
+                          setOpenDropdown={setOpenDropdown}
+                          value={analyticsRange}
+                          setValue={setAnalyticsRange}
+                          options={analyticsRanges}
+                        />
 
-                <div className="grid grid-cols-5 gap-1 px-3">
-                  {[
-                    [
-                      "Users",
-                      analytics ? number(analytics.users) : "12,842",
-                      analytics ? growthText(analytics.growth.users) : "↑ 18.7%",
-                      true,
-                    ],
-                    [
-                      "Sessions",
-                      analytics ? number(analytics.sessions) : "18,942",
-                      analytics ? growthText(analytics.growth.sessions) : "↑ 21.3%",
-                      true,
-                    ],
-                    [
-                      "Page Views",
-                      analytics ? number(analytics.pageViews) : "28,561",
-                      analytics ? growthText(analytics.growth.pageViews) : "↑ 22.4%",
-                      true,
-                    ],
-                    [
-                      "Avg. Session",
-                      analytics ? duration(analytics.averageSessionSeconds) : "02:45",
-                      analytics ? growthText(analytics.growth.averageSession) : "↑ 8.3%",
-                      true,
-                    ],
-                    [
-                      "Bounce Rate",
-                      analytics ? `${analytics.bounceRate.toFixed(1)}%` : "32.6%",
-                      analytics ? growthText(analytics.growth.bounceRate, true) : "↓ 5.1%",
-                      false,
-                    ],
-                  ].map(
-                    ([
-                      label,
-                      value,
-                      delta,
-                      good,
-                    ]) => (
+                        <button
+                          type="button"
+                          className="flex items-center gap-1 text-[10px] font-bold text-blue-600 hover:text-blue-700"
+                        >
+                          View Report
+
+                          <ArrowRight className="h-3.5 w-3.5 text-blue-600" />
+                        </button>
+                      </div>
+                    }
+                  >
+                    Analytics Overview
+                  </PanelTitle>
+
+                  <div className="grid grid-cols-4 gap-1.5 px-3 pt-3">
+                    {[
+                      {
+                        label: "Users",
+                        value: analytics ? number(analytics.users) : "12,842",
+                        delta: analytics ? growthText(analytics.growth.users) : "↑ 18.7%",
+                        good: true,
+                        bg: "bg-[#eff6ff] border-[#dbeafe]",
+                        valColor: "text-blue-900",
+                      },
+                      {
+                        label: "Page Views",
+                        value: analytics ? number(analytics.pageViews) : "28,561",
+                        delta: analytics ? growthText(analytics.growth.pageViews) : "↑ 22.4%",
+                        good: true,
+                        bg: "bg-[#f0fdf4] border-[#dcfce7]",
+                        valColor: "text-emerald-900",
+                      },
+                      {
+                        label: "Avg. Session",
+                        value: analytics ? duration(analytics.averageSessionSeconds) : "02:45",
+                        delta: analytics ? growthText(analytics.growth.averageSession) : "↑ 8.3%",
+                        good: true,
+                        bg: "bg-[#faf5ff] border-[#f3e8ff]",
+                        valColor: "text-purple-900",
+                      },
+                      {
+                        label: "Bounce Rate",
+                        value: analytics ? `${analytics.bounceRate.toFixed(1)}%` : "32.6%",
+                        delta: analytics ? growthText(analytics.growth.bounceRate, true) : "↓ 5.1%",
+                        good: false,
+                        bg: "bg-[#fff7ed] border-[#ffedd5]",
+                        valColor: "text-amber-900",
+                      },
+                    ].map((item) => (
                       <div
-                        key={String(label)}
-                        className="rounded-[6px] bg-[#f7f8fb] p-1.5"
+                        key={item.label}
+                        className={`rounded-[7px] border px-2 py-1.5 ${item.bg}`}
+                        style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.08) 0px 0px 0px 1px" }}
                       >
-                        <p className="text-[9px] font-bold text-[#394867]">
-                          {label}
+                        <p className="text-[9px] font-bold text-[#334666]">
+                          {item.label}
                         </p>
 
-                        <p className="mt-0.5 text-[15px] font-extrabold">
-                          {value}
+                        <p className={`mt-0.5 text-[17px] font-semibold ${item.valColor}`} style={{ fontWeight: 600 }}>
+                          <AnimatedCounter value={item.value} />
                         </p>
 
                         <p
-                          className={`mt-0.5 text-[9px] font-bold ${good
-                            ? "text-emerald-700"
-                            : "text-rose-600"
-                            }`}
+                          className={`mt-0.5 text-[9px] font-bold ${item.good ? "text-emerald-700" : "text-rose-600"}`}
                         >
-                          {delta}
+                          {item.delta}
                         </p>
                       </div>
-                    )
-                  )}
+                    ))}
+                  </div>
                 </div>
 
-                <div className="px-3 pt-1">
+                <div className="mt-auto w-full min-h-0 px-3 pt-3 pb-1">
                   <svg
-                    viewBox="0 0 430 85"
+                    viewBox="0 0 430 110"
                     preserveAspectRatio="none"
-                    className="h-[62px] w-full"
+                    className="h-[95px] w-full block overflow-visible"
+                    style={{ width: "100%", display: "block" }}
                   >
-                    <path
-                      d="M8 70 L35 57 L58 61 L84 49 L110 46 L138 54 L164 35 L193 49 L219 54 L246 39 L272 58 L300 51 L327 33 L354 55 L383 48 L418 31"
-                      fill="none"
-                      stroke="#317f62"
-                      strokeWidth="2"
-                    />
+                    <defs>
+                      <linearGradient id="bar-blue-gradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#3b82f6" />
+                        <stop offset="100%" stopColor="#1d4ed8" />
+                      </linearGradient>
 
-                    <path
-                      d="M8 70 L35 57 L58 61 L84 49 L110 46 L138 54 L164 35 L193 49 L219 54 L246 39 L272 58 L300 51 L327 33 L354 55 L383 48 L418 31 L418 79 L8 79 Z"
-                      fill="#e9f4ef"
-                    />
+                      <linearGradient id="bar-emerald-gradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#10b981" />
+                        <stop offset="100%" stopColor="#047857" />
+                      </linearGradient>
+                    </defs>
+
+                    <g className="animate-grow-chart" style={{ transformOrigin: "215px 90px" }}>
+                      {[20, 44, 68].map((y) => (
+                        <line
+                          key={y}
+                          x1="12"
+                          x2="420"
+                          y1={y}
+                          y2={y}
+                          stroke="#e2e8f0"
+                          strokeWidth="1"
+                          strokeDasharray="3 3"
+                        />
+                      ))}
+
+                      <line
+                        x1="12"
+                        x2="420"
+                        y1="90"
+                        y2="90"
+                        stroke="#cbd5e1"
+                        strokeWidth="1.2"
+                      />
+
+                      {[
+                        { date: "03 May", x: 48, blueH: 48, emH: 36 },
+                        { date: "10 May", x: 138, blueH: 62, emH: 48 },
+                        { date: "17 May", x: 228, blueH: 52, emH: 42 },
+                        { date: "24 May", x: 318, blueH: 70, emH: 56 },
+                        { date: "31 May", x: 408, blueH: 80, emH: 66 },
+                      ].map((item) => (
+                        <g key={item.date}>
+                          {/* Blue Bar (Users) */}
+                          <rect
+                            x={item.x - 12}
+                            y={90 - item.blueH}
+                            width="10"
+                            height={item.blueH}
+                            rx="3"
+                            ry="3"
+                            fill="url(#bar-blue-gradient)"
+                          />
+                          {/* Emerald Bar (Page Views) */}
+                          <rect
+                            x={item.x + 2}
+                            y={90 - item.emH}
+                            width="10"
+                            height={item.emH}
+                            rx="3"
+                            ry="3"
+                            fill="url(#bar-emerald-gradient)"
+                          />
+                          {/* Date Label */}
+                          <text
+                            x={item.x}
+                            y="108"
+                            textAnchor="middle"
+                            fill="#2563eb"
+                            fontSize="10.5"
+                            fontWeight="600"
+                          >
+                            {item.date}
+                          </text>
+                        </g>
+                      ))}
+                    </g>
                   </svg>
                 </div>
-
-                <FooterButton>
-                  View Full Analytics Report
-                </FooterButton>
               </Panel>
 
               {/* CORE WEB VITALS */}
@@ -1543,97 +1768,106 @@ export default function DashboardPage() {
               <Panel>
                 <PanelTitle
                   right={
-                    <RangeDropdown
-                      dropdownKey="web-vitals-range"
-                      openDropdown={
-                        openDropdown
-                      }
-                      setOpenDropdown={
-                        setOpenDropdown
-                      }
-                      value={webVitalsRange}
-                      setValue={
-                        setWebVitalsRange
-                      }
-                      options={
-                        webVitalsRanges
-                      }
-                    />
+                    <div className="flex items-center gap-2">
+                      <RangeDropdown
+                        dropdownKey="web-vitals-range"
+                        openDropdown={openDropdown}
+                        setOpenDropdown={setOpenDropdown}
+                        value={webVitalsRange}
+                        setValue={setWebVitalsRange}
+                        options={webVitalsRanges}
+                      />
+
+                      <button
+                        type="button"
+                        className="flex items-center gap-1 text-[10px] font-bold text-blue-600 hover:text-blue-700"
+                      >
+                        View Performance
+
+                        <ArrowRight className="h-3.5 w-3.5 text-blue-600" />
+                      </button>
+                    </div>
                   }
                 >
                   Core Web Vitals (Field Data)
                 </PanelTitle>
 
-                <div className="grid grid-cols-3 gap-1.5 px-3">
+                <div className="grid grid-cols-3 gap-1.5 px-3 pt-3">
                   {[
-                    [
-                      "Largest Contentful Paint (LCP)",
-                      pageSpeed?.lcp != null ? `${(pageSpeed.lcp / 1000).toFixed(1)}s` : "2.1s",
-                      "Good",
-                      "90%",
-                    ],
-                    [
-                      "Interaction to Next Paint (INP)",
-                      pageSpeed?.inp != null ? `${Math.round(pageSpeed.inp)}ms` : "128ms",
-                      "Good",
-                      "92%",
-                    ],
-                    [
-                      "Cumulative Layout Shift (CLS)",
-                      pageSpeed?.cls != null ? pageSpeed.cls.toFixed(2) : "0.06",
-                      "Good",
-                      "94%",
-                    ],
-                  ].map(
-                    ([
-                      label,
-                      value,
-                      status,
-                      score,
-                    ]) => (
-                      <div
-                        key={String(label)}
-                        className="rounded-[6px] bg-[#f7f8fb] p-1.5"
-                      >
-                        <p className="text-[9px] font-bold text-[#34435f]">
-                          {label}
-                        </p>
+                    {
+                      label: "Largest Contentful Paint (LCP)",
+                      value: pageSpeed?.lcp != null ? `${(pageSpeed.lcp / 1000).toFixed(1)}s` : "2.1s",
+                      status: "Good",
+                      score: "90%",
+                      bg: "bg-[#eff6ff] border-[#dbeafe]",
+                      valColor: "text-blue-900",
+                      barColor: "bg-blue-600",
+                      scoreColor: "text-blue-700",
+                    },
+                    {
+                      label: "Interaction to Next Paint (INP)",
+                      value: pageSpeed?.inp != null ? `${Math.round(pageSpeed.inp)}ms` : "128ms",
+                      status: "Good",
+                      score: "92%",
+                      bg: "bg-[#f0fdf4] border-[#dcfce7]",
+                      valColor: "text-emerald-900",
+                      barColor: "bg-emerald-600",
+                      scoreColor: "text-emerald-700",
+                    },
+                    {
+                      label: "Cumulative Layout Shift (CLS)",
+                      value: pageSpeed?.cls != null ? pageSpeed.cls.toFixed(2) : "0.06",
+                      status: "Good",
+                      score: "94%",
+                      bg: "bg-[#faf5ff] border-[#f3e8ff]",
+                      valColor: "text-purple-900",
+                      barColor: "bg-purple-600",
+                      scoreColor: "text-purple-700",
+                    },
+                  ].map((item) => (
+                    <div
+                      key={item.label}
+                      className={`rounded-[7px] border px-2 py-2 ${item.bg}`}
+                      style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.08) 0px 0px 0px 1px" }}
+                    >
+                      <p className="text-[9.5px] font-bold text-slate-900" style={{ color: "#0f172a", fontWeight: 700 }}>
+                        {item.label}
+                      </p>
 
-                        <p className="mt-0.5 text-[16px] font-extrabold">
-                          {value}
-                        </p>
+                      <p className={`mt-1 text-[16px] font-semibold ${item.valColor}`} style={{ fontWeight: 600 }}>
+                        <AnimatedCounter value={item.value} />
+                      </p>
 
-                        <p className="text-[9px] font-bold text-emerald-700">
-                          {status}
-                        </p>
+                      <p className="mt-0.5 text-[9px] font-bold text-emerald-700">
+                        {item.status}
+                      </p>
 
-                        <div className="mt-1 h-1 overflow-hidden rounded-full bg-[#e5ece8]">
-                          <div className="h-full w-[92%] rounded-full bg-emerald-700" />
-                        </div>
-
-                        <p className="mt-0.5 text-right text-[8px] font-bold text-emerald-700">
-                          {score}
-                        </p>
+                      <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-slate-200/60">
+                        <div className={`h-full rounded-full ${item.barColor}`} style={{ width: item.score }} />
                       </div>
-                    )
-                  )}
+
+                      <p className={`mt-0.5 text-right text-[8px] font-bold ${item.scoreColor}`}>
+                        {item.score}
+                      </p>
+                    </div>
+                  ))}
                 </div>
 
-                <div className="px-3 pt-1.5">
-                  <p className="mb-0.5 text-[10px] font-extrabold">
+                <div className="px-3 pt-2.5 pb-2">
+                  <p className="mb-1 text-[10px] font-extrabold text-slate-900" style={{ color: "#0f172a", fontWeight: 800 }}>
                     Other Performance Metrics
                   </p>
 
                   <div className="grid grid-cols-[1fr_64px_64px] gap-x-2 text-[9px] font-bold">
-                    <div className="bg-[#f7f8fb] px-2 py-0.5">
+                    <div className="rounded-l-[4px] bg-[#eaeff5] px-2 py-1 text-slate-700">
                       Metric
                     </div>
 
-                    <div className="bg-[#f7f8fb] px-2 py-0.5 text-center">
+                    <div className="bg-[#eaeff5] px-2 py-1 text-center text-slate-700">
                       Mobile
                     </div>
 
-                    <div className="bg-[#f7f8fb] px-2 py-0.5 text-center">
+                    <div className="rounded-r-[4px] bg-[#eaeff5] px-2 py-1 text-center text-slate-700">
                       Desktop
                     </div>
 
@@ -1647,42 +1881,52 @@ export default function DashboardPage() {
                         "Time to First Byte (TTFB)",
                         "0.7s",
                         "0.4s",
+                        "#2563eb",
                       ],
                       [
                         "Total Blocking Time (TBT)",
                         pageSpeed?.tbt != null ? `${Math.round(pageSpeed.tbt)}ms` : "120ms",
                         "80ms",
+                        "#4B1426",
                       ],
                     ].map((row) => (
                       <div
                         key={row[0]}
                         className="contents"
                       >
-                        <div className="px-2 py-0.5">
+                        <div className="px-2 py-1 font-medium text-slate-900" style={{ color: "#0f172a", fontWeight: 500 }}>
                           {row[0]}
                         </div>
 
-                        <div className="px-2 py-0.5 text-center text-emerald-700">
+                        <div
+                          className="px-2 py-1 text-center font-bold"
+                          style={{ color: row[3] || "#047857" }}
+                        >
                           {row[1]}
                         </div>
 
-                        <div className="px-2 py-0.5 text-center text-emerald-700">
+                        <div
+                          className="px-2 py-1 text-center font-bold"
+                          style={{ color: row[3] || "#047857" }}
+                        >
                           {row[2]}
                         </div>
                       </div>
                     ))}
                   </div>
                 </div>
-
-                <FooterButton>
-                  View Performance Center
-                </FooterButton>
               </Panel>
 
               {/* SITE STATUS */}
 
               <Panel>
-                <PanelTitle>
+                <PanelTitle
+                  right={
+                    <Link href="#" className="text-[9px] font-bold text-blue-600 hover:underline">
+                      View Site Health
+                    </Link>
+                  }
+                >
                   Site Status
                 </PanelTitle>
 
@@ -1710,13 +1954,13 @@ export default function DashboardPage() {
                     ],
                     [
                       Globe2,
-                      "WordPress Version",
-                      "6.5.3",
+                      "Next.js Version",
+                      "16.3.4",
                     ],
                     [
                       Wrench,
-                      "PHP Version",
-                      "8.2.14",
+                      "Node.js Version",
+                      "v24.20.0",
                     ],
                   ].map(
                     ([
@@ -1734,7 +1978,7 @@ export default function DashboardPage() {
                           {label as string}
                         </span>
 
-                        <span className="font-bold text-emerald-700">
+                        <span className={`font-bold ${label === "Last Backup" ? "text-[#4B1426]" : "text-emerald-700"}`}>
                           {value as string}
                         </span>
 
@@ -1744,9 +1988,6 @@ export default function DashboardPage() {
                   )}
                 </div>
 
-                <FooterButton>
-                  View Site Health
-                </FooterButton>
               </Panel>
             </div>
 
@@ -1761,22 +2002,25 @@ export default function DashboardPage() {
               <Panel>
                 <PanelTitle
                   right={
-                    <RangeDropdown
-                      dropdownKey="top-pages-range"
-                      openDropdown={
-                        openDropdown
-                      }
-                      setOpenDropdown={
-                        setOpenDropdown
-                      }
-                      value={topPagesRange}
-                      setValue={
-                        setTopPagesRange
-                      }
-                      options={
-                        monthlyRanges
-                      }
-                    />
+                    <div className="flex items-center gap-3">
+                      <Link href="#" className="text-[9px] font-bold text-blue-600 hover:underline">View All</Link>
+                      <RangeDropdown
+                        dropdownKey="top-pages-range"
+                        openDropdown={
+                          openDropdown
+                        }
+                        setOpenDropdown={
+                          setOpenDropdown
+                        }
+                        value={topPagesRange}
+                        setValue={
+                          setTopPagesRange
+                        }
+                        options={
+                          monthlyRanges
+                        }
+                      />
+                    </div>
                   }
                 >
                   Top Pages by Traffic
@@ -1809,9 +2053,6 @@ export default function DashboardPage() {
                   )}
                 </div>
 
-                <FooterButton>
-                  View All Pages Analytics
-                </FooterButton>
               </Panel>
 
               {/* KEYWORD PERFORMANCE */}
@@ -1819,22 +2060,25 @@ export default function DashboardPage() {
               <Panel>
                 <PanelTitle
                   right={
-                    <RangeDropdown
-                      dropdownKey="keyword-range"
-                      openDropdown={
-                        openDropdown
-                      }
-                      setOpenDropdown={
-                        setOpenDropdown
-                      }
-                      value={keywordRange}
-                      setValue={
-                        setKeywordRange
-                      }
-                      options={
-                        monthlyRanges
-                      }
-                    />
+                    <div className="flex items-center gap-3">
+                      <Link href="#" className="text-[9px] font-bold text-blue-600 hover:underline">View Data</Link>
+                      <RangeDropdown
+                        dropdownKey="keyword-range"
+                        openDropdown={
+                          openDropdown
+                        }
+                        setOpenDropdown={
+                          setOpenDropdown
+                        }
+                        value={keywordRange}
+                        setValue={
+                          setKeywordRange
+                        }
+                        options={
+                          monthlyRanges
+                        }
+                      />
+                    </div>
                   }
                 >
                   Keyword Performance
@@ -1872,9 +2116,6 @@ export default function DashboardPage() {
                   )}
                 </div>
 
-                <FooterButton>
-                  View All Keyword Data
-                </FooterButton>
               </Panel>
 
               {/* LOCATIONS */}
@@ -1882,22 +2123,25 @@ export default function DashboardPage() {
               <Panel>
                 <PanelTitle
                   right={
-                    <RangeDropdown
-                      dropdownKey="location-range"
-                      openDropdown={
-                        openDropdown
-                      }
-                      setOpenDropdown={
-                        setOpenDropdown
-                      }
-                      value={locationRange}
-                      setValue={
-                        setLocationRange
-                      }
-                      options={
-                        monthlyRanges
-                      }
-                    />
+                    <div className="flex items-center gap-3">
+                      <Link href="#" className="text-[9px] font-bold text-blue-600 hover:underline">View Report</Link>
+                      <RangeDropdown
+                        dropdownKey="location-range"
+                        openDropdown={
+                          openDropdown
+                        }
+                        setOpenDropdown={
+                          setOpenDropdown
+                        }
+                        value={locationRange}
+                        setValue={
+                          setLocationRange
+                        }
+                        options={
+                          monthlyRanges
+                        }
+                      />
+                    </div>
                   }
                 >
                   Top Sewa Help Locations
@@ -1942,9 +2186,6 @@ export default function DashboardPage() {
                   )}
                 </div>
 
-                <FooterButton>
-                  View Full Location Report
-                </FooterButton>
               </Panel>
 
               {/* RECENT SUBMISSIONS */}
