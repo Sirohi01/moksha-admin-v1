@@ -4,21 +4,25 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import typography from "./PagesTypography.module.css";
 import {
+  ArrowRight,
   CheckCircle2,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
+  Clock,
   ExternalLink,
   FileText,
   Filter,
   Home,
+  Layers,
   MoreVertical,
   Pencil,
   Plus,
   Search,
   SlidersHorizontal,
+  TrendingUp,
   UserRound,
   UsersRound,
   X,
@@ -387,6 +391,68 @@ export default function PagesCmsPage() {
     setActivePagination(1);
   }, [search, pageFilter, statusFilter, authorFilter, pageSize]);
 
+  const topStats = [
+    {
+      title: "TOTAL PAGES",
+      value: pages.length.toString(),
+      note: `Published: ${publishedCount}`,
+      icon: FileText,
+      tone: "violet",
+      gradient: "linear-gradient(135deg, #ffffff 0%, #ffffff 55%, #f8f5ff 100%)",
+      numColor: "#6d28d9",
+      footer: "View all pages",
+    },
+    {
+      title: "DRAFT PAGES",
+      value: draftCount.toString(),
+      note: "Unpublished",
+      icon: Pencil,
+      tone: "amber",
+      gradient: "linear-gradient(135deg, #ffffff 0%, #ffffff 55%, #fffdf0 100%)",
+      numColor: "#b45309",
+      footer: "View drafts",
+    },
+    {
+      title: "TOTAL SECTIONS",
+      value: totalSections.toString(),
+      note: "Across all pages",
+      icon: Layers,
+      tone: "blue",
+      gradient: "linear-gradient(135deg, #ffffff 0%, #ffffff 55%, #f0f7ff 100%)",
+      numColor: "#1d4ed8",
+      footer: "Manage sections",
+    },
+    {
+      title: "LAST UPDATED",
+      value: lastUpdatedPage?.updated ?? "—",
+      note: `By ${lastUpdatedPage?.updatedBy ?? "—"}`,
+      icon: Clock,
+      tone: "rose",
+      gradient: "linear-gradient(135deg, #ffffff 0%, #ffffff 55%, #fff5f6 100%)",
+      numColor: "#be123c",
+      footer: "View history",
+    },
+    {
+      title: "SEO SCORE (AVG)",
+      value: averageSeo.toString(),
+      suffix: "/100",
+      note: averageSeoRating,
+      icon: TrendingUp,
+      tone: "emerald",
+      gradient: "linear-gradient(135deg, #ffffff 0%, #ffffff 55%, #f0fdf4 100%)",
+      numColor: "#047857",
+      footer: "View SEO report",
+    },
+  ];
+
+  const toneClass = {
+    emerald: "bg-emerald-50 text-emerald-700 ring-emerald-100",
+    violet: "bg-violet-50 text-violet-700 ring-violet-100",
+    amber: "bg-amber-50 text-amber-700 ring-amber-100",
+    blue: "bg-blue-50 text-blue-700 ring-blue-100",
+    rose: "bg-rose-50 text-rose-700 ring-rose-100",
+  };
+
   return (
     <div className={`${typography.pages} h-full min-h-0 w-full overflow-hidden bg-[#fffefb] text-[#182238]`}>
       <div className="flex h-full min-h-0 flex-col overflow-hidden px-[18px] pb-[10px] pt-[14px]">
@@ -450,87 +516,61 @@ export default function PagesCmsPage() {
                 STATS
             ============================================= */}
 
-            <div className="grid h-[104px] shrink-0 grid-cols-5 gap-[11px]">
-              <div className="rounded-[7px] border border-[#e7e7e3] bg-white px-[13px] py-[9px]">
-                <p className="text-[9px] font-semibold text-[#5e697d]">
-                  Total Pages
-                </p>
+            <div className="grid h-[98px] shrink-0 grid-cols-5 gap-[11px]">
+              {topStats.map((item) => {
+                const Icon = item.icon;
 
-                <p className="mt-[4px] text-[18px] font-bold leading-none text-[#19243b]">
-                  {pages.length}
-                </p>
+                return (
+                  <div
+                    key={item.title}
+                    className="relative flex flex-col justify-center overflow-hidden rounded-[7px] p-2"
+                    style={{
+                      background: item.gradient,
+                      boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px",
+                    }}
+                  >
+                    <div className="flex items-start gap-1.5">
+                      <div
+                        className={`grid h-[30px] w-[30px] shrink-0 place-items-center rounded-full ring-1 ${toneClass[
+                          item.tone as keyof typeof toneClass
+                        ]
+                          }`}
+                      >
+                        <Icon className="h-4 w-4" />
+                      </div>
 
-                <p className="mt-[8px] text-[8.5px] font-medium text-[#606b7e]">
-                  Published: {publishedCount}
-                </p>
-              </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-[8px] !font-semibold tracking-[0.01em] text-slate-900" style={{ fontWeight: 600, color: "#0f172a" }}>
+                          {item.title}
+                        </p>
 
-              <div className="rounded-[7px] border border-[#e7e7e3] bg-white px-[13px] py-[9px]">
-                <p className="text-[9px] font-semibold text-[#5e697d]">
-                  Draft Pages
-                </p>
+                        <div className="mt-1.5 flex items-end gap-1">
+                          <span 
+                            className={`!font-semibold tracking-[-0.04em] ${
+                              item.title === "LAST UPDATED" ? "text-[11px] leading-[1.2]" : "text-[17px] leading-none"
+                            }`} 
+                            style={{ color: item.numColor, fontWeight: 600 }}
+                          >
+                            {item.value}
+                          </span>
 
-                <p className="mt-[4px] text-[18px] font-bold leading-none text-[#19243b]">
-                  {draftCount}
-                </p>
+                          {item.suffix && (
+                            <span className="mb-0.5 text-[8px] font-bold">
+                              {item.suffix}
+                            </span>
+                          )}
+                        </div>
 
-                <p className="mt-[8px] text-[8.5px] font-medium text-[#606b7e]">
-                  Unpublished
-                </p>
-              </div>
-
-              <div className="rounded-[7px] border border-[#e7e7e3] bg-white px-[13px] py-[9px]">
-                <p className="text-[9px] font-semibold text-[#5e697d]">
-                  Total Sections
-                </p>
-
-                <p className="mt-[4px] text-[18px] font-bold leading-none text-[#19243b]">
-                  {totalSections}
-                </p>
-
-                <p className="mt-[8px] text-[8.5px] font-medium text-[#606b7e]">
-                  Across all pages
-                </p>
-              </div>
-
-              <div className="rounded-[7px] border border-[#e7e7e3] bg-white px-[13px] py-[9px]">
-                <p className="text-[9px] font-semibold text-[#5e697d]">
-                  Last Updated
-                </p>
-
-                <p className="mt-[4px] text-[12px] font-bold leading-[1.2] text-[#19243b]">
-                  {lastUpdatedPage?.updated ?? "—"}
-                </p>
-
-                <p className="mt-[7px] text-[8.5px] font-medium text-[#606b7e]">
-                  By {lastUpdatedPage?.updatedBy ?? "—"}
-                </p>
-              </div>
-
-              <div className="flex items-center justify-between rounded-[7px] border border-[#e7e7e3] bg-white px-[13px] py-[8px]">
-                <div>
-                  <p className="text-[9px] font-semibold text-[#5e697d]">
-                    SEO Score (Avg.)
-                  </p>
-
-                  <p className="mt-[4px] text-[17px] font-bold leading-none text-[#19243b]">
-                    {averageSeo}/100
-                  </p>
-
-                  <p className="mt-[7px] text-[8.5px] font-semibold" style={{ color: averageSeoColor }}>
-                    {averageSeoRating}
-                  </p>
-                </div>
-
-                <div
-                  className="relative h-[42px] w-[42px] shrink-0 rounded-full"
-                  style={{
-                    background: `conic-gradient(${averageSeoColor} 0deg ${averageSeo * 3.6}deg, #eef1ed ${averageSeo * 3.6}deg 360deg)`,
-                  }}
-                >
-                  <div className="absolute inset-[4px] rounded-full bg-white" />
-                </div>
-              </div>
+                        <p
+                          className={`mt-0.5 text-[7.5px] font-bold ${item.title === "DRAFT PAGES" ? "text-amber-600" : item.title === "TOTAL SECTIONS" ? "text-blue-600" : item.title === "LAST UPDATED" ? "text-rose-600" : "text-emerald-700"}`}
+                        >
+                          {item.note}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
 
             {/* =============================================
@@ -609,33 +649,29 @@ export default function PagesCmsPage() {
 
               {/* TABLE HEADER */}
 
-              <div className="grid h-[34px] shrink-0 grid-cols-[minmax(0,2.7fr)_minmax(0,1.8fr)_minmax(0,1.25fr)_minmax(0,1fr)_minmax(0,1.15fr)_minmax(0,1.45fr)_88px] items-center border-b border-[#e8e5df] bg-[#fbf9f5] px-[10px]">
-                <div className="min-w-0 overflow-hidden px-[4px] text-[8px] font-bold text-[#445067]">
+              <div className="grid h-[34px] shrink-0 grid-cols-[minmax(0,2.7fr)_minmax(0,1.8fr)_minmax(0,1.25fr)_minmax(0,1fr)_minmax(0,1.15fr)_minmax(0,1.45fr)] items-center border-b border-[#e8e5df] bg-[#233D4D] px-[10px]">
+                <div className="min-w-0 overflow-hidden px-[4px] text-[8px] font-bold text-white">
                   PAGE TITLE
                 </div>
 
-                <div className="min-w-0 overflow-hidden px-[4px] text-[8px] font-bold text-[#445067]">
+                <div className="min-w-0 overflow-hidden px-[4px] text-[8px] font-bold text-white">
                   URL
                 </div>
 
-                <div className="min-w-0 overflow-hidden px-[4px] text-[8px] font-bold text-[#445067]">
+                <div className="min-w-0 overflow-hidden px-[4px] text-[8px] font-bold text-white">
                   AUTHOR
                 </div>
 
-                <div className="min-w-0 overflow-hidden px-[4px] text-[8px] font-bold text-[#445067]">
+                <div className="min-w-0 overflow-hidden px-[4px] text-[8px] font-bold text-white">
                   STATUS
                 </div>
 
-                <div className="min-w-0 overflow-hidden px-[4px] text-[8px] font-bold text-[#445067]">
+                <div className="min-w-0 overflow-hidden px-[4px] text-[8px] font-bold text-white">
                   SEO SCORE
                 </div>
 
-                <div className="min-w-0 overflow-hidden px-[4px] text-[8px] font-bold text-[#445067]">
+                <div className="min-w-0 overflow-hidden px-[4px] text-[8px] font-bold text-white">
                   LAST UPDATED
-                </div>
-
-                <div className="overflow-hidden text-center text-[8px] font-bold text-[#445067]">
-                  ACTIONS
                 </div>
               </div>
 
@@ -662,7 +698,7 @@ export default function PagesCmsPage() {
                           setActionMenu(null);
                         }
                       }}
-                      className={`grid min-h-[44px] w-full grid-cols-[minmax(0,2.7fr)_minmax(0,1.8fr)_minmax(0,1.25fr)_minmax(0,1fr)_minmax(0,1.15fr)_minmax(0,1.45fr)_88px] items-center border-b border-[#f0f0ec] px-[10px] text-left transition last:border-b-0 ${selected
+                      className={`grid min-h-[44px] w-full grid-cols-[minmax(0,2.7fr)_minmax(0,1.8fr)_minmax(0,1.25fr)_minmax(0,1fr)_minmax(0,1.15fr)_minmax(0,1.45fr)] items-center border-b border-[#f0f0ec] px-[10px] text-left transition last:border-b-0 ${selected
                         ? "bg-[#fffefa]"
                         : "bg-white hover:bg-[#fffefa]"
                         }`}
@@ -762,80 +798,6 @@ export default function PagesCmsPage() {
                         </p>
                       </div>
 
-                      {/* ACTIONS */}
-
-                      <div
-                        className="relative flex min-w-0 items-center justify-center gap-[5px] overflow-hidden"
-                        onClick={(event) =>
-                          event.stopPropagation()
-                        }
-                      >
-                        <button
-                          type="button"
-                          onClick={() =>
-                            window.open(
-                              `/pages/${page.id}/edit`,
-                              "_blank",
-                              "noopener,noreferrer",
-                            )
-                          }
-                          className="grid h-[25px] w-[25px] place-items-center rounded-[5px] border border-[#e4e5e1] bg-white text-[#566176] transition hover:bg-[#f7f8f5]"
-                        >
-                          <Pencil
-                            className="h-[10px] w-[10px]"
-                            strokeWidth={1.7}
-                          />
-                        </button>
-
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setActionMenu(
-                              actionMenu === page.id
-                                ? null
-                                : page.id,
-                            )
-                          }
-                          className="grid h-[25px] w-[25px] place-items-center rounded-[5px] border border-[#e4e5e1] bg-white text-[#566176] transition hover:bg-[#f7f8f5]"
-                        >
-                          <MoreVertical
-                            className="h-[12px] w-[12px]"
-                            strokeWidth={1.7}
-                          />
-                        </button>
-
-                        {actionMenu === page.id && (
-                          <div className="absolute right-0 top-[29px] z-[100] w-[115px] rounded-[6px] border border-[#e4e4e0] bg-white p-[4px] shadow-[0_8px_20px_rgba(15,23,42,0.11)]">
-                            <button
-                              type="button"
-                              onClick={() =>
-                                window.open(
-                                  `/pages/${page.id}/edit`,
-                                  "_blank",
-                                  "noopener,noreferrer",
-                                )
-                              }
-                              className="w-full rounded-[4px] px-[8px] py-[6px] text-left text-[8px] font-medium text-[#465168] hover:bg-[#f6f7f4]"
-                            >
-                              Edit Page
-                            </button>
-
-                            <button
-                              type="button"
-                              className="w-full rounded-[4px] px-[8px] py-[6px] text-left text-[8px] font-medium text-[#465168] hover:bg-[#f6f7f4]"
-                            >
-                              Duplicate
-                            </button>
-
-                            <button
-                              type="button"
-                              className="w-full rounded-[4px] px-[8px] py-[6px] text-left text-[8px] font-medium text-red-600 hover:bg-red-50"
-                            >
-                              Delete
-                            </button>
-                          </div>
-                        )}
-                      </div>
                     </div>
                   );
                 })}

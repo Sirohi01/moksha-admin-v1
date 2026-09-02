@@ -1675,7 +1675,7 @@ export default function DashboardPage() {
                   </div>
                 </div>
 
-                <div className="mt-auto w-full min-h-0 px-3 pt-3 pb-1">
+                <div className="mt-auto w-full min-h-0 px-3 pt-0 pb-3">
                   <svg
                     viewBox="0 0 430 110"
                     preserveAspectRatio="none"
@@ -1858,16 +1858,16 @@ export default function DashboardPage() {
                     Other Performance Metrics
                   </p>
 
-                  <div className="grid grid-cols-[1fr_64px_64px] gap-x-2 text-[9px] font-bold">
-                    <div className="rounded-l-[4px] bg-[#eaeff5] px-2 py-1 text-slate-700">
+                  <div className="grid grid-cols-[1fr_64px_64px] text-[9px] font-bold">
+                    <div className="rounded-l-[4px] bg-[#eaeff5] px-2 py-1 text-black">
                       Metric
                     </div>
 
-                    <div className="bg-[#eaeff5] px-2 py-1 text-center text-slate-700">
+                    <div className="bg-[#eaeff5] px-2 py-1 text-center text-black">
                       Mobile
                     </div>
 
-                    <div className="rounded-r-[4px] bg-[#eaeff5] px-2 py-1 text-center text-slate-700">
+                    <div className="rounded-r-[4px] bg-[#eaeff5] px-2 py-1 text-center text-black">
                       Desktop
                     </div>
 
@@ -1978,7 +1978,7 @@ export default function DashboardPage() {
                           {label as string}
                         </span>
 
-                        <span className={`font-bold ${label === "Last Backup" ? "text-[#4B1426]" : "text-emerald-700"}`}>
+                        <span className={`font-bold ${label === "Last Backup" ? "text-[#4B1426]" : label === "Security Status" ? "text-blue-600" : "text-emerald-700"}`}>
                           {value as string}
                         </span>
 
@@ -1995,32 +1995,16 @@ export default function DashboardPage() {
                 BOTTOM ROW
             ============================== */}
 
-            <div className="grid min-h-0 grid-cols-[1.02fr_1fr_1fr_1.12fr] gap-2">
+            <div className="mt-4 grid min-h-0 grid-cols-[1.02fr_1fr_1fr_1.12fr] gap-2">
 
               {/* TOP PAGES */}
 
               <Panel>
                 <PanelTitle
                   right={
-                    <div className="flex items-center gap-3">
-                      <Link href="#" className="text-[9px] font-bold text-blue-600 hover:underline">View All</Link>
-                      <RangeDropdown
-                        dropdownKey="top-pages-range"
-                        openDropdown={
-                          openDropdown
-                        }
-                        setOpenDropdown={
-                          setOpenDropdown
-                        }
-                        value={topPagesRange}
-                        setValue={
-                          setTopPagesRange
-                        }
-                        options={
-                          monthlyRanges
-                        }
-                      />
-                    </div>
+                    <Link href="#" className="text-[9px] font-bold text-blue-600 hover:underline">
+                      View All
+                    </Link>
                   }
                 >
                   Top Pages by Traffic
@@ -2031,7 +2015,7 @@ export default function DashboardPage() {
                     (row, index) => (
                       <div
                         key={row[0]}
-                        className="grid grid-cols-[16px_1fr_76px_42px_14px] items-center gap-1 py-[3px] font-bold"
+                        className="grid grid-cols-[16px_1fr_76px_42px_14px] items-center gap-2 py-1.5 font-bold"
                       >
                         <span>
                           {index + 1}.
@@ -2039,7 +2023,7 @@ export default function DashboardPage() {
 
                         <span>{row[0]}</span>
 
-                        <span className="truncate text-[#5f6b7e]">
+                        <span className="truncate text-[#4B1426]">
                           {row[1]}
                         </span>
 
@@ -2060,25 +2044,9 @@ export default function DashboardPage() {
               <Panel>
                 <PanelTitle
                   right={
-                    <div className="flex items-center gap-3">
-                      <Link href="#" className="text-[9px] font-bold text-blue-600 hover:underline">View Data</Link>
-                      <RangeDropdown
-                        dropdownKey="keyword-range"
-                        openDropdown={
-                          openDropdown
-                        }
-                        setOpenDropdown={
-                          setOpenDropdown
-                        }
-                        value={keywordRange}
-                        setValue={
-                          setKeywordRange
-                        }
-                        options={
-                          monthlyRanges
-                        }
-                      />
-                    </div>
+                    <Link href="#" className="text-[9px] font-bold text-blue-600 hover:underline">
+                      View Data
+                    </Link>
                   }
                 >
                   Keyword Performance
@@ -2123,31 +2091,15 @@ export default function DashboardPage() {
               <Panel>
                 <PanelTitle
                   right={
-                    <div className="flex items-center gap-3">
-                      <Link href="#" className="text-[9px] font-bold text-blue-600 hover:underline">View Report</Link>
-                      <RangeDropdown
-                        dropdownKey="location-range"
-                        openDropdown={
-                          openDropdown
-                        }
-                        setOpenDropdown={
-                          setOpenDropdown
-                        }
-                        value={locationRange}
-                        setValue={
-                          setLocationRange
-                        }
-                        options={
-                          monthlyRanges
-                        }
-                      />
-                    </div>
+                    <Link href="#" className="text-[9px] font-bold text-blue-600 hover:underline">
+                      View Report
+                    </Link>
                   }
                 >
                   Top Sewa Help Locations
                 </PanelTitle>
 
-                <div className="space-y-[6px] px-3 pt-1">
+                <div className="space-y-3 px-3 pt-1 pb-1">
                   {locationRows.map(
                     (
                       [
@@ -2161,11 +2113,11 @@ export default function DashboardPage() {
                         key={String(name)}
                         className="grid grid-cols-[62px_1fr_28px_42px] items-center gap-1.5 text-[9px] font-bold"
                       >
-                        <span>{name}</span>
+                        <span className="text-[#4B1426]">{name}</span>
 
                         <div className="h-1.5 rounded-full bg-[#edf2f8]">
                           <div
-                            className="h-full rounded-full bg-[#2f77d7]"
+                            className="h-full rounded-full bg-[#4B1426]"
                             style={{
                               width: `${88 -
                                 index * 14
@@ -2178,7 +2130,7 @@ export default function DashboardPage() {
                           {count}
                         </span>
 
-                        <span className="text-right text-[#6b7280]">
+                        <span className="text-right text-emerald-700">
                           ({pct})
                         </span>
                       </div>
@@ -2190,7 +2142,7 @@ export default function DashboardPage() {
 
               {/* RECENT SUBMISSIONS */}
 
-              <Panel>
+              <Panel style={{ boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px" }}>
                 <PanelTitle
                   right={
                     <button
@@ -2229,11 +2181,11 @@ export default function DashboardPage() {
                           <FileText className="h-3 w-3" />
                         </div>
 
-                        <span className="truncate">
+                        <span className="truncate text-[#4B1426]">
                           {row[0]}
                         </span>
 
-                        <span className="truncate text-[#43526d]">
+                        <span className="truncate pl-5 text-blue-600">
                           {row[1]}
                         </span>
 
