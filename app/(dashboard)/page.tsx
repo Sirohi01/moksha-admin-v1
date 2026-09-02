@@ -762,14 +762,19 @@ export default function DashboardPage() {
 
               {/* TITLE */}
 
-              <div className="min-w-0">
+              <div
+                className="min-w-0 rounded-md border border-black bg-white px-3 py-1.5"
+                style={{
+                  boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px"
+                }}
+              >
                 <h1 className="truncate text-[20px] font-extrabold leading-tight tracking-[-0.025em]">
-                  Welcome back, Admin!{" "}
+                  Welcome back, Vansh!{" "}
                   <span className="text-[18px]">👋</span>
                 </h1>
 
                 <p className="truncate text-[11px] font-medium leading-tight text-[#4a5261]">
-                  Here&apos;s an overview of your website{" "}
+                  Here&apos;s an overview of your website today{" "}
                   <b className="font-extrabold">
                     mokshasewa.org
                   </b>
@@ -1915,7 +1920,13 @@ export default function DashboardPage() {
               {/* SITE STATUS */}
 
               <Panel>
-                <PanelTitle>
+                <PanelTitle
+                  right={
+                    <Link href="#" className="text-[9px] font-bold text-blue-600 hover:underline">
+                      View Site Health
+                    </Link>
+                  }
+                >
                   Site Status
                 </PanelTitle>
 
@@ -1943,13 +1954,13 @@ export default function DashboardPage() {
                     ],
                     [
                       Globe2,
-                      "WordPress Version",
-                      "6.5.3",
+                      "Next.js Version",
+                      "16.3.4",
                     ],
                     [
                       Wrench,
-                      "PHP Version",
-                      "8.2.14",
+                      "Node.js Version",
+                      "v24.20.0",
                     ],
                   ].map(
                     ([
@@ -1967,7 +1978,7 @@ export default function DashboardPage() {
                           {label as string}
                         </span>
 
-                        <span className="font-bold text-emerald-700">
+                        <span className={`font-bold ${label === "Last Backup" ? "text-[#4B1426]" : "text-emerald-700"}`}>
                           {value as string}
                         </span>
 
@@ -1977,9 +1988,6 @@ export default function DashboardPage() {
                   )}
                 </div>
 
-                <FooterButton>
-                  View Site Health
-                </FooterButton>
               </Panel>
             </div>
 
@@ -1994,22 +2002,25 @@ export default function DashboardPage() {
               <Panel>
                 <PanelTitle
                   right={
-                    <RangeDropdown
-                      dropdownKey="top-pages-range"
-                      openDropdown={
-                        openDropdown
-                      }
-                      setOpenDropdown={
-                        setOpenDropdown
-                      }
-                      value={topPagesRange}
-                      setValue={
-                        setTopPagesRange
-                      }
-                      options={
-                        monthlyRanges
-                      }
-                    />
+                    <div className="flex items-center gap-3">
+                      <Link href="#" className="text-[9px] font-bold text-blue-600 hover:underline">View All</Link>
+                      <RangeDropdown
+                        dropdownKey="top-pages-range"
+                        openDropdown={
+                          openDropdown
+                        }
+                        setOpenDropdown={
+                          setOpenDropdown
+                        }
+                        value={topPagesRange}
+                        setValue={
+                          setTopPagesRange
+                        }
+                        options={
+                          monthlyRanges
+                        }
+                      />
+                    </div>
                   }
                 >
                   Top Pages by Traffic
@@ -2042,9 +2053,6 @@ export default function DashboardPage() {
                   )}
                 </div>
 
-                <FooterButton>
-                  View All Pages Analytics
-                </FooterButton>
               </Panel>
 
               {/* KEYWORD PERFORMANCE */}
@@ -2052,22 +2060,25 @@ export default function DashboardPage() {
               <Panel>
                 <PanelTitle
                   right={
-                    <RangeDropdown
-                      dropdownKey="keyword-range"
-                      openDropdown={
-                        openDropdown
-                      }
-                      setOpenDropdown={
-                        setOpenDropdown
-                      }
-                      value={keywordRange}
-                      setValue={
-                        setKeywordRange
-                      }
-                      options={
-                        monthlyRanges
-                      }
-                    />
+                    <div className="flex items-center gap-3">
+                      <Link href="#" className="text-[9px] font-bold text-blue-600 hover:underline">View Data</Link>
+                      <RangeDropdown
+                        dropdownKey="keyword-range"
+                        openDropdown={
+                          openDropdown
+                        }
+                        setOpenDropdown={
+                          setOpenDropdown
+                        }
+                        value={keywordRange}
+                        setValue={
+                          setKeywordRange
+                        }
+                        options={
+                          monthlyRanges
+                        }
+                      />
+                    </div>
                   }
                 >
                   Keyword Performance
@@ -2105,9 +2116,6 @@ export default function DashboardPage() {
                   )}
                 </div>
 
-                <FooterButton>
-                  View All Keyword Data
-                </FooterButton>
               </Panel>
 
               {/* LOCATIONS */}
@@ -2115,22 +2123,25 @@ export default function DashboardPage() {
               <Panel>
                 <PanelTitle
                   right={
-                    <RangeDropdown
-                      dropdownKey="location-range"
-                      openDropdown={
-                        openDropdown
-                      }
-                      setOpenDropdown={
-                        setOpenDropdown
-                      }
-                      value={locationRange}
-                      setValue={
-                        setLocationRange
-                      }
-                      options={
-                        monthlyRanges
-                      }
-                    />
+                    <div className="flex items-center gap-3">
+                      <Link href="#" className="text-[9px] font-bold text-blue-600 hover:underline">View Report</Link>
+                      <RangeDropdown
+                        dropdownKey="location-range"
+                        openDropdown={
+                          openDropdown
+                        }
+                        setOpenDropdown={
+                          setOpenDropdown
+                        }
+                        value={locationRange}
+                        setValue={
+                          setLocationRange
+                        }
+                        options={
+                          monthlyRanges
+                        }
+                      />
+                    </div>
                   }
                 >
                   Top Sewa Help Locations
@@ -2175,9 +2186,6 @@ export default function DashboardPage() {
                   )}
                 </div>
 
-                <FooterButton>
-                  View Full Location Report
-                </FooterButton>
               </Panel>
 
               {/* RECENT SUBMISSIONS */}

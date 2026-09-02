@@ -346,9 +346,18 @@ export default function Topbar({
             <Menu className="h-[18px] w-[18px]" />
           </button>
           {pathname === "/" ? (
-            <div className="min-w-0">
-              <h1 className="truncate text-[18px] font-normal leading-tight tracking-tight text-slate-900">Dashboard - Welcome back, <strong className="font-bold">{firstName || "Admin"}!</strong> <span aria-hidden>👋</span></h1>
-              <p className="hidden truncate text-[13px] font-normal leading-tight text-slate-500 sm:block">Here&apos;s an overview of your website today</p>
+            <div
+              className="ml-3 min-w-0 rounded-md border border-slate-200 bg-white px-3 py-1.5"
+              style={{
+                boxShadow: "rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px"
+              }}
+            >
+              <h1 className="truncate text-[14px] font-semibold leading-tight tracking-tight text-slate-900">
+                Dashboard - <span className="text-blue-600">Welcome back,</span> <strong className="font-bold text-[#4B1426]">{firstName || "Admin"}!</strong> <span aria-hidden>👋</span>
+              </h1>
+              <p className="hidden truncate text-[11px] font-semibold leading-tight text-slate-500 sm:block">
+                Here&apos;s an overview of your website today
+              </p>
             </div>
           ) : pagesSubRouteLabel(pathname) ? (
             <h1 className="flex items-center gap-1.5 text-base font-semibold tracking-tight">
@@ -589,7 +598,7 @@ export default function Topbar({
                 </span>
 
                 <span
-                  className={`mt-0.5 block capitalize leading-tight text-slate-500 ${isDashboard
+                  className={`mt-0.5 block capitalize leading-tight text-[#4B1426] ${isDashboard
                     ? "text-[8px] font-semibold"
                     : "text-[10px] font-semibold"
                     }`}
@@ -621,7 +630,7 @@ export default function Topbar({
                       {displayName}
                     </p>
 
-                    <p className="mt-0.5 text-[9px] font-semibold capitalize text-slate-500">
+                    <p className="mt-0.5 text-[9px] font-semibold capitalize text-[#4B1426]">
                       {displayRole}
                     </p>
                   </div>
