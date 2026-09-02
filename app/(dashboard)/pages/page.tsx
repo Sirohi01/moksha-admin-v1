@@ -198,7 +198,7 @@ function FilterSelect({
         onChange={(event) =>
           onChange(event.target.value)
         }
-        className="h-[36px] w-full cursor-pointer appearance-none rounded-[6px] border border-[#e3e4e0] bg-white pl-[11px] pr-[28px] text-[9.5px] font-semibold text-[#374156] outline-none transition-colors hover:border-[#d2c9b3] focus:border-[#c39a43]"
+        className="h-[30px] w-full cursor-pointer appearance-none rounded-[6px] border border-[#e3e4e0] bg-white pl-[11px] pr-[28px] text-[8.5px] font-semibold text-[#374156] outline-none transition-colors hover:border-[#d2c9b3] focus:border-[#c39a43]"
       >
         {options.map((option) => (
           <option
@@ -423,16 +423,7 @@ export default function PagesCmsPage() {
       numColor: "#1d4ed8",
       footer: "Manage sections",
     },
-    {
-      title: "LAST UPDATED",
-      value: lastUpdatedPage?.updated ?? "—",
-      note: `By ${lastUpdatedPage?.updatedBy ?? "—"}`,
-      icon: Clock,
-      tone: "rose",
-      gradient: "linear-gradient(135deg, #ffffff 0%, #ffffff 55%, #fff5f6 100%)",
-      numColor: "#be123c",
-      footer: "View history",
-    },
+
     {
       title: "SEO SCORE (AVG)",
       value: averageSeo.toString(),
@@ -462,7 +453,7 @@ export default function PagesCmsPage() {
             TOP HEADING
         ================================================= */}
 
-        <div className="flex h-[62px] shrink-0 items-start justify-between">
+        <div className="mb-[20px] flex shrink-0 items-start justify-between border-b-[2px] border-[#293681] pb-[8px]">
           <div>
             <h1 className="text-[19px] font-bold leading-[1.15] tracking-[-0.018em] text-[#18233b]">
               Pages &amp; CMS
@@ -476,10 +467,10 @@ export default function PagesCmsPage() {
           <div className="flex items-center gap-[10px]">
             <button
               type="button"
-              className="flex h-[37px] items-center justify-center gap-[7px] rounded-[6px] border border-[#ddcda8] bg-[#fffefa] px-[18px] text-[9.5px] font-semibold text-[#45463e] shadow-[0_1px_4px_rgba(30,30,20,0.025)] transition hover:bg-[#fff9eb]"
+              className="flex h-[30px] items-center justify-center gap-[5px] rounded-[6px] border border-red-200 bg-red-50 px-[12px] text-[8.5px] font-semibold text-red-700 shadow-[0_1px_4px_rgba(30,30,20,0.025)] transition hover:bg-red-100"
             >
               <SlidersHorizontal
-                className="h-[13px] w-[13px]"
+                className="h-[11px] w-[11px]"
                 strokeWidth={1.7}
               />
 
@@ -489,10 +480,10 @@ export default function PagesCmsPage() {
             <button
               type="button"
               onClick={() => router.push("/pages/new")}
-              className="flex h-[37px] items-center justify-center gap-[7px] rounded-[6px] bg-[linear-gradient(135deg,#bc861b,#d99b18)] px-[21px] text-[9.5px] font-semibold text-white shadow-[0_5px_12px_rgba(185,128,17,0.15)] transition hover:brightness-95"
+              className="flex h-[30px] items-center justify-center gap-[5px] rounded-[6px] bg-[#293681] px-[14px] text-[8.5px] font-semibold text-white shadow-[0_5px_12px_rgba(41,54,129,0.15)] transition hover:bg-[#1f2963]"
             >
               <Plus
-                className="h-[14px] w-[14px]"
+                className="h-[12px] w-[12px]"
                 strokeWidth={1.7}
               />
 
@@ -517,7 +508,7 @@ export default function PagesCmsPage() {
                 STATS
             ============================================= */}
 
-            <div className="grid h-[98px] shrink-0 grid-cols-5 gap-[11px]">
+            <div className="grid h-[98px] shrink-0 grid-cols-4 gap-[11px]">
               {topStats.map((item) => {
                 const Icon = item.icon;
 
@@ -578,7 +569,7 @@ export default function PagesCmsPage() {
                 FILTER ROW
             ============================================= */}
 
-            <div className="mt-[10px] flex h-[36px] shrink-0 items-center gap-[9px]">
+            <div className="mt-[10px] flex h-[30px] shrink-0 items-center gap-[9px]">
               <div className="relative min-w-[250px] flex-1">
                 <Search
                   className="absolute left-[11px] top-1/2 h-[12px] w-[12px] -translate-y-1/2 text-[#7a818d]"
@@ -592,7 +583,7 @@ export default function PagesCmsPage() {
                     setSearch(event.target.value)
                   }
                   placeholder="Search pages by title or URL..."
-                  className="h-[36px] w-full rounded-[6px] border border-[#e3e4e0] bg-white pl-[33px] pr-[11px] text-[9px] font-normal text-[#424c5f] outline-none placeholder:text-[#9298a3] focus:border-[#c8ad70]"
+                  className="h-[30px] w-full rounded-[6px] border border-[#e3e4e0] bg-white pl-[33px] pr-[11px] text-[8.5px] font-normal text-[#424c5f] outline-none placeholder:text-[#9298a3] focus:border-[#c8ad70]"
                 />
               </div>
 
@@ -631,7 +622,7 @@ export default function PagesCmsPage() {
 
               <button
                 type="button"
-                className="flex h-[36px] w-[82px] shrink-0 items-center justify-center gap-[6px] rounded-[6px] border border-[#e3e4e0] bg-white text-[9.5px] font-semibold text-[#374156]"
+                className="flex h-[30px] w-[72px] shrink-0 items-center justify-center gap-[6px] rounded-[6px] border border-[#e3e4e0] bg-white text-[8.5px] font-semibold text-[#374156]"
               >
                 <Filter
                   className="h-[12px] w-[12px]"
@@ -646,39 +637,42 @@ export default function PagesCmsPage() {
                 TABLE
             ============================================= */}
 
-            <div className="mt-[13px] flex min-h-0 flex-1 flex-col overflow-hidden rounded-[7px] border border-[#e7e7e3] bg-white">
+            <div 
+              className="mt-[13px] flex min-h-0 flex-1 flex-col overflow-hidden rounded-[7px] bg-white"
+              style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px" }}
+            >
 
               {/* TABLE HEADER */}
 
-              <div className="grid h-[34px] shrink-0 grid-cols-[minmax(0,2.7fr)_minmax(0,1.8fr)_minmax(0,1.25fr)_minmax(0,1fr)_minmax(0,1.15fr)_minmax(0,1.45fr)] items-center border-b border-[#e8e5df] bg-[#233D4D] px-[10px]">
-                <div className="min-w-0 overflow-hidden px-[4px] text-[8px] font-bold text-white">
+              <div className="grid h-[32px] shrink-0 grid-cols-[minmax(0,2.7fr)_minmax(0,1.8fr)_minmax(0,1.25fr)_minmax(0,1fr)_minmax(0,1.15fr)_minmax(0,1.45fr)] items-center border-b border-[#e8e5df] bg-[#233D4D] px-[10px]">
+                <div className="min-w-0 overflow-hidden px-[4px] text-[8.5px] font-bold text-white">
                   PAGE TITLE
                 </div>
 
-                <div className="min-w-0 overflow-hidden px-[4px] text-[8px] font-bold text-white">
+                <div className="min-w-0 overflow-hidden px-[4px] text-[8.5px] font-bold text-white">
                   URL
                 </div>
 
-                <div className="min-w-0 overflow-hidden px-[4px] text-[8px] font-bold text-white">
+                <div className="min-w-0 overflow-hidden px-[4px] text-[8.5px] font-bold text-white">
                   AUTHOR
                 </div>
 
-                <div className="min-w-0 overflow-hidden px-[4px] text-[8px] font-bold text-white">
+                <div className="min-w-0 overflow-hidden px-[4px] text-[8.5px] font-bold text-white">
                   STATUS
                 </div>
 
-                <div className="min-w-0 overflow-hidden px-[4px] text-[8px] font-bold text-white">
+                <div className="min-w-0 overflow-hidden px-[4px] text-[8.5px] font-bold text-white">
                   SEO SCORE
                 </div>
 
-                <div className="min-w-0 overflow-hidden px-[4px] text-[8px] font-bold text-white">
+                <div className="min-w-0 overflow-hidden px-[4px] text-[8.5px] font-bold text-white">
                   LAST UPDATED
                 </div>
               </div>
 
               {/* ROWS */}
 
-              <div className="min-h-0 flex-1 overflow-y-auto">
+              <div className="min-h-0 flex-1 overflow-y-auto pr-1 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-300 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:w-[2px]">
                 {paginatedPages.map((page) => {
                   const selected =
                     selectedPage.id === page.id;
@@ -700,8 +694,8 @@ export default function PagesCmsPage() {
                         }
                       }}
                       className={`grid min-h-[44px] w-full grid-cols-[minmax(0,2.7fr)_minmax(0,1.8fr)_minmax(0,1.25fr)_minmax(0,1fr)_minmax(0,1.15fr)_minmax(0,1.45fr)] items-center border-b border-[#f0f0ec] px-[10px] text-left transition last:border-b-0 ${selected
-                        ? "bg-[#fffefa]"
-                        : "bg-white hover:bg-[#fffefa]"
+                        ? "bg-[#E4DA72]/20"
+                        : "bg-white hover:bg-slate-50"
                         }`}
                     >
 
@@ -711,12 +705,12 @@ export default function PagesCmsPage() {
                         <PageTypeIcon type={page.type} />
 
                         <div className="flex min-w-0 max-w-full items-center gap-[5px] overflow-hidden">
-                          <span className="truncate text-[9.5px] font-bold text-[#303a4f]">
+                          <span className="truncate text-[8px] font-semibold text-[#293681]">
                             {page.title}
                           </span>
 
                           {page.type === "home" && (
-                            <span className="shrink-0 rounded-[4px] bg-[#edf5eb] px-[5px] py-[2px] text-[7px] font-semibold text-[#397b54]">
+                            <span className="shrink-0 rounded-[4px] bg-[#edf5eb] px-[5px] py-[2px] text-[6.5px] font-semibold text-[#397b54]">
                               Homepage
                             </span>
                           )}
@@ -726,7 +720,7 @@ export default function PagesCmsPage() {
                       {/* URL */}
 
                       <div className="flex min-w-0 items-center gap-[5px] overflow-hidden px-[4px]">
-                        <span className="truncate text-[8px] font-medium text-[#626e81]">
+                        <span className="truncate text-[7.5px] font-medium text-[#4B1426]">
                           {page.slug}
                         </span>
 
@@ -739,9 +733,7 @@ export default function PagesCmsPage() {
                       {/* AUTHOR */}
 
                       <div className="flex min-w-0 items-center gap-[6px] overflow-hidden px-[4px]">
-                        <AuthorIcon />
-
-                        <span className="truncate text-[8px] font-medium text-[#465168]">
+                        <span className="truncate text-[7.5px] font-medium text-[#BE1A1A]">
                           {page.author}
                         </span>
                       </div>
@@ -750,7 +742,7 @@ export default function PagesCmsPage() {
 
                       <div className="min-w-0 px-[4px]">
                         <span
-                          className={`inline-flex max-w-full items-center gap-[4px] whitespace-nowrap rounded-[4px] px-[6px] py-[3px] text-[7.5px] font-semibold ${page.status === "Published"
+                          className={`inline-flex max-w-full items-center gap-[4px] whitespace-nowrap rounded-[4px] px-[6px] py-[3px] text-[7px] font-semibold ${page.status === "Published"
                             ? "bg-[#edf6ee] text-[#327d50]"
                             : "bg-[#fff3de] text-[#bf8120]"
                             }`}
@@ -772,7 +764,7 @@ export default function PagesCmsPage() {
                         <SeoRing score={page.seoScore} />
 
                         <div className="min-w-0">
-                          <p className="text-[12px] font-bold leading-none text-[#2c374c]">
+                          <p className="text-[11px] font-bold leading-none text-[#2c374c]">
                             {page.seoScore}
                           </p>
 
@@ -789,13 +781,13 @@ export default function PagesCmsPage() {
 
                       {/* UPDATED */}
 
-                      <div className="min-w-0 overflow-hidden px-[4px]">
-                        <p className="truncate text-[7.7px] font-medium leading-[1.3] text-[#465168]">
-                          {page.updated}
+                      <div className="min-w-0 overflow-hidden px-[4px] pl-[12px]">
+                        <p className="truncate text-[7.5px] font-semibold leading-[1.3] text-[#293681]">
+                          {page.updated.split(",")[0]}
                         </p>
 
-                        <p className="mt-[2px] truncate text-[7px] font-normal leading-[1.3] text-[#6d7789]">
-                          by {page.updatedBy}
+                        <p className="mt-[2px] truncate text-[7.5px] font-semibold leading-[1.3] text-blue-600">
+                          {page.updated.split(",")[1]?.trim()}
                         </p>
                       </div>
 
@@ -819,7 +811,7 @@ export default function PagesCmsPage() {
               {/* PAGINATION */}
 
               <div className="flex h-[44px] shrink-0 items-center justify-between border-t border-[#e9e9e5] px-[10px]">
-                <p className="whitespace-nowrap text-[8px] font-medium text-[#657084]">
+                <p className="whitespace-nowrap text-[8px] font-medium text-[#293681]">
                   Showing {filteredPages.length ? (safePage - 1) * pageSize + 1 : 0} to {Math.min(safePage * pageSize, filteredPages.length)} of {filteredPages.length} pages
                 </p>
 
@@ -912,25 +904,23 @@ export default function PagesCmsPage() {
               RIGHT DETAILS
           =============================================== */}
 
-          <aside className="flex min-h-0 flex-col overflow-hidden rounded-[7px] border border-[#e7e7e3] bg-white">
+          <aside
+            className="flex min-h-0 flex-col overflow-hidden rounded-[7px] bg-white"
+            style={{ boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px" }}
+          >
 
             {/* HEADER */}
 
-            <div className="flex h-[42px] shrink-0 items-center justify-between border-b border-[#ebebe7] px-[13px]">
-              <h2 className="text-[14px] font-bold tracking-[-0.01em] text-[#303a50]">
+            <div className="flex h-[32px] shrink-0 items-center justify-between border-b border-slate-200/80 bg-[#f0f3f6] px-2.5 backdrop-blur-sm">
+              <h2 className="text-[11.5px] font-semibold tracking-[-0.01em] text-[#0f172a]">
                 Page Details
               </h2>
-
-              <X
-                className="h-[13px] w-[13px] text-[#8a919c]"
-                strokeWidth={1.6}
-              />
             </div>
 
             {/* SELECTED PAGE */}
 
             <div className="h-[160px] shrink-0 border-b border-[#ebebe7] px-[13px] py-[10px]">
-              <p className="text-[8px] font-bold uppercase tracking-[0.02em] text-[#566177]">
+              <p className="text-[8px] font-bold uppercase tracking-[0.02em] text-[#BE1A1A]">
                 SELECTED PAGE
               </p>
 
@@ -957,7 +947,7 @@ export default function PagesCmsPage() {
 
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-[6px]">
-                    <h3 className="text-[11.5px] font-bold text-[#303a50]">
+                    <h3 className="text-[11.5px] font-bold text-[#293681]">
                       {selectedPage.title}
                     </h3>
 
@@ -970,7 +960,7 @@ export default function PagesCmsPage() {
                   </div>
 
                   <div className="mt-[5px] flex items-center gap-[4px]">
-                    <span className="text-[8px] font-medium text-[#697386]">
+                    <span className="text-[8px] font-medium text-[#4B1426]">
                       {selectedPage.slug}
                     </span>
 
@@ -980,11 +970,11 @@ export default function PagesCmsPage() {
                     />
                   </div>
 
-                  <p className="mt-[5px] text-[7.8px] font-medium text-[#606b7e]">
+                  <p className="mt-[5px] text-[7.8px] font-semibold text-[#17433F]">
                     Last updated {selectedPage.updated}
                   </p>
 
-                  <p className="mt-[3px] text-[7.8px] font-medium text-[#606b7e]">
+                  <p className="mt-[3px] text-[7.8px] font-medium text-[#BE1A1A]">
                     by {selectedPage.author}
                   </p>
                 </div>
@@ -1000,7 +990,7 @@ export default function PagesCmsPage() {
                       "noopener,noreferrer",
                     )
                   }
-                  className="flex h-[29px] items-center justify-center gap-[6px] rounded-[5px] bg-[linear-gradient(135deg,#126039,#0a4e2e)] text-[8px] font-semibold text-white"
+                  className="flex h-[29px] items-center justify-center gap-[6px] rounded-[5px] bg-[#1E104E] text-[8px] font-semibold text-white transition hover:opacity-90"
                 >
                   <Pencil
                     className="h-[10px] w-[10px]"
@@ -1019,7 +1009,7 @@ export default function PagesCmsPage() {
                       "noopener,noreferrer",
                     )
                   }
-                  className="flex h-[29px] items-center justify-center gap-[6px] rounded-[5px] border border-[#d0bf95] bg-[#fffefa] text-[8px] font-semibold text-[#53564e]"
+                  className="flex h-[29px] items-center justify-center gap-[6px] rounded-[5px] border border-orange-200 bg-orange-50 text-[8px] font-semibold text-[#303a50] transition hover:bg-orange-100"
                 >
                   <ExternalLink
                     className="h-[10px] w-[10px]"
@@ -1240,13 +1230,16 @@ export default function PagesCmsPage() {
                   ].map(([label, value]) => (
                     <div
                       key={label}
-                      className="rounded-[6px] border border-[#e7e7e3] bg-[#fafaf8] p-[11px]"
+                      className="flex flex-col overflow-hidden rounded-[7px] border border-[#e5e7e6] bg-white p-[11px]"
+                      style={{
+                        boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px",
+                      }}
                     >
-                      <p className="text-[8px] font-medium text-[#667184]">
+                      <p className="truncate text-[8.5px] font-semibold tracking-[0.01em] text-slate-900">
                         {label}
                       </p>
 
-                      <p className="mt-[4px] text-[16px] font-bold text-[#263149]">
+                      <p className="mt-[4px] text-[21px] font-semibold leading-none tracking-[-0.04em] text-slate-900">
                         {value}
                       </p>
                     </div>

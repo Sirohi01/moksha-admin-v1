@@ -1107,7 +1107,7 @@ export default function DashboardPage() {
             MAIN
         =================================================== */}
 
-        <main className="min-h-0 flex-1 overflow-visible pl-5 pr-1.5 pt-4 pb-2">
+        <main className="min-h-0 flex-1 overflow-visible pl-5 pr-5 pt-4 pb-5">
           <div className="grid h-full min-h-0 w-full grid-rows-[98px_270px_minmax(0,1.08fr)_minmax(0,0.76fr)] gap-2">
 
             {/* =============================

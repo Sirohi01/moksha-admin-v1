@@ -39,7 +39,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
         <div className="flex min-w-0 flex-1 flex-col relative z-10">
           <Topbar onMenuClick={() => setMobileNavOpen(true)} />
-          <main className="min-h-0 flex-1 overflow-y-auto pl-1.5 pr-4 pb-4 pt-1 lg:pl-1.5 lg:pr-5 lg:pb-5 lg:pt-1">{children}</main>
+          <main className="min-h-0 flex-1 overflow-y-auto pl-1.5 pr-1.5 pb-1.5 pt-1 lg:pl-1.5 lg:pr-1.5 lg:pb-1.5 lg:pt-1">{children}</main>
           <AdminFooter />
         </div>
         <AdminSocialRail />
