@@ -192,7 +192,7 @@ export default function Topbar({
     loadNotifications();
 
     externalServiceApi.list().then(setExternalServices).catch(() => setExternalServices([]));
-    settingsApi.get().then(setSystemSettings).catch(() => setSystemSettings(null));
+    settingsApi.getSystemAlerts().then(setSystemSettings).catch(() => setSystemSettings(null));
   }, [isInternal, loadNotifications]);
 
   const expiringServices = externalServices

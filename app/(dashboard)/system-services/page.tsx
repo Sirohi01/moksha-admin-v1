@@ -284,7 +284,7 @@ export default function SystemServicesPage() {
 
   const load = async () => {
     setLoading(true);
-    settingsApi.get().then((settingsRes) => {
+    settingsApi.getSystemAlerts().then((settingsRes) => {
       setSettings(settingsRes);
       setAlertDraft({
         popupReminderDays: String(settingsRes.systemAlerts?.popupReminderDays ?? 15),
