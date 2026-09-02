@@ -76,7 +76,7 @@ export default function Table<T>({
                 {columns.map((col) => (
                   <td
                     key={col.key}
-                    className={`px-3 py-2.5 align-middle text-text-primary ${ALIGN_CLASSES[col.align ?? "left"]}`}
+                    className={`px-3 py-2.5 align-middle text-text-primary ${col.width ?? ""} ${ALIGN_CLASSES[col.align ?? "left"]}`}
                   >
                     {col.render(row)}
                   </td>

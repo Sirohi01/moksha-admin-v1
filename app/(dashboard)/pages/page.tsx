@@ -402,13 +402,6 @@ export default function PagesCmsPage() {
             </h1>
 
             <div className="mt-[6px] flex items-center gap-[6px] text-[9px] font-medium text-[#6c7587]">
-              <span>Dashboard</span>
-
-              <ChevronRight
-                className="h-[10px] w-[10px]"
-                strokeWidth={1.7}
-              />
-
               <span>Pages &amp; CMS</span>
             </div>
           </div>

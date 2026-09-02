@@ -97,7 +97,7 @@ export const NAV_SECTIONS: NavSection[] = [
     items: [
       { label: "Users & Roles", href: "/roles", icon: Users },
       { label: "Staff Management", href: "/staff", icon: UserCog },
-      { label: "Security Center", href: "/settings", icon: LockKeyhole },
+      { label: "Security Center", href: "/system-services", icon: LockKeyhole },
       { label: "Backups & Restore", icon: DatabaseBackup, disabled: true },
       { label: "Audit Logs", href: "/audit-log", icon: History },
       { label: "Settings", href: "/settings", icon: Settings },

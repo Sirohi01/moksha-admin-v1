@@ -6,6 +6,7 @@ import {
   type ChangeEvent,
   type ReactNode,
 } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   AlignLeft,
@@ -462,13 +463,9 @@ export default function AddNewPage() {
             </h1>
 
             <div className="mt-[4px] flex items-center gap-[6px] text-[10px] font-medium text-[#6f7888]">
-              <span>Dashboard</span>
-
-              <ChevronRight className="h-[10px] w-[10px]" />
-
-              <span>
+              <Link href="/pages" className="hover:text-[#326646] hover:underline">
                 Pages &amp; CMS
-              </span>
+              </Link>
 
               <ChevronRight className="h-[10px] w-[10px]" />
 

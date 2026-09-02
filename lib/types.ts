@@ -308,6 +308,57 @@ export interface CaseDetail extends CaseSummary {
   assignments: CaseVolunteerAssignment[];
 }
 
+export type ExternalServiceCategory =
+  | "DOMAIN"
+  | "HOSTING"
+  | "SSL_CERTIFICATE"
+  | "PAYMENT_GATEWAY"
+  | "EMAIL_SMTP"
+  | "SMS_WHATSAPP"
+  | "MEDIA_STORAGE"
+  | "AI_API"
+  | "ANALYTICS"
+  | "DATABASE"
+  | "CDN"
+  | "SOFTWARE_LICENSE"
+  | "SOCIAL_MEDIA"
+  | "API_SERVICE"
+  | "OTHER";
+
+export type ExternalServiceBillingCycle = "ONE_TIME" | "MONTHLY" | "YEARLY";
+
+export interface ExternalServiceReceipt {
+  url: string;
+  label?: string;
+  uploadedAt: string;
+}
+
+export interface ExternalService {
+  _id: string;
+  category: ExternalServiceCategory;
+  name: string;
+  provider?: string;
+  accountIdentifier?: string;
+  loginUrl?: string;
+  secretLabel?: string;
+  secretValue?: string;
+  startDate?: string;
+  expiryDate: string;
+  autoRenews?: boolean;
+  notes?: string;
+  popupReminderDays?: number;
+  emailReminderDays?: number;
+  notifyEmails?: string[];
+  remindersEnabled: boolean;
+  pricingType: "FREE" | "PAID";
+  costAmount?: number;
+  currency?: string;
+  billingCycle?: ExternalServiceBillingCycle;
+  receipts: ExternalServiceReceipt[];
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface Settings {
   _id: string;
   siteName: string;
@@ -324,6 +375,11 @@ export interface Settings {
   notifications?: {
     quietHoursStart?: string;
     quietHoursEnd?: string;
+  };
+  systemAlerts?: {
+    popupReminderDays: number;
+    emailReminderDays: number;
+    notifyEmails: string[];
   };
   advancedSeo?: {
     globalHeadCode?: string;

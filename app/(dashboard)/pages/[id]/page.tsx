@@ -868,15 +868,9 @@ export default function CmsPageDetailPage() {
               </h1>
 
               <div className="mt-[7px] flex items-center gap-[7px] text-[10.5px] font-medium text-[#697386]">
-                <span>
-                  Dashboard
-                </span>
-
-                <ChevronRight className="h-[10px] w-[10px]" />
-
-                <span>
+                <Link href="/pages" className="hover:text-[#2f7a50] hover:underline">
                   Pages &amp; CMS
-                </span>
+                </Link>
 
                 <ChevronRight className="h-[10px] w-[10px]" />
 

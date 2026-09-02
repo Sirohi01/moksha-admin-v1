@@ -7,6 +7,8 @@ import React, {
   type ReactNode,
 } from "react";
 
+import Link from "next/link";
+
 import {
   useParams,
   useRouter,
@@ -1050,19 +1052,15 @@ export default function CmsEditPage() {
                   text-[#697386]
                 "
               >
-                <span>Dashboard</span>
-
-                <ChevronRight className="h-[10px] w-[10px]" />
-
-                <span>
+                <Link href="/pages" className="hover:text-[#23714a] hover:underline">
                   Pages &amp; CMS
-                </span>
+                </Link>
 
                 <ChevronRight className="h-[10px] w-[10px]" />
 
-                <span>
+                <Link href={`/pages/${params.id}`} className="hover:text-[#23714a] hover:underline">
                   {page.title}
-                </span>
+                </Link>
 
                 <ChevronRight className="h-[10px] w-[10px]" />
 

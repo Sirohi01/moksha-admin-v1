@@ -1,6 +1,6 @@
 import { api } from "./api";
 
-export type AdminNotificationType = "DONATION" | "ENQUIRY" | "CASE" | "VOLUNTEER";
+export type AdminNotificationType = "DONATION" | "ENQUIRY" | "CASE" | "VOLUNTEER" | "SYSTEM_EXPIRY";
 
 export interface AdminNotificationItem {
   _id: string;
