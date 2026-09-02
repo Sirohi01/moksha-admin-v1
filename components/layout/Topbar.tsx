@@ -191,15 +191,8 @@ export default function Topbar({
 
     loadNotifications();
 
-    Promise.all([externalServiceApi.list(), settingsApi.get()])
-      .then(([services, settings]) => {
-        setExternalServices(services);
-        setSystemSettings(settings);
-      })
-      .catch(() => {
-        setExternalServices([]);
-        setSystemSettings(null);
-      });
+    externalServiceApi.list().then(setExternalServices).catch(() => setExternalServices([]));
+    settingsApi.get().then(setSystemSettings).catch(() => setSystemSettings(null));
   }, [isInternal, loadNotifications]);
 
   const expiringServices = externalServices
