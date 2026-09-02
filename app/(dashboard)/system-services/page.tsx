@@ -5,7 +5,7 @@ import {
   Plus, Pencil, Trash2, ExternalLink, BellRing, BellOff, Upload, FileText, X,
   Globe, Server, CreditCard, Mail, MessageSquare, Cloud, ShieldCheck, Sparkles,
   BarChart3, Database, Network, KeyRound, Share2, Plug, Package, Check,
-  AlertTriangle, Search, type LucideIcon,
+  AlertTriangle, Search, Clock3, type LucideIcon,
 } from "lucide-react";
 import { externalServiceApi } from "@/lib/externalServiceApi";
 import { settingsApi } from "@/lib/settingsApi";
@@ -69,6 +69,13 @@ const GROUP_META: Record<GroupKey, { label: string; note: string }> = {
 };
 
 const GROUP_ORDER: GroupKey[] = ["EXPIRED", "SOON", "LATER", "MUTED"];
+
+const GROUP_TONES: Record<GroupKey, string> = {
+  EXPIRED: "border-l-rose-500 text-rose-700",
+  SOON: "border-l-amber-500 text-amber-700",
+  LATER: "border-l-emerald-500 text-emerald-700",
+  MUTED: "border-l-slate-400 text-slate-600",
+};
 
 const EMPTY: FormState = {
   category: "OTHER", name: "", provider: "", accountIdentifier: "", loginUrl: "",
@@ -136,7 +143,8 @@ function Modal({
 function Countdown({ expiryDate, status }: { expiryDate: string; status: UIStatus }) {
   const c = useCountdown(expiryDate);
   return (
-    <span className={`whitespace-nowrap text-xs tracking-[-.01em] tabular-nums ${status === "EXPIRED" ? "text-[#A8202B]" : status === "SOON" ? "text-[#9C5A08]" : "text-[#261B15]"}`}>
+    <span className={`inline-flex w-fit items-center gap-1.5 whitespace-nowrap rounded-md border px-2.5 py-1 text-[11px] font-semibold tracking-[-.01em] shadow-sm tabular-nums ${status === "EXPIRED" ? "border-rose-200 bg-rose-50 text-rose-700" : status === "SOON" ? "border-amber-200 bg-amber-50 text-amber-700" : status === "MUTED" ? "border-slate-200 bg-slate-50 text-slate-500" : "border-emerald-200 bg-emerald-50 text-emerald-700"}`}>
+      <Clock3 size={12} className="shrink-0 opacity-75" />
       {formatCountdown(c)}
     </span>
   );
@@ -155,19 +163,20 @@ function Runway({
   const later = services.length - overdue.length - within.length;
 
   return (
-    <section className="mt-2 overflow-hidden border border-[#EAE5DE] bg-white shadow-[0_8px_28px_rgba(53,35,24,.035)]">
-      <div className="flex items-center justify-between gap-3 px-[18px] pb-3.5 pt-[17px] max-[560px]:flex-col max-[560px]:items-stretch">
-        <span className="text-sm font-bold tracking-[-.01em]">Renewal runway</span>
-        <span className="text-xs text-[#81766E]">Next 90 days. Click a marker to find the service below.</span>
+    <section className="mt-2 overflow-hidden rounded-xl border border-slate-200/90 bg-white shadow-[0_1px_2px_rgba(15,23,42,.03),0_8px_24px_rgba(15,23,42,.04)]">
+      <div className="flex items-center justify-between gap-3 border-b border-slate-100 px-5 py-[15px] max-[560px]:flex-col max-[560px]:items-stretch">
+        <span className="text-[15px] font-semibold tracking-[-.01em] text-slate-900">Renewal Runway</span>
+        <span className="rounded-full bg-slate-100 px-3 py-1 text-[10.5px] font-semibold text-slate-500">Next 90 Days · Select A Marker For Details</span>
       </div>
-      <div className="overflow-x-auto px-4 pb-4">
+      <div className="overflow-x-auto p-3">
         {services.length === 0 ? (
           <p className="py-[30px] text-center text-[#81766E]">Nothing to plot yet.</p>
         ) : (
-          <div className="grid min-w-[660px] grid-cols-[96px_1fr_84px]">
-            <div className={`border-r border-dashed border-[#D8D0C7] pr-3${overdue.length ? " text-[#A8202B]" : ""}`}>
-              <div className="text-[19px] font-semibold tracking-[-.02em] tabular-nums">{overdue.length}</div>
-              <div className="mt-0.5 text-[11.5px] leading-[1.3] text-[#81766E]">already past<br />the expiry date</div>
+          <div className="grid min-w-[700px] grid-cols-[128px_1fr_128px] items-stretch gap-2">
+            <div className={`flex flex-col justify-center rounded-lg border bg-white px-4 py-3 ${overdue.length ? "border-rose-200 text-rose-700" : "border-slate-200 text-slate-500"}`}>
+              <div className="flex items-center gap-2"><span className={`size-2 rounded-full ${overdue.length ? "bg-rose-500" : "bg-slate-300"}`} /><span className="text-[10px] font-semibold uppercase tracking-[.08em]">Past Due</span></div>
+              <div className="mt-2 text-[26px] font-semibold leading-none tracking-[-.04em] tabular-nums">{overdue.length}</div>
+              <div className="mt-1.5 text-[10px] font-medium leading-[1.35] text-slate-500">Expired Services</div>
               <div className="mt-2.5 flex flex-wrap gap-[5px]">
                 {overdue.map((s) => (
                   <button key={s._id} className="size-[11px] cursor-pointer rounded-full border-[2.5px] border-white bg-current p-0 shadow-[0_0_0_1.5px_currentColor]" style={{ color: "#A8202B" }}
@@ -176,21 +185,26 @@ function Runway({
               </div>
             </div>
 
-            <div className="relative mx-3.5 h-[126px]">
+            <div className="relative h-[112px] rounded-lg border border-slate-200 bg-[radial-gradient(circle_at_top,#ffffff_0%,#f8fafc_100%)] px-2 shadow-inner">
               {[0, 30, 60, 90].map((t) => (
-                <div key={t} className="absolute inset-y-0 bottom-5 w-px bg-[#EAE5DE] [&_span]:absolute [&_span]:-bottom-[18px] [&_span]:-translate-x-1/2 [&_span]:whitespace-nowrap [&_span]:text-[11.5px] [&_span]:text-[#81766E]" style={{ left: `${(t / 90) * 100}%` }}>
-                  <span style={t === 0 ? { transform: "none" } : undefined}>{t === 0 ? "today" : `${t} days`}</span>
+                <div
+                  key={t}
+                  className="absolute bottom-5 top-0 w-px bg-slate-200 [&_span]:absolute [&_span]:-bottom-[18px] [&_span]:whitespace-nowrap [&_span]:text-[10.5px] [&_span]:font-semibold [&_span]:text-slate-500"
+                  style={{ left: t === 0 ? 28 : t === 90 ? "calc(100% - 32px)" : `${(t / 90) * 100}%` }}
+                >
+                  <span className="-translate-x-1/2">{t === 0 ? "Today" : `${t} Days`}</span>
                 </div>
               ))}
-              <div className="absolute inset-x-0 bottom-5 h-px bg-[#D8D0C7]" />
+              <div className="absolute inset-x-7 bottom-5 h-px bg-[#D8D0C7]" />
               {within.map((s, i) => {
                 const d = daysRemaining(s.expiryDate);
                 const st = uiStatus(s, settings);
+                const markerPosition = Math.max(6, Math.min(94, (d / 90) * 100));
                 return (
-                  <div key={s._id} className={`absolute flex -translate-x-1/2 flex-col items-center${st === "SOON" ? " [&>div:first-child]:font-semibold [&>div:first-child]:text-[#261B15]" : ""}`}
-                    style={{ left: `${Math.min(99, (d / 90) * 100)}%`, top: 6 + (i % 3) * 22, bottom: 20 }}>
-                    <div className="mb-[5px] max-w-[120px] truncate whitespace-nowrap text-[11px] text-[#665B53]">{s.name}</div>
-                    <button className="size-[11px] cursor-pointer rounded-full border-[2.5px] border-white bg-current p-0 shadow-[0_0_0_1.5px_currentColor]" style={{ color: st === "SOON" ? "#9C5A08" : "#8B6A3E" }}
+                  <div key={s._id} className="absolute flex -translate-x-1/2 flex-col items-center"
+                    style={{ left: `${markerPosition}%`, top: 10 + (i % 2) * 28, bottom: 20 }}>
+                    <div className={`relative z-10 mb-1 max-w-[130px] truncate whitespace-nowrap rounded-md border px-2.5 py-1 text-[10px] font-semibold shadow-sm ${st === "SOON" ? "border-amber-200 bg-amber-50 !text-amber-800" : "border-emerald-200 bg-emerald-50 !text-emerald-800"}`}>{s.name}</div>
+                    <button className={`relative z-10 size-3 cursor-pointer rounded-full border-[3px] border-white bg-current p-0 shadow-[0_0_0_1.5px_currentColor] ${st === "SOON" ? "text-amber-600" : "text-emerald-600"}`}
                       onClick={() => onPick(s._id)} title={`${s.name} — ${d} days left`}
                       aria-label={`${s.name}, ${d} days left`} />
                     <div className="w-px flex-1 bg-[#D8D0C7]" />
@@ -199,9 +213,10 @@ function Runway({
               })}
             </div>
 
-            <div className="border-r border-dashed border-[#D8D0C7] pr-3 right">
-              <div className="text-[19px] font-semibold tracking-[-.02em] tabular-nums">{later}</div>
-              <div className="mt-0.5 text-[11.5px] leading-[1.3] text-[#81766E]">further out<br />or not expiring</div>
+            <div className="flex flex-col justify-center rounded-lg border border-slate-200 bg-white px-4 py-3 text-blue-700">
+              <div className="flex items-center gap-2"><span className="size-2 rounded-full bg-blue-500" /><span className="text-[10px] font-semibold uppercase tracking-[.08em]">Later</span></div>
+              <div className="mt-2 text-[26px] font-semibold leading-none tracking-[-.04em] tabular-nums">{later}</div>
+              <div className="mt-1.5 text-[10px] font-medium leading-[1.35] text-slate-500">Outside 90 Days</div>
             </div>
           </div>
         )}
@@ -231,8 +246,8 @@ function SummaryCard({ title, value, label, detail, icon: Icon, tone }: {
         <span className="min-w-0 truncate pt-0.5 text-[9px] font-semibold uppercase tracking-[.01em] text-slate-900">{title}</span>
       </div>
       <div className={`-mt-[15px] ml-[38px] text-[22px] font-semibold leading-none tracking-[-.04em] tabular-nums ${colors.value}`}>{value}</div>
-      <div className={`ml-[38px] mt-1 truncate text-[9px] font-bold ${colors.value}`}>{label}</div>
-      <div className="absolute inset-x-2 bottom-1 truncate text-center text-[8.5px] font-bold leading-tight text-[#293957]">{detail}</div>
+      <div className={`ml-[38px] mt-1 truncate text-[9px] font-semibold ${colors.value}`}>{label}</div>
+      <div className="absolute inset-x-2 bottom-1 truncate text-center text-[8.5px] font-semibold leading-tight text-[#293957]">{detail}</div>
     </div>
   );
 }
@@ -462,21 +477,21 @@ export default function SystemServicesPage() {
   const yearlyTotal = yearlyServices.reduce((sum, s) => sum + Number(s.costAmount || 0), 0);
 
   return (
-    <div className="min-h-screen bg-[#F7F5F1] px-6 pb-24 pt-8 text-[13px] capitalize leading-[1.45] text-[#261B15] antialiased max-[820px]:px-3.5 max-[820px]:pb-20 max-[820px]:pt-[18px]">
+    <div className="min-h-screen bg-[#F7F5F1] px-6 pb-24 pt-2 text-[13px] capitalize leading-[1.45] text-[#261B15] antialiased max-[820px]:px-3.5 max-[820px]:pb-20 max-[820px]:pt-[18px]">
       <div className="mx-auto max-w-[1240px]">
         <header className="flex flex-wrap items-center justify-between gap-5 px-0.5 pb-0.5 pt-1 max-[560px]:items-stretch">
           <div>
             <h1 className="m-0 font-serif text-[30px] font-medium leading-[1.12] tracking-[-.035em] max-[560px]:text-[26px]">System &amp; Security</h1>
           </div>
           <div className="flex gap-2 max-[560px]:w-full [&_button]:max-[560px]:flex-1">
-            <button className="inline-flex min-h-[38px] items-center justify-center gap-[7px] rounded-[10px] border border-[#D8D0C7] bg-white px-[15px] py-2 text-[12.5px] font-bold leading-none text-[#261B15] transition hover:-translate-y-px hover:border-[#C3B8AC] hover:bg-[#FAF8F5] disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:shrink-0" onClick={() => setAlertOpen(true)} disabled={!settings}>
+            <button className="inline-flex min-h-[38px] items-center justify-center gap-[7px] rounded-[10px] border border-[#D8D0C7] bg-white px-[15px] py-2 text-[12.5px] font-semibold leading-none text-[#261B15] transition hover:-translate-y-px hover:border-[#C3B8AC] hover:bg-[#FAF8F5] disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:shrink-0" onClick={() => setAlertOpen(true)} disabled={!settings}>
               <BellRing size={14} /> Reminder Defaults
             </button>
-            <button className="inline-flex min-h-[38px] items-center justify-center gap-[7px] rounded-[10px] border border-[#8B6A3E] bg-[#8B6A3E] px-[15px] py-2 text-[12.5px] font-bold leading-none text-white shadow-[0_4px_12px_rgba(104,74,41,.16)] transition hover:-translate-y-px hover:border-[#684A29] hover:bg-[#684A29] hover:shadow-[0_6px_16px_rgba(104,74,41,.22)] active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none [&_svg]:shrink-0" onClick={openAdd}><Plus size={14} /> Add Service</button>
+            <button className="inline-flex min-h-[38px] items-center justify-center gap-[7px] rounded-[10px] border border-[#8B6A3E] bg-[#8B6A3E] px-[15px] py-2 text-[12.5px] font-semibold leading-none text-white shadow-[0_4px_12px_rgba(104,74,41,.16)] transition hover:-translate-y-px hover:border-[#684A29] hover:bg-[#684A29] hover:shadow-[0_6px_16px_rgba(104,74,41,.22)] active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none [&_svg]:shrink-0" onClick={openAdd}><Plus size={14} /> Add Service</button>
           </div>
         </header>
 
-        <div className="mt-3.5 grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-5">
+        <div className="mt-2.5 grid grid-cols-1 gap-1.5 sm:grid-cols-2 xl:grid-cols-5">
           <SummaryCard title="Inventory" value={loading ? "—" : services.length} label="Services tracked" detail={loading ? "Loading service data" : `${paidServices.length} paid · ${services.length - paidServices.length} free`} icon={Package} tone="emerald" />
           <SummaryCard title="Attention" value={loading ? "—" : overdueCount} label="Past due" detail={overdueCount ? "Immediate action required" : "No overdue renewals"} icon={AlertTriangle} tone="rose" />
           <SummaryCard title="Upcoming" value={loading ? "—" : soonCount} label="Renewing soon" detail="Inside the reminder window" icon={BellRing} tone="amber" />
@@ -486,27 +501,27 @@ export default function SystemServicesPage() {
 
         {!loading && <Runway services={services} settings={settings} onPick={pick} />}
 
-        <section className="mt-2 overflow-hidden border border-[#EAE5DE] bg-white shadow-[0_8px_28px_rgba(53,35,24,.035)]">
-          <div className="flex items-center justify-between gap-3 px-[18px] pb-3.5 pt-[17px] max-[560px]:flex-col max-[560px]:items-stretch">
-            <span className="text-sm font-bold tracking-[-.01em]">Tracked services</span>
+        <section className="mt-2 overflow-hidden rounded-xl border border-slate-200/90 bg-white shadow-[0_1px_2px_rgba(15,23,42,.03),0_8px_24px_rgba(15,23,42,.04)]">
+          <div className="flex items-center justify-between gap-3 border-b border-slate-100 px-5 py-2 max-[560px]:flex-col max-[560px]:items-stretch">
+            <span className="text-[15px] font-semibold tracking-[-.01em] text-slate-900">Tracked Services</span>
             <div className="relative">
-              <Search size={14} className="absolute left-[9px] top-[9px] text-[#81766E]" />
-              <input className="w-[210px] rounded-lg border border-[#D8D0C7] bg-white py-2 pl-7 pr-2.5 text-[13px] text-[#261B15] placeholder:text-[#81766E] focus:border-[#8B6A3E] focus:outline-none focus:ring-4 focus:ring-[#F5ECDD] max-[560px]:w-full" placeholder="Search name or provider"
+              <Search size={13} className="absolute left-[9px] top-[7px] text-[#81766E]" />
+              <input className="w-[250px] rounded-lg border border-slate-200 bg-slate-50 py-1.5 pl-8 pr-3 text-[11.5px] font-medium text-slate-800 transition placeholder:text-slate-400 focus:border-[#8B6A3E] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#F5ECDD] max-[560px]:w-full" placeholder="Search Name Or Provider"
                 value={query} onChange={(e) => setQuery(e.target.value)} />
             </div>
           </div>
 
-          <div className="grid min-h-16 grid-cols-[4px_1.6fr_.9fr_.8fr_.9fr_84px] items-center gap-3.5 border-t border-[#EAE5DE] pr-[18px] transition-colors hover:bg-[#FCFBF9] max-[820px]:grid-cols-[4px_1fr_auto_76px] max-[820px]:pr-2.5 max-[560px]:grid-cols-[4px_1fr_auto] max-[560px]:pr-3 min-h-[34px] text-[11.5px] text-[#81766E]">
+          <div className="grid min-h-[38px] grid-cols-[4px_minmax(180px,1.6fr)_minmax(120px,.9fr)_110px_minmax(150px,.9fr)_84px] items-center gap-2 border-b border-slate-200 bg-slate-50/80 pr-4 text-[9.5px] font-semibold uppercase tracking-[.1em] text-slate-500 max-[820px]:grid-cols-[4px_1fr_auto_76px] max-[820px]:pr-2 max-[560px]:grid-cols-[4px_1fr_auto]">
             <span />
             <span>Service</span>
             <span className="max-[820px]:hidden">Category</span>
-            <span className="max-[820px]:hidden">Cost</span>
-            <span>Time left</span>
+            <span className="-translate-x-3 max-[820px]:hidden">Cost</span>
+            <span className="translate-x-5">Time Left</span>
             <span className="text-right max-[820px]:hidden">Actions</span>
           </div>
 
           {loading && [0, 1, 2, 3].map((i) => (
-            <div className="grid min-h-16 grid-cols-[4px_1.6fr_.9fr_.8fr_.9fr_84px] items-center gap-3.5 border-t border-[#EAE5DE] pr-[18px] transition-colors hover:bg-[#FCFBF9] max-[820px]:grid-cols-[4px_1fr_auto_76px] max-[820px]:pr-2.5 max-[560px]:grid-cols-[4px_1fr_auto] max-[560px]:pr-3" key={i}>
+            <div className="grid min-h-[44px] grid-cols-[4px_minmax(180px,1.6fr)_minmax(120px,.9fr)_110px_minmax(150px,.9fr)_84px] items-center gap-2 border-b border-slate-100 pr-4 max-[820px]:grid-cols-[4px_1fr_auto_76px] max-[820px]:pr-2 max-[560px]:grid-cols-[4px_1fr_auto]" key={i}>
               <div className="self-stretch bg-[#EAE5DE]" />
               <div className="flex items-center gap-2.5">
                 <span className="block size-[30px] animate-pulse rounded-lg bg-[#EDF1EF]" />
@@ -532,20 +547,20 @@ export default function SystemServicesPage() {
             if (!rows.length) return null;
             return (
               <div key={key}>
-                <div className="flex items-center gap-2 border-t border-[#EAE5DE] bg-[#FAF8F5] px-4 pb-[7px] pt-[9px] text-xs text-[#665B53] [&_b]:font-semibold [&_b]:text-[#261B15] [&_.pill]:ml-auto [&_.pill]:text-[#81766E] [&_.pill]:tabular-nums">
+                <div className={`relative flex items-center justify-center gap-1.5 border-l-[3px] border-b border-r border-slate-100 bg-slate-50/70 px-12 py-1 text-center text-[10.5px] font-semibold ${GROUP_TONES[key]}`}>
                   <b>{GROUP_META[key].label}</b>
-                  <span>{GROUP_META[key].note}</span>
-                  <span className="pill">{rows.length}</span>
+                  <span className="font-medium text-slate-500">· {GROUP_META[key].note}</span>
+                  <span className="absolute right-4 grid min-w-5 place-items-center rounded-full border border-slate-200 bg-white px-1.5 py-0.5 font-semibold text-slate-600 tabular-nums">{rows.length}</span>
                 </div>
                 {rows.map((s) => {
                   const st = uiStatus(s, settings);
                   const Icon = CAT_ICON[s.category] ?? Package;
                   return (
-                    <div key={s._id} id={`svc-${s._id}`} className={`group grid min-h-16 grid-cols-[4px_1.6fr_.9fr_.8fr_.9fr_84px] items-center gap-3.5 border-t border-[#EAE5DE] pr-[18px] transition-colors hover:bg-[#FCFBF9] max-[820px]:grid-cols-[4px_1fr_auto_76px] max-[820px]:pr-2.5 max-[560px]:grid-cols-[4px_1fr_auto] max-[560px]:pr-3${highlight === s._id ? " animate-pulse bg-[#F5ECDD]" : ""}`}>
+                    <div key={s._id} id={`svc-${s._id}`} className={`group grid min-h-[44px] grid-cols-[4px_minmax(180px,1.6fr)_minmax(120px,.9fr)_110px_minmax(150px,.9fr)_84px] items-center gap-2 border-b border-slate-100 pr-4 transition-colors last:border-b-0 hover:bg-slate-50/70 max-[820px]:grid-cols-[4px_1fr_auto_76px] max-[820px]:pr-2 max-[560px]:grid-cols-[4px_1fr_auto] ${highlight === s._id ? "animate-pulse bg-[#F5ECDD]" : ""}`}>
                       <div className={`self-stretch ${railClass(st)}`} />
                       <div className="flex min-w-0 items-center gap-2.5 [&_p]:m-0 [&_p]:truncate [&_p]:font-semibold [&_small]:text-[11.5px] [&_small]:text-[#81766E]">
-                        <span className={`flex size-[34px] shrink-0 items-center justify-center rounded-[10px] ${st === "EXPIRED" ? "bg-[#FAE7E7] text-[#A8202B]" : st === "SOON" ? "bg-[#FAEEDA] text-[#9C5A08]" : "bg-[#F5ECDD] text-[#684A29]"}`}>
-                          <Icon size={15} />
+                        <span className={`flex size-7 shrink-0 items-center justify-center rounded-md ring-1 ring-inset ${st === "EXPIRED" ? "bg-rose-50 text-rose-700 ring-rose-100" : st === "SOON" ? "bg-amber-50 text-amber-700 ring-amber-100" : "bg-slate-50 text-slate-700 ring-slate-200"}`}>
+                          <Icon size={13} />
                         </span>
                         <div className="min-w-0">
                           <p>{s.name}</p>
@@ -556,13 +571,13 @@ export default function SystemServicesPage() {
                         </div>
                       </div>
 
-                      <div className="truncate whitespace-nowrap text-[#665B53] max-[820px]:hidden">{CAT_LABEL[s.category]}</div>
+                      <div className="truncate whitespace-nowrap text-[11.5px] font-medium text-slate-500 max-[820px]:hidden">{CAT_LABEL[s.category]}</div>
 
-                      <div className="max-[820px]:hidden">
+                      <div className="min-w-[110px] -translate-x-3 overflow-visible max-[820px]:hidden">
                         {s.pricingType === "FREE" ? (
                           <span className="inline-flex items-center gap-[5px] whitespace-nowrap rounded-full bg-[#F5ECDD] px-2 py-0.5 text-[11.5px] font-medium text-[#684A29]">Free</span>
                         ) : s.costAmount != null ? (
-                          <span className="whitespace-nowrap text-xs tracking-[-.01em] tabular-nums">
+                          <span className="inline-flex whitespace-nowrap text-xs font-semibold tracking-[-.01em] tabular-nums">
                             {s.currency && s.currency !== "INR" ? `${s.currency} ${s.costAmount.toLocaleString("en-IN")}` : inr(s.costAmount)}
                             <span className="text-[#81766E]">
                               {s.billingCycle && s.billingCycle !== "ONE_TIME" ? ` /${CYCLE[s.billingCycle].slice(0, 2)}` : ""}
@@ -573,12 +588,12 @@ export default function SystemServicesPage() {
                         )}
                       </div>
 
-                      <div className="flex min-w-0 items-center gap-2">
+                      <div className="flex min-w-0 translate-x-5 items-center gap-1.5">
                         <Countdown expiryDate={s.expiryDate} status={st} />
                         {st === "MUTED" && <BellOff size={13} className="text-[#81766E]" aria-label="Reminders off" />}
                       </div>
 
-                      <div className="flex justify-end gap-0.5 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 max-[820px]:opacity-100 max-[560px]:col-span-full max-[560px]:justify-start max-[560px]:pb-2">
+                      <div className="flex justify-end gap-1 opacity-60 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 max-[820px]:opacity-100 max-[560px]:col-span-full max-[560px]:justify-start max-[560px]:pb-2">
                         {s.loginUrl && (
                           <a className="flex size-7 items-center justify-center rounded-[7px] border-0 bg-transparent text-[#81766E] hover:bg-[#FAF8F5] hover:text-[#261B15]" href={s.loginUrl} target="_blank" rel="noreferrer" title="Open provider dashboard">
                             <ExternalLink size={14} />
@@ -604,8 +619,8 @@ export default function SystemServicesPage() {
         width={620}
         footer={
           <>
-            <button className="inline-flex min-h-[38px] items-center justify-center gap-[7px] rounded-[10px] border border-[#D8D0C7] bg-white px-[15px] py-2 text-[12.5px] font-bold leading-none text-[#261B15] transition hover:-translate-y-px hover:border-[#C3B8AC] hover:bg-[#FAF8F5] disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:shrink-0" onClick={() => setFormOpen(false)}>Cancel</button>
-            <button className="inline-flex min-h-[38px] items-center justify-center gap-[7px] rounded-[10px] border border-[#8B6A3E] bg-[#8B6A3E] px-[15px] py-2 text-[12.5px] font-bold leading-none text-white shadow-[0_4px_12px_rgba(104,74,41,.16)] transition hover:-translate-y-px hover:border-[#684A29] hover:bg-[#684A29] hover:shadow-[0_6px_16px_rgba(104,74,41,.22)] active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none [&_svg]:shrink-0" onClick={save} disabled={saving}>
+            <button className="inline-flex min-h-[38px] items-center justify-center gap-[7px] rounded-[10px] border border-[#D8D0C7] bg-white px-[15px] py-2 text-[12.5px] font-semibold leading-none text-[#261B15] transition hover:-translate-y-px hover:border-[#C3B8AC] hover:bg-[#FAF8F5] disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:shrink-0" onClick={() => setFormOpen(false)}>Cancel</button>
+            <button className="inline-flex min-h-[38px] items-center justify-center gap-[7px] rounded-[10px] border border-[#8B6A3E] bg-[#8B6A3E] px-[15px] py-2 text-[12.5px] font-semibold leading-none text-white shadow-[0_4px_12px_rgba(104,74,41,.16)] transition hover:-translate-y-px hover:border-[#684A29] hover:bg-[#684A29] hover:shadow-[0_6px_16px_rgba(104,74,41,.22)] active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none [&_svg]:shrink-0" onClick={save} disabled={saving}>
               {saving ? "Saving…" : editing ? "Save changes" : "Add service"}
             </button>
           </>
@@ -693,7 +708,7 @@ export default function SystemServicesPage() {
           <div className="rounded-[10px] border border-[#EAE5DE] p-[13px]">
             <div className="flex items-center justify-between">
               <p className="m-0 text-xs font-semibold">Bills and receipts</p>
-              <button type="button" className="inline-flex min-h-[38px] items-center justify-center gap-[7px] rounded-[10px] border border-[#D8D0C7] bg-white px-[15px] py-2 text-[12.5px] font-bold leading-none text-[#261B15] transition hover:-translate-y-px hover:border-[#C3B8AC] hover:bg-[#FAF8F5] disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:shrink-0" onClick={() => fileRef.current?.click()} disabled={uploading}>
+              <button type="button" className="inline-flex min-h-[38px] items-center justify-center gap-[7px] rounded-[10px] border border-[#D8D0C7] bg-white px-[15px] py-2 text-[12.5px] font-semibold leading-none text-[#261B15] transition hover:-translate-y-px hover:border-[#C3B8AC] hover:bg-[#FAF8F5] disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:shrink-0" onClick={() => fileRef.current?.click()} disabled={uploading}>
                 <Upload size={13} /> {uploading ? "Uploading…" : "Attach"}
               </button>
               <input ref={fileRef} type="file" accept="image/*,application/pdf" hidden onChange={addReceipt} />
@@ -767,8 +782,8 @@ export default function SystemServicesPage() {
         width={440}
         footer={
           <>
-            <button className="inline-flex min-h-[38px] items-center justify-center gap-[7px] rounded-[10px] border border-[#D8D0C7] bg-white px-[15px] py-2 text-[12.5px] font-bold leading-none text-[#261B15] transition hover:-translate-y-px hover:border-[#C3B8AC] hover:bg-[#FAF8F5] disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:shrink-0" onClick={() => setAlertOpen(false)}>Cancel</button>
-            <button className="inline-flex min-h-[38px] items-center justify-center gap-[7px] rounded-[10px] border border-[#8B6A3E] bg-[#8B6A3E] px-[15px] py-2 text-[12.5px] font-bold leading-none text-white shadow-[0_4px_12px_rgba(104,74,41,.16)] transition hover:-translate-y-px hover:border-[#684A29] hover:bg-[#684A29] hover:shadow-[0_6px_16px_rgba(104,74,41,.22)] active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none [&_svg]:shrink-0" onClick={saveAlertDefaults} disabled={savingAlerts}>
+            <button className="inline-flex min-h-[38px] items-center justify-center gap-[7px] rounded-[10px] border border-[#D8D0C7] bg-white px-[15px] py-2 text-[12.5px] font-semibold leading-none text-[#261B15] transition hover:-translate-y-px hover:border-[#C3B8AC] hover:bg-[#FAF8F5] disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:shrink-0" onClick={() => setAlertOpen(false)}>Cancel</button>
+            <button className="inline-flex min-h-[38px] items-center justify-center gap-[7px] rounded-[10px] border border-[#8B6A3E] bg-[#8B6A3E] px-[15px] py-2 text-[12.5px] font-semibold leading-none text-white shadow-[0_4px_12px_rgba(104,74,41,.16)] transition hover:-translate-y-px hover:border-[#684A29] hover:bg-[#684A29] hover:shadow-[0_6px_16px_rgba(104,74,41,.22)] active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none [&_svg]:shrink-0" onClick={saveAlertDefaults} disabled={savingAlerts}>
               {savingAlerts ? "Saving…" : "Save defaults"}
             </button>
           </>
@@ -800,8 +815,8 @@ export default function SystemServicesPage() {
         width={420}
         footer={
           <>
-            <button className="inline-flex min-h-[38px] items-center justify-center gap-[7px] rounded-[10px] border border-[#D8D0C7] bg-white px-[15px] py-2 text-[12.5px] font-bold leading-none text-[#261B15] transition hover:-translate-y-px hover:border-[#C3B8AC] hover:bg-[#FAF8F5] disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:shrink-0" onClick={() => setDeleteTarget(null)}>Keep it</button>
-            <button className="inline-flex min-h-[38px] items-center justify-center gap-[7px] rounded-[10px] border border-[#A8202B] bg-[#A8202B] px-[15px] py-2 text-[12.5px] font-bold leading-none text-white transition hover:-translate-y-px hover:bg-[#8A1A23] disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:shrink-0" onClick={confirmDelete} disabled={deleting}>
+            <button className="inline-flex min-h-[38px] items-center justify-center gap-[7px] rounded-[10px] border border-[#D8D0C7] bg-white px-[15px] py-2 text-[12.5px] font-semibold leading-none text-[#261B15] transition hover:-translate-y-px hover:border-[#C3B8AC] hover:bg-[#FAF8F5] disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:shrink-0" onClick={() => setDeleteTarget(null)}>Keep it</button>
+            <button className="inline-flex min-h-[38px] items-center justify-center gap-[7px] rounded-[10px] border border-[#A8202B] bg-[#A8202B] px-[15px] py-2 text-[12.5px] font-semibold leading-none text-white transition hover:-translate-y-px hover:bg-[#8A1A23] disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:shrink-0" onClick={confirmDelete} disabled={deleting}>
               <Trash2 size={14} /> {deleting ? "Deleting…" : "Delete"}
             </button>
           </>
