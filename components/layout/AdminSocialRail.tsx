@@ -1,3 +1,7 @@
+"use client";
+
+import { useState } from "react";
+
 type IconProps = {
   className?: string;
 };
@@ -79,6 +83,22 @@ const YoutubeIcon = ({ className }: IconProps) => (
   </svg>
 );
 
+const CloseIcon = ({ className }: IconProps) => (
+  <svg
+    viewBox="0 0 24 24"
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden
+  >
+    <path d="M18 6 6 18" />
+    <path d="m6 6 12 12" />
+  </svg>
+);
+
 const links = [
   {
     label: "X",
@@ -113,6 +133,8 @@ const links = [
 ];
 
 export default function AdminSocialRail() {
+  const [collapsed, setCollapsed] = useState(false);
+
   return (
     <nav
       className="
@@ -127,12 +149,11 @@ export default function AdminSocialRail() {
       aria-label="Moksha Sewa social media"
     >
       <div
-        className="
+        className={`
           relative
           flex
           flex-col
           items-center
-          gap-1
           rounded-[22px]
           border
           border-white/90
@@ -140,247 +161,311 @@ export default function AdminSocialRail() {
           p-1
           shadow-[0_12px_30px_rgba(42,29,20,.14),0_2px_7px_rgba(42,29,20,.07)]
           backdrop-blur-xl
-        "
+          transition-all
+          duration-300
+
+          ${collapsed
+            ? "gap-0"
+            : "gap-1"
+          }
+        `}
       >
         {/* GOLD SIDE LINE */}
 
-        <span
-          className="
-            pointer-events-none
-            absolute
-            inset-y-5
-            right-[-4px]
-            w-[3px]
-            rounded-full
-            bg-gradient-to-b
-            from-[#e8c779]
-            via-[#9b743e]
-            to-[#e8c779]
-          "
-        />
+        {!collapsed && (
+          <span
+            className="
+              pointer-events-none
+              absolute
+              inset-y-5
+              right-[-4px]
+              w-[3px]
+              rounded-full
+              bg-gradient-to-b
+              from-[#e8c779]
+              via-[#9b743e]
+              to-[#e8c779]
+            "
+          />
+        )}
 
-        {/* TOP DECORATION */}
+        {/* =========================================
+            CROSS / COLLAPSE BUTTON
+        ========================================= */}
 
-        <div
+        <button
+          type="button"
+          onClick={() =>
+            setCollapsed(
+              (value) => !value,
+            )
+          }
+          aria-label={
+            collapsed
+              ? "Expand social media"
+              : "Collapse social media"
+          }
+          title={
+            collapsed
+              ? "Open"
+              : "Close"
+          }
           className="
+            group
             flex
-            h-7
+            h-8
             w-9
+            shrink-0
             items-center
             justify-center
+            rounded-full
+            text-[#80613a]
+            transition-all
+            duration-300
+
+            hover:bg-[#f6efe3]
+            hover:text-[#5f421f]
+
+            focus-visible:outline-2
+            focus-visible:outline-offset-2
+            focus-visible:outline-[#9b743e]
           "
-          aria-hidden
         >
-          <svg
-            viewBox="0 0 32 32"
-            className="h-5 w-5 text-[#9b743e]"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-          >
-            <path d="M16 25c-5-4-7-9-5-15 4 2 6 5 5 10 0-5 2-8 5-10 2 6 0 11-5 15Z" />
-            <path d="M8 17c4 0 7 3 8 8M24 17c-4 0-7 3-8 8M8 26c5 2 11 2 16 0" />
-          </svg>
-        </div>
+          <CloseIcon
+            className={`
+              h-[16px]
+              w-[16px]
+              transition-transform
+              duration-300
 
-        {/* SOCIAL ICONS */}
+              ${collapsed
+                ? "rotate-45"
+                : "rotate-0"
+              }
+            `}
+          />
+        </button>
 
-        {links.map(
-          ({
-            label,
-            href,
-            color,
-            icon: Icon,
-          }) => (
-            <a
-              key={label}
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={label}
-              className="
-                group
-                relative
-                flex
-                h-10
-                w-10
-                items-center
-                justify-center
-                rounded-full
+        {/* =========================================
+            SOCIAL ICONS
+        ========================================= */}
 
-                focus-visible:outline-2
-                focus-visible:outline-offset-2
-                focus-visible:outline-[#9b743e]
-              "
-            >
-              {/* ================================
-                  HOVER TEXT
+        <div
+          className={`
+            flex
+            flex-col
+            items-center
+            gap-1
+            overflow-visible
 
-                  Separate floating label.
-                  Icon circle ki width change nahi hogi.
-              ================================= */}
+            transition-all
+            duration-300
+            ease-out
 
-              <span
+            ${collapsed
+              ? "pointer-events-none max-h-0 scale-90 opacity-0"
+              : "max-h-[240px] scale-100 opacity-100"
+            }
+          `}
+        >
+          {links.map(
+            ({
+              label,
+              href,
+              color,
+              icon: Icon,
+            }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={label}
                 className="
-                  pointer-events-none
-                  absolute
-                  right-[46px]
-                  top-1/2
-                  z-20
-                  -translate-y-1/2
-                  translate-x-[8px]
-
-                  whitespace-nowrap
-
-                  rounded-full
-                  border
-                  border-white/80
-                  px-[12px]
-                  py-[6px]
-
-                  text-[10px]
-                  font-bold
-                  uppercase
-                  tracking-[0.05em]
-                  text-white
-
-                  opacity-0
-                  shadow-[0_5px_16px_rgba(0,0,0,.20)]
-
-                  transition-all
-                  duration-300
-                  ease-out
-
-                  group-hover:translate-x-0
-                  group-hover:opacity-100
-                "
-                style={{
-                  backgroundColor: color,
-                }}
-              >
-                {label}
-
-                {/* SMALL ARROW */}
-
-                <span
-                  className="
-                    absolute
-                    right-[-4px]
-                    top-1/2
-                    h-[8px]
-                    w-[8px]
-                    -translate-y-1/2
-                    rotate-45
-                  "
-                  style={{
-                    backgroundColor: color,
-                  }}
-                />
-              </span>
-
-              {/* ================================
-                  FIXED SIZE ICON BACKGROUND
-              ================================= */}
-
-              <span
-                className="
+                  group
                   relative
-                  z-30
                   flex
-                  h-9
-                  w-9
-                  shrink-0
+                  h-10
+                  w-10
                   items-center
                   justify-center
-                  overflow-hidden
                   rounded-full
-                  border-2
-                  border-white
-                  text-white
 
-                  shadow-[0_3px_10px_rgba(0,0,0,.18)]
-                  ring-1
-                  ring-black/5
-
-                  transition-all
-                  duration-300
-                  ease-out
-
-                  group-hover:shadow-[0_7px_20px_rgba(0,0,0,.25)]
-                  group-hover:ring-2
-                  group-hover:ring-white
+                  focus-visible:outline-2
+                  focus-visible:outline-offset-2
+                  focus-visible:outline-[#9b743e]
                 "
-                style={{
-                  backgroundColor: color,
-                }}
               >
-                {/* SHINE */}
+                {/* =================================
+                    FLOATING HOVER TEXT
+                ================================= */}
 
                 <span
                   className="
                     pointer-events-none
                     absolute
-                    inset-0
-                    bg-gradient-to-br
-                    from-white/25
-                    via-transparent
-                    to-black/15
-                  "
-                />
+                    right-[46px]
+                    top-1/2
+                    z-20
 
-                {/* ICON */}
+                    -translate-y-1/2
+                    translate-x-[8px]
 
-                <Icon
-                  className="
-                    relative
-                    z-10
-                    h-4
-                    w-4
-                    shrink-0
+                    whitespace-nowrap
 
-                    transition-transform
+                    rounded-full
+                    border
+                    border-white/80
+
+                    px-[12px]
+                    py-[6px]
+
+                    text-[10px]
+                    font-bold
+                    uppercase
+                    tracking-[0.05em]
+                    text-white
+
+                    opacity-0
+
+                    shadow-[0_5px_16px_rgba(0,0,0,.20)]
+
+                    transition-all
                     duration-300
                     ease-out
 
-                    group-hover:rotate-[4deg]
-                    group-hover:scale-[1.35]
+                    group-hover:translate-x-0
+                    group-hover:opacity-100
                   "
-                />
-              </span>
-            </a>
-          ),
+                  style={{
+                    backgroundColor:
+                      color,
+                  }}
+                >
+                  {label}
+
+                  {/* ARROW */}
+
+                  <span
+                    className="
+                      absolute
+                      right-[-4px]
+                      top-1/2
+                      h-[8px]
+                      w-[8px]
+                      -translate-y-1/2
+                      rotate-45
+                    "
+                    style={{
+                      backgroundColor:
+                        color,
+                    }}
+                  />
+                </span>
+
+                {/* =================================
+                    FIXED ICON BACKGROUND
+                ================================= */}
+
+                <span
+                  className="
+                    relative
+                    z-30
+
+                    flex
+                    h-9
+                    w-9
+                    shrink-0
+                    items-center
+                    justify-center
+
+                    overflow-hidden
+
+                    rounded-full
+
+                    border-2
+                    border-white
+
+                    text-white
+
+                    shadow-[0_3px_10px_rgba(0,0,0,.18)]
+
+                    ring-1
+                    ring-black/5
+
+                    transition-all
+                    duration-300
+                    ease-out
+
+                    group-hover:shadow-[0_7px_20px_rgba(0,0,0,.25)]
+                    group-hover:ring-2
+                    group-hover:ring-white
+                  "
+                  style={{
+                    backgroundColor:
+                      color,
+                  }}
+                >
+                  {/* SHINE */}
+
+                  <span
+                    className="
+                      pointer-events-none
+                      absolute
+                      inset-0
+
+                      bg-gradient-to-br
+                      from-white/25
+                      via-transparent
+                      to-black/15
+                    "
+                  />
+
+                  {/* ICON */}
+
+                  <Icon
+                    className="
+                      relative
+                      z-10
+
+                      h-4
+                      w-4
+                      shrink-0
+
+                      transition-transform
+                      duration-300
+                      ease-out
+
+                      group-hover:rotate-[4deg]
+                      group-hover:scale-[1.35]
+                    "
+                  />
+                </span>
+              </a>
+            ),
+          )}
+        </div>
+
+        {/* =========================================
+            BOTTOM DIVIDER
+            FOLLOW TEXT REMOVED
+        ========================================= */}
+
+        {!collapsed && (
+          <span
+            className="
+              mt-0.5
+              h-px
+              w-7
+
+              bg-gradient-to-r
+              from-transparent
+              via-[#b18a50]
+              to-transparent
+            "
+            aria-hidden
+          />
         )}
-
-        {/* BOTTOM DIVIDER */}
-
-        <span
-          className="
-            mt-0.5
-            h-px
-            w-7
-            bg-gradient-to-r
-            from-transparent
-            via-[#b18a50]
-            to-transparent
-          "
-          aria-hidden
-        />
-
-        {/* FOLLOW */}
-
-        <span
-          className="
-            pb-1
-            text-[8px]
-            font-bold
-            uppercase
-            tracking-[.18em]
-            text-[#80613a]
-          "
-          aria-hidden
-        >
-          Follow
-        </span>
       </div>
     </nav>
   );
