@@ -63,16 +63,22 @@ const CSS = `
 .ms-sub{margin:7px 0 0; color:var(--ink2); max-width:62ch;font-size:13px;}
 .ms-headbtns{display:flex; gap:8px;}
 
-.ms-figs{display:grid; grid-template-columns:repeat(4,1fr); margin-top:14px;
+.ms-figs{display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); margin-top:14px;
   background:var(--card); border:1px solid var(--line); border-radius:0; overflow:hidden;
   box-shadow:0 10px 30px rgba(53,35,24,.045);}
-.ms-fig{position:relative;padding:18px 20px; border-left:1px solid var(--line);}
-.ms-fig:after{content:"";position:absolute;left:20px;bottom:0;width:32px;height:2px;border-radius:2px;background:var(--teal);opacity:.5;}
+.ms-fig{position:relative;padding:11px 16px 12px; border-left:1px solid var(--line);min-width:0;}
+.ms-fig:after{content:"";position:absolute;left:18px;bottom:0;width:32px;height:2px;border-radius:2px;background:var(--teal);opacity:.5;}
 .ms-fig:first-child{border-left:0;}
-.ms-fig-v{font-size:24px; font-weight:700; letter-spacing:-.035em; font-variant-numeric:tabular-nums;}
-.ms-fig-l{color:var(--ink3); font-size:11.5px; margin-top:3px;}
+.ms-fig-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:7px;}
+.ms-fig-icon{width:26px;height:26px;display:flex;align-items:center;justify-content:center;background:var(--teal-soft);color:var(--teal);}
+.ms-fig-kicker{color:var(--ink3);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;}
+.ms-fig-v{font-size:21px;line-height:1.1;font-weight:700; letter-spacing:-.035em; font-variant-numeric:tabular-nums;}
+.ms-fig-l{color:var(--ink2); font-size:11px; margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ms-fig-detail{color:var(--ink3);font-size:10px;margin-top:6px;padding-top:6px;border-top:1px solid var(--line);line-height:1.25;}
 .ms-fig.alarm .ms-fig-v{color:var(--red);}
+.ms-fig.alarm .ms-fig-icon{background:var(--red-soft);color:var(--red);}
 .ms-fig.warn .ms-fig-v{color:var(--amber);}
+.ms-fig.warn .ms-fig-icon{background:var(--amber-soft);color:var(--amber);}
 
 .ms-panel{background:var(--card); border:1px solid var(--line); border-radius:0; margin-top:8px;
   overflow:hidden;box-shadow:0 8px 28px rgba(53,35,24,.035);}
@@ -193,6 +199,7 @@ const CSS = `
   .ms-figs{grid-template-columns:1fr 1fr;}
   .ms-fig:nth-child(3){border-left:0;}
   .ms-fig:nth-child(n+3){border-top:1px solid var(--line);}
+  .ms-fig:last-child{grid-column:1 / -1;border-left:0;}
   .ms-row{grid-template-columns:4px 1fr auto 76px; padding-right:10px;}
   .ms-hide-sm{display:none;}
   .ms-actions{opacity:1;}
@@ -601,12 +608,11 @@ export default function SystemServicesPage() {
 
   const overdueCount = services.filter((s) => uiStatus(s, settings) === "EXPIRED").length;
   const soonCount = services.filter((s) => uiStatus(s, settings) === "SOON").length;
-  const perMonth = services.reduce((sum, s) => {
-    if (s.pricingType !== "PAID" || !s.costAmount) return sum;
-    if (s.billingCycle === "MONTHLY") return sum + s.costAmount;
-    if (s.billingCycle === "YEARLY") return sum + s.costAmount / 12;
-    return sum;
-  }, 0);
+  const paidServices = services.filter((s) => s.pricingType === "PAID" && !!s.costAmount);
+  const monthlyServices = paidServices.filter((s) => s.billingCycle === "MONTHLY");
+  const yearlyServices = paidServices.filter((s) => s.billingCycle === "YEARLY");
+  const monthlyTotal = monthlyServices.reduce((sum, s) => sum + Number(s.costAmount || 0), 0);
+  const yearlyTotal = yearlyServices.reduce((sum, s) => sum + Number(s.costAmount || 0), 0);
 
   return (
     <div className="ms">
@@ -628,20 +634,34 @@ export default function SystemServicesPage() {
 
         <div className="ms-figs">
           <div className="ms-fig">
+            <div className="ms-fig-top"><span className="ms-fig-kicker">Inventory</span><span className="ms-fig-icon"><Package size={15} /></span></div>
             <div className="ms-fig-v">{loading ? "—" : services.length}</div>
-            <div className="ms-fig-l">services tracked</div>
+            <div className="ms-fig-l">Services tracked</div>
+            <div className="ms-fig-detail">{loading ? "Loading service data" : `${paidServices.length} paid · ${services.length - paidServices.length} free`}</div>
           </div>
           <div className={`ms-fig${overdueCount ? " alarm" : ""}`}>
+            <div className="ms-fig-top"><span className="ms-fig-kicker">Attention</span><span className="ms-fig-icon"><AlertTriangle size={15} /></span></div>
             <div className="ms-fig-v">{loading ? "—" : overdueCount}</div>
-            <div className="ms-fig-l">past due</div>
+            <div className="ms-fig-l">Past due</div>
+            <div className="ms-fig-detail">{overdueCount ? "Immediate action required" : "No overdue renewals"}</div>
           </div>
           <div className={`ms-fig${soonCount ? " warn" : ""}`}>
+            <div className="ms-fig-top"><span className="ms-fig-kicker">Upcoming</span><span className="ms-fig-icon"><BellRing size={15} /></span></div>
             <div className="ms-fig-v">{loading ? "—" : soonCount}</div>
-            <div className="ms-fig-l">renewing soon</div>
+            <div className="ms-fig-l">Renewing soon</div>
+            <div className="ms-fig-detail">Inside the reminder window</div>
           </div>
           <div className="ms-fig">
-            <div className="ms-fig-v">{loading ? "—" : inr(Math.round(perMonth))}</div>
-            <div className="ms-fig-l">per month, yearly plans averaged</div>
+            <div className="ms-fig-top"><span className="ms-fig-kicker">Monthly</span><span className="ms-fig-icon"><CreditCard size={15} /></span></div>
+            <div className="ms-fig-v">{loading ? "—" : inr(monthlyTotal)}</div>
+            <div className="ms-fig-l">Monthly billing</div>
+            <div className="ms-fig-detail">{monthlyServices.length} monthly {monthlyServices.length === 1 ? "subscription" : "subscriptions"}</div>
+          </div>
+          <div className="ms-fig">
+            <div className="ms-fig-top"><span className="ms-fig-kicker">Yearly</span><span className="ms-fig-icon"><BarChart3 size={15} /></span></div>
+            <div className="ms-fig-v">{loading ? "—" : inr(yearlyTotal)}</div>
+            <div className="ms-fig-l">Annual billing</div>
+            <div className="ms-fig-detail">{yearlyServices.length} yearly {yearlyServices.length === 1 ? "subscription" : "subscriptions"}</div>
           </div>
         </div>
 
