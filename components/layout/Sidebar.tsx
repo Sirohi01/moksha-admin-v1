@@ -268,10 +268,10 @@ export default function Sidebar({
         className="
           relative
           z-10
-          h-[188px]
           shrink-0
           px-[16px]
-          pt-[6px]
+          pt-[12px]
+          pb-[16px]
           text-center
         "
       >
@@ -285,7 +285,7 @@ export default function Sidebar({
           className="
             relative
             mx-auto
-            h-[94px]
+            h-[70px]
             w-full
             overflow-hidden
           "
@@ -298,9 +298,9 @@ export default function Sidebar({
               absolute
               left-1/2
               top-[-2px]
-              h-[102px]
+              h-[75px]
               w-full
-              max-w-[188px]
+              max-w-[140px]
               -translate-x-1/2
               object-contain
               object-top
@@ -353,7 +353,7 @@ export default function Sidebar({
         </div>
 
         {/* INITIATIVE */}
-        <div className="mt-[7px] text-center">
+        {/* <div className="mt-[7px] text-center">
           <p
             className="
               font-serif
@@ -379,7 +379,7 @@ export default function Sidebar({
           >
             Namo Gange Trust
           </p>
-        </div>
+        </div> */}
       </div>
 
       {/* NAVIGATION */}
