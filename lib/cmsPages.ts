@@ -31,6 +31,21 @@ export interface CmsPage {
     robotsFollow?: boolean;
   };
 }
+export function getCmsPageRouteKey(page: Pick<CmsPage, "title">): string {
+  return page.title
+    .toLowerCase()
+    .trim()
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+export function findCmsPageByRouteKey(pages: CmsPage[], routeKey: string): CmsPage | undefined {
+  const numericId = Number(routeKey);
+  return pages.find((page) =>
+    (Number.isInteger(numericId) && page.id === numericId) || getCmsPageRouteKey(page) === routeKey.toLowerCase(),
+  );
+}
 
 type SettingsPageConfig = {
   seo?: {

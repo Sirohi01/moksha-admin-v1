@@ -7,8 +7,6 @@ import React, {
   type ReactNode,
 } from "react";
 
-import Link from "next/link";
-
 import {
   useParams,
   useRouter,
@@ -52,6 +50,8 @@ import {
 import {
   cmsPages,
   cmsPagesFromSettings,
+  findCmsPageByRouteKey,
+  getCmsPageRouteKey,
   PUBLIC_SITE_URL,
 } from "@/lib/cmsPages";
 import { settingsApi } from "@/lib/settingsApi";
@@ -753,18 +753,11 @@ export default function CmsEditPage() {
   const router =
     useRouter();
 
-  const pageId =
-    Number(params.id);
-
   const [pages, setPages] = useState(cmsPages);
   const [settings, setSettings] = useState<Record<string, any> | null>(null);
   const [saving, setSaving] = useState(false);
 
-  const page =
-    pages.find(
-      (item) =>
-        item.id === pageId,
-    ) ?? pages[0] ?? cmsPages[0];
+  const page = findCmsPageByRouteKey(pages, params.id) ?? pages[0] ?? cmsPages[0];
 
   useEffect(() => {
     settingsApi.get().then((value) => {
@@ -1052,15 +1045,19 @@ export default function CmsEditPage() {
                   text-[#697386]
                 "
               >
-                <Link href="/pages" className="hover:text-[#23714a] hover:underline">
-                  Pages &amp; CMS
-                </Link>
+                <span>Dashboard</span>
 
                 <ChevronRight className="h-[10px] w-[10px]" />
 
-                <Link href={`/pages/${params.id}`} className="hover:text-[#23714a] hover:underline">
+                <span>
+                  Pages &amp; CMS
+                </span>
+
+                <ChevronRight className="h-[10px] w-[10px]" />
+
+                <span>
                   {page.title}
-                </Link>
+                </span>
 
                 <ChevronRight className="h-[10px] w-[10px]" />
 
@@ -1109,7 +1106,7 @@ export default function CmsEditPage() {
               type="button"
               onClick={() =>
                 router.push(
-                  `/pages/${page.id}`,
+                  `/pages/${getCmsPageRouteKey(page)}`,
                 )
               }
               className="
@@ -2167,7 +2164,7 @@ export default function CmsEditPage() {
                   type="button"
                   onClick={() =>
                     router.push(
-                      `/pages/${page.id}`,
+                      `/pages/${getCmsPageRouteKey(page)}`,
                     )
                   }
                   className="
