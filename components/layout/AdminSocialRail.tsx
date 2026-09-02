@@ -99,6 +99,25 @@ const CloseIcon = ({ className }: IconProps) => (
   </svg>
 );
 
+// Classic "share" glyph — box with an arrow pointing out the top,
+// used for the collapsed state instead of the old rotated "+".
+const ShareIcon = ({ className }: IconProps) => (
+  <svg
+    viewBox="0 0 24 24"
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden
+  >
+    <path d="M12 15V3" />
+    <path d="m7 8 5-5 5 5" />
+    <path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6" />
+  </svg>
+);
+
 const links = [
   {
     label: "X",
@@ -148,25 +167,147 @@ export default function AdminSocialRail() {
       "
       aria-label="Moksha Sewa social media"
     >
+      {/* =========================================
+          COLLAPSE / EXPAND BUTTON
+          Lives OUTSIDE the white capsule — floats free,
+          overlapping its top edge, so there's no white
+          disc sitting behind it. Golden always, never white.
+          Shows an X while open, a share glyph while collapsed.
+      ========================================= */}
+
+      <button
+        type="button"
+        onClick={() =>
+          setCollapsed(
+            (value) => !value,
+          )
+        }
+        aria-label={
+          collapsed
+            ? "Expand social media"
+            : "Collapse social media"
+        }
+        aria-expanded={!collapsed}
+        title={
+          collapsed
+            ? "Open"
+            : "Close"
+        }
+        className="
+          group
+          relative
+          z-40
+
+          mx-auto
+          -mb-4
+
+          flex
+          h-10
+          w-10
+          shrink-0
+          items-center
+          justify-center
+          overflow-hidden
+          rounded-full
+          border-2
+          border-white
+          text-white
+          shadow-[0_6px_16px_rgba(155,116,62,.45)]
+          ring-1
+          ring-black/5
+          transition-all
+          duration-300
+          ease-out
+
+          hover:shadow-[0_9px_22px_rgba(155,116,62,.55)]
+          hover:ring-2
+          hover:ring-white
+          hover:brightness-105
+
+          focus-visible:outline-2
+          focus-visible:outline-offset-2
+          focus-visible:outline-[#9b743e]
+        "
+        style={{
+          backgroundImage:
+            "linear-gradient(135deg, #e8c779, #b1863f 55%, #9b743e)",
+        }}
+      >
+        {/* SHINE */}
+
+        <span
+          className="
+            pointer-events-none
+            absolute
+            inset-0
+
+            bg-gradient-to-br
+            from-white/30
+            via-transparent
+            to-black/15
+          "
+        />
+
+        {/* CLOSE ICON */}
+
+        <CloseIcon
+          className={`
+            absolute
+            z-10
+            h-[16px]
+            w-[16px]
+            transition-all
+            duration-300
+            ease-out
+
+            ${collapsed
+              ? "scale-50 rotate-90 opacity-0"
+              : "scale-100 rotate-0 opacity-100"
+            }
+          `}
+        />
+
+        {/* SHARE ICON */}
+
+        <ShareIcon
+          className={`
+            absolute
+            z-10
+            h-[16px]
+            w-[16px]
+            transition-all
+            duration-300
+            ease-out
+
+            ${collapsed
+              ? "scale-100 rotate-0 opacity-100"
+              : "scale-50 -rotate-90 opacity-0"
+            }
+          `}
+        />
+      </button>
+
       <div
         className={`
           relative
           flex
           flex-col
           items-center
+          overflow-hidden
           rounded-[22px]
           border
           border-white/90
           bg-white/80
-          p-1
+          px-1
           shadow-[0_12px_30px_rgba(42,29,20,.14),0_2px_7px_rgba(42,29,20,.07)]
           backdrop-blur-xl
           transition-all
           duration-300
+          ease-out
 
           ${collapsed
-            ? "gap-0"
-            : "gap-1"
+            ? "max-h-0 gap-0 border-transparent bg-transparent py-0 opacity-0 shadow-none"
+            : "max-h-[320px] gap-1 pb-1 pt-6 opacity-100"
           }
         `}
       >
@@ -188,63 +329,6 @@ export default function AdminSocialRail() {
             "
           />
         )}
-
-        {/* =========================================
-            CROSS / COLLAPSE BUTTON
-        ========================================= */}
-
-        <button
-          type="button"
-          onClick={() =>
-            setCollapsed(
-              (value) => !value,
-            )
-          }
-          aria-label={
-            collapsed
-              ? "Expand social media"
-              : "Collapse social media"
-          }
-          title={
-            collapsed
-              ? "Open"
-              : "Close"
-          }
-          className="
-            group
-            flex
-            h-8
-            w-9
-            shrink-0
-            items-center
-            justify-center
-            rounded-full
-            text-[#80613a]
-            transition-all
-            duration-300
-
-            hover:bg-[#f6efe3]
-            hover:text-[#5f421f]
-
-            focus-visible:outline-2
-            focus-visible:outline-offset-2
-            focus-visible:outline-[#9b743e]
-          "
-        >
-          <CloseIcon
-            className={`
-              h-[16px]
-              w-[16px]
-              transition-transform
-              duration-300
-
-              ${collapsed
-                ? "rotate-45"
-                : "rotate-0"
-              }
-            `}
-          />
-        </button>
 
         {/* =========================================
             SOCIAL ICONS
@@ -448,7 +532,6 @@ export default function AdminSocialRail() {
 
         {/* =========================================
             BOTTOM DIVIDER
-            FOLLOW TEXT REMOVED
         ========================================= */}
 
         {!collapsed && (

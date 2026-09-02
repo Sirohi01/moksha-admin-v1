@@ -96,22 +96,24 @@ function LargeSeoRing({
     <div
       className="relative grid h-[108px] w-[108px] shrink-0 place-items-center rounded-full"
       style={{
-        background: `conic-gradient(
-          #18844c 0deg ${score * 3.6}deg,
-          #edf1ed ${score * 3.6}deg 360deg
-        )`,
+        background: score >= 100 
+          ? "#2563eb" 
+          : `conic-gradient(
+              #2563eb 0deg ${score * 3.6}deg,
+              #e2e8f0 ${score * 3.6}deg 360deg
+            )`,
       }}
     >
       <div className="grid h-[88px] w-[88px] place-items-center rounded-full bg-white">
         <div className="text-center">
-          <div className="text-[23px] font-bold leading-none tracking-[-0.025em] text-[#17223a]">
+          <div className="text-[19px] font-bold leading-none tracking-[-0.025em] text-[#17223a]">
             {score}
-            <span className="ml-[1px] text-[8px] font-semibold">
+            <span className="ml-[1px] text-[7.5px] font-semibold text-[#64748b]">
               /100
             </span>
           </div>
 
-          <p className="mt-[5px] whitespace-nowrap font-semibold text-[#18844c]" style={{ fontSize: "10px" }}>
+          <p className="mt-[5px] whitespace-nowrap font-semibold text-[#2563eb]" style={{ fontSize: "10px" }}>
             {score >= 90 ? "Excellent" : score >= 75 ? "Good" : "Needs Work"}
           </p>
         </div>
@@ -238,6 +240,27 @@ export default function PagesCmsPage() {
   const selectedPage = selectedPageValue ?? pages[0] ?? cmsPages[0];
 
   const [rawSettings, setRawSettings] = useState<Record<string, any> | null>(null);
+
+  const [toastMessage, setToastMessage] = useState<{title: string; type: "success" | "error"} | null>(null);
+
+  const handleToggleStatus = (isActive: boolean) => {
+    const newStatus = isActive ? "Published" : "Draft";
+    setPages((prev) => prev.map((p) => (p.id === selectedPage.id ? { ...p, status: newStatus } : p)));
+    setSelectedPage((prev) => prev ? { ...prev, status: newStatus } : { ...selectedPage, status: newStatus });
+
+    if (isActive) {
+      setToastMessage({
+        title: "Success! The page has been set to Active and is now live.",
+        type: "success"
+      });
+    } else {
+      setToastMessage({
+        title: "Notice: The page has been set to Inactive and moved to drafts.",
+        type: "error"
+      });
+    }
+    setTimeout(() => setToastMessage(null), 4000);
+  };
 
   useEffect(() => {
     let active = true;
@@ -646,27 +669,27 @@ export default function PagesCmsPage() {
 
               <div className="grid h-[32px] shrink-0 grid-cols-[minmax(0,2.7fr)_minmax(0,1.8fr)_minmax(0,1.25fr)_minmax(0,1fr)_minmax(0,1.15fr)_minmax(0,1.45fr)] items-center border-b border-[#e8e5df] bg-[#233D4D] px-[10px]">
                 <div className="min-w-0 overflow-hidden px-[4px] text-[8.5px] font-bold text-white">
-                  PAGE TITLE
+                  Page Title
                 </div>
 
                 <div className="min-w-0 overflow-hidden px-[4px] text-[8.5px] font-bold text-white">
-                  URL
+                  Url
                 </div>
 
                 <div className="min-w-0 overflow-hidden px-[4px] text-[8.5px] font-bold text-white">
-                  AUTHOR
+                  Author
                 </div>
 
                 <div className="min-w-0 overflow-hidden px-[4px] text-[8.5px] font-bold text-white">
-                  STATUS
+                  Status
                 </div>
 
                 <div className="min-w-0 overflow-hidden px-[4px] text-[8.5px] font-bold text-white">
-                  SEO SCORE
+                  Seo Score
                 </div>
 
                 <div className="min-w-0 overflow-hidden px-[4px] text-[8.5px] font-bold text-white">
-                  LAST UPDATED
+                  Last Updated
                 </div>
               </div>
 
@@ -693,10 +716,13 @@ export default function PagesCmsPage() {
                           setActionMenu(null);
                         }
                       }}
-                      className={`grid min-h-[44px] w-full grid-cols-[minmax(0,2.7fr)_minmax(0,1.8fr)_minmax(0,1.25fr)_minmax(0,1fr)_minmax(0,1.15fr)_minmax(0,1.45fr)] items-center border-b border-[#f0f0ec] px-[10px] text-left transition last:border-b-0 ${selected
-                        ? "bg-[#E4DA72]/20"
-                        : "bg-white hover:bg-slate-50"
-                        }`}
+                      className={`grid min-h-[44px] w-full grid-cols-[minmax(0,2.7fr)_minmax(0,1.8fr)_minmax(0,1.25fr)_minmax(0,1fr)_minmax(0,1.15fr)_minmax(0,1.45fr)] items-center border-b border-[#f0f0ec] px-[10px] text-left transition last:border-b-0 ${
+                        selected 
+                          ? "bg-[#E4DA72]/20" 
+                          : page.status !== "Published" 
+                            ? "bg-rose-50/60 hover:bg-rose-100/60" 
+                            : "bg-white hover:bg-slate-50"
+                      }`}
                     >
 
                       {/* TITLE */}
@@ -744,17 +770,17 @@ export default function PagesCmsPage() {
                         <span
                           className={`inline-flex max-w-full items-center gap-[4px] whitespace-nowrap rounded-[4px] px-[6px] py-[3px] text-[7px] font-semibold ${page.status === "Published"
                             ? "bg-[#edf6ee] text-[#327d50]"
-                            : "bg-[#fff3de] text-[#bf8120]"
+                            : "bg-rose-50 text-rose-700"
                             }`}
                         >
                           <span
                             className={`h-[4px] w-[4px] rounded-full ${page.status === "Published"
                               ? "bg-[#308052]"
-                              : "bg-[#e59b28]"
+                              : "bg-rose-600"
                               }`}
                           />
 
-                          {page.status}
+                          {page.status === "Published" ? "Active" : "Inactive"}
                         </span>
                       </div>
 
@@ -920,9 +946,21 @@ export default function PagesCmsPage() {
             {/* SELECTED PAGE */}
 
             <div className="h-[160px] shrink-0 border-b border-[#ebebe7] px-[13px] py-[10px]">
-              <p className="text-[8px] font-bold uppercase tracking-[0.02em] text-[#BE1A1A]">
-                SELECTED PAGE
-              </p>
+              <div className="flex items-center justify-between">
+                <p className="text-[8px] font-bold uppercase tracking-[0.02em] text-[#BE1A1A]">
+                  SELECTED PAGE
+                </p>
+
+                <label className="relative inline-block h-[24px] w-[42px] cursor-pointer">
+                  <input
+                    type="checkbox"
+                    className="peer sr-only"
+                    checked={selectedPage.status === "Published"}
+                    onChange={(e) => handleToggleStatus(e.target.checked)}
+                  />
+                  <span className="absolute inset-0 rounded-[30px] border border-[#ccc] bg-red-500 transition-all duration-400 peer-checked:border-transparent peer-checked:bg-[#5fdd54] before:absolute before:left-[1px] before:top-[1px] before:h-[20px] before:w-[20px] before:rounded-full before:bg-white before:shadow-[0_2px_5px_#999999] before:content-[''] before:transition-all before:duration-400 peer-checked:before:translate-x-[18px]"></span>
+                </label>
+              </div>
 
               <div className="mt-[8px] flex items-start gap-[10px]">
                 <div className="grid h-[42px] w-[42px] shrink-0 place-items-center rounded-full bg-[#edf5eb] text-[#24774b]">
@@ -1063,7 +1101,7 @@ export default function PagesCmsPage() {
 
                 <div className="grid h-[190px] shrink-0 grid-cols-[140px_1fr] border-b border-[#ebebe7]">
                   <div className="flex flex-col items-center justify-center border-r border-[#ebebe7] px-[10px]">
-                    <p className="mb-[5px] w-full text-left text-[8px] font-semibold text-[#59647a]">
+                    <p className="mb-[5px] w-full text-left text-[8px] font-semibold text-[#BE1A1A]">
                       SEO Score
                     </p>
 
@@ -1122,17 +1160,20 @@ export default function PagesCmsPage() {
                   {/* TITLE */}
 
                   <div className="mt-[6px]">
-                    <p className="text-[7.5px] font-semibold text-[#687386]">
+                    <p className="text-[7.5px] font-semibold text-black">
                       SEO Title
                     </p>
 
                     <div className="mt-[3px] flex items-end justify-between gap-[8px]">
-                      <p className="text-[7.5px] font-medium leading-[1.3] text-[#465168]">
+                      <p className="text-[7.5px] font-medium leading-[1.3] text-[#4B1426]">
                         {selectedPage.seo?.metaTitle || "Not added yet"}
                       </p>
 
-                      <span className="shrink-0 text-[6.8px] font-medium text-[#737d8e]">
-                        {selectedPage.seo?.metaTitle?.length ?? 0} / 60
+                      <span className="shrink-0 text-[6.8px] font-semibold">
+                        <span className={(selectedPage.seo?.metaTitle?.length || 0) > 60 ? "text-rose-600" : "text-[#37805a]"}>
+                          {selectedPage.seo?.metaTitle?.length ?? 0}
+                        </span>
+                        <span className="text-rose-600"> / 60</span>
                       </span>
                     </div>
                   </div>
@@ -1140,7 +1181,7 @@ export default function PagesCmsPage() {
                   {/* DESCRIPTION */}
 
                   <div className="mt-[5px] border-t border-[#f0f0ec] pt-[5px]">
-                    <p className="text-[7.5px] font-semibold text-[#687386]">
+                    <p className="text-[7.5px] font-semibold text-black">
                       Meta Description
                     </p>
 
@@ -1148,27 +1189,30 @@ export default function PagesCmsPage() {
                       {selectedPage.seo?.metaDescription || "Not added yet"}
                     </p>
 
-                    <p className="mt-[2px] text-right text-[6.8px] font-semibold text-[#37805a]">
-                      {selectedPage.seo?.metaDescription?.length ?? 0} / 160
+                    <p className="mt-[2px] text-right text-[6.8px] font-semibold">
+                      <span className={(selectedPage.seo?.metaDescription?.length || 0) > 160 ? "text-rose-600" : "text-[#37805a]"}>
+                        {selectedPage.seo?.metaDescription?.length ?? 0}
+                      </span>
+                      <span className="text-rose-600"> / 160</span>
                     </p>
                   </div>
 
                   {/* KEYWORD */}
 
                   <div className="mt-[5px] border-t border-[#f0f0ec] pt-[5px]">
-                    <p className="text-[7.5px] font-semibold text-[#687386]">
+                    <p className="text-[7.5px] font-semibold text-black">
                       Focus Keyword
                     </p>
 
-                    <span className="mt-[3px] inline-flex rounded-full bg-[#f2f3f1] px-[7px] py-[3px] text-[6.8px] font-medium text-[#626b7a]">
+                    <p className="mt-[3px] text-[7.2px] font-medium leading-[1.3] text-[#626b7a]">
                       {selectedPage.seo?.metaKeywords || "Not added yet"}
-                    </span>
+                    </p>
                   </div>
 
                   {/* CANONICAL */}
 
                   <div className="mt-[5px] border-t border-[#f0f0ec] pt-[5px]">
-                    <p className="text-[7.5px] font-semibold text-[#687386]">
+                    <p className="text-[7.5px] font-semibold text-black">
                       Canonical URL
                     </p>
 
@@ -1187,7 +1231,7 @@ export default function PagesCmsPage() {
                   {/* INDEX */}
 
                   <div className="mt-[5px] flex min-h-[22px] items-center justify-between border-t border-[#f0f0ec] pt-[4px]">
-                    <span className="text-[7.5px] font-semibold text-[#687386]">
+                    <span className="text-[7.5px] font-semibold text-black">
                       Index Status
                     </span>
 
@@ -1199,7 +1243,7 @@ export default function PagesCmsPage() {
                   {/* ROBOTS */}
 
                   <div className="flex min-h-[22px] items-center justify-between border-t border-[#f0f0ec]">
-                    <span className="text-[7.5px] font-semibold text-[#687386]">
+                    <span className="text-[7.5px] font-semibold text-black">
                       Robots
                     </span>
 
@@ -1298,6 +1342,28 @@ export default function PagesCmsPage() {
           </aside>
         </div>
       </div>
+
+      {/* CUSTOM TOAST ALERT */}
+      {toastMessage && (
+        <div className={`fixed right-6 top-8 z-50 flex items-center gap-[12px] rounded-[8px] px-[16px] py-[12px] shadow-lg ring-1 transition-all duration-300 animate-in fade-in slide-in-from-top-8 ${
+          toastMessage.type === "success" 
+            ? "bg-emerald-50 text-emerald-700 ring-emerald-200" 
+            : "bg-rose-50 text-rose-700 ring-rose-200"
+        }`}>
+          <div className={`grid h-[24px] w-[24px] shrink-0 place-items-center rounded-full bg-white shadow-sm ${
+            toastMessage.type === "success" ? "text-emerald-600" : "text-rose-600"
+          }`}>
+            {toastMessage.type === "success" ? (
+              <CheckCircle2 className="h-[14px] w-[14px]" strokeWidth={2.5} />
+            ) : (
+              <X className="h-[14px] w-[14px]" strokeWidth={2.5} />
+            )}
+          </div>
+          <p className="text-[12.5px] font-semibold">
+            {toastMessage.title}
+          </p>
+        </div>
+      )}
     </div>
   );
 }
