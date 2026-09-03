@@ -7,6 +7,7 @@ import {
   ArrowRight,
   CheckCircle2,
   ChevronDown,
+  CircleGauge,
   ChevronLeft,
   ChevronRight,
   ChevronsLeft,
@@ -16,8 +17,11 @@ import {
   FileText,
   Filter,
   Home,
+  ImageIcon,
   Layers,
+  Link2,
   MoreVertical,
+  MousePointerClick,
   Pencil,
   Plus,
   Search,
@@ -37,6 +41,7 @@ import {
   type PageType,
 } from "@/lib/cmsPages";
 import { settingsApi } from "@/lib/settingsApi";
+import { useAppSelector } from "@/store/hooks";
 
 /* =========================================================
    TYPES
@@ -96,8 +101,8 @@ function LargeSeoRing({
     <div
       className="relative grid h-[108px] w-[108px] shrink-0 place-items-center rounded-full"
       style={{
-        background: score >= 100 
-          ? "#2563eb" 
+        background: score >= 100
+          ? "#2563eb"
           : `conic-gradient(
               #2563eb 0deg ${score * 3.6}deg,
               #e2e8f0 ${score * 3.6}deg 360deg
@@ -223,6 +228,7 @@ function FilterSelect({
 
 export default function PagesCmsPage() {
   const router = useRouter();
+  const admin = useAppSelector((state) => state.auth.admin);
   const [pages, setPages] = useState<CmsPage[]>([]);
   const [totalSections, setTotalSections] = useState(0);
   const [search, setSearch] = useState("");
@@ -238,10 +244,11 @@ export default function PagesCmsPage() {
 
   const [selectedPageValue, setSelectedPage] = useState<CmsPage | null>(null);
   const selectedPage = selectedPageValue ?? pages[0] ?? cmsPages[0];
+  const loggedInAdminName = admin?.name?.trim() || "Admin User";
 
   const [rawSettings, setRawSettings] = useState<Record<string, any> | null>(null);
 
-  const [toastMessage, setToastMessage] = useState<{title: string; type: "success" | "error"} | null>(null);
+  const [toastMessage, setToastMessage] = useState<{ title: string; type: "success" | "error" } | null>(null);
 
   const handleToggleStatus = (isActive: boolean) => {
     const newStatus = isActive ? "Published" : "Draft";
@@ -250,12 +257,12 @@ export default function PagesCmsPage() {
 
     if (isActive) {
       setToastMessage({
-        title: "Success! The page has been set to Active and is now live.",
+        title: "Success! The page has been published and is now live.",
         type: "success"
       });
     } else {
       setToastMessage({
-        title: "Notice: The page has been set to Inactive and moved to drafts.",
+        title: "Notice: The page has been unpublished and moved to drafts.",
         type: "error"
       });
     }
@@ -287,6 +294,20 @@ export default function PagesCmsPage() {
   }, []);
 
   const selectedPageConfig = selectedPage.configKey && rawSettings ? rawSettings[selectedPage.configKey] : undefined;
+
+  const selectedPageIsPublished = selectedPage.status === "Published";
+  const selectedPageIsActive =
+    selectedPageIsPublished && selectedPageConfig?.enabled !== false;
+
+  const selectedPagePublicUrl = `${PUBLIC_SITE_URL.replace(/\/+$/, "")}${selectedPage.slug === "/"
+    ? "/"
+    : selectedPage.slug.startsWith("/")
+      ? selectedPage.slug
+      : `/${selectedPage.slug}`
+    }`;
+
+  const selectedPageSections: Array<Record<string, any>> =
+    selectedPageConfig?.sections ?? [];
 
   const selectedPageHasInternalLinks = Boolean(
     selectedPageConfig?.sections?.some((section: Record<string, any>) => {
@@ -402,7 +423,7 @@ export default function PagesCmsPage() {
   ]);
 
   const publishedCount = pages.filter((page) => page.status === "Published").length;
-  const draftCount = pages.filter((page) => page.status === "Draft").length;
+  const draftCount = Math.max(0, pages.length - publishedCount);
   const averageSeo = pages.length ? Math.round(pages.reduce((sum, page) => sum + page.seoScore, 0) / pages.length) : 0;
   const averageSeoRating = averageSeo >= 90 ? "Excellent" : averageSeo >= 75 ? "Good" : averageSeo >= 50 ? "Needs Work" : "Poor";
   const averageSeoColor = averageSeo >= 75 ? "#1a864d" : averageSeo >= 50 ? "#d99b18" : "#c0392b";
@@ -429,7 +450,7 @@ export default function PagesCmsPage() {
     {
       title: "DRAFT PAGES",
       value: draftCount.toString(),
-      note: "Unpublished",
+      note: `Unpublished: ${draftCount}`,
       icon: Pencil,
       tone: "amber",
       gradient: "linear-gradient(135deg, #ffffff 0%, #ffffff 55%, #fffdf0 100%)",
@@ -560,10 +581,9 @@ export default function PagesCmsPage() {
                         </p>
 
                         <div className="mt-1.5 flex items-end gap-1">
-                          <span 
-                            className={`!font-semibold tracking-[-0.04em] ${
-                              item.title === "LAST UPDATED" ? "text-[11px] leading-[1.2]" : "text-[17px] leading-none"
-                            }`} 
+                          <span
+                            className={`!font-semibold tracking-[-0.04em] ${item.title === "LAST UPDATED" ? "text-[11px] leading-[1.2]" : "text-[17px] leading-none"
+                              }`}
                             style={{ color: item.numColor, fontWeight: 600 }}
                           >
                             {item.value}
@@ -660,7 +680,7 @@ export default function PagesCmsPage() {
                 TABLE
             ============================================= */}
 
-            <div 
+            <div
               className="mt-[13px] flex min-h-0 flex-1 flex-col overflow-hidden rounded-[7px] bg-white"
               style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px" }}
             >
@@ -716,13 +736,12 @@ export default function PagesCmsPage() {
                           setActionMenu(null);
                         }
                       }}
-                      className={`grid min-h-[44px] w-full grid-cols-[minmax(0,2.7fr)_minmax(0,1.8fr)_minmax(0,1.25fr)_minmax(0,1fr)_minmax(0,1.15fr)_minmax(0,1.45fr)] items-center border-b border-[#f0f0ec] px-[10px] text-left transition last:border-b-0 ${
-                        selected 
-                          ? "bg-[#E4DA72]/20" 
-                          : page.status !== "Published" 
-                            ? "bg-rose-50/60 hover:bg-rose-100/60" 
-                            : "bg-white hover:bg-slate-50"
-                      }`}
+                      className={`grid min-h-[44px] w-full grid-cols-[minmax(0,2.7fr)_minmax(0,1.8fr)_minmax(0,1.25fr)_minmax(0,1fr)_minmax(0,1.15fr)_minmax(0,1.45fr)] items-center border-b border-[#f0f0ec] px-[10px] text-left transition last:border-b-0 ${selected
+                        ? "bg-[#E4DA72]/20"
+                        : page.status !== "Published"
+                          ? "bg-rose-50/60 hover:bg-rose-100/60"
+                          : "bg-white hover:bg-slate-50"
+                        }`}
                     >
 
                       {/* TITLE */}
@@ -945,32 +964,55 @@ export default function PagesCmsPage() {
 
             {/* SELECTED PAGE */}
 
-            <div className="h-[160px] shrink-0 border-b border-[#ebebe7] px-[13px] py-[10px]">
+            <div className="h-[170px] shrink-0 border-b border-[#ebebe7] px-[13px] py-[8px]">
               <div className="flex items-center justify-between">
                 <p className="text-[8px] font-bold uppercase tracking-[0.02em] text-[#BE1A1A]">
                   SELECTED PAGE
                 </p>
 
-                <label className="relative inline-block h-[24px] w-[42px] cursor-pointer">
-                  <input
-                    type="checkbox"
-                    className="peer sr-only"
-                    checked={selectedPage.status === "Published"}
-                    onChange={(e) => handleToggleStatus(e.target.checked)}
-                  />
-                  <span className="absolute inset-0 rounded-[30px] border border-[#ccc] bg-red-500 transition-all duration-400 peer-checked:border-transparent peer-checked:bg-[#5fdd54] before:absolute before:left-[1px] before:top-[1px] before:h-[20px] before:w-[20px] before:rounded-full before:bg-white before:shadow-[0_2px_5px_#999999] before:content-[''] before:transition-all before:duration-400 peer-checked:before:translate-x-[18px]"></span>
-                </label>
+                <div className="flex items-center gap-[5px]">
+                  <span
+                    className={`inline-flex items-center gap-[4px] rounded-full px-[7px] py-[3px] text-[7px] font-bold ${selectedPageIsActive
+                      ? "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-100"
+                      : "bg-rose-50 text-rose-700 ring-1 ring-rose-100"
+                      }`}
+                  >
+                    <span
+                      className={`h-[5px] w-[5px] rounded-full ${selectedPageIsActive ? "bg-emerald-500" : "bg-rose-500"
+                        }`}
+                    />
+                    {selectedPageIsActive ? "Active" : "Inactive"}
+                  </span>
+
+                  <span
+                    className={`inline-flex items-center gap-[4px] rounded-full px-[7px] py-[3px] text-[7px] font-bold ${selectedPageIsPublished
+                      ? "bg-blue-50 text-blue-700 ring-1 ring-blue-100"
+                      : "bg-amber-50 text-amber-700 ring-1 ring-amber-100"
+                      }`}
+                  >
+                    {selectedPageIsPublished ? "Published" : "Not Published"}
+                  </span>
+
+                  <label className="relative ml-[2px] inline-block h-[24px] w-[42px] cursor-pointer">
+                    <input
+                      type="checkbox"
+                      className="peer sr-only"
+                      checked={selectedPageIsPublished}
+                      onChange={(e) => handleToggleStatus(e.target.checked)}
+                    />
+                    <span className="absolute inset-0 rounded-[30px] border border-[#ccc] bg-red-500 transition-all duration-300 peer-checked:border-transparent peer-checked:bg-[#5fdd54] before:absolute before:left-[1px] before:top-[1px] before:h-[20px] before:w-[20px] before:rounded-full before:bg-white before:shadow-[0_2px_5px_#999999] before:content-[''] before:transition-all before:duration-300 peer-checked:before:translate-x-[18px]" />
+                  </label>
+                </div>
               </div>
 
-              <div className="mt-[8px] flex items-start gap-[10px]">
+              <div className="mt-[6px] flex items-start gap-[10px]">
                 <div className="grid h-[42px] w-[42px] shrink-0 place-items-center rounded-full bg-[#edf5eb] text-[#24774b]">
                   {selectedPage.type === "home" ? (
                     <Home
                       className="h-[17px] w-[17px]"
                       strokeWidth={1.7}
                     />
-                  ) : selectedPage.type ===
-                    "people" ? (
+                  ) : selectedPage.type === "people" ? (
                     <UsersRound
                       className="h-[16px] w-[16px]"
                       strokeWidth={1.7}
@@ -985,40 +1027,50 @@ export default function PagesCmsPage() {
 
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-[6px]">
-                    <h3 className="text-[11.5px] font-bold text-[#293681]">
+                    <h3 className="truncate text-[11.5px] font-bold text-[#293681]">
                       {selectedPage.title}
                     </h3>
 
-                    {selectedPage.type ===
-                      "home" && (
-                        <span className="rounded-[4px] bg-[#edf5eb] px-[6px] py-[2px] text-[7px] font-semibold text-[#3b7b56]">
-                          Homepage
-                        </span>
-                      )}
+                    {selectedPage.type === "home" && (
+                      <span className="shrink-0 rounded-[4px] bg-[#edf5eb] px-[6px] py-[2px] text-[7px] font-semibold text-[#3b7b56]">
+                        Homepage
+                      </span>
+                    )}
                   </div>
 
-                  <div className="mt-[5px] flex items-center gap-[4px]">
-                    <span className="text-[8px] font-medium text-[#4B1426]">
-                      {selectedPage.slug}
-                    </span>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      window.open(
+                        selectedPagePublicUrl,
+                        "_blank",
+                        "noopener,noreferrer",
+                      )
+                    }
+                    className="mt-[4px] flex max-w-full items-center gap-[4px] text-left text-[12px] font-semibold text-blue-600 transition hover:text-blue-700 hover:underline"
+                    title={selectedPagePublicUrl}
+                  >
+                    <span className="truncate">{selectedPagePublicUrl}</span>
 
                     <ExternalLink
-                      className="h-[9px] w-[9px] text-[#7a8495]"
+                      className="h-[12px] w-[12px] shrink-0"
                       strokeWidth={1.7}
                     />
+                  </button>
+
+                  <div className="mt-[4px] flex items-center justify-between gap-[8px]">
+                    <p className="truncate text-[10px] font-semibold text-[#17433F]">
+                      Last updated {selectedPage.updated}
+                    </p>
+
+                    <p className="shrink-0 text-[10px] font-medium text-[#BE1A1A]">
+                      by {loggedInAdminName}
+                    </p>
                   </div>
-
-                  <p className="mt-[5px] text-[7.8px] font-semibold text-[#17433F]">
-                    Last updated {selectedPage.updated}
-                  </p>
-
-                  <p className="mt-[3px] text-[7.8px] font-medium text-[#BE1A1A]">
-                    by {selectedPage.author}
-                  </p>
                 </div>
               </div>
 
-              <div className="mt-[9px] grid grid-cols-2 gap-[7px]">
+              <div className="mt-[7px] grid grid-cols-2 gap-[7px]">
                 <button
                   type="button"
                   onClick={() =>
@@ -1042,7 +1094,7 @@ export default function PagesCmsPage() {
                   type="button"
                   onClick={() =>
                     window.open(
-                      `/pages/${getCmsPageRouteKey(selectedPage)}`,
+                      selectedPagePublicUrl,
                       "_blank",
                       "noopener,noreferrer",
                     )
@@ -1054,14 +1106,14 @@ export default function PagesCmsPage() {
                     strokeWidth={1.7}
                   />
 
-                  View Page
+                  View Live Page
                 </button>
               </div>
             </div>
 
             {/* TABS */}
 
-            <div className="grid h-[38px] shrink-0 grid-cols-4 border-b border-[#ebebe7]">
+            <div className="grid h-[32px] shrink-0 grid-cols-4 border-b border-[#ebebe7]">
               {(
                 [
                   "SEO",
@@ -1260,34 +1312,150 @@ export default function PagesCmsPage() {
             ============================================= */}
 
             {activeTab === "Content" && (
-              <div className="min-h-0 flex-1 p-[13px]">
-                <h3 className="text-[12px] font-bold text-[#364055]">
-                  Content Overview
-                </h3>
+              <div className="min-h-0 flex-1 overflow-y-auto p-[13px]">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-[11px] font-bold text-[#26324a]">
+                      Content Overview
+                    </h3>
+                    <p className="mt-[2px] text-[7.5px] font-medium text-[#7a8391]">
+                      Live content structure for {selectedPage.title}
+                    </p>
+                  </div>
 
-                <div className="mt-[11px] grid grid-cols-2 gap-[8px]">
+                  <span className="rounded-full bg-[#eef2ff] px-[8px] py-[4px] text-[7px] font-bold text-[#293681]">
+                    {contentStats.sections} Sections
+                  </span>
+                </div>
+
+                <div className="mt-[10px] grid grid-cols-2 gap-[7px]">
                   {[
-                    ["Sections", String(contentStats.sections)],
-                    ["Text Blocks", String(contentStats.textBlocks)],
-                    ["Images", String(contentStats.images)],
-                    ["CTA Blocks", String(contentStats.ctaBlocks)],
-                  ].map(([label, value]) => (
-                    <div
-                      key={label}
-                      className="flex flex-col overflow-hidden rounded-[7px] border border-[#e5e7e6] bg-white p-[11px]"
-                      style={{
-                        boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px",
-                      }}
-                    >
-                      <p className="truncate text-[8.5px] font-semibold tracking-[0.01em] text-slate-900">
-                        {label}
-                      </p>
+                    {
+                      label: "Sections",
+                      value: String(contentStats.sections),
+                      icon: Layers,
+                      iconClass: "bg-blue-50 text-blue-700",
+                    },
+                    {
+                      label: "Text Blocks",
+                      value: String(contentStats.textBlocks),
+                      icon: FileText,
+                      iconClass: "bg-violet-50 text-violet-700",
+                    },
+                    {
+                      label: "Images",
+                      value: String(contentStats.images),
+                      icon: ImageIcon,
+                      iconClass: "bg-emerald-50 text-emerald-700",
+                    },
+                    {
+                      label: "CTA Blocks",
+                      value: String(contentStats.ctaBlocks),
+                      icon: MousePointerClick,
+                      iconClass: "bg-amber-50 text-amber-700",
+                    },
+                  ].map((item) => {
+                    const Icon = item.icon;
 
-                      <p className="mt-[4px] text-[21px] font-semibold leading-none tracking-[-0.04em] text-slate-900">
-                        {value}
-                      </p>
+                    return (
+                      <div
+                        key={item.label}
+                        className="flex items-center gap-[8px] rounded-[7px] border border-[#e7e9e6] bg-white p-[9px]"
+                        style={{
+                          boxShadow:
+                            "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.07) 0px 0px 0px 1px",
+                        }}
+                      >
+                        <div
+                          className={`grid h-[28px] w-[28px] shrink-0 place-items-center rounded-[7px] ${item.iconClass}`}
+                        >
+                          <Icon
+                            className="h-[13px] w-[13px]"
+                            strokeWidth={1.8}
+                          />
+                        </div>
+
+                        <div className="min-w-0">
+                          <p className="truncate text-[7.5px] font-semibold text-[#667085]">
+                            {item.label}
+                          </p>
+
+                          <p className="mt-[2px] text-[16px] font-bold leading-none text-[#182238]">
+                            {item.value}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <div className="mt-[10px] rounded-[8px] border border-[#e8e9e5] bg-[#fbfcfa]">
+                  <div className="flex items-center justify-between border-b border-[#eceeea] px-[10px] py-[7px]">
+                    <div className="flex items-center gap-[6px]">
+                      <Layers className="h-[11px] w-[11px] text-[#293681]" />
+
+                      <span className="text-[8px] font-bold text-[#344054]">
+                        Page Sections
+                      </span>
                     </div>
-                  ))}
+
+                    <span className="text-[7px] font-semibold text-[#7a8391]">
+                      {selectedPageSections.length} total
+                    </span>
+                  </div>
+
+                  <div className="max-h-[150px] overflow-y-auto px-[10px] py-[4px]">
+                    {selectedPageSections.length > 0 ? (
+                      selectedPageSections.map((section, index) => {
+                        const sectionLabel =
+                          section.title ||
+                          section.heading ||
+                          section.name ||
+                          section.key ||
+                          `Section ${index + 1}`;
+
+                        const isEnabled = section.enabled !== false;
+
+                        return (
+                          <div
+                            key={String(
+                              section._id ??
+                              section.key ??
+                              `${sectionLabel}-${index}`,
+                            )}
+                            className="flex items-center justify-between gap-[8px] border-b border-[#efefec] py-[6px] last:border-b-0"
+                          >
+                            <div className="flex min-w-0 items-center gap-[7px]">
+                              <span className="grid h-[18px] w-[18px] shrink-0 place-items-center rounded-full bg-[#eef2ff] text-[6.5px] font-bold text-[#293681]">
+                                {index + 1}
+                              </span>
+
+                              <span className="truncate text-[7.8px] font-semibold text-[#475467]">
+                                {String(sectionLabel)}
+                              </span>
+                            </div>
+
+                            <span
+                              className={`shrink-0 rounded-full px-[6px] py-[2px] text-[6.5px] font-bold ${isEnabled
+                                ? "bg-emerald-50 text-emerald-700"
+                                : "bg-slate-100 text-slate-500"
+                                }`}
+                            >
+                              {isEnabled ? "Visible" : "Hidden"}
+                            </span>
+                          </div>
+                        );
+                      })
+                    ) : (
+                      <div className="py-[18px] text-center">
+                        <FileText className="mx-auto h-[18px] w-[18px] text-slate-300" />
+
+                        <p className="mt-[5px] text-[7.5px] font-medium text-[#8a93a2]">
+                          No sections available for this page.
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             )}
@@ -1297,14 +1465,114 @@ export default function PagesCmsPage() {
             ============================================= */}
 
             {activeTab === "Performance" && (
-              <div className="min-h-0 flex-1 p-[13px]">
-                <h3 className="text-[12px] font-bold text-[#364055]">
-                  Page Performance
-                </h3>
+              <div className="min-h-0 flex-1 overflow-y-auto p-[13px]">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-[11px] font-bold text-[#26324a]">
+                      Page Performance
+                    </h3>
 
-                <p className="mt-[11px] text-[9px] font-medium leading-[1.5] text-[#7a8391]">
-                  Real Core Web Vitals (LCP, INP, CLS) aren&apos;t tracked yet — this needs a real-user-monitoring or Lighthouse integration on the backend, which doesn&apos;t exist currently. Not showing placeholder numbers here to avoid implying this is measured.
-                </p>
+                    <p className="mt-[2px] text-[7.5px] font-medium text-[#7a8391]">
+                      Measurement readiness for this page
+                    </p>
+                  </div>
+
+                  <span className="rounded-full bg-amber-50 px-[8px] py-[4px] text-[7px] font-bold text-amber-700 ring-1 ring-amber-100">
+                    Live Metrics Not Connected
+                  </span>
+                </div>
+
+                <div className="mt-[10px] grid grid-cols-3 gap-[7px]">
+                  {[
+                    ["LCP", "—", "Not Connected"],
+                    ["INP", "—", "Not Connected"],
+                    ["CLS", "—", "Not Connected"],
+                  ].map(([label, value, status]) => (
+                    <div
+                      key={label}
+                      className="rounded-[7px] border border-[#e7e9e6] bg-white px-[9px] py-[10px]"
+                      style={{
+                        boxShadow:
+                          "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.07) 0px 0px 0px 1px",
+                      }}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-[7.5px] font-bold text-[#667085]">
+                          {label}
+                        </span>
+
+                        <CircleGauge className="h-[11px] w-[11px] text-[#98a2b3]" />
+                      </div>
+
+                      <p className="mt-[6px] text-[18px] font-bold leading-none text-[#182238]">
+                        {value}
+                      </p>
+
+                      <p className="mt-[5px] text-[6.8px] font-semibold text-amber-700">
+                        {status}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-[10px] grid grid-cols-2 gap-[7px]">
+                  <div className="rounded-[8px] border border-[#dbeafe] bg-[#eff6ff] p-[10px]">
+                    <div className="flex items-center gap-[7px]">
+                      <TrendingUp className="h-[13px] w-[13px] text-blue-700" />
+
+                      <p className="text-[8px] font-bold text-blue-900">
+                        SEO Readiness
+                      </p>
+                    </div>
+
+                    <p className="mt-[6px] text-[18px] font-bold leading-none text-blue-900">
+                      {selectedPage.seoScore}
+
+                      <span className="ml-[2px] text-[7px] font-semibold text-blue-600">
+                        /100
+                      </span>
+                    </p>
+
+                    <p className="mt-[5px] text-[7px] font-semibold text-blue-700">
+                      {selectedPage.rating}
+                    </p>
+                  </div>
+
+                  <div className="rounded-[8px] border border-[#dcfce7] bg-[#f0fdf4] p-[10px]">
+                    <div className="flex items-center gap-[7px]">
+                      <Link2 className="h-[13px] w-[13px] text-emerald-700" />
+
+                      <p className="text-[8px] font-bold text-emerald-900">
+                        Internal Links
+                      </p>
+                    </div>
+
+                    <p className="mt-[6px] text-[12px] font-bold leading-none text-emerald-900">
+                      {selectedPageHasInternalLinks ? "Detected" : "Not Detected"}
+                    </p>
+
+                    <p className="mt-[6px] text-[7px] font-semibold text-emerald-700">
+                      Based on current CMS content
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-[10px] rounded-[8px] border border-amber-200 bg-amber-50/70 p-[10px]">
+                  <div className="flex items-start gap-[8px]">
+                    <Clock className="mt-[1px] h-[13px] w-[13px] shrink-0 text-amber-700" />
+
+                    <div>
+                      <p className="text-[8px] font-bold text-amber-900">
+                        Core Web Vitals integration required
+                      </p>
+
+                      <p className="mt-[3px] text-[7.3px] font-medium leading-[1.45] text-amber-800">
+                        LCP, INP and CLS are not currently stored per page by the backend.
+                        Connect Lighthouse, PageSpeed or real-user monitoring to show measured values here.
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
 
@@ -1313,29 +1581,116 @@ export default function PagesCmsPage() {
             ============================================= */}
 
             {activeTab === "History" && (
-              <div className="min-h-0 flex-1 p-[13px]">
-                <h3 className="text-[12px] font-bold text-[#364055]">
-                  Page History
-                </h3>
+              <div className="min-h-0 flex-1 overflow-y-auto p-[13px]">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-[11px] font-bold text-[#26324a]">
+                      Page History
+                    </h3>
 
-                <div className="mt-[11px] space-y-[9px]">
-                  <div className="flex gap-[7px] border-b border-[#eeeeea] pb-[8px]">
-                    <span className="mt-[4px] h-[6px] w-[6px] shrink-0 rounded-full bg-[#b68a28]" />
+                    <p className="mt-[2px] text-[7.5px] font-medium text-[#7a8391]">
+                      Latest known activity for {selectedPage.title}
+                    </p>
+                  </div>
 
-                    <div>
-                      <p className="text-[8px] font-semibold text-[#465168]">
-                        Last updated by {selectedPage.updatedBy}
-                      </p>
+                  <span
+                    className={`rounded-full px-[8px] py-[4px] text-[7px] font-bold ${selectedPageIsPublished
+                      ? "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-100"
+                      : "bg-amber-50 text-amber-700 ring-1 ring-amber-100"
+                      }`}
+                  >
+                    {selectedPageIsPublished ? "Published" : "Draft"}
+                  </span>
+                </div>
 
-                      <p className="mt-[2px] text-[7px] font-normal text-[#7a8391]">
-                        {selectedPage.updated}
-                      </p>
-                    </div>
+                <div className="mt-[12px] rounded-[8px] border border-[#e8e9e5] bg-white p-[10px]">
+                  <div className="relative pl-[20px]">
+                    <span className="absolute left-[4px] top-[4px] h-[8px] w-[8px] rounded-full bg-[#293681] ring-[3px] ring-[#eef2ff]" />
+
+                    <span className="absolute bottom-[-20px] left-[7px] top-[14px] w-px bg-[#e4e7ec]" />
+
+                    <p className="text-[8px] font-bold text-[#344054]">
+                      Page updated
+                    </p>
+
+                    <p className="mt-[3px] text-[7.2px] font-medium text-[#667085]">
+                      {selectedPage.updated}
+                    </p>
+
+                    <p className="mt-[2px] text-[7px] font-semibold text-[#BE1A1A]">
+                      by {loggedInAdminName}
+                    </p>
+                  </div>
+
+                  <div className="relative mt-[18px] pl-[20px]">
+                    <span
+                      className={`absolute left-[4px] top-[4px] h-[8px] w-[8px] rounded-full ring-[3px] ${selectedPageIsPublished
+                        ? "bg-emerald-500 ring-emerald-50"
+                        : "bg-amber-500 ring-amber-50"
+                        }`}
+                    />
+
+                    <p className="text-[8px] font-bold text-[#344054]">
+                      Current publishing state
+                    </p>
+
+                    <p
+                      className={`mt-[3px] text-[7.2px] font-semibold ${selectedPageIsPublished
+                        ? "text-emerald-700"
+                        : "text-amber-700"
+                        }`}
+                    >
+                      {selectedPageIsPublished
+                        ? "Published and available on the live site"
+                        : "Not published · stored as draft"}
+                    </p>
                   </div>
                 </div>
 
-                <p className="mt-[10px] text-[8.5px] font-medium leading-[1.5] text-[#7a8391]">
-                  Detailed per-change history isn&apos;t tracked yet — the backend only stores current page state, not a revision log. Only the last-updated timestamp above is real.
+                <div className="mt-[10px] rounded-[8px] border border-[#e8e9e5] bg-[#fbfcfa] p-[10px]">
+                  <div className="flex items-center justify-between gap-[8px]">
+                    <span className="text-[7.5px] font-semibold text-[#667085]">
+                      Live URL
+                    </span>
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        window.open(
+                          selectedPagePublicUrl,
+                          "_blank",
+                          "noopener,noreferrer",
+                        )
+                      }
+                      className="flex min-w-0 items-center gap-[4px] text-[7px] font-bold text-blue-600 hover:underline"
+                    >
+                      <span className="max-w-[190px] truncate">
+                        {selectedPagePublicUrl}
+                      </span>
+
+                      <ExternalLink className="h-[8px] w-[8px] shrink-0" />
+                    </button>
+                  </div>
+
+                  <div className="mt-[7px] flex items-center justify-between border-t border-[#eceeea] pt-[7px]">
+                    <span className="text-[7.5px] font-semibold text-[#667085]">
+                      Page state
+                    </span>
+
+                    <span
+                      className={`text-[7px] font-bold ${selectedPageIsActive
+                        ? "text-emerald-700"
+                        : "text-rose-700"
+                        }`}
+                    >
+                      {selectedPageIsActive ? "Active" : "Inactive"}
+                    </span>
+                  </div>
+                </div>
+
+                <p className="mt-[10px] text-[7.4px] font-medium leading-[1.45] text-[#8a93a2]">
+                  Detailed revision-by-revision history is not stored by the current backend,
+                  so this panel only shows the latest real update and current page state.
                 </p>
               </div>
             )}
@@ -1345,14 +1700,12 @@ export default function PagesCmsPage() {
 
       {/* CUSTOM TOAST ALERT */}
       {toastMessage && (
-        <div className={`fixed right-6 top-8 z-50 flex items-center gap-[12px] rounded-[8px] px-[16px] py-[12px] shadow-lg ring-1 transition-all duration-300 animate-in fade-in slide-in-from-top-8 ${
-          toastMessage.type === "success" 
-            ? "bg-emerald-50 text-emerald-700 ring-emerald-200" 
-            : "bg-rose-50 text-rose-700 ring-rose-200"
-        }`}>
-          <div className={`grid h-[24px] w-[24px] shrink-0 place-items-center rounded-full bg-white shadow-sm ${
-            toastMessage.type === "success" ? "text-emerald-600" : "text-rose-600"
+        <div className={`fixed right-6 top-8 z-50 flex items-center gap-[12px] rounded-[8px] px-[16px] py-[12px] shadow-lg ring-1 transition-all duration-300 animate-in fade-in slide-in-from-top-8 ${toastMessage.type === "success"
+          ? "bg-emerald-50 text-emerald-700 ring-emerald-200"
+          : "bg-rose-50 text-rose-700 ring-rose-200"
           }`}>
+          <div className={`grid h-[24px] w-[24px] shrink-0 place-items-center rounded-full bg-white shadow-sm ${toastMessage.type === "success" ? "text-emerald-600" : "text-rose-600"
+            }`}>
             {toastMessage.type === "success" ? (
               <CheckCircle2 className="h-[14px] w-[14px]" strokeWidth={2.5} />
             ) : (
