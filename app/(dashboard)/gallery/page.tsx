@@ -619,6 +619,30 @@ export default function MediaLibraryPage() {
                 </select>
               </div>
             </div>
+
+            {/* BOTTOM MESSAGE (Inside Left Column directly below table) */}
+            <div className="mt-[12px] flex min-h-[60px] items-center justify-between gap-[16px] rounded-[8px] border border-[#dce8df] bg-[linear-gradient(90deg,#eef7f1,#f7fbf8)] px-[16px] py-[12px]">
+              <div className="flex min-w-0 items-center gap-[12px]">
+                <ShieldCheck className="h-[24px] w-[24px] shrink-0 text-[#14683d]" />
+                <div className="min-w-0">
+                  <p className="text-[10.5px] font-extrabold text-[#274735]">
+                    Keep your media library organized!
+                  </p>
+                  <p className="mt-[2px] truncate text-[9px] font-semibold text-[#64748b]">
+                    Use folders, meaningful names and alt text for better performance and accessibility.
+                  </p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => router.push("/gallery/uploaded")}
+                className="inline-flex h-[36px] shrink-0 items-center gap-[8px] rounded-[6px] border border-[#d8e4dc] bg-white px-[14px] text-[9px] font-bold text-[#14683d] transition hover:bg-emerald-50"
+              >
+                Media Library Best Practices
+                <ChevronRight className="h-[13px] w-[13px]" />
+              </button>
+            </div>
           </div>
 
           {/* RIGHT SIDEBAR */}
@@ -788,30 +812,6 @@ export default function MediaLibraryPage() {
               </div>
             </section>
           </aside>
-        </section>
-
-        {/* BOTTOM MESSAGE */}
-        <section className="mt-[14px] flex min-h-[66px] items-center justify-between gap-[18px] rounded-[8px] border border-[#dce8df] bg-[linear-gradient(90deg,#eef7f1,#f7fbf8)] px-[18px]">
-          <div className="flex min-w-0 items-center gap-[12px]">
-            <ShieldCheck className="h-[28px] w-[28px] shrink-0 text-[#14683d]" />
-            <div className="min-w-0">
-              <p className="text-[11px] font-extrabold text-[#274735]">
-                Keep your media library organized!
-              </p>
-              <p className="mt-[4px] truncate text-[9.5px] font-semibold text-[#64748b]">
-                Use folders, meaningful names and alt text for better performance and accessibility.
-              </p>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => router.push("/gallery/uploaded")}
-            className="inline-flex h-[40px] shrink-0 items-center gap-[9px] rounded-[6px] border border-[#d8e4dc] bg-white px-[18px] text-[9.5px] font-bold text-[#14683d] transition hover:bg-emerald-50"
-          >
-            Media Library Best Practices
-            <ChevronRight className="h-[13px] w-[13px]" />
-          </button>
         </section>
       </div>
     </main>
