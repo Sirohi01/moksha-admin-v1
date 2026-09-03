@@ -21,6 +21,11 @@ export interface LiveDashboardOverview {
       growth: { posts: number | null; enquiriesMtd: number | null };
       recentSubmissions: Array<{ id: string; name: string; type: string; city?: string; createdAt: string }>;
       topLocations: Array<{ city: string; count: number }>;
+      donations: { total: number; mtd: number; totalAmount: number };
+      volunteers: { total: number; active: number };
+      cases: { total: number; open: number };
+      newsletter: { total: number; mtd: number };
+      campaigns: { total: number; active: number };
     }>;
     analytics: DashboardSource<{
       users: number;
