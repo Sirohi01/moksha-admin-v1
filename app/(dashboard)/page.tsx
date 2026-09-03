@@ -846,6 +846,7 @@ function RangeDropdown({
 ========================================================= */
 
 export default function DashboardPage() {
+  const [cachedPageSpeed, setCachedPageSpeed] = useState<LiveDashboardOverview["sources"]["pageSpeed"]["data"]>(null);
   const [
     liveDashboard,
     setLiveDashboard,
@@ -893,6 +894,23 @@ export default function DashboardPage() {
   ========================================================= */
 
   useEffect(() => {
+    try {
+      const stored = window.localStorage.getItem("moksha-dashboard-pagespeed");
+      if (stored) setCachedPageSpeed(JSON.parse(stored));
+    } catch {
+      // Ignore an invalid or unavailable browser cache.
+    }
+  }, []);
+
+  useEffect(() => {
+    const current = liveDashboard?.sources.pageSpeed;
+    if (current?.status === "connected" && current.data) {
+      setCachedPageSpeed(current.data);
+      window.localStorage.setItem("moksha-dashboard-pagespeed", JSON.stringify(current.data));
+    }
+  }, [liveDashboard?.sources.pageSpeed]);
+
+  useEffect(() => {
     let active = true;
 
     dashboardApi
@@ -920,10 +938,7 @@ export default function DashboardPage() {
   useEffect(() => {
     if (
       !liveDashboard ||
-      liveDashboard.sources
-        .pageSpeed
-        .status ===
-      "connected"
+      liveDashboard.sources.pageSpeed.data?.lighthouseAvailable === true
     ) {
       return;
     }
@@ -963,6 +978,8 @@ export default function DashboardPage() {
         10_000,
       );
 
+    void refresh();
+
     return () => {
       active = false;
 
@@ -971,8 +988,7 @@ export default function DashboardPage() {
       );
     };
   }, [
-    liveDashboard?.sources
-      .pageSpeed.status,
+    liveDashboard?.sources.pageSpeed.data?.lighthouseAvailable,
   ]);
 
   useEffect(() => {
@@ -1115,7 +1131,7 @@ export default function DashboardPage() {
 
   const pageSpeed =
     liveDashboard?.sources
-      .pageSpeed.data;
+      .pageSpeed.data ?? cachedPageSpeed;
 
   const indexCoverageSource =
     liveDashboard?.sources
@@ -2207,97 +2223,26 @@ export default function DashboardPage() {
                         "#0f172a",
                     }}
                   >
-                    {[
-                      [
-                        "SEO Score",
-
-                        pageSpeed
-                          ? `${pageSpeed.seoScore}/100`
-                          : "No Data",
-
-                        !!pageSpeed &&
-                        pageSpeed.seoScore >=
-                        90,
-                      ],
-
-                      [
-                        "Performance",
-
-                        pageSpeed
-                          ? `${pageSpeed.performanceScore}/100`
-                          : "No Data",
-
-                        !!pageSpeed &&
-                        pageSpeed.performanceScore >=
-                        90,
-                      ],
-
-                      [
-                        "LCP",
-
-                        pageSpeed?.lcp !=
-                          null
-                          ? `${(
-                            pageSpeed.lcp /
-                            1000
-                          ).toFixed(
-                            1,
-                          )}s`
-                          : "No Data",
-
-                        pageSpeed?.lcp !=
-                        null &&
-                        pageSpeed.lcp <=
-                        2500,
-                      ],
-
-                      [
-                        "INP",
-
-                        pageSpeed?.inp !=
-                          null
-                          ? `${Math.round(
-                            pageSpeed.inp,
-                          )}ms`
-                          : "No Data",
-
-                        pageSpeed?.inp !=
-                        null &&
-                        pageSpeed.inp <=
-                        200,
-                      ],
-
-                      [
-                        "CLS",
-
-                        pageSpeed?.cls !=
-                          null
-                          ? pageSpeed.cls.toFixed(
-                            2,
-                          )
-                          : "No Data",
-
-                        pageSpeed?.cls !=
-                        null &&
-                        pageSpeed.cls <=
-                        0.1,
-                      ],
-                    ].map(
-                      ([
-                        name,
-                        status,
-                        ok,
-                      ]) => (
+                    {(pageSpeed?.seoChecks ?? [
+                      { key: "meta-title", label: "Meta Title", status: "not_checked" as const },
+                      { key: "meta-description", label: "Meta Description", status: "not_checked" as const },
+                      { key: "headings", label: "Headings", status: "not_checked" as const },
+                      { key: "content-quality", label: "Content Quality", status: "not_checked" as const },
+                      { key: "internal-linking", label: "Internal Linking", status: "not_checked" as const },
+                      { key: "image-alt", label: "Images (ALT Text)", status: "not_checked" as const },
+                      { key: "schema-markup", label: "Schema Markup", status: "not_checked" as const },
+                      { key: "mobile-friendly", label: "Mobile Friendliness", status: "not_checked" as const },
+                      { key: "page-speed", label: "Page Speed", status: "not_checked" as const },
+                    ]).map(
+                      (check) => (
                         <div
-                          key={String(
-                            name,
-                          )}
+                          key={check.key}
                           className="grid grid-cols-[14px_1fr_auto] items-center gap-1"
                         >
-                          {ok ? (
+                          {check.status === "good" ? (
                             <CheckCircle2 className="h-3.5 w-3.5 text-emerald-700" />
                           ) : (
-                            <AlertCircle className="h-3.5 w-3.5 text-amber-500" />
+                            <AlertCircle className={`h-3.5 w-3.5 ${check.status === "needs_work" ? "text-amber-500" : "text-slate-400"}`} />
                           )}
 
                           <span
@@ -2309,21 +2254,23 @@ export default function DashboardPage() {
                               fontWeight: 500,
                             }}
                           >
-                            {String(
-                              name,
-                            )}
+                            {check.label}
                           </span>
 
                           <span
                             className={
-                              ok
+                              check.status === "good"
                                 ? "text-emerald-700"
-                                : "text-amber-500"
+                                : check.status === "needs_work"
+                                  ? "text-amber-500"
+                                  : "text-slate-400"
                             }
                           >
-                            {String(
-                              status,
-                            )}
+                            {check.status === "good"
+                              ? "Good"
+                              : check.status === "needs_work"
+                                ? "Needs Work"
+                                : "Not Checked"}
                           </span>
                         </div>
                       ),

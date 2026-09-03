@@ -48,13 +48,21 @@ export interface LiveDashboardOverview {
     }>;
     pageSpeed: DashboardSource<{
       strategy: "mobile" | "desktop";
+      lighthouseAvailable: boolean;
       performanceScore: number;
       seoScore: number;
       lcp: number | null;
       inp: number | null;
       cls: number | null;
       fcp: number | null;
+      ttfb: number | null;
       tbt: number | null;
+      seoChecks: Array<{
+        key: string;
+        label: string;
+        status: "good" | "needs_work" | "not_checked";
+        score: number | null;
+      }>;
     }>;
     indexCoverage: DashboardSource<{
       indexed: number;
