@@ -58,7 +58,7 @@ export const NAV_SECTIONS: NavSection[] = [
       { label: "Services Management", href: "/services", icon: BriefcaseBusiness },
       { label: "Blog & Awareness", href: "/blogs", icon: BookOpenText },
       { label: "Media Library", href: "/gallery", icon: GalleryHorizontalEnd },
-      { label: "Testimonials", icon: MessageSquare, disabled: true },
+      { label: "Testimonials", href: "/testimonials", icon: MessageSquare },
       { label: "FAQs", href: "/faqs", icon: MessageSquare },
       { label: "Navigation Menus", href: "/website?section=navbar", icon: ListTree },
     ],

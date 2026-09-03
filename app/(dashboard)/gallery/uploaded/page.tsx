@@ -57,7 +57,7 @@ function Panel({
 }) {
   return (
     <section
-      className={`min-h-0 overflow-hidden rounded-[8px] border border-[#e7e9e8] bg-white px-[16px] py-[14px] shadow-[0_1px_3px_rgba(15,23,42,0.025)] ${className}`}
+      className={`min-h-0 overflow-visible rounded-[8px] border border-[#e7e9e8] bg-white px-[16px] py-[14px] shadow-[0_1px_3px_rgba(15,23,42,0.025)] ${className}`}
     >
       <h2 className="text-[14px] font-extrabold leading-tight tracking-[-0.01em] text-[#17234a]">
         {title}
@@ -158,8 +158,8 @@ export default function MediaSettingsPage() {
   ];
 
   return (
-    <main className="h-full min-h-0 w-full overflow-hidden bg-[#fffefb] px-[18px] py-[12px] text-[#16233f]">
-      <div className="grid h-full min-h-0 grid-rows-[60px_42px_minmax(0,1fr)_42px] gap-[8px]">
+    <main className="h-full min-h-0 w-full overflow-y-auto overflow-x-hidden bg-[#fffefb] px-[18px] py-[12px] text-[#16233f] [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-300">
+      <div className="grid min-h-full grid-rows-[60px_42px_auto_42px] gap-[8px]">
         {/* HEADER */}
         <header className="flex min-h-0 items-start justify-between gap-[16px]">
           <div>
@@ -214,7 +214,7 @@ export default function MediaSettingsPage() {
         </div>
 
         {/* PANELS */}
-        <section className="grid min-h-0 grid-cols-3 grid-rows-[minmax(0,1.35fr)_minmax(0,0.72fr)] gap-[10px]">
+        <section className="grid min-h-0 grid-cols-3 auto-rows-max items-start gap-[10px]">
           {/* GENERAL SETTINGS */}
           <Panel
             title="General Settings"
