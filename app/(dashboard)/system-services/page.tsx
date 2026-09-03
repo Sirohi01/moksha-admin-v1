@@ -2,12 +2,15 @@
 
 import { useState, useEffect, useRef, useMemo, type ReactNode, type ChangeEvent, type ComponentType } from "react";
 import {
-  Plus, Pencil, Trash2, ExternalLink, BellRing, BellOff, Upload, FileText, X,
+  Pencil, Trash2, ExternalLink, BellRing, BellOff, Upload, FileText, X,
   Globe, Server, CreditCard, Mail, Cloud, ShieldCheck, Sparkles,
-  BarChart3, Database, Network, KeyRound, Share2, Plug, Package, Check,
+  BarChart3, Database, Network, KeyRound, Share2, Plug, Package,
   AlertTriangle, Search, Eye, type LucideIcon,
 } from "lucide-react";
 import { externalServiceApi } from "@/lib/externalServiceApi";
+import SystemServiceAccessGate from "@/components/system-services/SystemServiceAccessGate";
+import SystemServicesHeader from "@/components/system-services/SystemServicesHeader";
+import SystemServiceToasts, { type SystemServiceToast } from "@/components/system-services/SystemServiceToasts";
 import { settingsApi } from "@/lib/settingsApi";
 import { uploadApi } from "@/lib/uploadApi";
 import {
@@ -21,7 +24,6 @@ import { ApiRequestError } from "@/lib/api";
 import { daysRemaining, serviceStatus, useCountdown, formatCountdown } from "@/lib/systemServiceUtils";
 type UIStatus = "OK" | "SOON" | "EXPIRED" | "MUTED";
 type GroupKey = "EXPIRED" | "SOON" | "LATER" | "MUTED";
-type Toast = { id: string; text: string; type: "ok" | "err" };
 
 type FormState = {
   category: ExternalServiceCategory; name: string; provider: string; accountIdentifier: string;
@@ -430,10 +432,12 @@ function SummaryCard({ title, value, label, detail, icon: Icon, tone }: {
 /* --------------------------------------------------------------------- page */
 
 export default function SystemServicesPage() {
+  const [accessGranted, setAccessGranted] = useState(false);
+  const [accessExpiresAt, setAccessExpiresAt] = useState<string | null>(null);
   const [settings, setSettings] = useState<Settings | null>(null);
   const [services, setServices] = useState<ExternalService[]>([]);
   const [loading, setLoading] = useState(true);
-  const [toasts, setToasts] = useState<Toast[]>([]);
+  const [toasts, setToasts] = useState<SystemServiceToast[]>([]);
   const [query, setQuery] = useState("");
   const [highlight, setHighlight] = useState<string | null>(null);
 
@@ -459,6 +463,33 @@ export default function SystemServicesPage() {
     setTimeout(() => setToasts((t) => t.filter((x) => x.id !== id)), 3800);
   };
 
+  useEffect(() => {
+    if (!accessGranted || !accessExpiresAt) return;
+    const expiry = new Date(accessExpiresAt).getTime();
+    const lock = () => {
+      if (Date.now() < expiry) return;
+      window.sessionStorage.removeItem("moksha_system_services_grant");
+      window.sessionStorage.removeItem("moksha_system_services_expires_at");
+      setServices([]);
+      setSettings(null);
+      setViewing(null);
+      setEditing(null);
+      setFormOpen(false);
+      setAlertOpen(false);
+      setAccessGranted(false);
+      setAccessExpiresAt(null);
+    };
+    const timer = window.setTimeout(lock, Math.max(0, expiry - Date.now()));
+    const recheck = () => lock();
+    window.addEventListener("focus", recheck);
+    document.addEventListener("visibilitychange", recheck);
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("focus", recheck);
+      document.removeEventListener("visibilitychange", recheck);
+    };
+  }, [accessGranted, accessExpiresAt]);
+
   const load = async () => {
     setLoading(true);
     settingsApi.getSystemAlerts().then((settingsRes) => {
@@ -481,8 +512,6 @@ export default function SystemServicesPage() {
       setLoading(false);
     }
   };
-
-  useEffect(() => { load(); }, []);
 
   const openAdd = () => { setEditing(null); setForm(EMPTY); setShowAccess(false); setFormOpen(true); };
 
@@ -664,22 +693,14 @@ export default function SystemServicesPage() {
   const monthlyTotal = monthlyServices.reduce((sum, s) => sum + Number(s.costAmount || 0), 0);
   const yearlyTotal = yearlyServices.reduce((sum, s) => sum + Number(s.costAmount || 0), 0);
 
+  if (!accessGranted) return <SystemServiceAccessGate onGranted={async (expiresAt) => { setAccessExpiresAt(expiresAt); setAccessGranted(true); await load(); }} />;
+
   return (
     <div className="min-h-screen bg-[#F7F5F1] px-6 pb-24 pt-2 text-[13px] capitalize leading-[1.45] text-[#261B15] antialiased max-[820px]:px-3.5 max-[820px]:pb-20 max-[820px]:pt-[18px]">
       <div className="mx-auto max-w-[1240px]">
-        <header className="flex flex-wrap items-center justify-between gap-5 px-0.5 pb-0.5 pt-1 max-[560px]:items-stretch">
-          <div>
-            <h1 className="m-0 font-serif text-[30px] font-medium leading-[1.12] tracking-[-.035em] max-[560px]:text-[26px]">System &amp; Security</h1>
-          </div>
-          <div className="flex gap-2 max-[560px]:w-full [&_button]:max-[560px]:flex-1">
-            <button className="inline-flex min-h-[38px] items-center justify-center gap-[7px] rounded-[10px] border border-[#D8D0C7] bg-white px-[15px] py-2 text-[12.5px] font-semibold leading-none text-[#261B15] transition hover:-translate-y-px hover:border-[#C3B8AC] hover:bg-[#FAF8F5] disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:shrink-0" onClick={() => setAlertOpen(true)} disabled={!settings}>
-              <BellRing size={14} /> Reminder Defaults
-            </button>
-            <button className="inline-flex min-h-[38px] items-center justify-center gap-[7px] rounded-[10px] border border-[#8B6A3E] bg-[#8B6A3E] px-[15px] py-2 text-[12.5px] font-semibold leading-none text-white shadow-[0_4px_12px_rgba(104,74,41,.16)] transition hover:-translate-y-px hover:border-[#684A29] hover:bg-[#684A29] hover:shadow-[0_6px_16px_rgba(104,74,41,.22)] active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none [&_svg]:shrink-0" onClick={openAdd}><Plus size={14} /> Add Service</button>
-          </div>
-        </header>
+        <SystemServicesHeader reminderDisabled={!settings} onReminderDefaults={() => setAlertOpen(true)} onAddService={openAdd} />
 
-        <div className="mt-2.5 grid grid-cols-1 gap-1.5 sm:grid-cols-2 xl:grid-cols-5">
+        <div className="mt-1 grid grid-cols-1 gap-1.5 sm:grid-cols-2 xl:grid-cols-5">
           <SummaryCard title="Inventory" value={loading ? "—" : services.length} label="Services tracked" detail={loading ? "Loading service data" : `${paidServices.length} paid · ${services.length - paidServices.length} free`} icon={Package} tone="emerald" />
           <SummaryCard title="Attention" value={loading ? "—" : overdueCount} label="Past due" detail={overdueCount ? "Immediate action required" : "No overdue renewals"} icon={AlertTriangle} tone="rose" />
           <SummaryCard title="Upcoming" value={loading ? "—" : soonCount} label="Renewing soon" detail="Inside the reminder window" icon={BellRing} tone="amber" />
@@ -1123,14 +1144,7 @@ export default function SystemServicesPage() {
         </div>
       </Modal>
 
-      <div className="fixed bottom-5 right-5 z-[60] flex flex-col gap-2">
-        {toasts.map((t) => (
-          <div key={t.id} className={`flex max-w-[330px] items-start gap-[9px] rounded-[10px] px-[13px] py-[11px] text-[12.5px] font-medium text-[#EAF2EE] shadow-[0_12px_30px_rgba(10,25,20,.3)] [&_.ic]:mt-px [&_.ic]:shrink-0 ${t.type === "err" ? "bg-[#A8202B]" : "bg-[#15211D]"}`}>
-            <span className="ic">{t.type === "err" ? <AlertTriangle size={14} /> : <Check size={14} />}</span>
-            <span>{t.text}</span>
-          </div>
-        ))}
-      </div>
+      <SystemServiceToasts items={toasts} />
     </div>
   );
 }

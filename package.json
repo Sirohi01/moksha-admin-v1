@@ -19,7 +19,8 @@
     "react-dom": "19.2.4",
     "react-leaflet": "^5.0.0",
     "react-redux": "^9.3.0",
-    "recharts": "^3.10.1"
+    "recharts": "^3.10.1",
+    "sweetalert2": "^11.26.25"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

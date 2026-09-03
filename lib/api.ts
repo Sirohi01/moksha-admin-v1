@@ -95,6 +95,10 @@ async function request<T>(path: string, options?: RequestInit, isRetry = false):
     ...(options?.headers as Record<string, string> | undefined),
   };
   if (accessToken) headers.Authorization = `Bearer ${accessToken}`;
+  if (typeof window !== "undefined" && (path.startsWith("/system-services/admin") || path === "/system-services/access/status")) {
+    const grant = window.sessionStorage.getItem("moksha_system_services_grant");
+    if (grant) headers["X-System-Services-Grant"] = grant;
+  }
 
   const timeoutController = new AbortController();
   const timeoutId = setTimeout(() => timeoutController.abort(), REQUEST_TIMEOUT_MS);

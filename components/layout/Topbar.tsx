@@ -175,10 +175,10 @@ function ServiceClock({
   const days = daysRemaining(expiryDate);
   const urgent = countdown.isExpired || days <= URGENT_DAYS;
   const palette = countdown.isExpired
-    ? { card: "border-red-300 bg-gradient-to-br from-red-50 via-white to-rose-50 hover:border-red-400", label: "text-red-800", digit: "border-red-200 bg-white text-red-800", unit: "text-red-600", dot: "animate-pulse bg-red-500 shadow-red-300" }
+    ? { card: "border-red-300 bg-gradient-to-br from-red-50 via-white to-rose-50 hover:border-red-400", label: "text-red-800", digit: "text-red-800", unit: "text-red-600", dot: "animate-pulse bg-red-500 shadow-red-300" }
     : urgent
-      ? { card: "border-amber-300 bg-gradient-to-br from-amber-50 via-white to-yellow-50 hover:border-amber-400", label: "text-amber-800", digit: "border-amber-200 bg-white text-amber-800", unit: "text-amber-600", dot: "animate-pulse bg-amber-500 shadow-amber-300" }
-      : { card: "border-emerald-300 bg-gradient-to-br from-emerald-50 via-white to-green-50 hover:border-emerald-400", label: "text-emerald-800", digit: "border-emerald-200 bg-white text-emerald-800", unit: "text-emerald-600", dot: "bg-emerald-500 shadow-emerald-300" };
+      ? { card: "border-amber-300 bg-gradient-to-br from-amber-50 via-white to-yellow-50 hover:border-amber-400", label: "text-amber-800", digit: "text-amber-800", unit: "text-amber-600", dot: "animate-pulse bg-amber-500 shadow-amber-300" }
+      : { card: "border-emerald-300 bg-gradient-to-br from-emerald-50 via-white to-green-50 hover:border-emerald-400", label: "text-emerald-800", digit: "text-emerald-800", unit: "text-emerald-600", dot: "bg-emerald-500 shadow-emerald-300" };
   const parts = [
     { value: countdown.days, unit: "Days" },
     { value: countdown.hours, unit: "Hours" },
@@ -193,15 +193,15 @@ function ServiceClock({
       title={`${name} — renews ${new Date(expiryDate).toLocaleDateString()}`}
       className={`min-w-[190px] rounded-xl border px-2 py-1 text-left shadow-sm transition-all hover:-translate-y-px hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent ${palette.card}`}
     >
-      <span className={`mb-0.5 flex items-center justify-center gap-1.5 text-[8px] font-extrabold uppercase leading-none tracking-[.18em] ${palette.label}`}>
+      <span className={`mb-0.5 flex items-center justify-center gap-1.5 text-[8px] font-semibold uppercase leading-none tracking-[.18em] ${palette.label}`}>
         <span className={`h-1.5 w-1.5 rounded-full shadow-[0_0_6px_currentColor] ${palette.dot}`} />
         <Icon className="h-2.5 w-2.5" /> {label} Renews In
         <span className={`h-1.5 w-1.5 rounded-full shadow-[0_0_6px_currentColor] ${palette.dot}`} />
       </span>
       <span className="grid grid-cols-4 gap-1">
         {parts.map((part) => (
-          <span key={part.unit} className={`flex h-[27px] flex-col items-center justify-center rounded-md border shadow-[0_1px_3px_rgba(15,23,42,.05)] ${palette.digit}`}>
-            <b className="font-mono text-[11px] leading-none tabular-nums">{String(part.value).padStart(2, "0")}</b>
+          <span key={part.unit} className={`flex h-[27px] flex-col items-center justify-center rounded-md ${palette.digit}`}>
+            <span className="font-mono text-[11px] font-medium leading-none tabular-nums">{String(part.value).padStart(2, "0")}</span>
             <small className={`mt-0.5 text-[6px] font-bold uppercase leading-none ${palette.unit}`}>{part.unit}</small>
           </span>
         ))}
@@ -291,7 +291,7 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
     loadNotifications();
 
     externalServiceApi
-      .list()
+      .summary()
       .then(setExternalServices)
       .catch(() => setExternalServices([]));
 
@@ -499,7 +499,7 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
         <div className="flex items-center gap-2">
           {/* Renewal clocks + everything else that expires, in one quiet cluster. */}
           {hasClusterContent && (
-            <div className="relative hidden items-center gap-1 rounded-xl border border-slate-200 bg-white/70 p-1 shadow-sm lg:flex">
+            <div className="relative hidden items-center gap-1 lg:flex">
               {domainService && (
                 <ServiceClock
                   label="Domain"
