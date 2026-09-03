@@ -1,299 +1,817 @@
 "use client";
 
+import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
-  Check,
+  ChevronDown,
+  ChevronLeft,
   ChevronRight,
-  CloudUpload,
-  FilePenLine,
-  Folder,
+  Copy,
+  Download,
+  Eye,
+  FileImage,
+  FileText,
+  Filter,
+  FolderClosed,
+  HardDrive,
   Image as ImageIcon,
-  Lightbulb,
-  LockKeyhole,
-  Play,
+  MoreVertical,
+  Music2,
+  Pencil,
+  Plus,
+  RefreshCw,
+  Search,
+  Settings,
   ShieldCheck,
-  Star,
-  Tag,
   Trash2,
-  type LucideIcon,
+  Upload,
+  Video,
 } from "lucide-react";
 
-type Practice = {
-  number: number;
-  title: string;
-  icon: LucideIcon;
-  bullets: string[];
-  tip: string;
+type MediaType = "Image" | "Video" | "Document" | "Audio";
+type MediaStatus = "Published" | "Draft";
+
+type MediaItem = {
+  id: number;
+  name: string;
+  meta: string;
+  type: MediaType;
+  size: string;
+  folder: string;
+  uploadedBy: string;
+  date: string;
+  time: string;
+  status: MediaStatus;
+  image: string;
 };
 
-const practices: Practice[] = [
+const MEDIA_ITEMS: MediaItem[] = [
   {
-    number: 1,
-    title: "Organize with Folders",
-    icon: Folder,
-    bullets: [
-      "Create a clear folder structure by category or content type.",
-      "Use meaningful, consistent folder names.",
-      "Avoid too many nested folders.",
-    ],
-    tip: "A simple structure saves time and prevents confusion.",
+    id: 1,
+    name: "hero-home-banner.jpg",
+    meta: "1920 × 1080",
+    type: "Image",
+    size: "245 KB",
+    folder: "Banners",
+    uploadedBy: "Admin User",
+    date: "30 May 2026",
+    time: "10:30 AM",
+    status: "Published",
+    image:
+      "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=300&q=80",
   },
   {
-    number: 2,
-    title: "Use Descriptive File Names",
-    icon: FilePenLine,
-    bullets: [
-      "Rename files before uploading.",
-      "Use keywords related to the content.",
-      "Use hyphens (-) instead of spaces.",
-    ],
-    tip: "Descriptive names improve SEO and make files easy to find.",
+    id: 2,
+    name: "dignity-care.jpg",
+    meta: "1200 × 800",
+    type: "Image",
+    size: "189 KB",
+    folder: "Our Mission",
+    uploadedBy: "Admin User",
+    date: "29 May 2026",
+    time: "04:15 PM",
+    status: "Published",
+    image:
+      "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=300&q=80",
   },
   {
-    number: 3,
-    title: "Optimize Images",
-    icon: ImageIcon,
-    bullets: [
-      "Compress images before upload.",
-      "Use the correct dimensions for each use case.",
-      "Prefer WebP format for better performance.",
-    ],
-    tip: "Optimized images make your website faster and more user-friendly.",
+    id: 3,
+    name: "volunteers-support.jpg",
+    meta: "1280 × 853",
+    type: "Image",
+    size: "312 KB",
+    folder: "About Us",
+    uploadedBy: "Seva Team",
+    date: "28 May 2026",
+    time: "02:20 PM",
+    status: "Published",
+    image:
+      "https://images.unsplash.com/photo-1559027615-cd4628902d4a?auto=format&fit=crop&w=300&q=80",
   },
   {
-    number: 4,
-    title: "Manage Access & Permissions",
-    icon: LockKeyhole,
-    bullets: [
-      "Set appropriate access levels (Public, Members, Private).",
-      "Restrict sensitive media to admins only.",
-      "Review permissions regularly.",
-    ],
-    tip: "Proper access control keeps your media secure.",
+    id: 4,
+    name: "sewa-steps-infographic.png",
+    meta: "1600 × 900",
+    type: "Image",
+    size: "157 KB",
+    folder: "How It Works",
+    uploadedBy: "Admin User",
+    date: "26 May 2026",
+    time: "11:45 AM",
+    status: "Published",
+    image:
+      "https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=300&q=80",
   },
   {
-    number: 5,
-    title: "Add Alt Text & Metadata",
-    icon: Tag,
-    bullets: [
-      "Add alt text for all images.",
-      "Use titles, captions, and descriptions when relevant.",
-      "Add tags to make files searchable.",
-    ],
-    tip: "Metadata improves accessibility and SEO visibility.",
+    id: 5,
+    name: "policy-document.pdf",
+    meta: "",
+    type: "Document",
+    size: "1.24 MB",
+    folder: "Documents",
+    uploadedBy: "Admin User",
+    date: "24 May 2026",
+    time: "01:05 PM",
+    status: "Published",
+    image: "",
   },
   {
-    number: 6,
-    title: "Regular Cleanup",
-    icon: Trash2,
-    bullets: [
-      "Remove unused or duplicate files.",
-      "Review and update old media.",
-      "Keep your library clean and relevant.",
-    ],
-    tip: "A clean library improves performance and saves storage space.",
+    id: 6,
+    name: "moksha-sewa-video.mp4",
+    meta: "1920 × 1080",
+    type: "Video",
+    size: "24.6 MB",
+    folder: "Videos",
+    uploadedBy: "Seva Team",
+    date: "22 May 2026",
+    time: "05:30 PM",
+    status: "Published",
+    image:
+      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=300&q=80",
+  },
+  {
+    id: 7,
+    name: "mantra-chants.mp3",
+    meta: "03:45",
+    type: "Audio",
+    size: "8.7 MB",
+    folder: "Audio",
+    uploadedBy: "Admin User",
+    date: "20 May 2026",
+    time: "09:10 AM",
+    status: "Draft",
+    image: "",
   },
 ];
 
-const additionalTips = [
-  {
-    title: "Maintain Consistency",
-    text: "Follow naming conventions and folder structure across the site.",
-  },
-  {
-    title: "Backup Your Media",
-    text: "Regularly backup your media library to prevent data loss.",
-  },
-  {
-    title: "Check Links",
-    text: "Ensure media links are working and not broken.",
-  },
-  {
-    title: "Monitor Storage",
-    text: "Keep an eye on storage usage and upgrade when needed.",
-  },
-];
+const typeTone: Record<MediaType, string> = {
+  Image: "bg-emerald-50 text-emerald-700",
+  Video: "bg-blue-50 text-blue-700",
+  Document: "bg-violet-50 text-violet-700",
+  Audio: "bg-orange-50 text-orange-700",
+};
 
-import { useRouter } from "next/navigation";
-
-function PracticeCard({ item }: { item: Practice }) {
-  const Icon = item.icon;
-  const router = useRouter();
-
+function MetricCard({
+  icon,
+  iconClass,
+  label,
+  value,
+  note,
+  progress,
+}: {
+  icon: React.ReactNode;
+  iconClass: string;
+  label: string;
+  value: string;
+  note: string;
+  progress?: number;
+}) {
   return (
-    <article
-      onClick={() => router.push(`/gallery/${item.number}`)}
-      className="relative flex min-h-0 cursor-pointer flex-col justify-between rounded-[8px] border border-[#e7ebe8] bg-white p-[14px] shadow-[0_1px_3px_rgba(15,23,42,0.03)] transition-all duration-200 hover:-translate-y-0.5 hover:border-[#aed5b7] hover:shadow-md"
-    >
-      <div className="flex min-h-0 flex-1 gap-[14px]">
-        <div className="grid h-[52px] w-[52px] shrink-0 place-items-center rounded-full bg-[#edf7f1] text-[#12633c]">
-          <Icon className="h-[24px] w-[24px]" strokeWidth={2} />
-        </div>
-
-        <div className="min-w-0 flex-1">
-          <div className="flex items-center justify-between gap-[8px]">
-            <div className="flex items-center gap-[8px]">
-              <span className="grid h-[20px] w-[20px] shrink-0 place-items-center rounded-full bg-[#075b33] text-[9.5px] font-bold text-white">
-                {item.number}
-              </span>
-
-              <h3 className="text-[13.5px] font-bold leading-tight text-[#12204a]">
-                {item.title}
-              </h3>
-            </div>
-
-            <ChevronRight className="h-[14px] w-[14px] text-[#075b33] opacity-70" strokeWidth={2.5} />
-          </div>
-
-          <ul className="mt-[6px] space-y-[3px]">
-            {item.bullets.map((bullet) => (
-              <li
-                key={bullet}
-                className="grid grid-cols-[10px_1fr] gap-[6px] text-[11px] font-medium leading-[1.35] text-[#27365d]"
-              >
-                <span className="pt-[1px] text-[9px] leading-none text-[#102653]">•</span>
-                <span className="truncate">{bullet}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
+    <div className="relative flex h-[118px] min-w-0 items-center gap-[14px] overflow-hidden rounded-[9px] border border-[#e7e9ec] bg-white px-[16px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
+      <div className={`grid h-[46px] w-[46px] shrink-0 place-items-center rounded-full ${iconClass}`}>
+        {icon}
       </div>
 
-      <div className="mt-[10px] mb-[4px] flex min-h-[38px] shrink-0 items-center gap-[10px] rounded-[6px] bg-[linear-gradient(90deg,#f1f8f4_0%,#f6faf8_100%)] px-[14px] py-[6px]">
-        <Lightbulb className="h-[18px] w-[18px] shrink-0 text-[#f0aa1c]" strokeWidth={2} />
-        <p className="line-clamp-2 text-[10.5px] font-semibold leading-[1.3] text-[#17643d]">
-          {item.tip}
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-[10px] font-bold text-[#34435e]">{label}</p>
+        <p className="mt-[6px] text-[22px] font-extrabold leading-none tracking-[-0.03em] text-[#10204a]">
+          {value}
+        </p>
+        <p className="mt-[8px] truncate text-[9px] font-semibold text-[#64748b]">
+          {note}
         </p>
       </div>
-    </article>
-  );
-}
 
-function HeroIllustration() {
-  return (
-    <div className="relative h-[86px] w-[235px] shrink-0" aria-hidden>
-      <div className="absolute bottom-[10px] right-[22px] h-[70px] w-[118px] rounded-[8px] bg-[linear-gradient(180deg,#8bc39c_0%,#aed5b7_100%)] shadow-[0_8px_20px_rgba(26,93,56,.08)]">
-        <span className="absolute -top-[10px] left-[28px] h-[16px] w-[62px] rounded-t-[8px] bg-[#86bd95]" />
-        <span className="absolute left-[10px] right-[10px] top-[14px] h-px bg-white/45" />
-      </div>
-
-      <div className="absolute bottom-[11px] left-[20px] grid h-[58px] w-[58px] place-items-center rounded-[7px] border border-[#dbe8df] bg-white shadow-[0_3px_10px_rgba(35,82,57,.06)]">
-        <ImageIcon className="h-[32px] w-[32px] text-[#4d9566]" strokeWidth={2} />
-      </div>
-
-      <div className="absolute bottom-[10px] right-0 grid h-[50px] w-[58px] place-items-center rounded-[6px] bg-[#167344] text-white shadow-[0_4px_12px_rgba(16,92,53,.13)]">
-        <Play className="ml-[2px] h-[24px] w-[24px] fill-current" strokeWidth={1.5} />
-      </div>
-
-      <div className="absolute right-[-28px] top-[-8px] opacity-[0.16]">
-        <svg viewBox="0 0 70 120" className="h-[105px] w-[62px]">
-          <path d="M35 116C37 85 39 52 44 11" fill="none" stroke="#448e64" strokeWidth="2" />
-          <path d="M42 22C24 27 18 37 16 49C30 47 39 38 42 22Z" fill="#7ab28c" />
-          <path d="M39 49C53 51 61 60 62 71C50 68 42 61 39 49Z" fill="#7ab28c" />
-          <path d="M37 70C22 73 14 82 13 94C26 91 35 83 37 70Z" fill="#7ab28c" />
-        </svg>
-      </div>
+      {typeof progress === "number" ? (
+        <div className="absolute inset-x-0 bottom-0 h-[5px] bg-[#eef2f0]">
+          <div
+            className="h-full rounded-r-full bg-[#0b6a3b]"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      ) : null}
     </div>
   );
 }
 
-export default function MediaLibraryBestPracticesPage() {
-  return (
-    <main className="relative h-full min-h-0 w-full overflow-hidden bg-[#fffefb] px-[18px] py-[14px] text-[#142347]">
-      <div className="grid h-full min-h-0 grid-rows-[56px_116px_minmax(0,1fr)_112px_40px] gap-[10px]">
-        {/* HEADING */}
-        <header className="min-h-0">
-          <h1 className="text-[25px] font-extrabold leading-none tracking-[-0.02em] text-[#075b33]">
-            Media Library Best Practices
-          </h1>
+function FilePreview({ item }: { item: MediaItem }) {
+  if (item.type === "Document") {
+    return (
+      <div className="grid h-[50px] w-[70px] shrink-0 place-items-center rounded-[7px] border border-[#e5e8eb] bg-[#fff6f6]">
+        <FileText className="h-[26px] w-[26px] text-red-500" />
+      </div>
+    );
+  }
 
-          <nav
-            className="mt-[10px] flex items-center gap-[8px] text-[11px] font-semibold text-[#1d2b58]"
-            aria-label="Breadcrumb"
-          >
-            <span>Dashboard</span>
-            <ChevronRight className="h-[12px] w-[12px] text-[#69738d]" strokeWidth={2} />
-            <span>Media Library</span>
-            <ChevronRight className="h-[12px] w-[12px] text-[#69738d]" strokeWidth={2} />
-            <span>Best Practices</span>
-          </nav>
+  if (item.type === "Audio") {
+    return (
+      <div className="grid h-[50px] w-[70px] shrink-0 place-items-center rounded-[7px] border border-[#e5e8eb] bg-[#eef3ff]">
+        <Music2 className="h-[28px] w-[28px] text-indigo-500" />
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={item.image}
+      alt=""
+      className="h-[50px] w-[70px] shrink-0 rounded-[7px] border border-[#e5e8eb] object-cover"
+    />
+  );
+}
+
+export default function MediaLibraryPage() {
+  const router = useRouter();
+  const [query, setQuery] = useState("");
+  const [type, setType] = useState("All Types");
+  const [folder, setFolder] = useState("All Folders");
+  const [status, setStatus] = useState("All Status");
+  const [selectedId, setSelectedId] = useState(1);
+
+  const rows = useMemo(() => {
+    return MEDIA_ITEMS.filter((item) => {
+      const searchMatch =
+        !query ||
+        `${item.name} ${item.type} ${item.folder}`
+          .toLowerCase()
+          .includes(query.toLowerCase());
+
+      const typeMatch = type === "All Types" || item.type === type;
+      const folderMatch = folder === "All Folders" || item.folder === folder;
+      const statusMatch = status === "All Status" || item.status === status;
+
+      return searchMatch && typeMatch && folderMatch && statusMatch;
+    });
+  }, [query, type, folder, status]);
+
+  const selected =
+    MEDIA_ITEMS.find((item) => item.id === selectedId) ?? MEDIA_ITEMS[0];
+
+  const clearFilters = () => {
+    setQuery("");
+    setType("All Types");
+    setFolder("All Folders");
+    setStatus("All Status");
+  };
+
+  return (
+    <main
+      style={{
+        fontFamily:
+          'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      }}
+      className="h-full min-h-0 w-full overflow-y-auto overflow-x-hidden bg-[#fffefb] px-[18px] py-[14px] text-[#142347] [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-300"
+    >
+      <div className="min-h-full w-full">
+        {/* HEADER */}
+        <header className="flex items-start justify-between gap-[16px]">
+          <div>
+            <h1 className="text-[24px] font-extrabold leading-none tracking-[-0.02em] text-[#075b33]">
+              Media Library
+            </h1>
+
+            <nav className="mt-[9px] flex items-center gap-[8px] text-[10.5px] font-semibold text-[#1d2b58]">
+              <span>Dashboard</span>
+              <span className="text-[#7b8597]">›</span>
+              <span>Media Library</span>
+            </nav>
+          </div>
+
+          <div className="flex items-center gap-[10px]">
+            <button
+              type="button"
+              onClick={() => router.push("/gallery/1")}
+              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] border border-[#dfe3e7] bg-white px-[18px] text-[10.5px] font-bold text-[#273655] transition hover:bg-slate-50"
+            >
+              <FolderClosed className="h-[15px] w-[15px]" />
+              Add New Folder
+            </button>
+
+            <button
+              type="button"
+              onClick={() => router.push("/gallery/created")}
+              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] border border-[#b9d7c4] bg-white px-[18px] text-[10.5px] font-bold text-[#14683d] transition hover:bg-emerald-50"
+            >
+              <Upload className="h-[15px] w-[15px]" />
+              Upload Files
+            </button>
+
+            <button
+              type="button"
+              onClick={() => router.push("/gallery/created")}
+              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] bg-[linear-gradient(180deg,#076636_0%,#03542c_100%)] px-[20px] text-[10.5px] font-bold text-white shadow-[0_7px_16px_rgba(5,94,49,.12)] transition hover:opacity-95"
+            >
+              <Plus className="h-[15px] w-[15px]" />
+              Upload New Media
+            </button>
+
+            <button
+              type="button"
+              onClick={() => router.push("/gallery/uploaded")}
+              className="grid h-[40px] w-[40px] place-items-center rounded-[6px] border border-[#dfe3e7] bg-white text-[#43516a] transition hover:bg-slate-50"
+            >
+              <MoreVertical className="h-[15px] w-[15px]" />
+            </button>
+          </div>
         </header>
 
-        {/* INTRO BANNER */}
-        <section className="relative flex min-h-0 items-center overflow-hidden rounded-[8px] border border-[#d9e8dd] bg-[linear-gradient(90deg,#f2faf5_0%,#edf8f2_58%,#eaf5ee_100%)] px-[26px]">
-          <div className="grid h-[74px] w-[74px] shrink-0 place-items-center rounded-full border border-[#dce8df] bg-white text-[#08713f] shadow-[0_2px_8px_rgba(15,72,42,.03)]">
-            <ShieldCheck className="h-[42px] w-[42px]" strokeWidth={1.8} />
-          </div>
+        {/* STATS */}
+        <section className="mt-[18px] grid grid-cols-6 gap-[14px]">
+          <MetricCard
+            icon={<FolderClosed className="h-[22px] w-[22px]" />}
+            iconClass="bg-emerald-50 text-emerald-700"
+            label="Total Files"
+            value="1,248"
+            note="+ 23 this month"
+          />
 
-          <p className="ml-[24px] max-w-[820px] text-[12px] font-semibold leading-[1.65] text-[#2e333d]">
-            Following these best practices will help you keep your media library organized, secure, and optimized for performance.
-            <br />
-            Well-managed media ensures faster websites, better SEO, and an improved user experience.
-          </p>
+          <MetricCard
+            icon={<ImageIcon className="h-[22px] w-[22px]" />}
+            iconClass="bg-emerald-50 text-emerald-700"
+            label="Images"
+            value="832"
+            note="66.7% of total"
+          />
 
-          <div className="ml-auto mr-[30px]">
-            <HeroIllustration />
-          </div>
+          <MetricCard
+            icon={<Video className="h-[22px] w-[22px]" />}
+            iconClass="bg-blue-50 text-blue-700"
+            label="Videos"
+            value="148"
+            note="11.9% of total"
+          />
+
+          <MetricCard
+            icon={<FileText className="h-[22px] w-[22px]" />}
+            iconClass="bg-emerald-50 text-emerald-700"
+            label="Documents"
+            value="196"
+            note="15.7% of total"
+          />
+
+          <MetricCard
+            icon={<Music2 className="h-[22px] w-[22px]" />}
+            iconClass="bg-violet-50 text-violet-700"
+            label="Audio"
+            value="72"
+            note="5.8% of total"
+          />
+
+          <MetricCard
+            icon={<HardDrive className="h-[22px] w-[22px]" />}
+            iconClass="bg-stone-100 text-stone-700"
+            label="Storage Used"
+            value="2.48 GB"
+            note="of 10 GB (24.8%)"
+            progress={24.8}
+          />
         </section>
 
-        {/* 6 PRACTICE CARDS */}
-        <section className="grid min-h-0 grid-cols-3 grid-rows-2 gap-[10px]">
-          {practices.map((item) => (
-            <PracticeCard key={item.number} item={item} />
-          ))}
-        </section>
-
-        {/* ADDITIONAL TIPS */}
-        <section className="relative grid min-h-0 grid-cols-[56px_1fr_1fr_1fr_1fr_92px] items-center overflow-hidden rounded-[8px] border border-[#dbe6f3] bg-[linear-gradient(90deg,#f4f8ff_0%,#f7faff_55%,#f1f7ff_100%)] px-[22px]">
-          <div className="grid h-[44px] w-[44px] place-items-center rounded-full bg-[#dcecff] text-[#183c7b]">
-            <Star className="h-[24px] w-[24px]" strokeWidth={1.9} />
-          </div>
-
-          {additionalTips.map((tip, index) => (
-            <div
-              key={tip.title}
-              className={`flex h-[84px] min-w-0 flex-col justify-start px-[18px] pt-[19px] ${index > 0 ? "border-l border-[#dce4ef]" : ""
-                }`}
-            >
-              <h3 className="truncate text-[11px] font-bold leading-[1.2] text-[#19284f]">
-                {tip.title}
-              </h3>
-
-              <div className="mt-[8px] flex min-w-0 gap-[8px]">
-                <Check
-                  className="mt-[1px] h-[13px] w-[13px] shrink-0 text-[#27914d]"
-                  strokeWidth={2.8}
+        {/* CONTENT */}
+        <section className="mt-[16px] grid items-start gap-[14px] xl:grid-cols-[minmax(0,1fr)_285px]">
+          {/* LEFT */}
+          <div className="min-w-0">
+            {/* FILTERS */}
+            <div className="flex flex-wrap items-center gap-[10px]">
+              <label className="relative min-w-[180px] flex-1">
+                <Search className="absolute right-[13px] top-1/2 h-[15px] w-[15px] -translate-y-1/2 text-[#5d6b84]" />
+                <input
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder="Search media by name, type or tag..."
+                  className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[14px] pr-[40px] text-[10.5px] font-semibold text-[#273655] outline-none placeholder:text-[#8b95a7]"
                 />
-                <p className="min-w-0 text-[9.5px] font-medium leading-[1.45] text-[#31405f]">
-                  {tip.text}
+              </label>
+
+              <select
+                value={type}
+                onChange={(event) => setType(event.target.value)}
+                className="h-[40px] min-w-[120px] rounded-[6px] border border-[#dfe4e8] bg-white px-[10px] text-[10px] font-bold text-[#2a3855] outline-none"
+              >
+                <option>All Types</option>
+                <option>Image</option>
+                <option>Video</option>
+                <option>Document</option>
+                <option>Audio</option>
+              </select>
+
+              <select
+                value={folder}
+                onChange={(event) => setFolder(event.target.value)}
+                className="h-[40px] min-w-[125px] rounded-[6px] border border-[#dfe4e8] bg-white px-[10px] text-[10px] font-bold text-[#2a3855] outline-none"
+              >
+                <option>All Folders</option>
+                <option>Banners</option>
+                <option>Our Mission</option>
+                <option>About Us</option>
+                <option>How It Works</option>
+                <option>Documents</option>
+                <option>Videos</option>
+                <option>Audio</option>
+              </select>
+
+              <select
+                value={status}
+                onChange={(event) => setStatus(event.target.value)}
+                className="h-[40px] min-w-[110px] rounded-[6px] border border-[#dfe4e8] bg-white px-[10px] text-[10px] font-bold text-[#2a3855] outline-none"
+              >
+                <option>All Status</option>
+                <option>Published</option>
+                <option>Draft</option>
+              </select>
+
+              <button
+                type="button"
+                className="inline-flex h-[40px] items-center justify-center gap-[6px] rounded-[6px] border border-[#cfe4d7] bg-white px-[12px] text-[10px] font-bold text-[#146a3f] shrink-0"
+              >
+                <Filter className="h-[14px] w-[14px]" />
+                More Filters
+              </button>
+
+              <button
+                type="button"
+                onClick={clearFilters}
+                className="inline-flex h-[40px] items-center justify-center gap-[6px] rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10px] font-bold text-[#35445f] shrink-0"
+              >
+                <RefreshCw className="h-[14px] w-[14px]" />
+                Clear
+              </button>
+            </div>
+
+            {/* TABLE */}
+            <div className="mt-[12px] overflow-hidden rounded-[8px] border border-[#e7e9ec] bg-white shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[930px] border-collapse text-left">
+                  <thead>
+                    <tr className="h-[42px] border-b border-[#e7e9ec] bg-[#fafbfc] text-[8.5px] font-extrabold uppercase tracking-[0.04em] text-[#44516a]">
+                      <th className="w-[42px] px-[12px] text-center">
+                        <input type="checkbox" />
+                      </th>
+                      <th className="px-[8px]">File</th>
+                      <th className="px-[8px]">Type</th>
+                      <th className="px-[8px]">Size</th>
+                      <th className="px-[8px]">Folder</th>
+                      <th className="px-[8px]">Uploaded By</th>
+                      <th className="px-[8px]">Date</th>
+                      <th className="px-[8px]">Status</th>
+                      <th className="px-[8px] text-center">Actions</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {rows.map((item) => (
+                      <tr
+                        key={item.id}
+                        onClick={() => setSelectedId(item.id)}
+                        className={`h-[66px] cursor-pointer border-b border-[#eef0f2] align-middle last:border-b-0 hover:bg-slate-50/60 ${
+                          selectedId === item.id ? "bg-[#fbfefc]" : ""
+                        }`}
+                      >
+                        <td className="px-[12px] text-center">
+                          <input
+                            type="checkbox"
+                            onClick={(event) => event.stopPropagation()}
+                          />
+                        </td>
+
+                        <td className="px-[8px]">
+                          <div className="flex min-w-[220px] items-center gap-[12px]">
+                            <FilePreview item={item} />
+                            <div className="min-w-0">
+                              <p className="truncate text-[10px] font-extrabold text-[#19274a]">
+                                {item.name}
+                              </p>
+                              {item.meta ? (
+                                <p className="mt-[4px] text-[8.5px] font-semibold text-[#68758d]">
+                                  {item.meta}
+                                </p>
+                              ) : null}
+                            </div>
+                          </div>
+                        </td>
+
+                        <td className="px-[8px]">
+                          <span
+                            className={`inline-flex rounded-[5px] px-[8px] py-[4px] text-[8px] font-bold ${typeTone[item.type]}`}
+                          >
+                            {item.type}
+                          </span>
+                        </td>
+
+                        <td className="px-[8px] text-[9px] font-bold text-[#35445f]">
+                          {item.size}
+                        </td>
+
+                        <td className="px-[8px] text-[9px] font-bold text-[#35445f]">
+                          {item.folder}
+                        </td>
+
+                        <td className="px-[8px] text-[9px] font-bold text-[#35445f]">
+                          {item.uploadedBy}
+                        </td>
+
+                        <td className="px-[8px]">
+                          <p className="text-[9px] font-bold text-[#35445f]">
+                            {item.date}
+                          </p>
+                          <p className="mt-[3px] text-[8px] font-semibold text-[#68758d]">
+                            {item.time}
+                          </p>
+                        </td>
+
+                        <td className="px-[8px]">
+                          <span
+                            className={`inline-flex items-center gap-[5px] rounded-[5px] px-[8px] py-[4px] text-[8px] font-bold ${
+                              item.status === "Published"
+                                ? "bg-emerald-50 text-emerald-700"
+                                : "bg-amber-50 text-amber-700"
+                            }`}
+                          >
+                            <span
+                              className={`h-[5px] w-[5px] rounded-full ${
+                                item.status === "Published"
+                                  ? "bg-emerald-500"
+                                  : "bg-amber-500"
+                              }`}
+                            />
+                            {item.status}
+                          </span>
+                        </td>
+
+                        <td className="px-[8px]">
+                          <div className="flex items-center justify-center gap-[8px]">
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                router.push("/gallery/created");
+                              }}
+                              className="grid h-[30px] w-[30px] place-items-center rounded-[5px] border border-[#e1e5e9] bg-white text-[#4b5871] hover:bg-slate-50"
+                            >
+                              <Eye className="h-[12px] w-[12px]" />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                alert(`Downloading ${item.name}`);
+                              }}
+                              className="grid h-[30px] w-[30px] place-items-center rounded-[5px] border border-[#e1e5e9] bg-white text-[#4b5871] hover:bg-slate-50"
+                            >
+                              <Download className="h-[12px] w-[12px]" />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                router.push("/gallery/uploaded");
+                              }}
+                              className="grid h-[30px] w-[30px] place-items-center rounded-[5px] border border-[#e1e5e9] bg-white text-[#4b5871] hover:bg-slate-50"
+                            >
+                              <MoreVertical className="h-[12px] w-[12px]" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* PAGINATION */}
+              <div className="flex min-h-[58px] items-center justify-between gap-[12px] border-t border-[#e7e9ec] px-[12px]">
+                <p className="text-[9px] font-semibold text-[#47546c]">
+                  Showing 1 to {rows.length} of 1,248 files
                 </p>
+
+                <div className="flex items-center gap-[6px]">
+                  <button type="button" className="grid h-[32px] w-[32px] place-items-center rounded-[5px] border border-[#dfe3e7] bg-white">
+                    <ChevronLeft className="h-[13px] w-[13px]" />
+                  </button>
+
+                  {[1, 2, 3, 4, 5].map((page) => (
+                    <button
+                      type="button"
+                      key={page}
+                      className={`grid h-[32px] min-w-[32px] place-items-center rounded-[5px] px-[6px] text-[9px] font-bold ${
+                        page === 1
+                          ? "bg-[#075b33] text-white"
+                          : "border border-[#dfe3e7] bg-white text-[#35445f]"
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  ))}
+
+                  <span className="px-[2px] text-[10px] font-bold text-[#64748b]">…</span>
+
+                  <button type="button" className="grid h-[32px] min-w-[38px] place-items-center rounded-[5px] border border-[#dfe3e7] bg-white px-[6px] text-[9px] font-bold text-[#35445f]">
+                    125
+                  </button>
+
+                  <button type="button" className="grid h-[32px] w-[32px] place-items-center rounded-[5px] border border-[#dfe3e7] bg-white">
+                    <ChevronRight className="h-[13px] w-[13px]" />
+                  </button>
+                </div>
+
+                <select className="h-[32px] rounded-[5px] border border-[#dfe3e7] bg-white px-[10px] text-[9px] font-bold text-[#35445f]">
+                  <option>10 / page</option>
+                </select>
               </div>
             </div>
-          ))}
+          </div>
 
-          <div className="flex h-[84px] items-center justify-end border-l border-[#ccdbea] pl-[18px]">
-            <div className="relative">
-              <CloudUpload className="absolute -top-[28px] left-[4px] h-[38px] w-[38px] text-[#5d8ec0]" strokeWidth={1.5} />
-              <Folder className="h-[48px] w-[56px] fill-[#ffd77c] text-[#d6a845]" strokeWidth={1.5} />
+          {/* RIGHT SIDEBAR */}
+          <aside className="space-y-[12px]">
+            {/* MEDIA DETAILS */}
+            <section className="rounded-[8px] border border-[#e7e9ec] bg-white px-[14px] py-[13px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
+              <div className="flex items-center justify-between">
+                <h2 className="text-[12px] font-extrabold text-[#19274a]">
+                  Media Details
+                </h2>
+                <ChevronDown className="h-[14px] w-[14px] rotate-180 text-[#59657a]" />
+              </div>
+
+              <div className="mt-[12px]">
+                {selected.image ? (
+                  <img
+                    src={selected.image}
+                    alt=""
+                    className="h-[120px] w-full rounded-[8px] border border-[#e4e7eb] object-cover"
+                  />
+                ) : (
+                  <div className="grid h-[120px] w-full place-items-center rounded-[8px] border border-[#e4e7eb] bg-[#f6f8fa]">
+                    {selected.type === "Audio" ? (
+                      <Music2 className="h-[46px] w-[46px] text-indigo-500" />
+                    ) : (
+                      <FileText className="h-[46px] w-[46px] text-violet-500" />
+                    )}
+                  </div>
+                )}
+
+                <div className="mt-[12px] flex items-center justify-between gap-[8px]">
+                  <p className="truncate text-[10px] font-extrabold text-[#19274a]">
+                    {selected.name}
+                  </p>
+                  <span
+                    className={`shrink-0 rounded-[5px] px-[8px] py-[4px] text-[8px] font-bold ${typeTone[selected.type]}`}
+                  >
+                    {selected.type}
+                  </span>
+                </div>
+
+                <div className="mt-[12px] space-y-[7px] text-[9px]">
+                  <p>
+                    <span className="font-semibold text-[#69758c]">Uploaded on:</span>{" "}
+                    <strong className="text-[#34425e]">
+                      {selected.date}, {selected.time}
+                    </strong>
+                  </p>
+                  <p>
+                    <span className="font-semibold text-[#69758c]">Uploaded by:</span>{" "}
+                    <strong className="text-[#34425e]">{selected.uploadedBy}</strong>
+                  </p>
+                  <p>
+                    <span className="font-semibold text-[#69758c]">Folder:</span>{" "}
+                    <strong className="text-emerald-700">{selected.folder}</strong>
+                  </p>
+                  <p>
+                    <span className="font-semibold text-[#69758c]">Size:</span>{" "}
+                    <strong className="text-[#34425e]">{selected.size}</strong>
+                  </p>
+                  <p>
+                    <span className="font-semibold text-[#69758c]">Dimensions:</span>{" "}
+                    <strong className="text-[#34425e]">
+                      {selected.meta || "—"}
+                    </strong>
+                  </p>
+                </div>
+
+                <div className="mt-[12px]">
+                  <p className="mb-[6px] text-[9px] font-bold text-[#34425e]">URL:</p>
+                  <div className="flex items-center gap-[8px] rounded-[6px] border border-[#e2e6ea] bg-[#fbfcfd] px-[9px] py-[8px]">
+                    <p className="min-w-0 flex-1 break-all text-[8px] font-semibold leading-[1.35] text-[#59657a]">
+                      https://mokshasewa.org/wp-content/uploads/2026/05/{selected.name}
+                    </p>
+                    <Copy className="h-[13px] w-[13px] shrink-0 text-[#60708a] cursor-pointer" onClick={() => navigator.clipboard?.writeText(`https://mokshasewa.org/wp-content/uploads/2026/05/${selected.name}`)} />
+                  </div>
+                </div>
+
+                <div className="mt-[12px] grid grid-cols-3 gap-[7px]">
+                  <button
+                    type="button"
+                    onClick={() => router.push("/gallery/created")}
+                    className="inline-flex h-[34px] items-center justify-center gap-[6px] rounded-[5px] border border-[#e0e4e8] bg-white text-[8.5px] font-bold text-[#33415b] transition hover:bg-slate-50"
+                  >
+                    <Pencil className="h-[12px] w-[12px]" />
+                    Edit
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => router.push("/gallery/created")}
+                    className="inline-flex h-[34px] items-center justify-center gap-[6px] rounded-[5px] border border-[#e0e4e8] bg-white text-[8.5px] font-bold text-[#33415b] transition hover:bg-slate-50"
+                  >
+                    <RefreshCw className="h-[12px] w-[12px]" />
+                    Replace
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => alert(`Deleting ${selected.name}`)}
+                    className="inline-flex h-[34px] items-center justify-center gap-[6px] rounded-[5px] border border-rose-200 bg-white text-[8.5px] font-bold text-rose-600 transition hover:bg-rose-50"
+                  >
+                    <Trash2 className="h-[12px] w-[12px]" />
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            {/* FILE USAGE */}
+            <section className="rounded-[8px] border border-[#e7e9ec] bg-white px-[14px] py-[13px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
+              <div className="flex items-center justify-between">
+                <h2 className="text-[12px] font-extrabold text-[#19274a]">
+                  File Usage
+                </h2>
+                <ChevronDown className="h-[14px] w-[14px] rotate-180 text-[#59657a]" />
+              </div>
+
+              <p className="mt-[11px] text-[9px] font-bold text-[#44516a]">
+                Used in 5 pages
+              </p>
+
+              <div className="mt-[10px] space-y-[9px]">
+                {["Home", "About Us", "Our Services", "How Sewa Works", "When a Family Needs Help"].map(
+                  (item) => (
+                    <div key={item} className="flex items-center gap-[8px]">
+                      <span className="h-[7px] w-[7px] rounded-full bg-emerald-600" />
+                      <span className="text-[8.8px] font-semibold text-[#34425e]">
+                        {item}
+                      </span>
+                    </div>
+                  ),
+                )}
+              </div>
+
+              <button
+                type="button"
+                onClick={() => router.push("/gallery/uploaded")}
+                className="mt-[14px] h-[34px] w-full rounded-[5px] border border-[#dfe4e8] bg-white text-[8.5px] font-bold text-[#14683d] transition hover:bg-emerald-50"
+              >
+                View All Usage
+              </button>
+            </section>
+
+            {/* QUICK ACTIONS */}
+            <section className="rounded-[8px] border border-[#e7e9ec] bg-white px-[14px] py-[13px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
+              <h2 className="text-[12px] font-extrabold text-[#19274a]">
+                Quick Actions
+              </h2>
+
+              <div className="mt-[10px] grid grid-cols-2 gap-[8px]">
+                <button
+                  type="button"
+                  onClick={() => router.push("/gallery/1")}
+                  className="inline-flex h-[36px] items-center justify-center gap-[7px] rounded-[5px] border border-[#e2e6ea] bg-white text-[8.5px] font-bold text-[#33415b] transition hover:bg-slate-50"
+                >
+                  <FolderClosed className="h-[13px] w-[13px]" />
+                  Create Folder
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => router.push("/gallery/uploaded")}
+                  className="inline-flex h-[36px] items-center justify-center gap-[7px] rounded-[5px] border border-[#e2e6ea] bg-white text-[8.5px] font-bold text-[#33415b] transition hover:bg-slate-50"
+                >
+                  <Settings className="h-[13px] w-[13px]" />
+                  Media Settings
+                </button>
+              </div>
+            </section>
+          </aside>
+        </section>
+
+        {/* BOTTOM MESSAGE */}
+        <section className="mt-[14px] flex min-h-[66px] items-center justify-between gap-[18px] rounded-[8px] border border-[#dce8df] bg-[linear-gradient(90deg,#eef7f1,#f7fbf8)] px-[18px]">
+          <div className="flex min-w-0 items-center gap-[12px]">
+            <ShieldCheck className="h-[28px] w-[28px] shrink-0 text-[#14683d]" />
+            <div className="min-w-0">
+              <p className="text-[11px] font-extrabold text-[#274735]">
+                Keep your media library organized!
+              </p>
+              <p className="mt-[4px] truncate text-[9.5px] font-semibold text-[#64748b]">
+                Use folders, meaningful names and alt text for better performance and accessibility.
+              </p>
             </div>
           </div>
 
-          <div className="pointer-events-none absolute left-[76px] top-[9px] z-10 text-[11px] font-bold leading-none text-[#1b2b55]">
-            Additional Tips
-          </div>
-        </section>
-
-        {/* REMINDER */}
-        <section className="flex min-h-0 items-center rounded-[7px] border border-[#f4e6c2] bg-[linear-gradient(90deg,#fff9eb_0%,#fffdf4_100%)] px-[24px]">
-          <span className="mr-[14px] grid h-[22px] w-[22px] shrink-0 place-items-center rounded-full border-2 border-[#f0ac22] text-[11px] font-extrabold text-[#e59c0d]">
-            i
-          </span>
-
-          <p className="text-[10.5px] font-semibold text-[#6f5531]">
-            <strong className="font-extrabold">Remember:</strong>{" "}
-            <span className="text-[#17643d]">
-              A well-managed media library leads to a better website, better rankings, and a better experience for your visitors.
-            </span>
-          </p>
+          <button
+            type="button"
+            onClick={() => router.push("/gallery/uploaded")}
+            className="inline-flex h-[40px] shrink-0 items-center gap-[9px] rounded-[6px] border border-[#d8e4dc] bg-white px-[18px] text-[9.5px] font-bold text-[#14683d] transition hover:bg-emerald-50"
+          >
+            Media Library Best Practices
+            <ChevronRight className="h-[13px] w-[13px]" />
+          </button>
         </section>
       </div>
     </main>
