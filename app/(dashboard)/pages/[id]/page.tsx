@@ -809,6 +809,7 @@ export default function CmsPageDetailPage() {
         : 390;
 
   const previewViewportRef = useRef<HTMLDivElement>(null);
+  const frameScrollRef = useRef<HTMLDivElement>(null);
   const [
     viewportSize,
     setViewportSize,
@@ -1002,10 +1003,10 @@ export default function CmsPageDetailPage() {
 
             <div
               ref={previewViewportRef}
-              className="flex min-h-0 flex-1 items-start justify-center overflow-hidden bg-[#f8f8f5] px-[10px] pt-[8px]"
+              className="flex min-h-0 flex-1 items-start justify-center overflow-hidden bg-[#f8f8f5] px-[12px] pb-[14px] pt-[14px]"
             >
               <div
-                className="shrink-0 overflow-hidden rounded-t-[6px] border border-[#e9e6df] bg-white transition-all duration-200"
+                className="shrink-0 overflow-auto rounded-[6px] border border-[#e9e6df] bg-white shadow-sm transition-all duration-200"
                 style={{
                   width: scaledFrameWidth,
                   height: scaledFrameHeight,
@@ -1014,7 +1015,8 @@ export default function CmsPageDetailPage() {
                 <div
                   style={{
                     width: deviceWidthPx,
-                    height: unscaledFrameHeight,
+                    height: "100%",
+                    minHeight: unscaledFrameHeight,
                     transform: `scale(${previewScaleFactor})`,
                     transformOrigin: "top left",
                   }}
@@ -1023,8 +1025,8 @@ export default function CmsPageDetailPage() {
                     title={`${page.title} live website preview`}
                     src={`${PUBLIC_SITE_URL}${page.slug === "/" ? "" : page.slug}`}
                     width={deviceWidthPx}
-                    height={unscaledFrameHeight}
-                    className="border-0 bg-white"
+                    height="100%"
+                    className="min-h-full border-0 bg-white"
                   />
                 </div>
               </div>

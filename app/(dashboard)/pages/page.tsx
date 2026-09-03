@@ -1145,11 +1145,7 @@ export default function PagesCmsPage() {
                 <button
                   type="button"
                   onClick={() =>
-                    window.open(
-                      selectedPagePublicUrl,
-                      "_blank",
-                      "noopener,noreferrer",
-                    )
+                    router.push(`/pages/${getCmsPageRouteKey(selectedPage)}`)
                   }
                   className="flex h-[29px] items-center justify-center gap-[6px] rounded-[5px] border border-orange-200 bg-orange-50 text-[8px] font-semibold text-[#303a50] transition hover:bg-orange-100"
                 >
@@ -1158,7 +1154,7 @@ export default function PagesCmsPage() {
                     strokeWidth={1.7}
                   />
 
-                  View Live Page
+                  View Page
                 </button>
               </div>
             </div>
