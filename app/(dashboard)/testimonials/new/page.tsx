@@ -168,7 +168,7 @@ export default function AddNewTestimonialPage() {
         {/* HEADER */}
         <header className="flex items-start justify-between gap-[16px]">
           <div>
-            <h1 className="text-[24px] font-extrabold leading-none tracking-[-0.02em] text-[#075b33]">
+            <h1 className="text-[24px] font-semibold leading-none tracking-[-0.02em] text-[#075b33]">
               Add New Testimonial
             </h1>
 
@@ -211,7 +211,7 @@ export default function AddNewTestimonialPage() {
           <div className="space-y-[12px]">
             {/* TESTIMONIAL INFORMATION */}
             <section className="rounded-[9px] border border-[#e7e9ec] bg-white px-[18px] py-[16px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-              <h2 className="text-[14px] font-extrabold text-[#17234a]">
+              <h2 className="text-[14px] font-semibold text-[#17234a]">
                 Testimonial Information
               </h2>
               <p className="mt-[4px] text-[10.5px] font-semibold text-[#66738b]">
@@ -356,7 +356,7 @@ export default function AddNewTestimonialPage() {
 
             {/* PROFILE PHOTO */}
             <section className="rounded-[9px] border border-[#e7e9ec] bg-white px-[18px] py-[16px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-              <h2 className="text-[14px] font-extrabold text-[#17234a]">
+              <h2 className="text-[14px] font-semibold text-[#17234a]">
                 Profile / Photo
               </h2>
               <p className="mt-[4px] text-[10.5px] font-semibold text-[#66738b]">
@@ -406,7 +406,7 @@ export default function AddNewTestimonialPage() {
           <div className="space-y-[12px]">
             {/* DISPLAY SETTINGS */}
             <section className="rounded-[9px] border border-[#e7e9ec] bg-white px-[18px] py-[16px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-              <h2 className="text-[14px] font-extrabold text-[#17234a]">
+              <h2 className="text-[14px] font-semibold text-[#17234a]">
                 Display Settings
               </h2>
               <p className="mt-[4px] text-[10.5px] font-semibold text-[#66738b]">
@@ -452,8 +452,8 @@ export default function AddNewTestimonialPage() {
                             type="button"
                             onClick={() => setChecked((v) => !v)}
                             className={`grid h-[17px] w-[17px] place-items-center rounded-[4px] border ${checkedValue
-                                ? "border-[#0b6a3b] bg-[#0b6a3b] text-white"
-                                : "border-[#ccd4df] bg-white text-transparent"
+                              ? "border-[#0b6a3b] bg-[#0b6a3b] text-white"
+                              : "border-[#ccd4df] bg-white text-transparent"
                               }`}
                           >
                             <Check className="h-[11px] w-[11px]" />
@@ -494,7 +494,7 @@ export default function AddNewTestimonialPage() {
 
             {/* PREVIEW */}
             <section className="rounded-[9px] border border-[#e7e9ec] bg-white px-[18px] py-[16px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-              <h2 className="text-[14px] font-extrabold text-[#17234a]">
+              <h2 className="text-[14px] font-semibold text-[#17234a]">
                 Testimonial Preview
               </h2>
               <p className="mt-[4px] text-[10.5px] font-semibold text-[#66738b]">
@@ -516,7 +516,7 @@ export default function AddNewTestimonialPage() {
                   </div>
 
                   <div className="text-left">
-                    <p className="text-[11px] font-extrabold text-[#1a2646]">
+                    <p className="text-[11px] font-semibold text-[#1a2646]">
                       {previewName}
                     </p>
                     <p className="mt-[3px] text-[9px] font-bold text-[#178248]">
@@ -545,7 +545,7 @@ export default function AddNewTestimonialPage() {
               i
             </div>
             <p className="text-[9.5px] font-semibold text-[#38654b]">
-              <strong className="font-extrabold">Tip:</strong>{" "}
+              <strong className="font-semibold">Tip:</strong>{" "}
               After saving, you can edit, reorder or feature this testimonial anytime.
             </p>
           </div>

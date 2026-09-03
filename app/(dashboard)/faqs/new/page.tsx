@@ -104,7 +104,7 @@ export default function AddNewFAQPage() {
         {/* HEADER */}
         <header className="flex items-start justify-between gap-[16px]">
           <div>
-            <h1 className="text-[24px] font-extrabold leading-none tracking-[-0.02em] text-[#075b33]">
+            <h1 className="text-[24px] font-semibold leading-none tracking-[-0.02em] text-[#075b33]">
               Add New FAQ
             </h1>
 
@@ -142,7 +142,7 @@ export default function AddNewFAQPage() {
           <div className="space-y-[12px]">
             {/* FAQ INFORMATION */}
             <section className="rounded-[9px] border border-[#e7e9ec] bg-white px-[18px] py-[16px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-              <h2 className="text-[14px] font-extrabold text-[#17234a]">
+              <h2 className="text-[14px] font-semibold text-[#17234a]">
                 FAQ Information
               </h2>
               <p className="mt-[4px] text-[10.5px] font-semibold text-[#66738b]">
@@ -255,7 +255,7 @@ export default function AddNewFAQPage() {
                   <Toggle checked={active} onChange={() => setActive((v) => !v)} />
 
                   <div>
-                    <p className="text-[10.5px] font-extrabold text-[#213050]">
+                    <p className="text-[10.5px] font-semibold text-[#213050]">
                       Active
                     </p>
                     <p className="mt-[2px] text-[9.5px] font-semibold text-[#6d7890]">
@@ -268,7 +268,7 @@ export default function AddNewFAQPage() {
 
             {/* ADDITIONAL OPTIONS */}
             <section className="rounded-[9px] border border-[#e7e9ec] bg-white px-[18px] py-[16px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-              <h2 className="text-[14px] font-extrabold text-[#17234a]">
+              <h2 className="text-[14px] font-semibold text-[#17234a]">
                 Additional Options
               </h2>
               <p className="mt-[4px] text-[10.5px] font-semibold text-[#66738b]">
@@ -312,7 +312,7 @@ export default function AddNewFAQPage() {
           <div className="space-y-[12px]">
             {/* CATEGORY */}
             <section className="rounded-[9px] border border-[#e7e9ec] bg-white px-[18px] py-[16px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-              <h2 className="text-[14px] font-extrabold text-[#17234a]">
+              <h2 className="text-[14px] font-semibold text-[#17234a]">
                 Category &amp; Visibility
               </h2>
               <p className="mt-[4px] text-[10.5px] font-semibold text-[#66738b]">
@@ -382,13 +382,13 @@ export default function AddNewFAQPage() {
                         >
                           <span
                             className={`mt-[1px] h-[17px] w-[17px] shrink-0 rounded-full border ${selected
-                                ? "border-[#0b6a3b] shadow-[inset_0_0_0_4px_#0b6a3b]"
-                                : "border-[#cfd6df] bg-white"
+                              ? "border-[#0b6a3b] shadow-[inset_0_0_0_4px_#0b6a3b]"
+                              : "border-[#cfd6df] bg-white"
                               }`}
                           />
 
                           <div>
-                            <p className="text-[10.5px] font-extrabold text-[#213050]">
+                            <p className="text-[10.5px] font-semibold text-[#213050]">
                               {item.title}
                             </p>
                             <p className="mt-[3px] text-[9.5px] font-semibold text-[#6d7890]">
@@ -405,7 +405,7 @@ export default function AddNewFAQPage() {
 
             {/* SEO */}
             <section className="rounded-[9px] border border-[#e7e9ec] bg-white px-[18px] py-[16px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-              <h2 className="text-[14px] font-extrabold text-[#17234a]">
+              <h2 className="text-[14px] font-semibold text-[#17234a]">
                 SEO &amp; Display Settings
               </h2>
               <p className="mt-[4px] text-[10.5px] font-semibold text-[#66738b]">
@@ -478,7 +478,7 @@ export default function AddNewFAQPage() {
             </div>
 
             <p className="text-[9.5px] font-semibold text-[#38654b]">
-              <strong className="font-extrabold">Tip:</strong>{" "}
+              <strong className="font-semibold">Tip:</strong>{" "}
               After saving, you can add more FAQs or go back to manage existing FAQs.
             </p>
           </div>

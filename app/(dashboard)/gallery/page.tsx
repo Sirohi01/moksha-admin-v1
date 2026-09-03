@@ -174,7 +174,7 @@ function MetricCard({
 
       <div className="min-w-0 flex-1">
         <p className="truncate text-[10px] font-bold text-[#34435e]">{label}</p>
-        <p className="mt-[6px] text-[22px] font-extrabold leading-none tracking-[-0.03em] text-[#10204a]">
+        <p className="mt-[6px] text-[22px] font-semibold leading-none tracking-[-0.03em] text-[#10204a]">
           {value}
         </p>
         <p className="mt-[8px] truncate text-[9px] font-semibold text-[#64748b]">
@@ -267,7 +267,7 @@ export default function MediaLibraryPage() {
         {/* HEADER */}
         <header className="flex items-start justify-between gap-[16px]">
           <div>
-            <h1 className="text-[24px] font-extrabold leading-none tracking-[-0.02em] text-[#075b33]">
+            <h1 className="text-[24px] font-semibold leading-none tracking-[-0.02em] text-[#075b33]">
               Media Library
             </h1>
 
@@ -457,7 +457,7 @@ export default function MediaLibraryPage() {
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[930px] border-collapse text-left">
                   <thead>
-                    <tr className="h-[42px] border-b border-[#e7e9ec] bg-[#fafbfc] text-[8.5px] font-extrabold uppercase tracking-[0.04em] text-[#44516a]">
+                    <tr className="h-[42px] border-b border-[#e7e9ec] bg-[#fafbfc] text-[8.5px] font-semibold uppercase tracking-[0.04em] text-[#44516a]">
                       <th className="w-[42px] px-[12px] text-center">
                         <input type="checkbox" />
                       </th>
@@ -477,9 +477,8 @@ export default function MediaLibraryPage() {
                       <tr
                         key={item.id}
                         onClick={() => setSelectedId(item.id)}
-                        className={`h-[66px] cursor-pointer border-b border-[#eef0f2] align-middle last:border-b-0 hover:bg-slate-50/60 ${
-                          selectedId === item.id ? "bg-[#fbfefc]" : ""
-                        }`}
+                        className={`h-[66px] cursor-pointer border-b border-[#eef0f2] align-middle last:border-b-0 hover:bg-slate-50/60 ${selectedId === item.id ? "bg-[#fbfefc]" : ""
+                          }`}
                       >
                         <td className="px-[12px] text-center">
                           <input
@@ -492,7 +491,7 @@ export default function MediaLibraryPage() {
                           <div className="flex min-w-[220px] items-center gap-[12px]">
                             <FilePreview item={item} />
                             <div className="min-w-0">
-                              <p className="truncate text-[10px] font-extrabold text-[#19274a]">
+                              <p className="truncate text-[10px] font-semibold text-[#19274a]">
                                 {item.name}
                               </p>
                               {item.meta ? (
@@ -535,18 +534,16 @@ export default function MediaLibraryPage() {
 
                         <td className="px-[8px]">
                           <span
-                            className={`inline-flex items-center gap-[5px] rounded-[5px] px-[8px] py-[4px] text-[8px] font-bold ${
-                              item.status === "Published"
+                            className={`inline-flex items-center gap-[5px] rounded-[5px] px-[8px] py-[4px] text-[8px] font-bold ${item.status === "Published"
                                 ? "bg-emerald-50 text-emerald-700"
                                 : "bg-amber-50 text-amber-700"
-                            }`}
+                              }`}
                           >
                             <span
-                              className={`h-[5px] w-[5px] rounded-full ${
-                                item.status === "Published"
+                              className={`h-[5px] w-[5px] rounded-full ${item.status === "Published"
                                   ? "bg-emerald-500"
                                   : "bg-amber-500"
-                              }`}
+                                }`}
                             />
                             {item.status}
                           </span>
@@ -607,11 +604,10 @@ export default function MediaLibraryPage() {
                     <button
                       type="button"
                       key={page}
-                      className={`grid h-[32px] min-w-[32px] place-items-center rounded-[5px] px-[6px] text-[9px] font-bold ${
-                        page === 1
+                      className={`grid h-[32px] min-w-[32px] place-items-center rounded-[5px] px-[6px] text-[9px] font-bold ${page === 1
                           ? "bg-[#075b33] text-white"
                           : "border border-[#dfe3e7] bg-white text-[#35445f]"
-                      }`}
+                        }`}
                     >
                       {page}
                     </button>
@@ -639,7 +635,7 @@ export default function MediaLibraryPage() {
               <div className="flex min-w-0 items-center gap-[12px]">
                 <ShieldCheck className="h-[24px] w-[24px] shrink-0 text-[#14683d]" />
                 <div className="min-w-0">
-                  <p className="text-[10.5px] font-extrabold text-[#274735]">
+                  <p className="text-[10.5px] font-semibold text-[#274735]">
                     Keep your media library organized!
                   </p>
                   <p className="mt-[2px] truncate text-[9px] font-semibold text-[#64748b]">
@@ -664,7 +660,7 @@ export default function MediaLibraryPage() {
             {/* MEDIA DETAILS */}
             <section className="rounded-[8px] border border-[#e7e9ec] bg-white px-[14px] py-[13px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
               <div className="flex items-center justify-between">
-                <h2 className="text-[12px] font-extrabold text-[#19274a]">
+                <h2 className="text-[12px] font-semibold text-[#19274a]">
                   Media Details
                 </h2>
                 <ChevronDown className="h-[14px] w-[14px] rotate-180 text-[#59657a]" />
@@ -688,7 +684,7 @@ export default function MediaLibraryPage() {
                 )}
 
                 <div className="mt-[12px] flex items-center justify-between gap-[8px]">
-                  <p className="truncate text-[10px] font-extrabold text-[#19274a]">
+                  <p className="truncate text-[10px] font-semibold text-[#19274a]">
                     {selected.name}
                   </p>
                   <span
@@ -767,7 +763,7 @@ export default function MediaLibraryPage() {
             {/* FILE USAGE */}
             <section className="rounded-[8px] border border-[#e7e9ec] bg-white px-[14px] py-[13px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
               <div className="flex items-center justify-between">
-                <h2 className="text-[12px] font-extrabold text-[#19274a]">
+                <h2 className="text-[12px] font-semibold text-[#19274a]">
                   File Usage
                 </h2>
                 <ChevronDown className="h-[14px] w-[14px] rotate-180 text-[#59657a]" />
@@ -793,7 +789,7 @@ export default function MediaLibraryPage() {
 
             {/* QUICK ACTIONS */}
             <section className="rounded-[8px] border border-[#e7e9ec] bg-white px-[14px] py-[13px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-              <h2 className="text-[12px] font-extrabold text-[#19274a]">
+              <h2 className="text-[12px] font-semibold text-[#19274a]">
                 Quick Actions
               </h2>
 

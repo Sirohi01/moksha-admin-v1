@@ -1856,7 +1856,7 @@ export default function DashboardPage() {
                   "menu" && (
                     <div className="absolute left-0 top-[48px] z-[120] w-[210px] overflow-hidden rounded-[12px] border border-[#e5e2da] bg-white p-2 shadow-[0_14px_40px_rgba(15,23,42,0.16)]">
                       <div className="border-b border-[#ecece7] px-2.5 pb-2 pt-1">
-                        <p className="text-[9px] font-extrabold uppercase tracking-[0.08em] text-[#8a92a0]">
+                        <p className="text-[9px] font-semibold uppercase tracking-[0.08em] text-[#8a92a0]">
                           Navigation
                         </p>
                       </div>
@@ -1927,7 +1927,7 @@ export default function DashboardPage() {
                     "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px",
                 }}
               >
-                <h1 className="truncate text-[20px] font-extrabold leading-tight tracking-[-0.025em]">
+                <h1 className="truncate text-[20px] font-semibold leading-tight tracking-[-0.025em]">
                   Welcome back,
                   Vansh!{" "}
 
@@ -1941,7 +1941,7 @@ export default function DashboardPage() {
                   overview of your
                   website today{" "}
 
-                  <b className="font-extrabold">
+                  <b className="font-semibold">
                     mokshasewa.org
                   </b>
                 </p>
@@ -2095,7 +2095,7 @@ export default function DashboardPage() {
 
                       <div
                         onClick={() => window.open(item.href || "/pages", "_blank")}
-                        className="absolute bottom-1 left-2 right-2 flex cursor-pointer items-center justify-center gap-1 text-[8px] font-extrabold text-[#293957] transition hover:text-blue-600"
+                        className="absolute bottom-1 left-2 right-2 flex cursor-pointer items-center justify-center gap-1 text-[8px] font-semibold text-[#293957] transition hover:text-blue-600"
                       >
                         {
                           item.footer
@@ -2183,7 +2183,7 @@ export default function DashboardPage() {
 
                     <div className="absolute inset-[9px] z-10 grid place-items-center rounded-full bg-white text-center">
                       <div>
-                        <div className="text-[22px] font-extrabold leading-none text-emerald-600">
+                        <div className="text-[22px] font-semibold leading-none text-emerald-600">
                           <AnimatedCounter
                             value={
                               pageSpeed
@@ -2461,7 +2461,7 @@ export default function DashboardPage() {
                           className={`
                             mt-1
                             text-[18px]
-                            font-extrabold
+                            font-semibold
                             ${item.valColor}
                           `}
                         >
@@ -2746,7 +2746,7 @@ export default function DashboardPage() {
                             border
                             px-2
                             text-[9px]
-                            font-extrabold
+                            font-semibold
 
                             ${level ===
                               "High"
@@ -2770,7 +2770,7 @@ export default function DashboardPage() {
                             rounded-full
                             bg-[#f8f2ee]
                             px-1
-                            font-extrabold
+                            font-semibold
                             text-[#695b50]
                           "
                         >
@@ -3480,7 +3480,7 @@ export default function DashboardPage() {
 
                 <div className="px-3 pt-2.5 pb-2">
                   <p
-                    className="mb-1 text-[10px] font-extrabold text-slate-900"
+                    className="mb-1 text-[10px] font-semibold text-slate-900"
                     style={{
                       color:
                         "#0f172a",

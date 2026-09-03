@@ -55,7 +55,7 @@ function Panel({
 }) {
   return (
     <section className="rounded-[9px] border border-[#e7e9ec] bg-white px-[18px] py-[16px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-      <h2 className="text-[14px] font-extrabold leading-tight tracking-[-0.01em] text-[#17234a]">
+      <h2 className="text-[14px] font-semibold leading-tight tracking-[-0.01em] text-[#17234a]">
         {title}
       </h2>
 
@@ -82,7 +82,7 @@ function SettingRow({
   return (
     <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-[14px] py-[6px]">
       <div className="min-w-0">
-        <p className="text-[10.5px] font-extrabold leading-[1.25] text-[#213050]">
+        <p className="text-[10.5px] font-semibold leading-[1.25] text-[#213050]">
           {title}
         </p>
         <p className="mt-[3px] text-[9px] font-semibold leading-[1.35] text-[#6d7890]">
@@ -173,7 +173,7 @@ export default function FAQSettingsPage() {
         {/* HEADER */}
         <header className="flex items-start justify-between gap-[16px]">
           <div>
-            <h1 className="text-[24px] font-extrabold leading-none tracking-[-0.02em] text-[#075b33]">
+            <h1 className="text-[24px] font-semibold leading-none tracking-[-0.02em] text-[#075b33]">
               FAQ Settings
             </h1>
 
@@ -245,7 +245,7 @@ export default function FAQSettingsPage() {
 
               <div className="grid grid-cols-[minmax(0,1fr)_180px] items-start gap-[14px] py-[6px]">
                 <div>
-                  <p className="text-[10.5px] font-extrabold text-[#213050]">
+                  <p className="text-[10.5px] font-semibold text-[#213050]">
                     FAQ Page Title
                   </p>
                   <p className="mt-[3px] text-[9px] font-semibold text-[#6d7890]">
@@ -261,7 +261,7 @@ export default function FAQSettingsPage() {
 
               <div className="grid grid-cols-[minmax(0,1fr)_180px] items-start gap-[14px] py-[6px]">
                 <div>
-                  <p className="text-[10.5px] font-extrabold text-[#213050]">
+                  <p className="text-[10.5px] font-semibold text-[#213050]">
                     FAQ Page Subtitle
                   </p>
                   <p className="mt-[3px] text-[9px] font-semibold text-[#6d7890]">
@@ -277,7 +277,7 @@ export default function FAQSettingsPage() {
 
               <div className="grid grid-cols-[minmax(0,1fr)_180px] items-start gap-[14px] py-[6px]">
                 <div>
-                  <p className="text-[10.5px] font-extrabold text-[#213050]">
+                  <p className="text-[10.5px] font-semibold text-[#213050]">
                     FAQ Slug / URL
                   </p>
                   <p className="mt-[3px] text-[9px] font-semibold text-[#6d7890]">
@@ -398,7 +398,7 @@ export default function FAQSettingsPage() {
             subtitle="Manage FAQ categories and their visibility."
           >
             <div>
-              <p className="mb-[9px] text-[10.5px] font-extrabold text-[#213050]">
+              <p className="mb-[9px] text-[10.5px] font-semibold text-[#213050]">
                 Manage Categories
               </p>
 
@@ -442,7 +442,7 @@ export default function FAQSettingsPage() {
               </button>
 
               <div className="mt-[18px] space-y-[11px]">
-                <p className="text-[10.5px] font-extrabold text-[#213050]">
+                <p className="text-[10.5px] font-semibold text-[#213050]">
                   Category Settings
                 </p>
 
@@ -498,7 +498,7 @@ export default function FAQSettingsPage() {
             >
               <div className="rounded-[8px] border border-[#e2e6ea] bg-white px-[16px] py-[16px]">
                 <div className="text-center">
-                  <h3 className="text-[17px] font-extrabold tracking-[-0.02em] text-[#18234a]">
+                  <h3 className="text-[17px] font-semibold tracking-[-0.02em] text-[#18234a]">
                     Frequently Asked Questions
                   </h3>
                   <p className="mx-auto mt-[7px] max-w-[270px] text-[9px] font-semibold leading-[1.5] text-[#66738b]">
@@ -522,8 +522,8 @@ export default function FAQSettingsPage() {
                         key={item}
                         type="button"
                         className={`h-[28px] shrink-0 rounded-[5px] px-[10px] text-[8px] font-bold ${index === 0
-                            ? "bg-[#075b33] text-white"
-                            : "bg-[#f2f4f6] text-[#536078]"
+                          ? "bg-[#075b33] text-white"
+                          : "bg-[#f2f4f6] text-[#536078]"
                           }`}
                       >
                         {item}
