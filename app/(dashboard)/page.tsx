@@ -127,9 +127,9 @@ interface DashboardIssue {
 const defaultTopStats = [
   {
     title: "SEO HEALTH SCORE",
-    value: "92",
+    value: "—",
     suffix: "/100",
-    note: "Excellent",
+    note: "Loading",
     icon: TrendingUp,
     tone: "emerald",
     gradient: "linear-gradient(135deg, #ffffff 0%, #ffffff 55%, #f0fdf4 100%)",
@@ -138,8 +138,8 @@ const defaultTopStats = [
   },
   {
     title: "TOTAL PAGES",
-    value: "48",
-    note: "↑ 5 this month",
+    value: "—",
+    note: "Loading",
     icon: FileText,
     tone: "violet",
     gradient: "linear-gradient(135deg, #ffffff 0%, #ffffff 55%, #f8f5ff 100%)",
@@ -148,8 +148,8 @@ const defaultTopStats = [
   },
   {
     title: "TOTAL POSTS",
-    value: "32",
-    note: "↑ 6 this month",
+    value: "—",
+    note: "Loading",
     icon: FileSearch,
     tone: "amber",
     gradient: "linear-gradient(135deg, #ffffff 0%, #ffffff 55%, #fffdf0 100%)",
@@ -158,9 +158,9 @@ const defaultTopStats = [
   },
   {
     title: "INDEXED PAGES",
-    value: "43",
-    suffix: "/48",
-    note: "89.6% Indexed",
+    value: "—",
+    suffix: "",
+    note: "Not Connected",
     icon: Search,
     tone: "blue",
     gradient: "linear-gradient(135deg, #ffffff 0%, #ffffff 55%, #f0f7ff 100%)",
@@ -169,8 +169,8 @@ const defaultTopStats = [
   },
   {
     title: "SEWA ENQUIRIES (MTD)",
-    value: "58",
-    note: "↑ 18.4% this month",
+    value: "—",
+    note: "Loading",
     icon: Users,
     tone: "rose",
     gradient: "linear-gradient(135deg, #ffffff 0%, #ffffff 55%, #fff5f6 100%)",
@@ -179,118 +179,14 @@ const defaultTopStats = [
   },
   {
     title: "CONVERSION RATE",
-    value: "4.8%",
-    note: "↑ 1.2% this month",
+    value: "—",
+    note: "Loading",
     icon: Target,
     tone: "emerald",
     gradient: "linear-gradient(135deg, #ffffff 0%, #ffffff 55%, #f0fdfa 100%)",
     numColor: "#0f766e",
     footer: "View analytics",
   },
-];
-
-const issues: DashboardIssue[] = [
-  {
-    label: "3 pages are missing meta description",
-    level: "High",
-    count: 3,
-    icon: FileText,
-    tone: "rose",
-  },
-  {
-    label: "2 pages are not indexed",
-    level: "High",
-    count: 2,
-    icon: FileText,
-    tone: "rose",
-  },
-  {
-    label: "Home page LCP issue detected",
-    level: "High",
-    count: 1,
-    icon: CircleGauge,
-    tone: "amber",
-  },
-  {
-    label: "7 images missing ALT text",
-    level: "Medium",
-    count: 7,
-    icon: ImageIcon,
-    tone: "amber",
-  },
-  {
-    label: "4 broken internal links found",
-    level: "Medium",
-    count: 4,
-    icon: Link2,
-    tone: "amber",
-  },
-  {
-    label: "About page traffic dropped by 21%",
-    level: "Low",
-    count: 1,
-    icon: TrendingDown,
-    tone: "violet",
-  },
-  {
-    label: "New keyword opportunities found",
-    level: "Low",
-    count: 12,
-    icon: MousePointerClick,
-    tone: "violet",
-  },
-];
-
-const topPages = [
-  ["Home", "/", "5,842"],
-  ["Our Services", "/our-services", "3,214"],
-  ["About Us", "/about-us", "2,189"],
-  ["How We Help", "/how-we-help", "1,876"],
-  ["Contact Us", "/contact-us", "1,421"],
-];
-
-const keywordRows = [
-  ["moksha sewa", "652", "4,812", "8.3"],
-  ["free antim sanskar", "421", "3,210", "6.7"],
-  ["final journey help", "312", "2,102", "9.1"],
-  ["unclaimed body sewa", "289", "1,987", "7.8"],
-  ["last rites support", "254", "1,456", "10.2"],
-];
-
-const locations = [
-  ["Delhi", 24, "41.4%"],
-  ["Ghaziabad", 18, "31.0%"],
-  ["Noida", 11, "19.9%"],
-  ["Faridabad", 3, "5.2%"],
-  ["Gurugram", 2, "3.4%"],
-];
-
-const submissions = [
-  [
-    "Rahul Sharma",
-    "Sewa Help Request",
-    "10 mins ago",
-  ],
-  [
-    "Neha Verma",
-    "Volunteer Registration",
-    "1 hour ago",
-  ],
-  [
-    "Amit Gupta",
-    "CSR Enquiry",
-    "2 hours ago",
-  ],
-  [
-    "Pooja Singh",
-    "Partnership Enquiry",
-    "3 hours ago",
-  ],
-  [
-    "Sandeep Kumar",
-    "Contact Us",
-    "4 hours ago",
-  ],
 ];
 
 const toneClass = {
@@ -575,10 +471,75 @@ export default function DashboardPage() {
     return () => { active = false; };
   }, []);
 
+  useEffect(() => {
+    if (!liveDashboard || liveDashboard.sources.pageSpeed.status === "connected") return;
+    let active = true;
+    const refresh = async () => {
+      try {
+        const pageSpeed = await dashboardApi.pageSpeed();
+        if (active) {
+          setLiveDashboard((current) => current ? {
+            ...current,
+            sources: { ...current.sources, pageSpeed },
+          } : current);
+        }
+      } catch {
+        // Keep the last truthful source state; the next poll will retry.
+      }
+    };
+    const timer = window.setInterval(refresh, 10_000);
+    return () => { active = false; window.clearInterval(timer); };
+  }, [liveDashboard?.sources.pageSpeed.status]);
+
+  useEffect(() => {
+    if (!liveDashboard || liveDashboard.sources.indexCoverage?.status === "connected") return;
+    let active = true;
+    const refresh = async () => {
+      try {
+        const indexCoverage = await dashboardApi.indexCoverage();
+        if (active) {
+          setLiveDashboard((current) => current ? {
+            ...current,
+            sources: { ...current.sources, indexCoverage },
+          } : current);
+        }
+      } catch {
+        // Preserve the latest source state and retry on the next interval.
+      }
+    };
+    const timer = window.setInterval(refresh, 10_000);
+    return () => { active = false; window.clearInterval(timer); };
+  }, [liveDashboard?.sources.indexCoverage?.status]);
+
+  useEffect(() => {
+    if (!liveDashboard || liveDashboard.sources.siteStatus?.status === "connected") return;
+    let active = true;
+    const refresh = async () => {
+      try {
+        const siteStatus = await dashboardApi.siteStatus();
+        if (active) setLiveDashboard((current) => current ? { ...current, sources: { ...current.sources, siteStatus } } : current);
+      } catch { /* retry on the next interval */ }
+    };
+    const timer = window.setInterval(refresh, 5_000);
+    return () => { active = false; window.clearInterval(timer); };
+  }, [liveDashboard?.sources.siteStatus?.status]);
+
   const internal = liveDashboard?.sources.internal.data;
   const analytics = liveDashboard?.sources.analytics.data;
   const searchConsole = liveDashboard?.sources.searchConsole.data;
+  const pageSpeedSource = liveDashboard?.sources.pageSpeed;
   const pageSpeed = liveDashboard?.sources.pageSpeed.data;
+  const indexCoverageSource = liveDashboard?.sources.indexCoverage;
+  const indexCoverage = indexCoverageSource?.data;
+  const siteStatus = liveDashboard?.sources.siteStatus?.data;
+  const seoScore = pageSpeed?.seoScore ?? 0;
+  const liveIssues: DashboardIssue[] = pageSpeed ? [
+    ...(pageSpeed.seoScore < 90 ? [{ label: `SEO score is ${pageSpeed.seoScore}/100`, level: "High" as const, count: 1, icon: FileSearch, tone: "rose" as const }] : []),
+    ...(pageSpeed.lcp != null && pageSpeed.lcp > 2500 ? [{ label: `LCP is ${(pageSpeed.lcp / 1000).toFixed(1)}s`, level: "High" as const, count: 1, icon: CircleGauge, tone: "rose" as const }] : []),
+    ...(pageSpeed.inp != null && pageSpeed.inp > 200 ? [{ label: `INP is ${Math.round(pageSpeed.inp)}ms`, level: "Medium" as const, count: 1, icon: Activity, tone: "amber" as const }] : []),
+    ...(pageSpeed.cls != null && pageSpeed.cls > 0.1 ? [{ label: `CLS is ${pageSpeed.cls.toFixed(2)}`, level: "Medium" as const, count: 1, icon: AlertCircle, tone: "amber" as const }] : []),
+    ...(pageSpeed.tbt != null && pageSpeed.tbt > 200 ? [{ label: `TBT is ${Math.round(pageSpeed.tbt)}ms`, level: "Low" as const, count: 1, icon: Timer, tone: "violet" as const }] : []),
+  ] : [];
   const number = (value: number) => new Intl.NumberFormat("en-IN").format(Math.round(value));
   const duration = (seconds: number) => `${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(Math.round(seconds % 60)).padStart(2, "0")}`;
   const growthText = (value: number | null | undefined, inverse = false) => {
@@ -588,14 +549,35 @@ export default function DashboardPage() {
   };
   const locationRows = internal?.topLocations.length
     ? internal.topLocations.map((item) => [item.city, item.count, `${internal.totalEnquiries > 0 ? ((item.count / internal.totalEnquiries) * 100).toFixed(1) : "0.0"}%`] as [string, number, string])
-    : locations;
+    : [];
   const submissionRows = internal?.recentSubmissions.length
     ? internal.recentSubmissions.map((item) => [item.name, item.type.replaceAll("_", " "), new Date(item.createdAt).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })])
-    : submissions;
+    : [];
+  const liveTopPages = (analytics?.pages ?? []).slice(0, 5).map((item) => {
+    const name = item.path === "/" ? "Home" : item.path.split("/").filter(Boolean).pop()?.replaceAll("-", " ") || item.path;
+    return [name, item.path, number(item.views)] as [string, string, string];
+  });
+  const liveKeywordRows = (searchConsole?.queries ?? []).slice(0, 5).map((item) => [
+    item.query, number(item.clicks), number(item.impressions), item.position.toFixed(1),
+  ] as [string, string, string, string]);
+  const analyticsDaily = analytics?.daily ?? [];
+  const analyticsChartSamples = analyticsDaily.length <= 5
+    ? analyticsDaily
+    : [0, 0.25, 0.5, 0.75, 1].map((ratio) => analyticsDaily[Math.round((analyticsDaily.length - 1) * ratio)]);
+  const analyticsChartMax = Math.max(1, ...analyticsChartSamples.flatMap((item) => [item.users, item.pageViews]));
+  const analyticsChartData = analyticsChartSamples.map((item, index) => {
+    const date = item.date.length === 8
+      ? new Date(`${item.date.slice(0, 4)}-${item.date.slice(4, 6)}-${item.date.slice(6, 8)}T00:00:00`).toLocaleDateString("en-GB", { day: "2-digit", month: "short" })
+      : item.date;
+    return { date, x: 48 + index * 90, blueH: (item.users / analyticsChartMax) * 72, emH: (item.pageViews / analyticsChartMax) * 72 };
+  });
   const topStats = defaultTopStats.map((item) => {
     if (item.title === "SEO HEALTH SCORE" && pageSpeed) return { ...item, value: String(pageSpeed.seoScore), note: pageSpeed.seoScore >= 90 ? "Excellent" : pageSpeed.seoScore >= 70 ? "Good" : "Needs Work" };
+    if (item.title === "SEO HEALTH SCORE") return { ...item, value: "—", note: pageSpeedSource?.message ?? "Connecting to PageSpeed" };
     if (item.title === "TOTAL PAGES" && internal) return { ...item, value: String(internal.totalPages), note: "Live from CMS" };
     if (item.title === "TOTAL POSTS" && internal) return { ...item, value: String(internal.totalPosts), note: growthText(internal.growth.posts) };
+    if (item.title === "INDEXED PAGES" && indexCoverage) return { ...item, value: `${indexCoverage.indexed}/${indexCoverage.total}`, note: `${indexCoverage.total > 0 ? ((indexCoverage.indexed / indexCoverage.total) * 100).toFixed(1) : "0.0"}% Indexed` };
+    if (item.title === "INDEXED PAGES") return { ...item, value: "—", note: indexCoverageSource?.message ?? "Connecting to Search Console" };
     if (item.title === "SEWA ENQUIRIES (MTD)" && internal) return { ...item, value: String(internal.enquiriesMtd), note: growthText(internal.growth.enquiriesMtd) };
     if (item.title === "CONVERSION RATE" && analytics) {
       const rate = analytics.sessions > 0 ? (analytics.conversions / analytics.sessions) * 100 : 0;
@@ -1219,8 +1201,9 @@ export default function DashboardPage() {
                     </svg>
 
                     <div
-                      className="absolute inset-0 rounded-full bg-[conic-gradient(#148151_0deg_255deg,#e9a11c_255deg_331deg,#edf0ea_331deg_360deg)]"
+                      className="absolute inset-0 rounded-full"
                       style={{
+                        background: `conic-gradient(#148151 0deg ${seoScore * 3.6}deg, #edf0ea ${seoScore * 3.6}deg 360deg)`,
                         mask: "url(#seo-donut-mask)",
                         WebkitMask: "url(#seo-donut-mask)",
                       }}
@@ -1229,11 +1212,11 @@ export default function DashboardPage() {
                     <div className="absolute inset-[9px] z-10 grid place-items-center rounded-full bg-white text-center">
                       <div>
                         <div className="text-[22px] font-extrabold leading-none text-emerald-600">
-                          <AnimatedCounter value={92} duration={2500} />
+                          <AnimatedCounter value={pageSpeed ? seoScore : "—"} duration={2500} />
                         </div>
 
                         <div className="mt-0.5 text-[9px] font-bold text-emerald-700">
-                          Excellent
+                          {pageSpeed ? (seoScore >= 90 ? "Excellent" : seoScore >= 70 ? "Good" : "Needs Work") : "No Live Data"}
                         </div>
                       </div>
                     </div>
@@ -1241,39 +1224,11 @@ export default function DashboardPage() {
 
                   <div className="space-y-[5px] text-[11.5px] font-medium text-slate-900" style={{ fontSize: "11.5px", fontWeight: 500, color: "#0f172a" }}>
                     {[
-                      ["Meta Title", "Good", true],
-                      [
-                        "Meta Description",
-                        "Good",
-                        true,
-                      ],
-                      ["Headings", "Good", true],
-                      [
-                        "Content Quality",
-                        "Good",
-                        true,
-                      ],
-                      [
-                        "Internal Linking",
-                        "Needs Work",
-                        false,
-                      ],
-                      [
-                        "Images (ALT Text)",
-                        "Needs Work",
-                        false,
-                      ],
-                      [
-                        "Schema Markup",
-                        "Good",
-                        true,
-                      ],
-                      [
-                        "Mobile Friendliness",
-                        "Good",
-                        true,
-                      ],
-                      ["Page Speed", "Good", true],
+                      ["SEO Score", pageSpeed ? `${pageSpeed.seoScore}/100` : "No Data", !!pageSpeed && pageSpeed.seoScore >= 90],
+                      ["Performance", pageSpeed ? `${pageSpeed.performanceScore}/100` : "No Data", !!pageSpeed && pageSpeed.performanceScore >= 90],
+                      ["LCP", pageSpeed?.lcp != null ? `${(pageSpeed.lcp / 1000).toFixed(1)}s` : "No Data", pageSpeed?.lcp != null && pageSpeed.lcp <= 2500],
+                      ["INP", pageSpeed?.inp != null ? `${Math.round(pageSpeed.inp)}ms` : "No Data", pageSpeed?.inp != null && pageSpeed.inp <= 200],
+                      ["CLS", pageSpeed?.cls != null ? pageSpeed.cls.toFixed(2) : "No Data", pageSpeed?.cls != null && pageSpeed.cls <= 0.1],
                     ].map(
                       ([name, status, ok]) => (
                         <div
@@ -1337,29 +1292,29 @@ export default function DashboardPage() {
                   {[
                     {
                       label: "Total Clicks",
-                      value: searchConsole ? number(searchConsole.clicks) : "3.62K",
-                      change: searchConsole ? growthText(searchConsole.growth.clicks) : "↑ 18.6%",
+                      value: searchConsole ? number(searchConsole.clicks) : "—",
+                      change: searchConsole ? growthText(searchConsole.growth.clicks) : "No Live Data",
                       bg: "bg-[#eff6ff] border-[#dbeafe]",
                       valColor: "text-blue-900",
                     },
                     {
                       label: "Total Impressions",
-                      value: searchConsole ? number(searchConsole.impressions) : "85.7K",
-                      change: searchConsole ? growthText(searchConsole.growth.impressions) : "↑ 20.4%",
+                      value: searchConsole ? number(searchConsole.impressions) : "—",
+                      change: searchConsole ? growthText(searchConsole.growth.impressions) : "No Live Data",
                       bg: "bg-[#f0fdf4] border-[#dcfce7]",
                       valColor: "text-emerald-900",
                     },
                     {
                       label: "Average CTR",
-                      value: searchConsole ? `${searchConsole.ctr.toFixed(2)}%` : "4.23%",
-                      change: searchConsole ? growthText(searchConsole.growth.ctr) : "↑ 8.7%",
+                      value: searchConsole ? `${searchConsole.ctr.toFixed(2)}%` : "—",
+                      change: searchConsole ? growthText(searchConsole.growth.ctr) : "No Live Data",
                       bg: "bg-[#faf5ff] border-[#f3e8ff]",
                       valColor: "text-purple-900",
                     },
                     {
                       label: "Average Position",
-                      value: searchConsole ? searchConsole.position.toFixed(1) : "12.6",
-                      change: searchConsole ? growthText(searchConsole.growth.position, true) : "",
+                      value: searchConsole ? searchConsole.position.toFixed(1) : "—",
+                      change: searchConsole ? growthText(searchConsole.growth.position, true) : "No Live Data",
                       bg: "bg-[#fff7ed] border-[#ffedd5]",
                       valColor: "text-amber-900",
                     },
@@ -1537,7 +1492,7 @@ export default function DashboardPage() {
                 </PanelTitle>
 
                 <div className="px-3 pt-2">
-                  {issues.map(
+                  {liveIssues.map(
                     ({
                       label,
                       level,
@@ -1621,32 +1576,32 @@ export default function DashboardPage() {
                     {[
                       {
                         label: "Users",
-                        value: analytics ? number(analytics.users) : "12,842",
-                        delta: analytics ? growthText(analytics.growth.users) : "↑ 18.7%",
+                        value: analytics ? number(analytics.users) : "—",
+                        delta: analytics ? growthText(analytics.growth.users) : "No Live Data",
                         good: true,
                         bg: "bg-[#eff6ff] border-[#dbeafe]",
                         valColor: "text-blue-900",
                       },
                       {
                         label: "Page Views",
-                        value: analytics ? number(analytics.pageViews) : "28,561",
-                        delta: analytics ? growthText(analytics.growth.pageViews) : "↑ 22.4%",
+                        value: analytics ? number(analytics.pageViews) : "—",
+                        delta: analytics ? growthText(analytics.growth.pageViews) : "No Live Data",
                         good: true,
                         bg: "bg-[#f0fdf4] border-[#dcfce7]",
                         valColor: "text-emerald-900",
                       },
                       {
                         label: "Avg. Session",
-                        value: analytics ? duration(analytics.averageSessionSeconds) : "02:45",
-                        delta: analytics ? growthText(analytics.growth.averageSession) : "↑ 8.3%",
+                        value: analytics ? duration(analytics.averageSessionSeconds) : "—",
+                        delta: analytics ? growthText(analytics.growth.averageSession) : "No Live Data",
                         good: true,
                         bg: "bg-[#faf5ff] border-[#f3e8ff]",
                         valColor: "text-purple-900",
                       },
                       {
                         label: "Bounce Rate",
-                        value: analytics ? `${analytics.bounceRate.toFixed(1)}%` : "32.6%",
-                        delta: analytics ? growthText(analytics.growth.bounceRate, true) : "↓ 5.1%",
+                        value: analytics ? `${analytics.bounceRate.toFixed(1)}%` : "—",
+                        delta: analytics ? growthText(analytics.growth.bounceRate, true) : "No Live Data",
                         good: false,
                         bg: "bg-[#fff7ed] border-[#ffedd5]",
                         valColor: "text-amber-900",
@@ -1717,13 +1672,7 @@ export default function DashboardPage() {
                         strokeWidth="1.2"
                       />
 
-                      {[
-                        { date: "03 May", x: 48, blueH: 48, emH: 36 },
-                        { date: "10 May", x: 138, blueH: 62, emH: 48 },
-                        { date: "17 May", x: 228, blueH: 52, emH: 42 },
-                        { date: "24 May", x: 318, blueH: 70, emH: 56 },
-                        { date: "31 May", x: 408, blueH: 80, emH: 66 },
-                      ].map((item) => (
+                      {analyticsChartData.map((item) => (
                         <g key={item.date}>
                           {/* Blue Bar (Users) */}
                           <rect
@@ -1796,9 +1745,9 @@ export default function DashboardPage() {
                   {[
                     {
                       label: "Largest Contentful Paint (LCP)",
-                      value: pageSpeed?.lcp != null ? `${(pageSpeed.lcp / 1000).toFixed(1)}s` : "2.1s",
-                      status: "Good",
-                      score: "90%",
+                      value: pageSpeed?.lcp != null ? `${(pageSpeed.lcp / 1000).toFixed(1)}s` : "—",
+                      status: pageSpeed?.lcp == null ? "No Data" : pageSpeed.lcp <= 2500 ? "Good" : pageSpeed.lcp <= 4000 ? "Needs Work" : "Poor",
+                      score: pageSpeed?.lcp == null ? "0%" : pageSpeed.lcp <= 2500 ? "100%" : pageSpeed.lcp <= 4000 ? "60%" : "25%",
                       bg: "bg-[#eff6ff] border-[#dbeafe]",
                       valColor: "text-blue-900",
                       barColor: "bg-blue-600",
@@ -1806,9 +1755,9 @@ export default function DashboardPage() {
                     },
                     {
                       label: "Interaction to Next Paint (INP)",
-                      value: pageSpeed?.inp != null ? `${Math.round(pageSpeed.inp)}ms` : "128ms",
-                      status: "Good",
-                      score: "92%",
+                      value: pageSpeed?.inp != null ? `${Math.round(pageSpeed.inp)}ms` : "—",
+                      status: pageSpeed?.inp == null ? "No Data" : pageSpeed.inp <= 200 ? "Good" : pageSpeed.inp <= 500 ? "Needs Work" : "Poor",
+                      score: pageSpeed?.inp == null ? "0%" : pageSpeed.inp <= 200 ? "100%" : pageSpeed.inp <= 500 ? "60%" : "25%",
                       bg: "bg-[#f0fdf4] border-[#dcfce7]",
                       valColor: "text-emerald-900",
                       barColor: "bg-emerald-600",
@@ -1816,9 +1765,9 @@ export default function DashboardPage() {
                     },
                     {
                       label: "Cumulative Layout Shift (CLS)",
-                      value: pageSpeed?.cls != null ? pageSpeed.cls.toFixed(2) : "0.06",
-                      status: "Good",
-                      score: "94%",
+                      value: pageSpeed?.cls != null ? pageSpeed.cls.toFixed(2) : "—",
+                      status: pageSpeed?.cls == null ? "No Data" : pageSpeed.cls <= 0.1 ? "Good" : pageSpeed.cls <= 0.25 ? "Needs Work" : "Poor",
+                      score: pageSpeed?.cls == null ? "0%" : pageSpeed.cls <= 0.1 ? "100%" : pageSpeed.cls <= 0.25 ? "60%" : "25%",
                       bg: "bg-[#faf5ff] border-[#f3e8ff]",
                       valColor: "text-purple-900",
                       barColor: "bg-purple-600",
@@ -1838,7 +1787,7 @@ export default function DashboardPage() {
                         <AnimatedCounter value={item.value} />
                       </p>
 
-                      <p className="mt-0.5 text-[9px] font-bold text-emerald-700">
+                      <p className={`mt-0.5 text-[9px] font-bold ${item.status === "Good" ? "text-emerald-700" : item.status === "No Data" ? "text-slate-500" : item.status === "Needs Work" ? "text-amber-700" : "text-red-700"}`}>
                         {item.status}
                       </p>
 
@@ -1847,7 +1796,7 @@ export default function DashboardPage() {
                       </div>
 
                       <p className={`mt-0.5 text-right text-[8px] font-bold ${item.scoreColor}`}>
-                        {item.score}
+                        {item.status === "No Data" ? "—" : item.score}
                       </p>
                     </div>
                   ))}
@@ -1874,19 +1823,19 @@ export default function DashboardPage() {
                     {[
                       [
                         "First Contentful Paint (FCP)",
-                        pageSpeed?.fcp != null ? `${(pageSpeed.fcp / 1000).toFixed(1)}s` : "1.5s",
-                        "0.9s",
+                        pageSpeed?.fcp != null ? `${(pageSpeed.fcp / 1000).toFixed(1)}s` : "—",
+                        "—",
                       ],
                       [
                         "Time to First Byte (TTFB)",
-                        "0.7s",
-                        "0.4s",
+                        "—",
+                        "—",
                         "#2563eb",
                       ],
                       [
                         "Total Blocking Time (TBT)",
-                        pageSpeed?.tbt != null ? `${Math.round(pageSpeed.tbt)}ms` : "120ms",
-                        "80ms",
+                        pageSpeed?.tbt != null ? `${Math.round(pageSpeed.tbt)}ms` : "—",
+                        "—",
                         "#4B1426",
                       ],
                     ].map((row) => (
@@ -1931,38 +1880,43 @@ export default function DashboardPage() {
                 </PanelTitle>
 
                 <div className="px-3">
-                  {[
+                  {(siteStatus ? [
                     [
                       LockKeyhole,
                       "SSL Certificate",
-                      "Valid",
+                      siteStatus.sslValid ? "Valid" : "Invalid",
+                    ],
+                    [
+                      Timer,
+                      "SSL Expiry",
+                      siteStatus.certificateDaysRemaining != null ? `${siteStatus.certificateDaysRemaining} Days · ${siteStatus.sslIssuer ?? "Issuer Unknown"}` : "Unavailable",
                     ],
                     [
                       ShieldCheck,
                       "Security Status",
-                      "Secure",
+                      `${siteStatus.securityHeaders.present}/${siteStatus.securityHeaders.total} Headers`,
                     ],
                     [
                       Timer,
-                      "Uptime (Last 30 days)",
-                      "99.9%",
-                    ],
-                    [
-                      Activity,
-                      "Last Backup",
-                      "30 May 2026, 02:30 AM",
+                      "Current Availability",
+                      siteStatus.online ? `Online · ${siteStatus.responseTimeMs}ms` : `HTTP ${siteStatus.httpStatus}`,
                     ],
                     [
                       Globe2,
-                      "Next.js Version",
-                      "16.3.4",
+                      "HTTP Status",
+                      `${siteStatus.httpStatus}${siteStatus.redirected ? " · Redirected" : ""}`,
+                    ],
+                    [
+                      Globe2,
+                      "Server IP",
+                      siteStatus.ipAddress ?? "Unavailable",
                     ],
                     [
                       Wrench,
                       "Node.js Version",
-                      "v24.20.0",
+                      siteStatus.nodeVersion,
                     ],
-                  ].map(
+                  ] : [[Activity, "Website Health", liveDashboard?.sources.siteStatus?.message ?? "Checking"]]).map(
                     ([
                       Icon,
                       label,
@@ -1982,7 +1936,7 @@ export default function DashboardPage() {
                           {value as string}
                         </span>
 
-                        <CheckCircle2 className="h-4 w-4 text-emerald-700" />
+                        <CheckCircle2 className={`h-4 w-4 ${siteStatus ? "text-emerald-700" : "text-slate-400"}`} />
                       </div>
                     )
                   )}
@@ -2011,7 +1965,7 @@ export default function DashboardPage() {
                 </PanelTitle>
 
                 <div className="px-3 text-[9px]">
-                  {topPages.map(
+                  {liveTopPages.map(
                     (row, index) => (
                       <div
                         key={row[0]}
@@ -2058,7 +2012,7 @@ export default function DashboardPage() {
                   <span>Impressions</span>
                   <span>Position</span>
 
-                  {keywordRows.map(
+                  {liveKeywordRows.map(
                     (row) => (
                       <div
                         className="contents"
