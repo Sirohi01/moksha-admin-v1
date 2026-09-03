@@ -1,723 +1,90 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import {
-  ChevronLeft,
-  ChevronRight,
-  ChevronDown,
-  Clock3,
-  Eye,
-  EyeOff,
-  Filter,
-  MessageCircleMore,
-  MoreVertical,
-  Pencil,
-  Plus,
-  RefreshCw,
-  Search,
-  Settings,
-  Star,
-  Tag,
-  UserRound,
+  Amphora, ArrowDownToLine, Box, ChevronLeft, ChevronRight, Eye, FileText, Filter, Flame,
+  Flower2, Grid2X2, HeartHandshake, MoreVertical, PackageOpen, Pencil, Plus, RefreshCw,
+  Search, SlidersHorizontal, Tag, Truck, UsersRound, X,
 } from "lucide-react";
 
-type TestimonialStatus = "Published" | "Pending Review" | "Hidden";
-type TestimonialCategory =
-  | "Family Member"
-  | "Beneficiary Family"
-  | "Volunteer"
-  | "Community Partner"
-  | "Donor";
-
-type Testimonial = {
-  id: number;
-  name: string;
-  role: string;
-  message: string;
-  category: TestimonialCategory;
-  rating: number;
-  status: TestimonialStatus;
-  date: string;
-  author: string;
-  avatar: string;
+type Service = {
+  id: number; name: string; description: string; category: "Transport" | "Cremation" | "Rituals" | "Support";
+  status: "Published" | "Draft"; views: number; requests: number; image: string;
+  serviceIcon: typeof Truck; iconTone: string;
 };
 
-const TESTIMONIALS: Testimonial[] = [
-  {
-    id: 1,
-    name: "Dr. Meera Sharma",
-    role: "Family Member",
-    message:
-      "Moksha Sewa stands as a beacon of compassion. Their support during a difficult time was invaluable.",
-    category: "Family Member",
-    rating: 5,
-    status: "Published",
-    date: "30 May 2026",
-    author: "Admin User",
-    avatar: "https://i.pravatar.cc/100?img=47",
-  },
-  {
-    id: 2,
-    name: "Ramesh Patel",
-    role: "Beneficiary Family",
-    message:
-      "A truly selfless initiative. The team handled everything with respect and dignity.",
-    category: "Beneficiary Family",
-    rating: 5,
-    status: "Published",
-    date: "29 May 2026",
-    author: "Seva Team",
-    avatar: "https://i.pravatar.cc/100?img=12",
-  },
-  {
-    id: 3,
-    name: "Vikram Singh",
-    role: "Volunteer",
-    message:
-      "The volunteers are very supportive and responsive. Highly appreciate their dedication.",
-    category: "Volunteer",
-    rating: 4.5,
-    status: "Published",
-    date: "28 May 2026",
-    author: "Admin User",
-    avatar: "https://i.pravatar.cc/100?img=14",
-  },
-  {
-    id: 4,
-    name: "Anjali Jain",
-    role: "Family Member",
-    message:
-      "Thank you for giving my father a dignified farewell. We are forever grateful.",
-    category: "Family Member",
-    rating: 5,
-    status: "Published",
-    date: "27 May 2026",
-    author: "Seva Team",
-    avatar: "https://i.pravatar.cc/100?img=32",
-  },
-  {
-    id: 5,
-    name: "Dr. Arvind Kumar",
-    role: "Community Partner",
-    message:
-      "Moksha Sewa is setting an example of humanity. Keep up the amazing work!",
-    category: "Community Partner",
-    rating: 4.5,
-    status: "Pending Review",
-    date: "26 May 2026",
-    author: "Admin User",
-    avatar: "https://i.pravatar.cc/100?img=53",
-  },
-  {
-    id: 6,
-    name: "Neha Agarwal",
-    role: "Donor",
-    message:
-      "Professional, compassionate and trustworthy. This initiative is truly needed in our society.",
-    category: "Donor",
-    rating: 4,
-    status: "Pending Review",
-    date: "25 May 2026",
-    author: "Seva Team",
-    avatar: "https://i.pravatar.cc/100?img=45",
-  },
-  {
-    id: 7,
-    name: "Suresh Gupta",
-    role: "Beneficiary Family",
-    message:
-      "Their help came at the right moment when we had no one to turn to.",
-    category: "Beneficiary Family",
-    rating: 5,
-    status: "Published",
-    date: "24 May 2026",
-    author: "Admin User",
-    avatar: "https://i.pravatar.cc/100?img=11",
-  },
-  {
-    id: 8,
-    name: "Pooja Verma",
-    role: "Volunteer",
-    message:
-      "Grateful to the entire team for their timely support and kindness.",
-    category: "Volunteer",
-    rating: 4.5,
-    status: "Hidden",
-    date: "23 May 2026",
-    author: "Admin User",
-    avatar: "https://i.pravatar.cc/100?img=44",
-  },
+const SERVICES: Service[] = [
+  { id: 1, name: "Final Journey & Transport", description: "Dignified transportation for last journey with care and respect.", category: "Transport", status: "Published", views: 856, requests: 312, image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165188/moksha-sewa/assets/how-we-help/one.png", serviceIcon: Truck, iconTone: "bg-emerald-50 text-emerald-600" },
+  { id: 2, name: "Cremation & Last Rites", description: "Complete cremation arrangements with essential items.", category: "Cremation", status: "Published", views: 1024, requests: 428, image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165198/moksha-sewa/assets/how-we-help/two.png", serviceIcon: Flame, iconTone: "bg-orange-50 text-orange-500" },
+  { id: 3, name: "Ritual & Priest Support", description: "Pandit ji and all required rituals as per tradition.", category: "Rituals", status: "Published", views: 642, requests: 198, image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165189/moksha-sewa/assets/how-we-help/pandit.png", serviceIcon: Flower2, iconTone: "bg-violet-50 text-violet-600" },
+  { id: 4, name: "Family & On-Ground Support", description: "Emotional support and on-ground assistance to families.", category: "Support", status: "Published", views: 726, requests: 218, image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165195/moksha-sewa/assets/how-we-help/three.png", serviceIcon: HeartHandshake, iconTone: "bg-emerald-50 text-emerald-600" },
+  { id: 5, name: "Asthi Collection & Visarjan", description: "Asthi collection and holy immersion with proper guidance.", category: "Rituals", status: "Published", views: 312, requests: 96, image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788164996/moksha-sewa/assets/about-optimized/cremation-ritual.webp", serviceIcon: Amphora, iconTone: "bg-indigo-50 text-indigo-600" },
+  { id: 6, name: "Documentation Support", description: "Help with necessary documents and formalities.", category: "Support", status: "Draft", views: 156, requests: 32, image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165001/moksha-sewa/assets/about-optimized/family-support.webp", serviceIcon: FileText, iconTone: "bg-slate-100 text-slate-600" },
+  { id: 7, name: "Sewa Essentials", description: "Providing essential items required during last rites.", category: "Support", status: "Published", views: 201, requests: 48, image: "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165018/moksha-sewa/assets/about-optimized/samagri.webp", serviceIcon: Box, iconTone: "bg-slate-100 text-emerald-700" },
 ];
 
-const categoryStyle: Record<TestimonialCategory, string> = {
-  "Family Member": "bg-emerald-50 text-emerald-700",
-  "Beneficiary Family": "bg-blue-50 text-blue-700",
-  Volunteer: "bg-violet-50 text-violet-700",
-  "Community Partner": "bg-orange-50 text-orange-700",
-  Donor: "bg-rose-50 text-rose-700",
-};
+const categoryTone = { Transport: "bg-blue-50 text-blue-600", Cremation: "bg-orange-50 text-orange-600", Rituals: "bg-violet-50 text-violet-600", Support: "bg-emerald-50 text-emerald-600" };
 
-const statusStyle: Record<TestimonialStatus, string> = {
-  Published: "bg-emerald-50 text-emerald-700",
-  "Pending Review": "bg-amber-50 text-amber-700",
-  Hidden: "bg-slate-100 text-slate-600",
-};
-
-const categoryData = [
-  { label: "Family Member", value: 22, percent: "39.3%", color: "#0f766e" },
-  { label: "Beneficiary Family", value: 14, percent: "25.0%", color: "#f59e0b" },
-  { label: "Volunteer", value: 8, percent: "14.3%", color: "#7c3aed" },
-  { label: "Community Partner", value: 6, percent: "10.7%", color: "#2563eb" },
-  { label: "Donor", value: 6, percent: "10.7%", color: "#fb7185" },
-];
-
-const ratingData = [
-  { label: "5 Stars", stars: 5, count: 32, percent: "57.1%", width: "70%" },
-  { label: "4 Stars", stars: 4, count: 16, percent: "28.6%", width: "44%" },
-  { label: "3 Stars", stars: 3, count: 5, percent: "8.9%", width: "17%" },
-  { label: "2 Stars", stars: 2, count: 2, percent: "3.6%", width: "8%" },
-  { label: "1 Star", stars: 1, count: 1, percent: "1.8%", width: "4%" },
-];
-
-function RatingStars({ value, size = 12 }: { value: number; size?: number }) {
-  const rounded = Math.round(value);
-
-  return (
-    <div className="flex items-center gap-[2px]">
-      {Array.from({ length: 5 }, (_, index) => (
-        <Star
-          key={index}
-          size={size}
-          strokeWidth={1.6}
-          className={
-            index < rounded
-              ? "fill-amber-400 text-amber-400"
-              : "fill-slate-200 text-slate-300"
-          }
-        />
-      ))}
-    </div>
-  );
+function MetricCard({ icon: Icon, tone, surface, valueTone, label, value, note }: { icon: typeof Grid2X2; tone: string; surface: string; valueTone: string; label: string; value: string; note: string }) {
+  return <div className={`relative flex h-[92px] min-w-0 items-center gap-3 overflow-hidden rounded-lg border px-3.5 py-2.5 shadow-[0_4px_14px_rgba(15,23,42,.045)] ${surface}`}><span className={`grid size-9 shrink-0 place-items-center rounded-full bg-white/80 ring-1 ring-inset ring-black/5 ${tone}`}><Icon size={18} strokeWidth={1.8} /></span><div className="flex min-w-0 flex-1 flex-col justify-center"><p className="truncate text-[10.5px] font-semibold leading-none tracking-[.005em] text-slate-900">{label}</p><p className={`mt-1.5 text-[24px] font-semibold leading-none tracking-[-.04em] ${valueTone}`}>{value}</p><p className={`mt-1.5 truncate text-[9.5px] font-bold leading-none ${note.startsWith("↑") ? "text-emerald-700" : "text-[#536987]"}`}>{note}</p></div></div>;
 }
 
-function MetricCard({
-  icon,
-  iconClass,
-  label,
-  value,
-  note,
-  stars,
-}: {
-  icon: React.ReactNode;
-  iconClass: string;
-  label: string;
-  value: string;
-  note: string;
-  stars?: boolean;
-}) {
-  return (
-    <div className="flex h-[104px] min-w-0 items-center gap-[15px] rounded-[8px] border border-[#e6e9ec] bg-white px-[16px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-      <div className={`grid h-[50px] w-[50px] shrink-0 place-items-center rounded-full ${iconClass}`}>
-        {icon}
-      </div>
-
-      <div className="min-w-0 flex-1">
-        <p className="truncate text-[9.5px] font-bold text-[#34435e]">{label}</p>
-        <p className="mt-[5px] text-[21px] font-extrabold leading-none tracking-[-0.03em] text-[#10204a]">
-          {value}
-        </p>
-
-        {stars ? (
-          <div className="mt-[8px]">
-            <RatingStars value={5} size={13} />
-          </div>
-        ) : (
-          <p className="mt-[7px] truncate text-[9px] font-semibold text-[#61708c]">
-            {note}
-          </p>
-        )}
-      </div>
-    </div>
-  );
-}
-
-export default function TestimonialsManagementPage() {
+export default function ServicesManagementView() {
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("All Status");
   const [category, setCategory] = useState("All Categories");
-  const [rating, setRating] = useState("All Ratings");
+  const rows = useMemo(() => SERVICES.filter((service) => {
+    const matchesQuery = `${service.name} ${service.description}`.toLowerCase().includes(query.toLowerCase());
+    return matchesQuery && (status === "All Status" || service.status === status) && (category === "All Categories" || service.category === category);
+  }), [query, status, category]);
 
-  const rows = useMemo(() => {
-    return TESTIMONIALS.filter((item) => {
-      const searchMatch =
-        !query ||
-        `${item.name} ${item.role} ${item.message}`
-          .toLowerCase()
-          .includes(query.toLowerCase());
-
-      const statusMatch = status === "All Status" || item.status === status;
-      const categoryMatch =
-        category === "All Categories" || item.category === category;
-
-      const ratingMatch =
-        rating === "All Ratings" ||
-        Math.round(item.rating) === Number(rating.replace(" Stars", ""));
-
-      return searchMatch && statusMatch && categoryMatch && ratingMatch;
-    });
-  }, [query, status, category, rating]);
-
-  const clearFilters = () => {
-    setQuery("");
-    setStatus("All Status");
-    setCategory("All Categories");
-    setRating("All Ratings");
-  };
-
+  const clear = () => { setQuery(""); setStatus("All Status"); setCategory("All Categories"); };
   return (
-    <main
-      style={{
-        fontFamily:
-          'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-      }}
-      className="h-full min-h-0 w-full overflow-y-auto overflow-x-hidden bg-[#fffefb] px-[18px] py-[14px] text-[#142347] [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-300"
-    >
-      <div className="min-h-full w-full">
-        {/* HEADER */}
-        <header className="flex items-start justify-between gap-[16px]">
-          <div>
-            <h1 className="text-[24px] font-extrabold leading-none tracking-[-0.02em] text-[#075b33]">
-              Testimonials Management
-            </h1>
+    <div style={{ fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }} className="min-h-screen bg-[#F8FAF9] px-4 pb-8 pt-3 text-slate-800 antialiased sm:px-5">
+      <div className="mx-auto max-w-[1440px]">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div><h1 className="text-[22px] font-semibold leading-none tracking-[-.03em] text-[#123E2D]">Services Management</h1><div className="mt-2 flex items-center gap-1.5 text-[9.5px] font-medium text-slate-500"><span>Dashboard</span><ChevronRight size={10} /><span className="text-slate-700">Services Management</span></div></div>
+          <Link href="/services/new" className="inline-flex min-h-9 items-center gap-2 rounded-md bg-[#075D3D] px-4 text-[11px] font-semibold text-white shadow-sm hover:bg-[#064B32]"><Plus size={14} /> Add New Service</Link>
+        </div>
 
-            <nav className="mt-[9px] flex items-center gap-[8px] text-[10.5px] font-semibold text-[#1d2b58]">
-              <span>Dashboard</span>
-              <span className="text-[#7b8597]">›</span>
-              <span>Testimonials Management</span>
-            </nav>
-          </div>
+        <div className="mt-2 grid w-full items-stretch gap-1.5 sm:grid-cols-2 lg:grid-cols-5">
+          <MetricCard icon={Grid2X2} tone="text-emerald-700" surface="border-emerald-200 bg-gradient-to-br from-emerald-50 via-white to-emerald-100/55" valueTone="text-emerald-800" label="Total Services" value="12" note="Published: 10" />
+          <MetricCard icon={Pencil} tone="text-blue-600" surface="border-blue-200 bg-gradient-to-br from-blue-50 via-white to-blue-100/60" valueTone="text-blue-800" label="Active Services" value="10" note="Visible on Website" />
+          <MetricCard icon={Eye} tone="text-amber-600" surface="border-amber-200 bg-gradient-to-br from-amber-50 via-white to-amber-100/70" valueTone="text-amber-800" label="Total Views" value="3,248" note="↑ 18.6% this month" />
+          <MetricCard icon={PackageOpen} tone="text-violet-600" surface="border-violet-200 bg-gradient-to-br from-violet-50 via-white to-violet-100/65" valueTone="text-violet-800" label="Total Requests" value="1,156" note="↑ 24.3% this month" />
+          <MetricCard icon={UsersRound} tone="text-orange-600" surface="border-orange-200 bg-gradient-to-br from-orange-50 via-white to-orange-100/70" valueTone="text-orange-800" label="Inactive Services" value="2" note="Hidden from Website" />
+        </div>
 
-          <div className="flex items-center gap-[12px]">
-            <button
-              type="button"
-              onClick={() => { window.location.href = "/testimonials"; }}
-              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] bg-[linear-gradient(180deg,#076636_0%,#03542c_100%)] px-[20px] text-[10.5px] font-bold text-white shadow-[0_7px_16px_rgba(5,94,49,.12)] transition hover:opacity-95"
-            >
-              <Plus className="h-[15px] w-[15px]" />
-              Add New Testimonial
-            </button>
-
-            <button
-              type="button"
-              onClick={() => { window.location.href = "/testimonials/settings"; }}
-              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] border border-[#dfe3e7] bg-white px-[18px] text-[10.5px] font-bold text-[#273655] transition hover:bg-slate-50"
-            >
-              <Settings className="h-[15px] w-[15px]" />
-              Testimonial Settings
-            </button>
-
-            <ChevronDown className="mt-[12px] h-[14px] w-[14px] text-[#8a93a3]" />
-          </div>
-        </header>
-
-        {/* TOP STATS */}
-        <section className="mt-[18px] grid grid-cols-5 gap-[14px]">
-          <MetricCard
-            icon={<MessageCircleMore className="h-[25px] w-[25px]" strokeWidth={1.8} />}
-            iconClass="bg-emerald-50 text-emerald-700"
-            label="Total Testimonials"
-            value="56"
-            note="Published: 48"
-          />
-
-          <MetricCard
-            icon={<Star className="h-[25px] w-[25px]" strokeWidth={1.8} />}
-            iconClass="bg-violet-50 text-violet-600"
-            label="Published"
-            value="48"
-            note="85.7% of total"
-          />
-
-          <MetricCard
-            icon={<Clock3 className="h-[25px] w-[25px]" strokeWidth={1.8} />}
-            iconClass="bg-orange-50 text-orange-500"
-            label="Pending Review"
-            value="5"
-            note="8.9% of total"
-          />
-
-          <MetricCard
-            icon={<EyeOff className="h-[25px] w-[25px]" strokeWidth={1.8} />}
-            iconClass="bg-blue-50 text-blue-600"
-            label="Hidden"
-            value="3"
-            note="5.4% of total"
-          />
-
-          <MetricCard
-            icon={<Star className="h-[25px] w-[25px]" strokeWidth={1.8} />}
-            iconClass="bg-emerald-50 text-emerald-700"
-            label="Average Rating"
-            value="4.8 / 5"
-            note=""
-            stars
-          />
-        </section>
-
-        {/* MAIN GRID */}
-        <section className="mt-[16px] grid items-start gap-[14px] xl:grid-cols-[minmax(0,1fr)_320px]">
-          {/* LEFT */}
+        <div className="mt-1.5 grid gap-1.5 text-[11px] xl:grid-cols-[minmax(0,1fr)_280px] [&_input]:!text-[11.5px] [&_select]:!text-[11.5px] [&_button]:!text-[10.5px] [&_thead]:!text-[9.5px] [&_tbody]:!text-[10.5px] [&_tbody_p]:!text-[10.5px] [&_aside_h2]:!text-[11.5px] [&_aside_p]:!text-[10px]">
           <div className="min-w-0">
-            {/* FILTERS */}
-            <div className="grid grid-cols-[minmax(260px,1fr)_132px_145px_130px_128px_96px] gap-[10px]">
-              <label className="relative">
-                <Search className="absolute right-[13px] top-1/2 h-[15px] w-[15px] -translate-y-1/2 text-[#5d6b84]" />
-                <input
-                  value={query}
-                  onChange={(event) => setQuery(event.target.value)}
-                  placeholder="Search testimonials by name, role or keyword..."
-                  className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[14px] pr-[40px] text-[10.5px] font-semibold text-[#273655] outline-none placeholder:text-[#8b95a7]"
-                />
-              </label>
-
-              <select
-                value={status}
-                onChange={(event) => setStatus(event.target.value)}
-                className="h-[40px] rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10px] font-bold text-[#2a3855] outline-none"
-              >
-                <option>All Status</option>
-                <option>Published</option>
-                <option>Pending Review</option>
-                <option>Hidden</option>
-              </select>
-
-              <select
-                value={category}
-                onChange={(event) => setCategory(event.target.value)}
-                className="h-[40px] rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10px] font-bold text-[#2a3855] outline-none"
-              >
-                <option>All Categories</option>
-                <option>Family Member</option>
-                <option>Beneficiary Family</option>
-                <option>Volunteer</option>
-                <option>Community Partner</option>
-                <option>Donor</option>
-              </select>
-
-              <select
-                value={rating}
-                onChange={(event) => setRating(event.target.value)}
-                className="h-[40px] rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10px] font-bold text-[#2a3855] outline-none"
-              >
-                <option>All Ratings</option>
-                <option>5 Stars</option>
-                <option>4 Stars</option>
-                <option>3 Stars</option>
-                <option>2 Stars</option>
-                <option>1 Star</option>
-              </select>
-
-              <button
-                type="button"
-                className="inline-flex h-[40px] items-center justify-center gap-[8px] rounded-[6px] border border-[#cfe4d7] bg-white px-[12px] text-[10px] font-bold text-[#146a3f]"
-              >
-                <Filter className="h-[14px] w-[14px]" />
-                More Filters
-              </button>
-
-              <button
-                type="button"
-                onClick={clearFilters}
-                className="inline-flex h-[40px] items-center justify-center gap-[8px] rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10px] font-bold text-[#35445f]"
-              >
-                <RefreshCw className="h-[14px] w-[14px]" />
-                Clear
-              </button>
+            <div className="mb-1.5 grid items-center gap-1.5 sm:grid-cols-[minmax(230px,1fr)_130px_145px_auto_auto]">
+              <label className="relative"><Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search services by name or keyword..." className="h-10 w-full rounded-lg border border-slate-200 bg-white pl-9 pr-9 text-[11px] outline-none focus:border-emerald-500" />{query && <button onClick={() => setQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"><X size={13} /></button>}</label>
+              <select value={status} onChange={(event) => setStatus(event.target.value)} className="h-10 rounded-lg border border-slate-200 bg-white px-3 text-[10.5px] font-semibold outline-none"><option>All Status</option><option>Published</option><option>Draft</option></select>
+              <select value={category} onChange={(event) => setCategory(event.target.value)} className="h-10 rounded-lg border border-slate-200 bg-white px-3 text-[10.5px] font-semibold outline-none"><option>All Categories</option>{Object.keys(categoryTone).map((item) => <option key={item}>{item}</option>)}</select>
+              <button className="flex h-10 items-center justify-center gap-2 rounded-lg border border-emerald-200 bg-white px-3 text-[10.5px] font-semibold text-emerald-700"><Filter size={14} /> More Filters</button>
+              <button onClick={clear} className="flex h-10 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-3 text-[10.5px] font-semibold"><RefreshCw size={13} /> Clear</button>
             </div>
 
-            {/* TABLE */}
-            <div className="mt-[12px] overflow-hidden rounded-[8px] border border-[#e7e9ec] bg-white shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
+            <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
               <div className="overflow-x-auto">
-                <table className="w-full min-w-[980px] border-collapse text-left">
-                  <thead>
-                    <tr className="h-[42px] border-b border-[#e7e9ec] bg-[#fafbfc] text-[8.5px] font-extrabold uppercase tracking-[0.04em] text-[#44516a]">
-                      <th className="w-[42px] px-[12px] text-center">
-                        <input type="checkbox" />
-                      </th>
-                      <th className="px-[8px]">Testimonial</th>
-                      <th className="px-[8px]">Category</th>
-                      <th className="px-[8px]">Rating</th>
-                      <th className="px-[8px]">Status</th>
-                      <th className="px-[8px]">Added On</th>
-                      <th className="px-[8px] text-center">Actions</th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    {rows.map((item) => (
-                      <tr
-                        key={item.id}
-                        className="h-[70px] border-b border-[#eef0f2] align-middle last:border-b-0 hover:bg-slate-50/60"
-                      >
-                        <td className="px-[12px] text-center">
-                          <input type="checkbox" />
-                        </td>
-
-                        <td className="px-[8px]">
-                          <div className="flex min-w-[300px] items-center gap-[12px]">
-                            <img
-                              src={item.avatar}
-                              alt=""
-                              className="h-[44px] w-[44px] shrink-0 rounded-full border border-[#e0e4e8] object-cover"
-                            />
-
-                            <div className="min-w-0">
-                              <p className="text-[10.5px] font-extrabold text-[#19274a]">
-                                {item.name}
-                              </p>
-                              <p className="mt-[4px] max-w-[335px] text-[8.8px] font-semibold leading-[1.4] text-[#53627c]">
-                                {item.message}
-                              </p>
-                            </div>
-                          </div>
-                        </td>
-
-                        <td className="px-[8px]">
-                          <span
-                            className={`inline-flex whitespace-nowrap rounded-[5px] px-[8px] py-[4px] text-[8px] font-bold ${categoryStyle[item.category]}`}
-                          >
-                            {item.category}
-                          </span>
-                        </td>
-
-                        <td className="px-[8px]">
-                          <div className="flex items-center gap-[8px] whitespace-nowrap">
-                            <RatingStars value={item.rating} />
-                            <span className="text-[9px] font-bold text-[#33425c]">
-                              {item.rating.toFixed(1)}
-                            </span>
-                          </div>
-                        </td>
-
-                        <td className="px-[8px]">
-                          <span
-                            className={`inline-flex items-center gap-[5px] whitespace-nowrap rounded-[5px] px-[8px] py-[4px] text-[8px] font-bold ${statusStyle[item.status]}`}
-                          >
-                            <span
-                              className={`h-[5px] w-[5px] rounded-full ${item.status === "Published"
-                                ? "bg-emerald-500"
-                                : item.status === "Pending Review"
-                                  ? "bg-amber-500"
-                                  : "bg-slate-400"
-                                }`}
-                            />
-                            {item.status}
-                          </span>
-                        </td>
-
-                        <td className="px-[8px]">
-                          <p className="whitespace-nowrap text-[9px] font-bold text-[#2c3a58]">
-                            {item.date}
-                          </p>
-                          <p className="mt-[4px] whitespace-nowrap text-[8px] font-semibold text-[#68758d]">
-                            By {item.author}
-                          </p>
-                        </td>
-
-                        <td className="px-[8px]">
-                          <div className="flex items-center justify-center gap-[8px]">
-                            <button className="grid h-[30px] w-[30px] place-items-center rounded-[5px] border border-[#e1e5e9] bg-white text-[#4b5871]">
-                              <Eye className="h-[12px] w-[12px]" />
-                            </button>
-                            <button className="grid h-[30px] w-[30px] place-items-center rounded-[5px] border border-[#e1e5e9] bg-white text-[#4b5871]">
-                              <Pencil className="h-[12px] w-[12px]" />
-                            </button>
-                            <button className="grid h-[30px] w-[30px] place-items-center rounded-[5px] border border-[#e1e5e9] bg-white text-[#4b5871]">
-                              <MoreVertical className="h-[12px] w-[12px]" />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
+                <table className="w-full min-w-[800px] border-collapse text-left">
+                  <thead><tr className="h-10 border-b border-slate-200 bg-slate-50/80 text-[8.5px] font-bold uppercase tracking-[.06em] text-slate-500"><th className="w-10 px-3 text-center"><input type="checkbox" /></th><th className="px-2">Service</th><th className="px-2">Category</th><th className="px-2 text-center">Icon</th><th className="px-2">Status</th><th className="px-2 text-center">Views</th><th className="px-2 text-center">Requests</th><th className="px-2 text-center">Order</th><th className="px-3 text-center">Actions</th></tr></thead>
+                  <tbody>{rows.map((service) => { const Icon = service.serviceIcon; return <tr key={service.id} className="h-[64px] border-b border-slate-100 align-middle last:border-0 hover:bg-slate-50/60"><td className="px-3 text-center"><input type="checkbox" /></td><td className="px-2"><div className="flex min-w-[235px] items-center gap-2.5"><img src={service.image} alt="" className="h-10 w-[54px] rounded-md border border-slate-200 object-cover" /><div><p className="text-[10px] font-semibold leading-tight text-slate-900">{service.name}</p><p className="mt-1 max-w-[205px] text-[8.5px] leading-[1.35] text-slate-500">{service.description}</p></div></div></td><td className="px-2"><span className={`inline-flex rounded-md px-2 py-1 text-[8.5px] font-semibold ${categoryTone[service.category]}`}>{service.category}</span></td><td className="px-2 text-center"><span className={`mx-auto grid size-8 place-items-center rounded-full ${service.iconTone}`}><Icon size={14} strokeWidth={1.8} /></span></td><td className="px-2"><span className={`inline-flex items-center gap-1 rounded-md px-2 py-1 text-[8.5px] font-semibold ${service.status === "Published" ? "bg-emerald-50 text-emerald-700" : "bg-slate-100 text-slate-600"}`}><span className={`size-1.5 rounded-full ${service.status === "Published" ? "bg-emerald-500" : "bg-slate-400"}`} />{service.status}</span></td><td className="px-2 text-center text-[9.5px] font-semibold tabular-nums">{service.views.toLocaleString()}</td><td className="px-2 text-center text-[9.5px] font-semibold tabular-nums">{service.requests}</td><td className="px-2 text-center text-[9.5px] font-semibold tabular-nums">{service.id}</td><td className="px-3"><div className="flex items-center justify-center gap-1.5"><button className="grid size-7 place-items-center rounded-md border border-slate-200 bg-white"><Pencil size={11} /></button><button className="grid size-7 place-items-center rounded-md border border-slate-200 bg-white"><Eye size={11} /></button><button className="grid size-7 place-items-center rounded-md border border-slate-200 bg-white"><MoreVertical size={11} /></button></div></td></tr>; })}</tbody>
                 </table>
               </div>
-
-              {/* PAGINATION */}
-              <div className="flex min-h-[58px] items-center justify-between gap-[12px] border-t border-[#e7e9ec] px-[12px]">
-                <p className="text-[9px] font-semibold text-[#47546c]">
-                  Showing 1 to {rows.length} of 56 testimonials
-                </p>
-
-                <div className="flex items-center gap-[6px]">
-                  <button className="grid h-[32px] w-[32px] place-items-center rounded-[5px] border border-[#dfe3e7] bg-white">
-                    <ChevronLeft className="h-[13px] w-[13px]" />
-                  </button>
-
-                  {[1, 2, 3, 4, 5, 6].map((page) => (
-                    <button
-                      key={page}
-                      className={`grid h-[32px] min-w-[32px] place-items-center rounded-[5px] px-[6px] text-[9px] font-bold ${page === 1
-                        ? "bg-[#075b33] text-white"
-                        : "border border-[#dfe3e7] bg-white text-[#35445f]"
-                        }`}
-                    >
-                      {page}
-                    </button>
-                  ))}
-
-                  <button className="grid h-[32px] w-[32px] place-items-center rounded-[5px] border border-[#dfe3e7] bg-white">
-                    <ChevronRight className="h-[13px] w-[13px]" />
-                  </button>
-                </div>
-
-                <select className="h-[32px] rounded-[5px] border border-[#dfe3e7] bg-white px-[10px] text-[9px] font-bold text-[#35445f]">
-                  <option>10 / page</option>
-                </select>
-              </div>
+              <div className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 px-4 py-3 text-[9.5px] text-slate-500"><span>Showing 1 to {rows.length} of 12 services</span><div className="flex items-center gap-1.5"><button className="grid size-8 place-items-center rounded-md border border-slate-200"><ChevronLeft size={13} /></button><button className="grid size-8 place-items-center rounded-md bg-[#075D3D] font-bold text-white">1</button><button className="grid size-8 place-items-center rounded-md border border-slate-200 font-semibold">2</button><button className="grid size-8 place-items-center rounded-md border border-slate-200"><ChevronRight size={13} /></button></div><select className="h-8 rounded-md border border-slate-200 bg-white px-3 text-[9.5px] font-semibold"><option>10 / page</option></select></div>
             </div>
           </div>
 
-          {/* RIGHT SIDEBAR */}
-          <aside className="space-y-[12px]">
-            {/* CATEGORY */}
-            <section className="rounded-[8px] border border-[#e7e9ec] bg-white px-[14px] py-[13px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-              <h2 className="text-[12px] font-extrabold text-[#19274a]">
-                Testimonials by Category
-              </h2>
-
-              <div className="mt-[12px] flex items-center gap-[15px]">
-                <div
-                  className="grid h-[110px] w-[110px] shrink-0 place-items-center rounded-full"
-                  style={{
-                    background:
-                      "conic-gradient(#0f766e 0 39.3%, #f59e0b 39.3% 64.3%, #7c3aed 64.3% 78.6%, #2563eb 78.6% 89.3%, #fb7185 89.3% 100%)",
-                  }}
-                >
-                  <div className="grid h-[70px] w-[70px] place-items-center rounded-full bg-white text-center">
-                    <div>
-                      <p className="text-[18px] font-extrabold leading-none text-[#10204a]">56</p>
-                      <p className="mt-[4px] text-[8px] font-bold text-[#61708c]">Total</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="min-w-0 flex-1 space-y-[7px]">
-                  {categoryData.map((item) => (
-                    <div
-                      key={item.label}
-                      className="grid grid-cols-[8px_1fr_auto] items-center gap-[7px]"
-                    >
-                      <span
-                        className="h-[8px] w-[8px] rounded-full"
-                        style={{ backgroundColor: item.color }}
-                      />
-                      <span className="truncate text-[8.5px] font-bold text-[#34425e]">
-                        {item.label}
-                      </span>
-                      <span className="whitespace-nowrap text-[8.3px] font-extrabold text-[#34425e]">
-                        {item.value} ({item.percent})
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </section>
-
-            {/* RATING */}
-            <section className="rounded-[8px] border border-[#e7e9ec] bg-white px-[14px] py-[13px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-              <h2 className="text-[12px] font-extrabold text-[#19274a]">
-                Rating Distribution
-              </h2>
-
-              <div className="mt-[12px] space-y-[10px]">
-                {ratingData.map((item) => (
-                  <div
-                    key={item.label}
-                    className="grid grid-cols-[40px_70px_1fr_58px] items-center gap-[6px]"
-                  >
-                    <span className="text-[8.5px] font-bold text-[#47546b]">
-                      {item.label}
-                    </span>
-
-                    <RatingStars value={item.stars} size={9} />
-
-                    <div className="h-[6px] overflow-hidden rounded-full bg-[#edf0f2]">
-                      <div
-                        className="h-full rounded-full bg-amber-400"
-                        style={{ width: item.width }}
-                      />
-                    </div>
-
-                    <span className="text-right text-[8.3px] font-bold text-[#4b5870]">
-                      {item.count} ({item.percent})
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            {/* QUICK ACTIONS */}
-            <section className="rounded-[8px] border border-[#e7e9ec] bg-white px-[14px] py-[13px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-              <h2 className="text-[12px] font-extrabold text-[#19274a]">
-                Quick Actions
-              </h2>
-
-              <div className="mt-[10px] space-y-[7px]">
-                {[
-                  [Plus, "Add New Testimonial"],
-                  [Clock3, "Review Pending (5)"],
-                  [Tag, "Manage Categories"],
-                  [Settings, "Testimonial Settings"],
-                ].map(([Icon, label]) => {
-                  const ActionIcon = Icon as typeof Plus;
-
-                  return (
-                    <button
-                      key={String(label)}
-                      type="button"
-                      onClick={() => {
-                        if (String(label) === "Testimonial Settings") {
-                          window.location.href = "/testimonials/settings";
-                        } else if (String(label) === "Add New Testimonial") {
-                          window.location.href = "/testimonials";
-                        }
-                      }}
-                      className="flex h-[36px] w-full items-center gap-[9px] rounded-[5px] border border-[#e2e6ea] bg-white px-[10px] text-[9px] font-bold text-[#293854] transition hover:bg-slate-50"
-                    >
-                      <ActionIcon className="h-[13px] w-[13px]" />
-                      {String(label)}
-                    </button>
-                  );
-                })}
-              </div>
-            </section>
-
-            {/* CTA */}
-            <section className="relative overflow-hidden rounded-[8px] bg-[linear-gradient(135deg,#08643a_0%,#07542f_100%)] px-[18px] py-[18px] text-white shadow-[0_7px_18px_rgba(5,94,49,.12)]">
-              <div className="relative z-10 max-w-[205px]">
-                <p className="text-[12px] font-extrabold leading-[1.4]">
-                  Real stories. Real impact.
-                </p>
-                <p className="mt-[9px] text-[10px] font-semibold leading-[1.55] text-white/90">
-                  Share the voices that inspire trust and compassion.
-                </p>
-
-                <button
-                  type="button"
-                  onClick={() => { window.location.href = "/testimonials"; }}
-                  className="mt-[16px] inline-flex h-[36px] items-center gap-[8px] rounded-[5px] bg-white px-[14px] text-[9px] font-extrabold text-[#075b33] transition hover:bg-slate-100"
-                >
-                  Add New Testimonial
-                  <ChevronRight className="h-[12px] w-[12px]" />
-                </button>
-              </div>
-
-              <MessageCircleMore className="absolute bottom-[-16px] right-[8px] h-[92px] w-[92px] text-emerald-200/25" strokeWidth={1.2} />
-            </section>
+          <aside className="space-y-1.5">
+            <section className="rounded-xl border border-slate-200 bg-white p-4"><h2 className="text-[11px] font-bold text-slate-900">Service Overview</h2><div className="mt-4 flex items-center gap-5"><div className="grid size-24 shrink-0 place-items-center rounded-full" style={{ background: "conic-gradient(#087345 0 83.3%, #f59e0b 83.3% 100%)" }}><div className="grid size-[68px] place-items-center rounded-full bg-white text-center"><div><b className="block text-lg text-slate-950">12</b><span className="text-[8px] text-slate-500">Total Services</span></div></div></div><div className="min-w-0 flex-1 space-y-3 text-[9px]"><p className="flex items-center justify-between gap-2"><span><i className="mr-2 inline-block size-2 rounded-full bg-emerald-600" />Published (10)</span><b>83.3%</b></p><p className="flex items-center justify-between"><span><i className="mr-2 inline-block size-2 rounded-full bg-amber-500" />Draft (2)</span><b>16.7%</b></p><p className="flex items-center justify-between"><span><i className="mr-2 inline-block size-2 rounded-full bg-slate-300" />Inactive (0)</span><b>0%</b></p></div></div></section>
+            <section className="rounded-xl border border-slate-200 bg-white p-3"><h2 className="mb-2 text-[10.5px] font-bold">Quick Actions</h2><div className="space-y-1.5">{[[Plus,"Add New Service"],[Tag,"Manage Categories"],[ArrowDownToLine,"Service Order"],[SlidersHorizontal,"Bulk Actions"]].map(([ItemIcon,label]) => { const ActionIcon=ItemIcon as typeof Plus; return <button key={label as string} className="flex h-8 w-full items-center gap-2 rounded-md border border-slate-200 px-3 text-[9.5px] font-semibold"><ActionIcon size={12} />{label as string}</button>; })}</div></section>
+            <section className="rounded-xl border border-slate-200 bg-white p-3"><h2 className="mb-2 text-[10.5px] font-bold">Top Performing Services</h2>{SERVICES.slice().sort((a,b)=>b.views-a.views).slice(0,3).map((item,index)=><div key={item.id} className="flex items-center gap-2 py-1.5 text-[9px]"><b className="text-[13px]">{index+1}</b><span className="min-w-0 flex-1 truncate font-semibold">{item.name}</span><Eye size={10} className="text-slate-400"/><span>{item.views.toLocaleString()} views</span></div>)}</section>
+            <section className="relative min-h-[92px] overflow-hidden rounded-xl bg-[#075D3D] px-4 py-3 text-white"><p className="max-w-[180px] text-[10.5px] font-semibold leading-4">Add more services to help more families in need.</p><button className="mt-2 rounded-md bg-white px-3 py-1.5 text-[9px] font-bold text-[#075D3D]">Add New Service →</button><HeartHandshake className="absolute -bottom-3 right-2 text-emerald-300/30" size={62} /></section>
           </aside>
-        </section>
+        </div>
       </div>
-    </main>
+    </div>
   );
 }
