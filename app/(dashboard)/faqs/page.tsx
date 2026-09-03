@@ -218,7 +218,7 @@ function MetricCard({
 
       <div className="min-w-0 flex-1">
         <p className="truncate text-[9.5px] font-bold text-[#34435e]">{label}</p>
-        <p className="mt-[5px] text-[21px] font-extrabold leading-none tracking-[-0.03em] text-[#10204a]">
+        <p className="mt-[5px] text-[21px] font-semibold leading-none tracking-[-0.03em] text-[#10204a]">
           {value}
         </p>
         <p className={`mt-[7px] truncate text-[9px] font-semibold ${noteTone}`}>
@@ -275,7 +275,7 @@ export default function FAQsManagementPage() {
         {/* HEADER */}
         <header className="flex items-start justify-between gap-[16px]">
           <div>
-            <h1 className="text-[24px] font-extrabold leading-none tracking-[-0.02em] text-[#075b33]">
+            <h1 className="text-[24px] font-semibold leading-none tracking-[-0.02em] text-[#075b33]">
               FAQs Management
             </h1>
 
@@ -426,7 +426,7 @@ export default function FAQsManagementPage() {
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[930px] border-collapse text-left">
                   <thead>
-                    <tr className="h-[42px] border-b border-[#e7e9ec] bg-[#fafbfc] text-[8.5px] font-extrabold uppercase tracking-[0.04em] text-[#44516a]">
+                    <tr className="h-[42px] border-b border-[#e7e9ec] bg-[#fafbfc] text-[8.5px] font-semibold uppercase tracking-[0.04em] text-[#44516a]">
                       <th className="w-[42px] px-[12px] text-center">
                         <input type="checkbox" />
                       </th>
@@ -452,7 +452,7 @@ export default function FAQsManagementPage() {
 
                         <td className="px-[8px]">
                           <div className="min-w-[300px]">
-                            <p className="text-[10.5px] font-extrabold leading-tight text-[#19274a]">
+                            <p className="text-[10.5px] font-semibold leading-tight text-[#19274a]">
                               {item.question}
                             </p>
                             <p className="mt-[4px] max-w-[330px] text-[8.8px] font-semibold leading-[1.35] text-[#53627c]">
@@ -546,8 +546,8 @@ export default function FAQsManagementPage() {
                       type="button"
                       key={page}
                       className={`grid h-[32px] min-w-[32px] place-items-center rounded-[5px] px-[6px] text-[9px] font-bold ${page === 1
-                          ? "bg-[#075b33] text-white"
-                          : "border border-[#dfe3e7] bg-white text-[#35445f]"
+                        ? "bg-[#075b33] text-white"
+                        : "border border-[#dfe3e7] bg-white text-[#35445f]"
                         }`}
                     >
                       {page}
@@ -576,7 +576,7 @@ export default function FAQsManagementPage() {
           <aside className="space-y-[12px]">
             {/* CATEGORY DONUT */}
             <section className="rounded-[8px] border border-[#e7e9ec] bg-white px-[14px] py-[13px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-              <h2 className="text-[12px] font-extrabold text-[#19274a]">
+              <h2 className="text-[12px] font-semibold text-[#19274a]">
                 FAQ Categories
               </h2>
 
@@ -590,7 +590,7 @@ export default function FAQsManagementPage() {
                 >
                   <div className="grid h-[76px] w-[76px] place-items-center rounded-full bg-white text-center">
                     <div>
-                      <p className="text-[18px] font-extrabold leading-none text-[#10204a]">8</p>
+                      <p className="text-[18px] font-semibold leading-none text-[#10204a]">8</p>
                       <p className="mt-[4px] text-[8px] font-bold text-[#61708c]">
                         Categories
                       </p>
@@ -611,7 +611,7 @@ export default function FAQsManagementPage() {
                       <span className="truncate text-[8.5px] font-bold text-[#34425e]">
                         {item.label}
                       </span>
-                      <span className="whitespace-nowrap text-[8.3px] font-extrabold text-[#34425e]">
+                      <span className="whitespace-nowrap text-[8.3px] font-semibold text-[#34425e]">
                         ({item.value})
                       </span>
                     </div>
@@ -622,7 +622,7 @@ export default function FAQsManagementPage() {
 
             {/* QUICK ACTIONS */}
             <section className="rounded-[8px] border border-[#e7e9ec] bg-white px-[14px] py-[13px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-              <h2 className="text-[12px] font-extrabold text-[#19274a]">
+              <h2 className="text-[12px] font-semibold text-[#19274a]">
                 Quick Actions
               </h2>
 
@@ -666,7 +666,7 @@ export default function FAQsManagementPage() {
             {/* TOP VIEWED */}
             <section className="rounded-[8px] border border-[#e7e9ec] bg-white px-[14px] py-[13px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
               <div className="flex items-center justify-between gap-[10px]">
-                <h2 className="text-[12px] font-extrabold text-[#19274a]">
+                <h2 className="text-[12px] font-semibold text-[#19274a]">
                   Top Viewed FAQs
                 </h2>
 
@@ -684,7 +684,7 @@ export default function FAQsManagementPage() {
                     key={label}
                     className="grid grid-cols-[20px_1fr_auto] items-center gap-[8px]"
                   >
-                    <span className="text-[13px] font-extrabold text-[#17234a]">
+                    <span className="text-[13px] font-semibold text-[#17234a]">
                       {index + 1}
                     </span>
 
@@ -704,7 +704,7 @@ export default function FAQsManagementPage() {
             {/* GREEN CTA */}
             <section className="relative overflow-hidden rounded-[8px] bg-[linear-gradient(135deg,#08643a_0%,#07542f_100%)] px-[18px] py-[18px] text-white shadow-[0_7px_18px_rgba(5,94,49,.12)]">
               <div className="relative z-10 max-w-[210px]">
-                <p className="text-[12px] font-extrabold leading-[1.5]">
+                <p className="text-[12px] font-semibold leading-[1.5]">
                   Keep your answers up-to-date
                   <br />
                   and help more people.
@@ -713,7 +713,7 @@ export default function FAQsManagementPage() {
                 <button
                   type="button"
                   onClick={() => router.push("/faqs/new")}
-                  className="mt-[16px] inline-flex h-[36px] items-center gap-[8px] rounded-[5px] bg-white px-[14px] text-[9px] font-extrabold text-[#075b33] transition hover:bg-slate-100"
+                  className="mt-[16px] inline-flex h-[36px] items-center gap-[8px] rounded-[5px] bg-white px-[14px] text-[9px] font-semibold text-[#075b33] transition hover:bg-slate-100"
                 >
                   Add New FAQ
                   <ChevronRight className="h-[12px] w-[12px]" />

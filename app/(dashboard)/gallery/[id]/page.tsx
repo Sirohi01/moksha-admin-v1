@@ -87,7 +87,7 @@ function SectionTitle({
 }) {
   return (
     <div>
-      <h2 className="text-[14px] font-extrabold tracking-[-0.01em] text-[#18224d]">
+      <h2 className="text-[14px] font-semibold tracking-[-0.01em] text-[#18224d]">
         {number}. {title}
       </h2>
       <p className="mt-[2px] text-[10px] font-semibold text-[#5e6b86]">
@@ -139,7 +139,7 @@ export default function AddNewFolderPage() {
         {/* Header */}
         <header className="flex min-h-0 items-start justify-between gap-[18px]">
           <div className="min-w-0">
-            <h1 className="text-[24px] font-extrabold leading-none tracking-[-0.02em] text-[#075b33]">
+            <h1 className="text-[24px] font-semibold leading-none tracking-[-0.02em] text-[#075b33]">
               Add New Folder
             </h1>
 
@@ -245,7 +245,7 @@ export default function AddNewFolderPage() {
                   <CircleHelp className="h-[16px] w-[16px]" strokeWidth={2.2} />
                 </div>
                 <p className="text-[10.5px] font-bold text-[#2d3b4a]">
-                  <span className="font-extrabold text-[#1b2836]">Note:</span>{" "}
+                  <span className="font-semibold text-[#1b2836]">Note:</span>{" "}
                   Folders help you keep your media files organized and easy to find.
                 </p>
               </div>
@@ -273,14 +273,14 @@ export default function AddNewFolderPage() {
                         type="button"
                         onClick={() => setVisibility(item.id)}
                         className={`relative flex h-[60px] items-center gap-[12px] rounded-[8px] border px-[12px] text-left transition ${active
-                            ? "border-[#8fc5a8] bg-[#f5fbf7] shadow-[inset_0_0_0_1px_rgba(29,117,72,0.08)]"
-                            : "border-[#e2e6ea] bg-white"
+                          ? "border-[#8fc5a8] bg-[#f5fbf7] shadow-[inset_0_0_0_1px_rgba(29,117,72,0.08)]"
+                          : "border-[#e2e6ea] bg-white"
                           }`}
                       >
                         <span
                           className={`absolute left-[10px] top-[10px] h-[14px] w-[14px] rounded-full border ${active
-                              ? "border-[#0d6b3e] shadow-[inset_0_0_0_4px_#0d6b3e]"
-                              : "border-[#ced5df] bg-white"
+                            ? "border-[#0d6b3e] shadow-[inset_0_0_0_4px_#0d6b3e]"
+                            : "border-[#ced5df] bg-white"
                             }`}
                         />
                         <div
@@ -291,7 +291,7 @@ export default function AddNewFolderPage() {
                         </div>
 
                         <div className="min-w-0">
-                          <div className="text-[12px] font-extrabold text-[#18224d]">
+                          <div className="text-[12px] font-semibold text-[#18224d]">
                             {item.title}
                           </div>
                           <div className="mt-[2px] text-[9.5px] font-semibold text-[#67748d]">
@@ -343,7 +343,7 @@ export default function AddNewFolderPage() {
                 </div>
 
                 <div className="ml-[14px] min-w-0">
-                  <h3 className="truncate text-[12px] font-extrabold text-[#1c2946]">
+                  <h3 className="truncate text-[12px] font-semibold text-[#1c2946]">
                     {previewName}
                   </h3>
                   <p className="mt-[2px] truncate text-[10px] font-semibold text-[#697791]">
@@ -360,7 +360,7 @@ export default function AddNewFolderPage() {
           {/* Right Column */}
           <div className="grid min-h-0 grid-rows-[minmax(0,1.04fr)_minmax(0,0.82fr)] gap-[8px]">
             <section className="min-h-0 overflow-hidden rounded-[10px] border border-[#e8ebee] bg-white px-[18px] py-[12px] shadow-[0_1px_3px_rgba(15,23,42,0.02)]">
-              <h3 className="text-[14px] font-extrabold tracking-[-0.01em] text-[#18224d]">
+              <h3 className="text-[14px] font-semibold tracking-[-0.01em] text-[#18224d]">
                 Folder Guidelines
               </h3>
               <p className="mt-[4px] text-[11px] font-semibold text-[#66738c]">
@@ -378,7 +378,7 @@ export default function AddNewFolderPage() {
                       </div>
 
                       <div className="min-w-0">
-                        <p className="text-[10.5px] font-extrabold leading-[1.35] text-[#20304f]">
+                        <p className="text-[10.5px] font-semibold leading-[1.35] text-[#20304f]">
                           {item.title}
                         </p>
                         <p className="mt-[2px] text-[9.5px] font-semibold leading-[1.35] text-[#66738c]">
@@ -392,7 +392,7 @@ export default function AddNewFolderPage() {
             </section>
 
             <section className="min-h-0 overflow-hidden rounded-[10px] border border-[#e8ebee] bg-white px-[18px] py-[12px] shadow-[0_1px_3px_rgba(15,23,42,0.02)]">
-              <h3 className="text-[14px] font-extrabold tracking-[-0.01em] text-[#18224d]">
+              <h3 className="text-[14px] font-semibold tracking-[-0.01em] text-[#18224d]">
                 Quick Tips
               </h3>
               <p className="mt-[4px] text-[11px] font-semibold text-[#66738c]">

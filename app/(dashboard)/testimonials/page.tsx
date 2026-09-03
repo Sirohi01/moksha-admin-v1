@@ -223,7 +223,7 @@ function MetricCard({
 
       <div className="min-w-0 flex-1">
         <p className="truncate text-[9.5px] font-bold text-[#34435e]">{label}</p>
-        <p className="mt-[5px] text-[21px] font-extrabold leading-none tracking-[-0.03em] text-[#10204a]">
+        <p className="mt-[5px] text-[21px] font-semibold leading-none tracking-[-0.03em] text-[#10204a]">
           {value}
         </p>
 
@@ -287,7 +287,7 @@ export default function TestimonialsManagementPage() {
         {/* HEADER */}
         <header className="flex items-start justify-between gap-[16px]">
           <div>
-            <h1 className="text-[24px] font-extrabold leading-none tracking-[-0.02em] text-[#075b33]">
+            <h1 className="text-[24px] font-semibold leading-none tracking-[-0.02em] text-[#075b33]">
               Testimonials Management
             </h1>
 
@@ -439,7 +439,7 @@ export default function TestimonialsManagementPage() {
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[980px] border-collapse text-left">
                   <thead>
-                    <tr className="h-[42px] border-b border-[#e7e9ec] bg-[#fafbfc] text-[8.5px] font-extrabold uppercase tracking-[0.04em] text-[#44516a]">
+                    <tr className="h-[42px] border-b border-[#e7e9ec] bg-[#fafbfc] text-[8.5px] font-semibold uppercase tracking-[0.04em] text-[#44516a]">
                       <th className="w-[42px] px-[12px] text-center">
                         <input type="checkbox" />
                       </th>
@@ -471,7 +471,7 @@ export default function TestimonialsManagementPage() {
                             />
 
                             <div className="min-w-0">
-                              <p className="text-[10.5px] font-extrabold text-[#19274a]">
+                              <p className="text-[10.5px] font-semibold text-[#19274a]">
                                 {item.name}
                               </p>
                               <p className="mt-[4px] max-w-[335px] text-[8.8px] font-semibold leading-[1.4] text-[#53627c]">
@@ -593,7 +593,7 @@ export default function TestimonialsManagementPage() {
           <aside className="space-y-[12px]">
             {/* CATEGORY */}
             <section className="rounded-[8px] border border-[#e7e9ec] bg-white px-[14px] py-[13px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-              <h2 className="text-[12px] font-extrabold text-[#19274a]">
+              <h2 className="text-[12px] font-semibold text-[#19274a]">
                 Testimonials by Category
               </h2>
 
@@ -607,7 +607,7 @@ export default function TestimonialsManagementPage() {
                 >
                   <div className="grid h-[70px] w-[70px] place-items-center rounded-full bg-white text-center">
                     <div>
-                      <p className="text-[18px] font-extrabold leading-none text-[#10204a]">56</p>
+                      <p className="text-[18px] font-semibold leading-none text-[#10204a]">56</p>
                       <p className="mt-[4px] text-[8px] font-bold text-[#61708c]">Total</p>
                     </div>
                   </div>
@@ -626,7 +626,7 @@ export default function TestimonialsManagementPage() {
                       <span className="truncate text-[8.5px] font-bold text-[#34425e]">
                         {item.label}
                       </span>
-                      <span className="whitespace-nowrap text-[8.3px] font-extrabold text-[#34425e]">
+                      <span className="whitespace-nowrap text-[8.3px] font-semibold text-[#34425e]">
                         {item.value} ({item.percent})
                       </span>
                     </div>
@@ -637,7 +637,7 @@ export default function TestimonialsManagementPage() {
 
             {/* RATING */}
             <section className="rounded-[8px] border border-[#e7e9ec] bg-white px-[14px] py-[13px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-              <h2 className="text-[12px] font-extrabold text-[#19274a]">
+              <h2 className="text-[12px] font-semibold text-[#19274a]">
                 Rating Distribution
               </h2>
 
@@ -670,7 +670,7 @@ export default function TestimonialsManagementPage() {
 
             {/* QUICK ACTIONS */}
             <section className="rounded-[8px] border border-[#e7e9ec] bg-white px-[14px] py-[13px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-              <h2 className="text-[12px] font-extrabold text-[#19274a]">
+              <h2 className="text-[12px] font-semibold text-[#19274a]">
                 Quick Actions
               </h2>
 
@@ -714,7 +714,7 @@ export default function TestimonialsManagementPage() {
             {/* CTA */}
             <section className="relative overflow-hidden rounded-[8px] bg-[linear-gradient(135deg,#08643a_0%,#07542f_100%)] px-[18px] py-[18px] text-white shadow-[0_7px_18px_rgba(5,94,49,.12)]">
               <div className="relative z-10 max-w-[205px]">
-                <p className="text-[12px] font-extrabold leading-[1.4]">
+                <p className="text-[12px] font-semibold leading-[1.4]">
                   Real stories. Real impact.
                 </p>
                 <p className="mt-[9px] text-[10px] font-semibold leading-[1.55] text-white/90">
@@ -724,7 +724,7 @@ export default function TestimonialsManagementPage() {
                 <button
                   type="button"
                   onClick={() => router.push("/testimonials/new")}
-                  className="mt-[16px] inline-flex h-[36px] items-center gap-[8px] rounded-[5px] bg-white px-[14px] text-[9px] font-extrabold text-[#075b33] transition hover:bg-slate-100"
+                  className="mt-[16px] inline-flex h-[36px] items-center gap-[8px] rounded-[5px] bg-white px-[14px] text-[9px] font-semibold text-[#075b33] transition hover:bg-slate-100"
                 >
                   Add New Testimonial
                   <ChevronRight className="h-[12px] w-[12px]" />

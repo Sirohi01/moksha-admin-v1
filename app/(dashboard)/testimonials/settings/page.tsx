@@ -57,7 +57,7 @@ function Panel({
     <section
       className={`rounded-[9px] border border-[#e7e9ec] bg-white px-[18px] py-[16px] shadow-[0_1px_3px_rgba(15,23,42,0.025)] ${className}`}
     >
-      <h2 className="text-[14px] font-extrabold leading-tight tracking-[-0.01em] text-[#17234a]">
+      <h2 className="text-[14px] font-semibold leading-tight tracking-[-0.01em] text-[#17234a]">
         {title}
       </h2>
 
@@ -84,7 +84,7 @@ function SettingRow({
   return (
     <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-[16px] py-[7px]">
       <div className="min-w-0">
-        <p className="text-[10.5px] font-extrabold leading-[1.3] text-[#213050]">
+        <p className="text-[10.5px] font-semibold leading-[1.3] text-[#213050]">
           {title}
         </p>
         <p className="mt-[3px] text-[9.5px] font-semibold leading-[1.4] text-[#6d7890]">
@@ -157,7 +157,7 @@ export default function TestimonialsSettingsPage() {
         {/* HEADER */}
         <header className="flex items-start justify-between gap-[16px]">
           <div>
-            <h1 className="text-[24px] font-extrabold leading-none tracking-[-0.02em] text-[#075b33]">
+            <h1 className="text-[24px] font-semibold leading-none tracking-[-0.02em] text-[#075b33]">
               Testimonials Settings
             </h1>
 
@@ -234,7 +234,7 @@ export default function TestimonialsSettingsPage() {
 
               <div className="grid grid-cols-[minmax(0,1fr)_178px] gap-[18px] py-[7px]">
                 <div>
-                  <p className="text-[10.5px] font-extrabold text-[#213050]">
+                  <p className="text-[10.5px] font-semibold text-[#213050]">
                     Allow Testimonials
                   </p>
                   <p className="mt-[3px] text-[9.5px] font-semibold text-[#6d7890]">
@@ -256,8 +256,8 @@ export default function TestimonialsSettingsPage() {
                     >
                       <span
                         className={`h-[16px] w-[16px] rounded-full border ${allowAnyone === Boolean(active)
-                            ? "border-[#0b6a3b] shadow-[inset_0_0_0_4px_#0b6a3b]"
-                            : "border-[#cfd6df] bg-white"
+                          ? "border-[#0b6a3b] shadow-[inset_0_0_0_4px_#0b6a3b]"
+                          : "border-[#cfd6df] bg-white"
                           }`}
                       />
                       <span className="text-[9.5px] font-semibold text-[#43506c]">
@@ -337,7 +337,7 @@ export default function TestimonialsSettingsPage() {
                 />
 
                 <div className="py-[7px]">
-                  <p className="text-[10.5px] font-extrabold text-[#213050]">
+                  <p className="text-[10.5px] font-semibold text-[#213050]">
                     Number of Featured Testimonials
                   </p>
                   <p className="mt-[3px] text-[9.5px] font-semibold text-[#6d7890]">
@@ -356,7 +356,7 @@ export default function TestimonialsSettingsPage() {
                 />
 
                 <div className="py-[7px]">
-                  <p className="text-[10.5px] font-extrabold text-[#213050]">
+                  <p className="text-[10.5px] font-semibold text-[#213050]">
                     Rotation Interval
                   </p>
                   <p className="mt-[3px] text-[9.5px] font-semibold text-[#6d7890]">
@@ -376,7 +376,7 @@ export default function TestimonialsSettingsPage() {
             >
               <div className="space-y-[5px]">
                 <div className="py-[7px]">
-                  <p className="text-[10.5px] font-extrabold text-[#213050]">
+                  <p className="text-[10.5px] font-semibold text-[#213050]">
                     Excerpt Length (Characters)
                   </p>
                   <p className="mt-[3px] text-[9.5px] font-semibold text-[#6d7890]">
@@ -430,7 +430,7 @@ export default function TestimonialsSettingsPage() {
                   </div>
 
                   <div className="text-left">
-                    <p className="text-[11.5px] font-extrabold text-[#1a2646]">
+                    <p className="text-[11.5px] font-semibold text-[#1a2646]">
                       Ramesh Kumar
                     </p>
                     <p className="mt-[4px] text-[9.5px] font-bold text-[#178248]">
@@ -490,7 +490,7 @@ export default function TestimonialsSettingsPage() {
             <div className="flex min-h-[66px] items-start gap-[10px] rounded-[8px] border border-[#f1e3bb] bg-[linear-gradient(90deg,#fff9e9,#fffdf4)] px-[14px] py-[12px]">
               <Lightbulb className="mt-[1px] h-[20px] w-[20px] shrink-0 text-[#f0aa1c]" />
               <p className="text-[9.5px] font-semibold leading-[1.5] text-[#6b5738]">
-                <strong className="font-extrabold text-[#236342]">Tip:</strong>{" "}
+                <strong className="font-semibold text-[#236342]">Tip:</strong>{" "}
                 Don&apos;t forget to click “Save Changes” after updating the settings.
               </p>
             </div>

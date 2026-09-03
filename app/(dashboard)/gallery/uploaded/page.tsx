@@ -59,7 +59,7 @@ function Panel({
     <section
       className={`min-h-0 overflow-visible rounded-[8px] border border-[#e7e9e8] bg-white px-[16px] py-[14px] shadow-[0_1px_3px_rgba(15,23,42,0.025)] ${className}`}
     >
-      <h2 className="text-[14px] font-extrabold leading-tight tracking-[-0.01em] text-[#17234a]">
+      <h2 className="text-[14px] font-semibold leading-tight tracking-[-0.01em] text-[#17234a]">
         {title}
       </h2>
       {subtitle ? (
@@ -91,7 +91,7 @@ function SettingRow({
       </div>
 
       <div className="min-w-0">
-        <p className="text-[10.5px] font-extrabold leading-[1.25] text-[#213050]">
+        <p className="text-[10.5px] font-semibold leading-[1.25] text-[#213050]">
           {title}
         </p>
         <p className="mt-[2px] text-[9px] font-semibold leading-[1.35] text-[#6d7890]">
@@ -163,7 +163,7 @@ export default function MediaSettingsPage() {
         {/* HEADER */}
         <header className="flex min-h-0 items-start justify-between gap-[16px]">
           <div>
-            <h1 className="text-[24px] font-extrabold leading-none tracking-[-0.02em] text-[#075b33]">
+            <h1 className="text-[24px] font-semibold leading-none tracking-[-0.02em] text-[#075b33]">
               Media Settings
             </h1>
 
@@ -382,7 +382,7 @@ export default function MediaSettingsPage() {
             <div className="space-y-[12px]">
               <div className="grid grid-cols-[1fr_136px] items-center gap-[14px]">
                 <div>
-                  <p className="text-[10.5px] font-extrabold text-[#213050]">Max File Size (Per File)</p>
+                  <p className="text-[10.5px] font-semibold text-[#213050]">Max File Size (Per File)</p>
                   <p className="mt-[3px] text-[9px] font-semibold text-[#6d7890]">Allowed maximum size for each file.</p>
                 </div>
                 <SelectBox value="10 MB" options={["5 MB", "10 MB", "20 MB", "50 MB"]} width={136} />
@@ -390,14 +390,14 @@ export default function MediaSettingsPage() {
 
               <div className="grid grid-cols-[1fr_136px] items-center gap-[14px]">
                 <div>
-                  <p className="text-[10.5px] font-extrabold text-[#213050]">Max Upload Files (Per Request)</p>
+                  <p className="text-[10.5px] font-semibold text-[#213050]">Max Upload Files (Per Request)</p>
                   <p className="mt-[3px] text-[9px] font-semibold text-[#6d7890]">Maximum number of files allowed in one upload.</p>
                 </div>
                 <SelectBox value="20" options={["10", "20", "30", "50"]} width={136} />
               </div>
 
               <div>
-                <p className="text-[10.5px] font-extrabold text-[#213050]">Allowed File Extensions</p>
+                <p className="text-[10.5px] font-semibold text-[#213050]">Allowed File Extensions</p>
                 <p className="mt-[3px] text-[9px] font-semibold text-[#6d7890]">Specify allowed file extensions.</p>
                 <input
                   defaultValue="jpg, jpeg, png, gif, webp, pdf, doc, docx, mp4, mp3"
@@ -407,7 +407,7 @@ export default function MediaSettingsPage() {
 
               <div className="flex items-start justify-between gap-[12px]">
                 <div>
-                  <p className="text-[10.5px] font-extrabold text-[#213050]">Auto Optimize Images</p>
+                  <p className="text-[10.5px] font-semibold text-[#213050]">Auto Optimize Images</p>
                   <p className="mt-[3px] text-[9px] font-semibold text-[#6d7890]">Automatically compress and optimize images.</p>
                 </div>
                 <Toggle checked={autoOptimize} onChange={() => setAutoOptimize((v) => !v)} />
@@ -415,7 +415,7 @@ export default function MediaSettingsPage() {
 
               <div className="flex items-start justify-between gap-[12px]">
                 <div>
-                  <p className="text-[10.5px] font-extrabold text-[#213050]">Generate WebP Images</p>
+                  <p className="text-[10.5px] font-semibold text-[#213050]">Generate WebP Images</p>
                   <p className="mt-[3px] text-[9px] font-semibold text-[#6d7890]">Generate WebP format for better performance.</p>
                 </div>
                 <Toggle checked={generateWebp} onChange={() => setGenerateWebp((v) => !v)} />
@@ -432,7 +432,7 @@ export default function MediaSettingsPage() {
               <div className="relative mx-auto grid h-[112px] w-[112px] place-items-center rounded-full bg-[conic-gradient(#0b6a3b_0deg_116deg,#dfe4ea_116deg_360deg)]">
                 <div className="grid h-[78px] w-[78px] place-items-center rounded-full bg-white text-center">
                   <div>
-                    <p className="text-[16px] font-extrabold leading-none text-[#1c2950]">3.24 GB</p>
+                    <p className="text-[16px] font-semibold leading-none text-[#1c2950]">3.24 GB</p>
                     <p className="mt-[4px] text-[8px] font-bold text-[#53617a]">Used</p>
                   </div>
                 </div>
@@ -448,7 +448,7 @@ export default function MediaSettingsPage() {
                   <div key={label} className="grid grid-cols-[9px_1fr_auto] items-center gap-[8px]">
                     <span className="h-[9px] w-[9px] rounded-full" style={{ backgroundColor: color }} />
                     <span className="text-[9px] font-bold text-[#30405d]">{label}</span>
-                    <span className="text-[9px] font-extrabold text-[#24345e]">{value}</span>
+                    <span className="text-[9px] font-semibold text-[#24345e]">{value}</span>
                   </div>
                 ))}
 
@@ -471,7 +471,7 @@ export default function MediaSettingsPage() {
             <div className="space-y-[8px]">
               <div className="flex items-start justify-between gap-[10px]">
                 <div>
-                  <p className="text-[10.5px] font-extrabold text-[#213050]">Auto Delete Unattached Files</p>
+                  <p className="text-[10.5px] font-semibold text-[#213050]">Auto Delete Unattached Files</p>
                   <p className="mt-[3px] text-[9px] font-semibold text-[#6d7890]">Delete files not attached to any content.</p>
                 </div>
                 <Toggle checked={autoDelete} onChange={() => setAutoDelete((v) => !v)} />
@@ -479,7 +479,7 @@ export default function MediaSettingsPage() {
 
               <div className="grid grid-cols-[1fr_110px] items-center gap-[12px]">
                 <div>
-                  <p className="text-[10.5px] font-extrabold text-[#213050]">Unattached Files Older Than</p>
+                  <p className="text-[10.5px] font-semibold text-[#213050]">Unattached Files Older Than</p>
                   <p className="mt-[3px] text-[9px] font-semibold text-[#6d7890]">Automatically delete files older than.</p>
                 </div>
                 <SelectBox value="30 Days" options={["7 Days", "30 Days", "60 Days", "90 Days"]} width={110} />
@@ -487,7 +487,7 @@ export default function MediaSettingsPage() {
 
               <div className="flex items-start justify-between gap-[10px]">
                 <div>
-                  <p className="text-[10.5px] font-extrabold text-[#213050]">Clean Trash Automatically</p>
+                  <p className="text-[10.5px] font-semibold text-[#213050]">Clean Trash Automatically</p>
                   <p className="mt-[3px] text-[9px] font-semibold text-[#6d7890]">Automatically clear trash after retention period.</p>
                 </div>
                 <Toggle checked={cleanTrash} onChange={() => setCleanTrash((v) => !v)} />

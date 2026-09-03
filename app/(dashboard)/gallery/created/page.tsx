@@ -57,7 +57,7 @@ function SectionHeading({
 }) {
   return (
     <div>
-      <h2 className="text-[14px] font-extrabold tracking-[-0.01em] text-[#1a254b]">
+      <h2 className="text-[14px] font-semibold tracking-[-0.01em] text-[#1a254b]">
         {number}. {title}
         {optional ? (
           <span className="font-semibold text-[#5d6a84]"> (Optional)</span>
@@ -134,7 +134,7 @@ export default function UploadNewMediaPage() {
         {/* HEADER */}
         <header className="flex min-h-0 items-start justify-between gap-[18px]">
           <div className="min-w-0">
-            <h1 className="text-[24px] font-extrabold leading-none tracking-[-0.02em] text-[#075b33]">
+            <h1 className="text-[24px] font-semibold leading-none tracking-[-0.02em] text-[#075b33]">
               Upload New Media
             </h1>
 
@@ -169,7 +169,7 @@ export default function UploadNewMediaPage() {
                     <UploadCloud className="h-[48px] w-[48px]" strokeWidth={1.8} />
                   </div>
 
-                  <h3 className="mt-[5px] text-[15px] font-extrabold text-[#1d2432]">
+                  <h3 className="mt-[5px] text-[15px] font-semibold text-[#1d2432]">
                     Drag &amp; drop your files here
                   </h3>
 
@@ -345,8 +345,8 @@ export default function UploadNewMediaPage() {
                         >
                           <span
                             className={`mt-[2px] h-[16px] w-[16px] rounded-full border ${active
-                                ? "border-[#0d6b3e] shadow-[inset_0_0_0_4px_#0d6b3e]"
-                                : "border-[#ccd4df] bg-white"
+                              ? "border-[#0d6b3e] shadow-[inset_0_0_0_4px_#0d6b3e]"
+                              : "border-[#ccd4df] bg-white"
                               }`}
                           />
                           <div className="flex gap-[10px]">
@@ -354,7 +354,7 @@ export default function UploadNewMediaPage() {
                               <Icon className="h-[13px] w-[13px]" strokeWidth={2.1} />
                             </div>
                             <div>
-                              <p className="text-[12px] font-extrabold leading-none text-[#1d2748]">
+                              <p className="text-[12px] font-semibold leading-none text-[#1d2748]">
                                 {item.title}
                               </p>
                               <p className="mt-[6px] text-[10.5px] font-semibold leading-none text-[#66738c]">
@@ -394,7 +394,7 @@ export default function UploadNewMediaPage() {
               <div className="mt-[10px] space-y-[12px]">
                 <div className="flex items-start justify-between gap-[16px]">
                   <div>
-                    <p className="text-[12px] font-extrabold text-[#1e2849]">Generate WebP (Image)</p>
+                    <p className="text-[12px] font-semibold text-[#1e2849]">Generate WebP (Image)</p>
                     <p className="mt-[3px] text-[10.5px] font-semibold text-[#66738c]">
                       Create WebP version for better performance
                     </p>
@@ -404,7 +404,7 @@ export default function UploadNewMediaPage() {
 
                 <div className="flex items-start justify-between gap-[16px]">
                   <div>
-                    <p className="text-[12px] font-extrabold text-[#1e2849]">Optimize Image</p>
+                    <p className="text-[12px] font-semibold text-[#1e2849]">Optimize Image</p>
                     <p className="mt-[3px] text-[10.5px] font-semibold text-[#66738c]">
                       Automatically compress and optimize images
                     </p>
@@ -414,7 +414,7 @@ export default function UploadNewMediaPage() {
 
                 <div className="flex items-start justify-between gap-[16px]">
                   <div>
-                    <p className="text-[12px] font-extrabold text-[#1e2849]">Add Watermark</p>
+                    <p className="text-[12px] font-semibold text-[#1e2849]">Add Watermark</p>
                     <p className="mt-[3px] text-[10.5px] font-semibold text-[#66738c]">
                       Apply watermark to this media file
                     </p>
@@ -428,7 +428,7 @@ export default function UploadNewMediaPage() {
                   </div>
 
                   <p className="text-[11px] font-bold leading-[1.6] text-[#293848]">
-                    <span className="font-extrabold text-[#1b2836]">Note:</span>{" "}
+                    <span className="font-semibold text-[#1b2836]">Note:</span>{" "}
                     Your media files will be organized and stored securely. You can manage them anytime from the Media Library.
                   </p>
                 </div>
