@@ -43,6 +43,7 @@ import {
   type PageType,
 } from "@/lib/cmsPages";
 import { settingsApi } from "@/lib/settingsApi";
+import { dashboardApi } from "@/lib/dashboardApi";
 import { useAppSelector } from "@/store/hooks";
 
 /* =========================================================
@@ -245,6 +246,7 @@ export default function PagesCmsPage() {
     useState("All Authors");
 
   const [pageSpeedData, setPageSpeedData] = useState<Record<string, any> | null>(null);
+  const [dashboardPageSpeed, setDashboardPageSpeed] = useState<Record<string, any> | null>(null);
   const [isFetchingPageSpeed, setIsFetchingPageSpeed] = useState(false);
   const [pageSpeedError, setPageSpeedError] = useState<string | null>(null);
 
@@ -296,6 +298,22 @@ export default function PagesCmsPage() {
         setSelectedPage(null);
       }
     });
+
+    dashboardApi.overview().then((data) => {
+      if (active && data?.sources?.pageSpeed?.data) {
+        const ps = data.sources.pageSpeed.data;
+        setDashboardPageSpeed({
+          score: ps.performanceScore ?? null,
+          lcp: ps.lcp != null ? `${(ps.lcp / 1000).toFixed(1)}s` : "No Data",
+          inp: ps.inp != null ? `${Math.round(ps.inp)}ms` : "No Data",
+          cls: ps.cls != null ? ps.cls.toFixed(2) : "0.00",
+          fcp: ps.fcp != null ? `${(ps.fcp / 1000).toFixed(1)}s` : "No Data",
+          ttfb: "No Data",
+          tbt: ps.tbt != null ? `${Math.round(ps.tbt)}ms` : "No Data",
+        });
+      }
+    }).catch(() => {});
+
     return () => { active = false; };
   }, []);
 
@@ -1630,11 +1648,13 @@ export default function PagesCmsPage() {
                     </p>
                   </div>
                   
-                  {pageSpeedData ? (
-                    <span className="rounded-full bg-emerald-50 px-[8px] py-[4px] text-[10px] font-bold text-emerald-700 ring-1 ring-emerald-100">
-                      Score: {pageSpeedData.score}/100
-                    </span>
-                  ) : (
+                  <div className="flex items-center gap-2">
+                    {(pageSpeedData || dashboardPageSpeed)?.score != null && (
+                      <span className="rounded-full bg-emerald-50 px-[8px] py-[4px] text-[10px] font-bold text-emerald-700 ring-1 ring-emerald-100">
+                        Score: {(pageSpeedData || dashboardPageSpeed)?.score}/100
+                      </span>
+                    )}
+                    
                     <button
                       onClick={runPageSpeedTest}
                       disabled={isFetchingPageSpeed}
@@ -1643,7 +1663,7 @@ export default function PagesCmsPage() {
                       {isFetchingPageSpeed ? <Loader2 className="h-[10px] w-[10px] animate-spin" /> : <Play className="h-[10px] w-[10px]" />}
                       {isFetchingPageSpeed ? "Running Test..." : "Run Test"}
                     </button>
-                  )}
+                  </div>
                 </div>
 
                 {pageSpeedError && (
@@ -1653,33 +1673,36 @@ export default function PagesCmsPage() {
                 )}
 
                 <div className="mt-[9px] grid grid-cols-3 gap-[7px]">
-                  {[
-                    ["LCP", pageSpeedData?.lcp || "—", pageSpeedData ? "Measured" : "Not Connected", pageSpeedData ? "text-emerald-700" : "text-amber-700"],
-                    ["INP", "—", "Requires Field Data", "text-amber-700"],
-                    ["CLS", pageSpeedData?.cls || "—", pageSpeedData ? "Measured" : "Not Connected", pageSpeedData ? "text-emerald-700" : "text-amber-700"],
-                    ["FCP", pageSpeedData?.fcp || "—", pageSpeedData ? "Measured" : "Not Connected", pageSpeedData ? "text-emerald-700" : "text-amber-700"],
-                    ["TTFB", pageSpeedData?.ttfb || "—", pageSpeedData ? "Measured" : "Not Connected", pageSpeedData ? "text-emerald-700" : "text-amber-700"],
-                    ["TBT", pageSpeedData?.tbt || "—", pageSpeedData ? "Measured" : "Not Connected", pageSpeedData ? "text-emerald-700" : "text-amber-700"],
-                  ].map(([label, value, status, statusColor]) => (
-                    <div
-                      key={label}
-                      className="rounded-[7px] border border-[#e7e9e6] bg-white px-[9px] py-[9px]"
-                      style={{
-                        boxShadow:
-                          "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.06) 0px 0px 0px 1px",
-                      }}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-bold text-[#667085]">{label}</span>
-                        <CircleGauge className="h-[11px] w-[11px] text-[#98a2b3]" />
+                  {(() => {
+                    const activeSpeed = pageSpeedData || dashboardPageSpeed;
+                    return [
+                      ["LCP", activeSpeed?.lcp || "—", activeSpeed ? (activeSpeed.lcp !== "No Data" ? "Measured" : "No Data") : "Not Connected", activeSpeed && activeSpeed.lcp !== "No Data" ? "text-emerald-700" : "text-amber-700"],
+                      ["INP", activeSpeed?.inp || "—", activeSpeed ? (activeSpeed.inp !== "No Data" ? "Measured" : "Requires Field Data") : "Not Connected", activeSpeed && activeSpeed.inp !== "No Data" ? "text-emerald-700" : "text-amber-700"],
+                      ["CLS", activeSpeed?.cls || "—", activeSpeed ? (activeSpeed.cls !== "No Data" ? "Measured" : "No Data") : "Not Connected", activeSpeed && activeSpeed.cls !== "No Data" ? "text-emerald-700" : "text-amber-700"],
+                      ["FCP", activeSpeed?.fcp || "—", activeSpeed ? (activeSpeed.fcp !== "No Data" ? "Measured" : "No Data") : "Not Connected", activeSpeed && activeSpeed.fcp !== "No Data" ? "text-emerald-700" : "text-amber-700"],
+                      ["TTFB", activeSpeed?.ttfb || "—", activeSpeed ? (activeSpeed.ttfb !== "No Data" ? "Measured" : "No Data") : "Not Connected", activeSpeed && activeSpeed.ttfb !== "No Data" ? "text-emerald-700" : "text-amber-700"],
+                      ["TBT", activeSpeed?.tbt || "—", activeSpeed ? (activeSpeed.tbt !== "No Data" ? "Measured" : "No Data") : "Not Connected", activeSpeed && activeSpeed.tbt !== "No Data" ? "text-emerald-700" : "text-amber-700"],
+                    ].map(([label, value, status, statusColor]) => (
+                      <div
+                        key={label}
+                        className="rounded-[7px] border border-[#e7e9e6] bg-white px-[9px] py-[9px]"
+                        style={{
+                          boxShadow:
+                            "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.06) 0px 0px 0px 1px",
+                        }}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-bold text-[#667085]">{label}</span>
+                          <CircleGauge className="h-[11px] w-[11px] text-[#98a2b3]" />
+                        </div>
+                        <p className="mt-[5px] text-[18px] font-bold leading-none text-[#182238]">{value}</p>
+                        <p className={`mt-[4px] text-[10px] font-semibold ${statusColor}`}>{status}</p>
                       </div>
-                      <p className="mt-[5px] text-[18px] font-bold leading-none text-[#182238]">{value}</p>
-                      <p className={`mt-[4px] text-[10px] font-semibold ${statusColor}`}>{status}</p>
-                    </div>
-                  ))}
+                    ));
+                  })()}
                 </div>
 
-                {!pageSpeedData && !isFetchingPageSpeed && (
+                {!(pageSpeedData || dashboardPageSpeed) && !isFetchingPageSpeed && (
                   <div className="mt-[9px] rounded-[9px] border border-[#dbeafe] bg-[#eff6ff] p-[9px]">
                     <div className="flex items-start gap-[7px]">
                       <CircleGauge className="mt-[1px] h-[13px] w-[13px] shrink-0 text-blue-700" />
