@@ -497,11 +497,13 @@ function SectionItemsEditor({
   onChangeItem,
   onAddItem,
   onRemoveItem,
+  sectionId,
 }: {
   items: Array<Record<string, any>>;
   onChangeItem: (index: number, key: string, value: unknown) => void;
   onAddItem: () => void;
   onRemoveItem: (index: number) => void;
+  sectionId?: string;
 }) {
   return (
     <div className="flex flex-col gap-[8px]">
@@ -528,21 +530,70 @@ function SectionItemsEditor({
         // Ensure icon field is present for items that might use it
         let defaultIcon = "";
         if (!item.icon) {
-           const text = item.label || item.title || "";
-           if (text.includes("Helpline")) defaultIcon = "users";
-           else if (text.includes("Region")) defaultIcon = "building";
-           else if (text.includes("Case-Based")) defaultIcon = "smile";
-           else if (text.includes("Eligibility")) defaultIcon = "shield";
-           else if (text.includes("Unclaimed")) defaultIcon = "info";
-           else if (text.includes("People Without")) defaultIcon = "heart";
+           const text = (item.title || "") + " " + (item.label || "");
+           const textUpper = text.toUpperCase();
+           if (textUpper.includes("HELPLINE")) defaultIcon = "users";
+           else if (textUpper.includes("REGION")) defaultIcon = "building";
+           else if (textUpper.includes("CASE-BASED")) defaultIcon = "smile";
+           else if (textUpper.includes("ELIGIBILITY") && !textUpper.includes("BODY")) defaultIcon = "shield";
+           else if (textUpper.includes("UNCLAIMED") && !textUpper.includes("BODY")) defaultIcon = "info";
+           else if (textUpper.includes("PEOPLE WITHOUT")) defaultIcon = "heart";
+           else if (textUpper.includes("AMBULANCE") || textUpper.includes("TRANSPORT")) defaultIcon = "van";
+           else if (textUpper.includes("CREMATION")) defaultIcon = "fire";
+           else if (textUpper.includes("RITUAL ESSENTIALS")) defaultIcon = "diya";
+           else if (textUpper.includes("PRIEST")) defaultIcon = "priest";
+           else if (textUpper.includes("ON-GROUND")) defaultIcon = "heart-hands";
+           else if (textUpper.includes("NAMO GANGE")) defaultIcon = "people";
+           else if (textUpper.includes("GOVERNANCE")) defaultIcon = "shield";
+           else if (textUpper.includes("IMPACT") || textUpper.includes("REPORT")) defaultIcon = "report";
+           else if (textUpper.includes("DONATION") || textUpper.includes("REFUND")) defaultIcon = "policy";
+           else if (textUpper.includes("SEWA") && !textUpper.includes("GIVE") && !textUpper.includes("SERVE") && !textUpper.includes("PARTNER") && textUpper.length < 15) defaultIcon = "heart-hand";
+           else if (textUpper.includes("INTEGRITY")) defaultIcon = "scale";
+           else if (textUpper.includes("TRANSPARENCY")) defaultIcon = "eye";
+           else if (textUpper.includes("ACCOUNTABILITY")) defaultIcon = "accountability";
+           else if (textUpper.includes("ON-GROUND SEWA")) defaultIcon = "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165452/moksha-sewa/assets/sewa/on-ground.png";
+           else if (textUpper.includes("VOLUNTEER SEWA")) defaultIcon = "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165459/moksha-sewa/assets/sewa/voluteer-seva.png";
+           else if (textUpper.includes("RITUAL SUPPORT")) defaultIcon = "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165456/moksha-sewa/assets/sewa/ritual-support.png";
+           else if (textUpper.includes("COMMUNITY OUTREACH")) defaultIcon = "https://res.cloudinary.com/dr8mld4i0/image/upload/v1788165449/moksha-sewa/assets/sewa/community-outreach.png";
            else if (text.includes("Economically")) defaultIcon = "heart";
-           else if (text.includes("Ambulance")) defaultIcon = "ambulance";
-           else if (text.includes("Cremation")) defaultIcon = "flame";
            else if (text.includes("Ritual")) defaultIcon = "book-open";
            else if (text.includes("Family")) defaultIcon = "users";
            else if (text.includes("Verified")) defaultIcon = "shield";
            else if (text.includes("Guided")) defaultIcon = "heart";
            else if (text.includes("Local")) defaultIcon = "map-pin";
+           else if (text.includes("Request")) defaultIcon = "clipboard";
+           else if (text.includes("Verification")) defaultIcon = "document";
+           else if (text.includes("Coordination")) defaultIcon = "hands";
+           else if (text.includes("Final")) defaultIcon = "diya";
+           else if (text.includes("Legally")) defaultIcon = "shield-check";
+           else if (text.includes("Dignified")) defaultIcon = "diya";
+           else if (text.includes("Compassionate")) defaultIcon = "heart-hands";
+           else if (textUpper.includes("ECONOMICALLY")) defaultIcon = "family-hands";
+           else if (textUpper.includes("ELDERLY")) defaultIcon = "elderly-care";
+           else if (textUpper.includes("UNCLAIMED BODY")) defaultIcon = "unclaimed-case";
+           else if (textUpper.includes("FOR THOSE UNCLAIMED")) defaultIcon = "users-round";
+           else if (textUpper.includes("FOR THOSE ALONE")) defaultIcon = "heart-hands";
+           else if (textUpper.includes("FOR FAMILIES IN NEED")) defaultIcon = "heart-hands";
+           else if (textUpper.includes("WITH DIGNITY & CARE")) defaultIcon = "shield-check";
+           else if (textUpper.includes("HUMANITY FIRST")) defaultIcon = "heart-hands";
+           else if (textUpper.includes("VERIFICATION & LEGAL")) defaultIcon = "scale";
+           else if (textUpper.includes("TRANSPARENT SEWA")) defaultIcon = "heart-hands";
+           else if (textUpper.includes("COMMUNITY POWERED")) defaultIcon = "users-round";
+           else if (textUpper.includes("COMPASSION")) defaultIcon = "heart";
+           else if (textUpper.includes("INTEGRITY")) defaultIcon = "shield-check";
+           else if (textUpper.includes("RESPECT")) defaultIcon = "users-round";
+           else if (textUpper.includes("DIGNITY")) defaultIcon = "lotus";
+           else if (textUpper.includes("UNCLAIMED & AUTHORISED")) defaultIcon = "document-check";
+           else if (textUpper.includes("PEOPLE WITHOUT FAMILY SUPPORT")) defaultIcon = "people";
+           else if (textUpper.includes("VERIFIED FAMILIES FACING FINANCIAL HARDSHIP")) defaultIcon = "heart-hands";
+           else if (textUpper.includes("WHAT") && textUpper.includes("WE DO")) defaultIcon = "give-icon";
+           else if (textUpper.includes("WHY") && textUpper.includes("WE EXIST")) defaultIcon = "lotus";
+           else if (textUpper.includes("WHO") && textUpper.includes("WE SERVE")) defaultIcon = "users-round";
+           else if (textUpper.includes("HOW") && textUpper.includes("WE SERVE")) defaultIcon = "serve-icon";
+           else if (textUpper.includes("NAMO GANGE TRUST")) defaultIcon = "lotus";
+           else if (text.toUpperCase().includes("GIVE")) defaultIcon = "give-icon";
+           else if (text.toUpperCase().includes("SERVE")) defaultIcon = "serve-icon";
+           else if (text.toUpperCase().includes("PARTNER")) defaultIcon = "partner-icon";
         }
         const itemToEdit = ("label" in item || "title" in item) && (!("icon" in item) || item.icon === "") 
           ? { ...item, icon: defaultIcon } 
@@ -581,7 +632,7 @@ function SectionItemsEditor({
                 <div key={key}>
                   <FieldLabel>{humanizeKey(key)}</FieldLabel>
 
-                  {key === "icon" ? (
+                  {key === "icon" && sectionId !== "journey-glimpse" ? (
                     <SelectField
                       value={String(value)}
                       options={[
@@ -600,7 +651,32 @@ function SectionItemsEditor({
                         { label: "Activity", value: "activity" },
                         { label: "Ambulance", value: "ambulance" },
                         { label: "Flame", value: "flame" },
-                        { label: "Book Open", value: "book-open" }
+                        { label: "Book Open", value: "book-open" },
+                        { label: "Clipboard", value: "clipboard" },
+                        { label: "Document", value: "document" },
+                        { label: "Hands", value: "hands" },
+                        { label: "Heart Hands", value: "heart-hands" },
+                        { label: "Shield Check", value: "shield-check" },
+                        { label: "Diya", value: "diya" },
+                        { label: "Family Hands", value: "family-hands" },
+                        { label: "Elderly Care", value: "elderly-care" },
+                        { label: "Unclaimed Case", value: "unclaimed-case" },
+                        { label: "Give Icon", value: "give-icon" },
+                        { label: "Serve Icon", value: "serve-icon" },
+                        { label: "Partner Icon", value: "partner-icon" },
+                        { label: "Users Round", value: "users-round" },
+                        { label: "Lotus", value: "lotus" },
+                        { label: "Document Check", value: "document-check" },
+                        { label: "People", value: "people" },
+                        { label: "Van", value: "van" },
+                        { label: "Fire", value: "fire" },
+                        { label: "Priest", value: "priest" },
+                        { label: "Report", value: "report" },
+                        { label: "Policy", value: "policy" },
+                        { label: "Heart Hand", value: "heart-hand" },
+                        { label: "Scale", value: "scale" },
+                        { label: "Eye", value: "eye" },
+                        { label: "Accountability", value: "accountability" }
                       ]}
                       onChange={(next) => onChangeItem(index, key, next)}
                     />
@@ -618,6 +694,15 @@ function SectionItemsEditor({
                     />
                   ) : typeof value === "boolean" ? (
                     <Toggle checked={value} onChange={(next) => onChangeItem(index, key, next)} />
+                  ) : key === "image" || (key === "icon" && sectionId === "journey-glimpse") ? (
+                    <div className="flex flex-col gap-[8px]">
+                      {value && typeof value === "string" && value.startsWith("http") && (
+                        <div className="h-[46px] w-[46px] shrink-0 overflow-hidden rounded-[6px] border border-[#d2d6db] bg-[#f8f9fa] shadow-sm">
+                          <img src={value} alt="Preview" className="h-full w-full object-contain p-1" />
+                        </div>
+                      )}
+                      <TextInput value={String(value)} onChange={(next) => onChangeItem(index, key, next)} />
+                    </div>
                   ) : (
                     <TextInput value={String(value)} onChange={(next) => onChangeItem(index, key, next)} />
                   )}
@@ -1498,6 +1583,7 @@ export default function CmsEditPage() {
                       onChangeItem={updateSectionItem}
                       onAddItem={addSectionItem}
                       onRemoveItem={removeSectionItem}
+                      sectionId={activeSection.key}
                     />
                   )}
                 </div>
