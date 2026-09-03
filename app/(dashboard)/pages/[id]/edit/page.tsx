@@ -55,6 +55,7 @@ import {
   PUBLIC_SITE_URL,
 } from "@/lib/cmsPages";
 import { settingsApi } from "@/lib/settingsApi";
+import Swal from "sweetalert2";
 
 /* =========================================================
    FEATURED IMAGE
@@ -115,10 +116,11 @@ function FieldLabel({
       className="
         mb-[5px]
         block
+        cursor-default
         text-[11px]
         font-semibold
         leading-[14px]
-        text-[#4b5568]
+        text-black
       "
     >
       {children}
@@ -160,10 +162,10 @@ function TextInput({
       className="
         h-[35px]
         w-full
-        rounded-[5px]
-        border
-        border-[#dedfdb]
+        cursor-default
         bg-white
+        rounded-none
+        shadow-[0_1px_3px_0_rgba(0,0,0,0.02),0_0_0_1px_rgba(27,31,35,0.15)]
         px-[10px]
         text-[11px]
         font-medium
@@ -187,7 +189,7 @@ function SelectField({
   onChange,
 }: {
   value: string;
-  options: string[];
+  options: {label: string, value: string}[] | string[];
   onChange: (
     value: string,
   ) => void;
@@ -206,10 +208,9 @@ function SelectField({
           w-full
           cursor-pointer
           appearance-none
-          rounded-[5px]
-          border
-          border-[#dedfdb]
           bg-white
+          rounded-none
+          shadow-[0_1px_3px_0_rgba(0,0,0,0.02),0_0_0_1px_rgba(27,31,35,0.15)]
           pl-[10px]
           pr-[28px]
           text-[11px]
@@ -219,16 +220,19 @@ function SelectField({
           focus:border-[#8fa98e]
         "
       >
-        {options.map(
-          (option) => (
+        {options.map((option) => {
+          const isString = typeof option === "string";
+          const optValue = isString ? option : option.value;
+          const optLabel = isString ? option : option.label;
+          return (
             <option
-              key={option}
-              value={option}
+              key={optValue}
+              value={optValue}
             >
-              {option}
+              {optLabel}
             </option>
-          ),
-        )}
+          );
+        })}
       </select>
 
       <ChevronDown
@@ -282,7 +286,7 @@ function SectionTitle({
         className="
           text-[13px]
           font-bold
-          text-[#285f40]
+          text-[#293681]
         "
       >
         {number}. {title}
@@ -405,7 +409,7 @@ function Textarea({
       placeholder={placeholder}
       rows={rows}
       onChange={(event) => onChange(event.target.value)}
-      className={`w-full resize-none rounded-[5px] border border-[#dedfdb] bg-white px-[10px] py-[8px] text-[11px] font-medium text-[#414b5e] outline-none placeholder:text-[10.5px] placeholder:text-[#9aa0aa] focus:border-[#8fa98e] ${mono ? "font-mono text-[10px]" : ""}`}
+      className={`w-full cursor-default resize-none bg-white rounded-none shadow-[0_1px_3px_0_rgba(0,0,0,0.02),0_0_0_1px_rgba(27,31,35,0.15)] px-[10px] py-[8px] text-[11px] font-medium text-[#414b5e] outline-none placeholder:text-[10.5px] placeholder:text-[#9aa0aa] focus:shadow-[0_1px_3px_0_rgba(0,0,0,0.02),0_0_0_1px_rgba(143,169,142,1)] ${mono ? "font-mono text-[10px]" : ""}`}
     />
   );
 }
@@ -521,7 +525,30 @@ function SectionItemsEditor({
       )}
 
       {items.map((item, index) => {
-        const fieldEntries = Object.entries(item).filter(
+        // Ensure icon field is present for items that might use it
+        let defaultIcon = "";
+        if (!item.icon) {
+           const text = item.label || item.title || "";
+           if (text.includes("Helpline")) defaultIcon = "users";
+           else if (text.includes("Region")) defaultIcon = "building";
+           else if (text.includes("Case-Based")) defaultIcon = "smile";
+           else if (text.includes("Eligibility")) defaultIcon = "shield";
+           else if (text.includes("Unclaimed")) defaultIcon = "info";
+           else if (text.includes("People Without")) defaultIcon = "heart";
+           else if (text.includes("Economically")) defaultIcon = "heart";
+           else if (text.includes("Ambulance")) defaultIcon = "ambulance";
+           else if (text.includes("Cremation")) defaultIcon = "flame";
+           else if (text.includes("Ritual")) defaultIcon = "book-open";
+           else if (text.includes("Family")) defaultIcon = "users";
+           else if (text.includes("Verified")) defaultIcon = "shield";
+           else if (text.includes("Guided")) defaultIcon = "heart";
+           else if (text.includes("Local")) defaultIcon = "map-pin";
+        }
+        const itemToEdit = ("label" in item || "title" in item) && (!("icon" in item) || item.icon === "") 
+          ? { ...item, icon: defaultIcon } 
+          : item;
+
+        const fieldEntries = Object.entries(itemToEdit).filter(
           ([key, value]) =>
             key !== "_id" &&
             (typeof value === "string" ||
@@ -533,7 +560,7 @@ function SectionItemsEditor({
         return (
           <div
             key={item._id ?? index}
-            className="rounded-[5px] border border-[#e5e6e2] bg-white p-[9px]"
+            className="bg-white p-[9px] border border-[#e5e6e2] shadow-[0_1px_3px_0_rgba(0,0,0,0.02),0_0_0_1px_rgba(27,31,35,0.15)]"
           >
             <div className="flex items-center justify-between">
               <span className="text-[9px] font-semibold text-[#697386]">
@@ -554,7 +581,30 @@ function SectionItemsEditor({
                 <div key={key}>
                   <FieldLabel>{humanizeKey(key)}</FieldLabel>
 
-                  {Array.isArray(value) ? (
+                  {key === "icon" ? (
+                    <SelectField
+                      value={String(value)}
+                      options={[
+                        { label: "None", value: "" },
+                        { label: "Group of People", value: "users" },
+                        { label: "Building", value: "building" },
+                        { label: "Smiley Face", value: "smile" },
+                        { label: "Shield", value: "shield" },
+                        { label: "Phone", value: "phone" },
+                        { label: "Mail", value: "mail" },
+                        { label: "Map Pin", value: "map-pin" },
+                        { label: "Heart", value: "heart" },
+                        { label: "Star", value: "star" },
+                        { label: "Check Circle", value: "check-circle" },
+                        { label: "Info", value: "info" },
+                        { label: "Activity", value: "activity" },
+                        { label: "Ambulance", value: "ambulance" },
+                        { label: "Flame", value: "flame" },
+                        { label: "Book Open", value: "book-open" }
+                      ]}
+                      onChange={(next) => onChangeItem(index, key, next)}
+                    />
+                  ) : Array.isArray(value) ? (
                     <TextInput
                       value={value.join(", ")}
                       onChange={(next) =>
@@ -613,7 +663,7 @@ function SeoScoreCircle() {
           cy="60"
           r="49"
           fill="none"
-          stroke="#08703d"
+          stroke="#218DAE"
           strokeWidth="9"
           strokeLinecap="round"
           strokeDasharray="307.87"
@@ -957,6 +1007,13 @@ export default function CmsEditPage() {
       const raw = updated as unknown as Record<string, any>;
       setSettings(raw);
       setPages(cmsPagesFromSettings(raw));
+      Swal.fire({
+        title: "Page Updated",
+        text: "Your changes have been saved successfully.",
+        icon: "success",
+        confirmButtonColor: "#218DAE",
+        timer: 2000,
+      });
     } finally {
       setSaving(false);
     }
@@ -966,7 +1023,7 @@ export default function CmsEditPage() {
     <div
       className="
         w-full
-        bg-[#fffefb]
+        bg-white
         text-[#172238]
       "
     >
@@ -989,17 +1046,20 @@ export default function CmsEditPage() {
 
         <div
           className="
+            mb-[20px]
             flex
-            h-[58px]
             shrink-0
             items-start
             justify-between
+            border-b-[2px]
+            border-[#293681]
+            pb-[8px]
           "
         >
           <div
             className="
               flex
-              items-start
+              items-center
               gap-[11px]
             "
           >
@@ -1007,8 +1067,8 @@ export default function CmsEditPage() {
               className="
                 mt-[1px]
                 grid
-                h-[42px]
-                w-[42px]
+                h-[28px]
+                w-[28px]
                 place-items-center
                 rounded-full
                 bg-[#e8f4e9]
@@ -1016,7 +1076,7 @@ export default function CmsEditPage() {
               "
             >
               <Edit3
-                className="h-[20px] w-[20px]"
+                className="h-[14px] w-[14px]"
                 strokeWidth={1.65}
               />
             </div>
@@ -1024,47 +1084,17 @@ export default function CmsEditPage() {
             <div>
               <h1
                 className="
-                  text-[20px]
+                  mt-[2px]
+                  text-[19px]
                   font-bold
-                  leading-[22px]
-                  tracking-[-0.02em]
-                  text-[#194631]
+                  leading-[1.15]
+                  tracking-[-0.018em]
+                  text-[#18233b]
                 "
               >
                 Edit Page
               </h1>
 
-              <div
-                className="
-                  mt-[6px]
-                  flex
-                  items-center
-                  gap-[7px]
-                  text-[10px]
-                  font-medium
-                  text-[#697386]
-                "
-              >
-                <span>Dashboard</span>
-
-                <ChevronRight className="h-[10px] w-[10px]" />
-
-                <span>
-                  Pages &amp; CMS
-                </span>
-
-                <ChevronRight className="h-[10px] w-[10px]" />
-
-                <span>
-                  {page.title}
-                </span>
-
-                <ChevronRight className="h-[10px] w-[10px]" />
-
-                <span>
-                  Edit Page
-                </span>
-              </div>
             </div>
           </div>
 
@@ -1084,17 +1114,17 @@ export default function CmsEditPage() {
               }
               className="
                 flex
-                h-[37px]
+                h-[30px]
                 items-center
                 gap-[7px]
-                rounded-[6px]
+                rounded-[4px]
                 border
-                border-[#dedfdb]
-                bg-white
-                px-[17px]
-                text-[10.5px]
+                border-red-200
+                bg-red-50
+                px-[12px]
+                text-[8.5px]
                 font-semibold
-                text-[#415067]
+                text-red-600
               "
             >
               <ArrowLeft className="h-[13px] w-[13px]" />
@@ -1111,17 +1141,17 @@ export default function CmsEditPage() {
               }
               className="
                 flex
-                h-[37px]
+                h-[30px]
                 items-center
                 gap-[7px]
-                rounded-[6px]
+                rounded-[4px]
                 border
-                border-[#ddcda8]
-                bg-[#fffefa]
-                px-[18px]
-                text-[10.5px]
+                border-orange-200
+                bg-orange-50
+                px-[12px]
+                text-[8.5px]
                 font-semibold
-                text-[#3d5648]
+                text-orange-600
               "
             >
               <Eye className="h-[13px] w-[13px]" />
@@ -1135,16 +1165,16 @@ export default function CmsEditPage() {
               disabled={saving}
               className="
                 flex
-                h-[37px]
+                h-[30px]
                 items-center
                 gap-[7px]
-                rounded-[6px]
-                bg-[linear-gradient(135deg,#08723e,#075832)]
-                px-[20px]
-                text-[10.5px]
+                rounded-[4px]
+                bg-[#218DAE]
+                px-[12px]
+                text-[8.5px]
                 font-semibold
                 text-white
-                shadow-[0_4px_10px_rgba(5,88,48,0.16)]
+                shadow-sm
               "
             >
               <Save className="h-[13px] w-[13px]" />
@@ -1156,10 +1186,10 @@ export default function CmsEditPage() {
               type="button"
               className="
                 grid
-                h-[37px]
-                w-[37px]
+                h-[30px]
+                w-[30px]
                 place-items-center
-                rounded-[6px]
+                rounded-[4px]
                 border
                 border-[#dedfdb]
                 bg-white
@@ -1201,9 +1231,9 @@ export default function CmsEditPage() {
             <section
               className="
                 shrink-0
-                rounded-[8px]
                 border
-                border-[#e7e7e3]
+                border-[#dedfdb]
+                shadow-[0_1px_3px_0_rgba(0,0,0,0.02),0_0_0_1px_rgba(27,31,35,0.15)]
                 bg-white
                 px-[16px]
                 py-[11px]
@@ -1242,7 +1272,7 @@ export default function CmsEditPage() {
                     }
                   />
 
-                  <p className="mt-[2px] text-right text-[9px] font-medium text-[#878f9b]">
+                  <p className="mt-[2px] text-right text-[9px] font-medium text-[#218DAE]">
                     {
                       form
                         .pageTitle
@@ -1262,9 +1292,8 @@ export default function CmsEditPage() {
                       flex
                       h-[35px]
                       overflow-hidden
-                      rounded-[5px]
-                      border
-                      border-[#dedfdb]
+                      rounded-none
+                      shadow-[0_1px_3px_0_rgba(0,0,0,0.02),0_0_0_1px_rgba(27,31,35,0.15)]
                       bg-white
                     "
                   >
@@ -1303,6 +1332,7 @@ export default function CmsEditPage() {
                       className="
                         min-w-0
                         flex-1
+                        cursor-default
                         px-[9px]
                         text-[10.5px]
                         font-medium
@@ -1313,7 +1343,7 @@ export default function CmsEditPage() {
                     />
                   </div>
 
-                  <p className="mt-[2px] text-right text-[9px] text-[#878f9b]">
+                  <p className="mt-[2px] text-right text-[9px] font-medium text-[#218DAE]">
                     {
                       form.slug
                         .length
@@ -1373,7 +1403,7 @@ export default function CmsEditPage() {
                     ]}
                   />
 
-                  <p className="mt-[2px] text-[9px] font-medium leading-[11px] text-[#888f9a]">
+                  <p className="mt-[2px] text-[9px] font-medium leading-[11px] text-red-500">
                     Choose parent page
                     (if any)
                   </p>
@@ -1391,9 +1421,7 @@ export default function CmsEditPage() {
                 flex
                 shrink-0
                 flex-col
-                rounded-[8px]
-                border
-                border-[#e7e7e3]
+                shadow-[0_1px_3px_0_rgba(0,0,0,0.02),0_0_0_1px_rgba(27,31,35,0.15)]
                 bg-white
                 px-[16px]
                 py-[9px]
@@ -1412,7 +1440,7 @@ export default function CmsEditPage() {
                   title="Page Sections"
                 />
 
-                <span className="text-[9.5px] font-semibold text-[#8b929c]">
+                <span className="text-[9.5px] font-semibold text-[#4B1426]">
                   {sectionsDraft.length} sections
                 </span>
               </div>
@@ -1441,7 +1469,7 @@ export default function CmsEditPage() {
               {/* ACTIVE SECTION EDITOR */}
 
               {activeSection ? (
-                <div className="mt-[12px] flex flex-col gap-[12px] rounded-[6px] border border-[#dedfdb] bg-[#fbfbfa] p-[12px]">
+                <div className="mt-[12px] flex flex-col gap-[12px] rounded-none border border-[#dedfdb] bg-[#fbfbfa] p-[12px]">
                   <div className="flex items-center justify-between">
                     <p className="text-[12px] font-bold text-[#1c5033]">
                       {activeSection.name ?? activeSection.key}
@@ -1487,9 +1515,9 @@ export default function CmsEditPage() {
             <section
               className="
                 shrink-0
-                rounded-[8px]
                 border
-                border-[#e7e7e3]
+                border-[#dedfdb]
+                shadow-[0_1px_3px_0_rgba(0,0,0,0.02),0_0_0_1px_rgba(27,31,35,0.15)]
                 bg-white
                 px-[16px]
                 py-[11px]
@@ -1633,9 +1661,9 @@ export default function CmsEditPage() {
             <section
               className="
                 shrink-0
-                rounded-[8px]
                 border
-                border-[#e7e7e3]
+                border-[#dedfdb]
+                shadow-[0_1px_3px_0_rgba(0,0,0,0.02),0_0_0_1px_rgba(27,31,35,0.15)]
                 bg-white
                 px-[16px]
                 py-[10px]
@@ -1853,15 +1881,14 @@ export default function CmsEditPage() {
             <section
               className="
                 shrink-0
-                rounded-[8px]
+                rounded-none
                 border
                 border-[#e7e7e3]
                 bg-white
-                px-[16px]
-                py-[11px]
+                overflow-hidden
               "
             >
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between bg-slate-50 border-b border-[#e7e7e3] px-[16px] py-[9px]">
                 <h2 className="text-[14px] font-bold text-[#263148]">
                   Publish
                 </h2>
@@ -1869,29 +1896,36 @@ export default function CmsEditPage() {
                 <ChevronDown className="h-[13px] w-[13px] rotate-180 text-[#596579]" />
               </div>
 
-              <div className="mt-[9px] space-y-[6px]">
+              <div className="px-[16px] pt-[11px] pb-[16px] space-y-[6px]">
                 <div className="grid grid-cols-[105px_1fr] items-center gap-[10px]">
                   <p className="text-[10.5px] font-semibold text-[#5d6677]">
                     Status
                   </p>
 
-                  <SelectField
-                    value={
-                      form.status
-                    }
-                    onChange={(
-                      value,
-                    ) =>
-                      updateField(
-                        "status",
-                        value as Status,
-                      )
-                    }
-                    options={[
-                      "Published",
-                      "Draft",
-                    ]}
-                  />
+                  <select
+                    value={form.status}
+                    onChange={(e) => {
+                      const value = e.target.value as Status;
+                      updateField("status", value);
+                      Swal.fire({
+                        title: "Status Updated",
+                        text: `Page status changed to ${value}`,
+                        icon: "success",
+                        confirmButtonColor: "#218DAE",
+                        timer: 1500,
+                        showConfirmButton: false,
+                      });
+                    }}
+                    className={`h-[26px] cursor-pointer appearance-none rounded-[4px] px-[8px] pr-[22px] text-[10px] font-bold outline-none bg-no-repeat bg-[right_6px_center] ${
+                      form.status === "Published"
+                        ? "bg-[#e8f5e9] text-[#23714a] border border-[#a5d6a7]"
+                        : "bg-[#ffebee] text-[#c62828] border border-[#ef9a9a]"
+                    }`}
+                    style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")` }}
+                  >
+                    <option value="Published">Published</option>
+                    <option value="Draft">Draft</option>
+                  </select>
                 </div>
 
                 <div className="grid grid-cols-[105px_1fr] items-center gap-[10px]">
@@ -1899,23 +1933,30 @@ export default function CmsEditPage() {
                     Visibility
                   </p>
 
-                  <SelectField
-                    value={
-                      form.visibility
-                    }
-                    onChange={(
-                      value,
-                    ) =>
-                      updateField(
-                        "visibility",
-                        value as Visibility,
-                      )
-                    }
-                    options={[
-                      "Public",
-                      "Private",
-                    ]}
-                  />
+                  <select
+                    value={form.visibility}
+                    onChange={(e) => {
+                      const value = e.target.value as Visibility;
+                      updateField("visibility", value);
+                      Swal.fire({
+                        title: "Visibility Updated",
+                        text: `Page visibility changed to ${value}`,
+                        icon: "success",
+                        confirmButtonColor: "#218DAE",
+                        timer: 1500,
+                        showConfirmButton: false,
+                      });
+                    }}
+                    className={`h-[26px] cursor-pointer appearance-none rounded-[4px] px-[8px] pr-[22px] text-[10px] font-bold outline-none bg-no-repeat bg-[right_6px_center] ${
+                      form.visibility === "Public"
+                        ? "bg-[#e3f2fd] text-[#1565c0] border border-[#90caf9]"
+                        : "bg-[#f3e5f5] text-[#7b1fa2] border border-[#ce93d8]"
+                    }`}
+                    style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")` }}
+                  >
+                    <option value="Public">Public</option>
+                    <option value="Private">Private</option>
+                  </select>
                 </div>
 
                 <div className="grid min-h-[24px] grid-cols-[105px_1fr] items-center gap-[10px]">
@@ -1924,7 +1965,7 @@ export default function CmsEditPage() {
                   </p>
 
                   <div className="flex items-center justify-between gap-2">
-                    <span className="flex items-center gap-[7px] whitespace-nowrap text-[10px] font-medium text-[#465267]">
+                    <span className="flex items-center gap-[7px] whitespace-nowrap text-[10px] font-medium text-[#293681]">
                       <CalendarDays className="h-[12px] w-[12px]" />
 
                       20 May 2026,
@@ -1945,7 +1986,7 @@ export default function CmsEditPage() {
                     Last Updated
                   </p>
 
-                  <span className="flex items-center gap-[7px] whitespace-nowrap text-[10px] font-medium text-[#465267]">
+                  <span className="flex items-center gap-[7px] whitespace-nowrap text-[10px] font-medium text-[#4b1426]">
                     <Clock3 className="h-[12px] w-[12px]" />
 
                     20 May 2026,
@@ -1958,7 +1999,7 @@ export default function CmsEditPage() {
                     Updated By
                   </p>
 
-                  <span className="flex items-center gap-[7px] text-[10px] font-medium text-[#465267]">
+                  <span className="flex items-center gap-[7px] text-[10px] font-medium text-orange-500">
                     <UserRound className="h-[12px] w-[12px]" />
 
                     Admin User
@@ -1968,6 +2009,8 @@ export default function CmsEditPage() {
 
               <div
                 className="
+                  mx-[16px]
+                  mb-[11px]
                   mt-[7px]
                   flex
                   h-[35px]
@@ -1997,67 +2040,51 @@ export default function CmsEditPage() {
             <section
               className="
                 shrink-0
-                rounded-[8px]
+                rounded-none
                 border
                 border-[#e7e7e3]
                 bg-white
-                px-[16px]
-                py-[11px]
+                overflow-hidden
               "
             >
-              <h2 className="text-[14px] font-bold text-[#263148]">
-                SEO Score
-              </h2>
+              <div className="flex items-center justify-between bg-slate-50 border-b border-[#e7e7e3] px-[16px] py-[9px]">
+                <h2 className="text-[14px] font-bold text-[#263148]">
+                  SEO Score
+                </h2>
 
-              <div
-                className="
-                  mt-[8px]
-                  grid
-                  grid-cols-[132px_1fr]
-                  items-center
-                  gap-[11px]
-                "
-              >
-                <div className="flex justify-center">
-                  <SeoScoreCircle />
-                </div>
-
-                <div className="space-y-[1px] border-l border-[#eeeeea] pl-[14px]">
-                  <SeoRow label="Meta Title" />
-                  <SeoRow label="Meta Description" />
-                  <SeoRow label="Headings" />
-                  <SeoRow label="Content Quality" />
-                  <SeoRow label="Internal Linking" />
-                  <SeoRow label="Images (ALT Text)" />
-                  <SeoRow label="Schema Markup" />
-                </div>
+                <button
+                  type="button"
+                  className="flex items-center gap-[4px] text-[10px] font-bold text-[#293681] hover:underline"
+                >
+                  View Full SEO Analysis
+                  <ChevronRight className="h-[10px] w-[10px]" />
+                </button>
               </div>
 
-              <button
-                type="button"
-                className="
-                  mt-[7px]
-                  flex
-                  h-[31px]
-                  w-full
-                  items-center
-                  justify-center
-                  gap-[8px]
-                  rounded-[5px]
-                  border
-                  border-[#e2d7ba]
-                  bg-[#fffefa]
-                  text-[9.5px]
-                  font-semibold
-                  text-[#37624a]
-                "
-              >
-                <Link2 className="h-[12px] w-[12px]" />
+              <div className="px-[16px] py-[11px]">
+                <div
+                  className="
+                    grid
+                    grid-cols-[132px_1fr]
+                    items-center
+                    gap-[11px]
+                  "
+                >
+                  <div className="flex justify-center">
+                    <SeoScoreCircle />
+                  </div>
 
-                View Full SEO Analysis
-
-                <ChevronRight className="h-[10px] w-[10px]" />
-              </button>
+                  <div className="space-y-[1px] border-l border-[#eeeeea] pl-[14px]">
+                    <SeoRow label="Meta Title" />
+                    <SeoRow label="Meta Description" />
+                    <SeoRow label="Headings" />
+                    <SeoRow label="Content Quality" />
+                    <SeoRow label="Internal Linking" />
+                    <SeoRow label="Images (ALT Text)" />
+                    <SeoRow label="Schema Markup" />
+                  </div>
+                </div>
+              </div>
             </section>
 
             {/* =================================================
@@ -2067,7 +2094,7 @@ export default function CmsEditPage() {
             <section
               className="
                 shrink-0
-                rounded-[8px]
+                rounded-none
                 border
                 border-[#e7e7e3]
                 bg-white
