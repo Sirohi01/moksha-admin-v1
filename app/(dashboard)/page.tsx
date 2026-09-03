@@ -236,6 +236,7 @@ const defaultTopStats = [
     numColor: "#047857",
     footer:
       "View full SEO report",
+    href: "/pages",
   },
 
   {
@@ -249,6 +250,7 @@ const defaultTopStats = [
     numColor: "#6d28d9",
     footer:
       "View all pages",
+    href: "/pages",
   },
 
   {
@@ -262,6 +264,7 @@ const defaultTopStats = [
     numColor: "#b45309",
     footer:
       "View all posts",
+    href: "/blogs",
   },
 
   {
@@ -276,6 +279,7 @@ const defaultTopStats = [
     numColor: "#1d4ed8",
     footer:
       "View details",
+    href: "/seo",
   },
 
   {
@@ -290,6 +294,7 @@ const defaultTopStats = [
     numColor: "#be123c",
     footer:
       "View all submissions",
+    href: "/submissions",
   },
 
   {
@@ -304,6 +309,7 @@ const defaultTopStats = [
     numColor: "#0f766e",
     footer:
       "View analytics",
+    href: "/analytics",
   },
 ];
 
@@ -402,8 +408,8 @@ function MiniSparkline({
             pad * 2);
 
         return `${index === 0
-            ? "M"
-            : "L"
+          ? "M"
+          : "L"
           } ${x.toFixed(
             1,
           )} ${y.toFixed(1)}`;
@@ -1292,8 +1298,8 @@ export default function DashboardPage() {
         : value;
 
     return `${adjusted >= 0
-        ? "↑"
-        : "↓"
+      ? "↑"
+      : "↓"
       } ${Math.abs(
         value,
       ).toFixed(1)}%`;
@@ -1334,11 +1340,11 @@ export default function DashboardPage() {
       ? internal.recentSubmissions.map(
         (item) => {
           let typeStr = item.type.toLowerCase().replace("contact", "form").replaceAll("_", " ");
-          
+
           // To simulate an activity log visually, we can just use "Created" 
           // (Since we don't have edited/deleted status in the API yet)
           let actionText = `Created ${typeStr}`;
-          
+
           return {
             id: item.id || item.name,
             name: item.name.split(" ")[0],
@@ -1588,13 +1594,13 @@ export default function DashboardPage() {
             value: `${indexCoverage.indexed}/${indexCoverage.total}`,
 
             note: `${indexCoverage.total >
-                0
-                ? (
-                  (indexCoverage.indexed /
-                    indexCoverage.total) *
-                  100
-                ).toFixed(1)
-                : "0.0"
+              0
+              ? (
+                (indexCoverage.indexed /
+                  indexCoverage.total) *
+                100
+              ).toFixed(1)
+              : "0.0"
               }% Indexed`,
           };
         }
@@ -2071,7 +2077,10 @@ export default function DashboardPage() {
                         </div>
                       </div>
 
-                      <div className="absolute bottom-1 left-2 right-2 flex items-center justify-center gap-1 text-[8px] font-extrabold text-[#293957]">
+                      <div
+                        onClick={() => window.open(item.href || "/pages", "_blank")}
+                        className="absolute bottom-1 left-2 right-2 flex cursor-pointer items-center justify-center gap-1 text-[8px] font-extrabold text-[#293957] transition hover:text-blue-600"
+                      >
                         {
                           item.footer
                         }
@@ -2106,9 +2115,10 @@ export default function DashboardPage() {
                   right={
                     <button
                       type="button"
+                      onClick={() => window.open("/seo", "_blank")}
                       className="flex items-center gap-1 text-[10px] font-bold text-blue-600 hover:text-blue-700"
                     >
-                      View Report
+                      View Data
 
                       <ArrowRight className="h-3.5 w-3.5 text-blue-600" />
                     </button>
@@ -2351,6 +2361,7 @@ export default function DashboardPage() {
 
                       <button
                         type="button"
+                        onClick={() => window.open("/seo", "_blank")}
                         className="flex items-center gap-1 text-[10px] font-bold text-blue-600 hover:text-blue-700"
                       >
                         View Console
@@ -2696,9 +2707,10 @@ export default function DashboardPage() {
                   right={
                     <button
                       type="button"
+                      onClick={() => window.open("/pages", "_blank")}
                       className="flex items-center gap-1 text-[10px] font-bold text-blue-600 hover:text-blue-700"
                     >
-                      View All Issues
+                      View All
 
                       <ArrowRight className="h-3.5 w-3.5 text-blue-600" />
                     </button>
@@ -3246,6 +3258,7 @@ export default function DashboardPage() {
 
                       <button
                         type="button"
+                        onClick={() => window.open("/analytics", "_blank")}
                         className="flex items-center gap-1 text-[10px] font-bold text-blue-600 hover:text-blue-700"
                       >
                         View Performance
@@ -3813,12 +3826,14 @@ export default function DashboardPage() {
               <Panel>
                 <PanelTitle
                   right={
-                    <Link
-                      href="#"
+                    <a
+                      href="/pages"
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="text-[9px] font-bold text-blue-600 hover:underline"
                     >
                       View All
-                    </Link>
+                    </a>
                   }
                 >
                   Top Pages by
@@ -3882,12 +3897,14 @@ export default function DashboardPage() {
               <Panel>
                 <PanelTitle
                   right={
-                    <Link
-                      href="#"
+                    <a
+                      href="/seo"
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="text-[9px] font-bold text-blue-600 hover:underline"
                     >
                       View Data
-                    </Link>
+                    </a>
                   }
                 >
                   Keyword Performance
@@ -3955,12 +3972,14 @@ export default function DashboardPage() {
               <Panel>
                 <PanelTitle
                   right={
-                    <Link
-                      href="#"
+                    <a
+                      href="/analytics"
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="text-[9px] font-bold text-blue-600 hover:underline"
                     >
                       View Report
-                    </Link>
+                    </a>
                   }
                 >
                   Top Sewa Help
@@ -4042,7 +4061,8 @@ export default function DashboardPage() {
                   right={
                     <button
                       type="button"
-                      className="flex items-center gap-1 text-[10px] font-bold"
+                      onClick={() => window.open("/submissions", "_blank")}
+                      className="flex items-center gap-1 text-[10px] font-bold text-blue-600 hover:text-blue-700"
                     >
                       View All
 
@@ -4117,7 +4137,7 @@ export default function DashboardPage() {
                       </div>
                     ),
                   )}
-                 </div>
+                </div>
               </Panel>
             </div>
           </div>
