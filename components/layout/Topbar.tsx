@@ -291,7 +291,7 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
     loadNotifications();
 
     externalServiceApi
-      .list()
+      .summary()
       .then(setExternalServices)
       .catch(() => setExternalServices([]));
 
