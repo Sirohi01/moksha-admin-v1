@@ -1948,6 +1948,7 @@ export default function DashboardPage() {
 
               Top stats = 98px
               Every section row below = 260px
+              Bottom row = 160px
           ================================================= */}
 
           <div
@@ -1956,7 +1957,7 @@ export default function DashboardPage() {
               h-full
               min-h-0
               w-full
-              grid-rows-[98px_260px_260px_260px]
+              grid-rows-[98px_260px_260px_160px]
               gap-2
             "
           >
@@ -2318,6 +2319,56 @@ export default function DashboardPage() {
                       ),
                     )}
                   </div>
+                </div>
+
+                {/* ---- Operations mini stats ---- */}
+                <div className="mx-3 mb-3 mt-2 grid grid-cols-5 gap-[5px]">
+                  {[
+                    {
+                      label: "Donations",
+                      value: internal ? String(internal.donations?.total ?? 0) : "—",
+                      sub: internal?.donations?.totalAmount != null
+                        ? `₹${new Intl.NumberFormat("en-IN").format(Math.round(internal.donations.totalAmount))}`
+                        : "—",
+                      bg: "bg-emerald-50", border: "border-emerald-100", vc: "text-emerald-700", lc: "text-emerald-900",
+                    },
+                    {
+                      label: "Volunteers",
+                      value: internal ? String(internal.volunteers?.total ?? 0) : "—",
+                      sub: internal?.volunteers?.active != null ? `${internal.volunteers.active} active` : "—",
+                      bg: "bg-blue-50", border: "border-blue-100", vc: "text-blue-700", lc: "text-blue-900",
+                    },
+                    {
+                      label: "Cases",
+                      value: internal ? String(internal.cases?.total ?? 0) : "—",
+                      sub: internal?.cases?.open != null ? `${internal.cases.open} open` : "—",
+                      bg: "bg-rose-50", border: "border-rose-100", vc: "text-rose-700", lc: "text-rose-900",
+                    },
+                    {
+                      label: "Subscribers",
+                      value: internal ? String(internal.newsletter?.total ?? 0) : "—",
+                      sub: internal?.newsletter?.mtd != null ? `+${internal.newsletter.mtd} MTD` : "—",
+                      bg: "bg-violet-50", border: "border-violet-100", vc: "text-violet-700", lc: "text-violet-900",
+                    },
+                    {
+                      label: "Campaigns",
+                      value: internal ? String(internal.campaigns?.total ?? 0) : "—",
+                      sub: internal?.campaigns?.active != null ? `${internal.campaigns.active} active` : "—",
+                      bg: "bg-amber-50", border: "border-amber-100", vc: "text-amber-700", lc: "text-amber-900",
+                    },
+                  ].map((card) => (
+                    <div
+                      key={card.label}
+                      className={`flex flex-col gap-[2px] rounded-[7px] border px-[7px] py-[6px] ${card.bg} ${card.border}`}
+                      style={{ boxShadow: "rgba(0,0,0,0.02) 0px 1px 3px 0px, rgba(27,31,35,0.05) 0px 0px 0px 1px" }}
+                    >
+                      <p className={`text-[6px] font-bold ${card.lc}`}>{card.label}</p>
+                      <p className={`text-[11px] font-extrabold leading-none tracking-[-0.03em] ${card.vc}`}>
+                        <AnimatedCounter value={card.value} />
+                      </p>
+                      <p className={`text-[6px] font-semibold ${card.vc} opacity-80`}>{card.sub}</p>
+                    </div>
+                  ))}
                 </div>
               </Panel>
 
@@ -2719,17 +2770,28 @@ export default function DashboardPage() {
                         key={
                           label
                         }
-                        className="
+                        className={`
                           grid
                           grid-cols-[24px_1fr_auto_22px]
                           items-center
                           gap-2
                           border-b
                           border-[#f0f0ec]
-                          py-[5px]
+                          py-[6px]
+                          px-2
+                          mb-1
                           text-[10px]
                           last:border-b-0
-                        "
+                          last:mb-0
+                          rounded-[6px]
+                          
+                          ${level === "High"
+                            ? "bg-red-100"
+                            : level === "Medium"
+                              ? "bg-orange-100"
+                              : "bg-yellow-100"
+                          }
+                        `}
                       >
                         <div
                           className={`
@@ -3782,7 +3844,7 @@ export default function DashboardPage() {
             </div>
 
             {/* =============================
-                BOTTOM ROW — 260PX
+                BOTTOM ROW — 160PX
             ============================== */}
 
             <div
@@ -4105,7 +4167,7 @@ export default function DashboardPage() {
                       </div>
                     ),
                   )}
-                </div>
+                 </div>
               </Panel>
             </div>
           </div>
