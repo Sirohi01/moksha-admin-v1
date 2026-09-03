@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   ChevronDown,
@@ -235,6 +235,7 @@ export default function FAQsManagementPage() {
   const [category, setCategory] = useState("All Categories");
   const [status, setStatus] = useState("All Status");
   const [visibility, setVisibility] = useState("All Visibility");
+  const [expandedId, setExpandedId] = useState<number | null>(1);
 
   const rows = useMemo(() => {
     return FAQS.filter((item) => {
@@ -261,6 +262,10 @@ export default function FAQsManagementPage() {
     setCategory("All Categories");
     setStatus("All Status");
     setVisibility("All Visibility");
+  };
+
+  const toggleExpand = (id: number) => {
+    setExpandedId((prev) => (prev === id ? null : id));
   };
 
   return (
@@ -441,91 +446,170 @@ export default function FAQsManagementPage() {
                   </thead>
 
                   <tbody>
-                    {rows.map((item) => (
-                      <tr
-                        key={item.id}
-                        className="h-[62px] border-b border-[#eef0f2] align-middle last:border-b-0 hover:bg-slate-50/60"
-                      >
-                        <td className="px-[12px] text-center">
-                          <input type="checkbox" />
-                        </td>
+                    {rows.map((item) => {
+                      const isExpanded = expandedId === item.id;
 
-                        <td className="px-[8px]">
-                          <div className="min-w-[300px]">
-                            <p className="text-[10.5px] font-extrabold leading-tight text-[#19274a]">
-                              {item.question}
-                            </p>
-                            <p className="mt-[4px] max-w-[330px] text-[8.8px] font-semibold leading-[1.35] text-[#53627c]">
-                              {item.summary}
-                            </p>
-                          </div>
-                        </td>
-
-                        <td className="px-[8px]">
-                          <span
-                            className={`inline-flex whitespace-nowrap rounded-[5px] px-[8px] py-[4px] text-[8px] font-bold ${categoryTone[item.category]}`}
+                      return (
+                        <React.Fragment key={item.id}>
+                          <tr
+                            onClick={() => toggleExpand(item.id)}
+                            className={`h-[62px] cursor-pointer border-b border-[#eef0f2] align-middle transition ${
+                              isExpanded ? "bg-[#f5fbf7]" : "hover:bg-slate-50/60"
+                            }`}
                           >
-                            {item.category}
-                          </span>
-                        </td>
-
-                        <td className="px-[8px]">
-                          <span className="inline-flex items-center gap-[5px] rounded-[5px] bg-emerald-50 px-[8px] py-[4px] text-[8px] font-bold text-emerald-700">
-                            <span className="h-[5px] w-[5px] rounded-full bg-emerald-500" />
-                            {item.status}
-                          </span>
-                        </td>
-
-                        <td className="px-[8px] text-center">
-                          <span className="text-[9.5px] font-bold tabular-nums text-[#2f3d58]">
-                            {item.views.toLocaleString()}
-                          </span>
-                        </td>
-
-                        <td className="px-[8px]">
-                          <div className="flex items-center justify-center gap-[6px] text-emerald-700">
-                            <ThumbsUp className="h-[12px] w-[12px]" />
-                            <span className="text-[9.5px] font-bold tabular-nums">
-                              {item.votes}
-                            </span>
-                          </div>
-                        </td>
-
-                        <td className="px-[8px]">
-                          <p className="whitespace-nowrap text-[9px] font-bold text-[#2c3a58]">
-                            {item.updatedOn}
-                          </p>
-                          <p className="mt-[4px] whitespace-nowrap text-[8px] font-semibold text-[#68758d]">
-                            By {item.updatedBy}
-                          </p>
-                        </td>
-
-                        <td className="px-[8px]">
-                          <div className="flex items-center justify-center gap-[8px]">
-                            <button
-                              type="button"
-                              onClick={() => router.push("/faqs/new")}
-                              className="grid h-[30px] w-[30px] place-items-center rounded-[5px] border border-[#e1e5e9] bg-white text-[#4b5871] hover:bg-slate-50"
+                            <td
+                              className="px-[12px] text-center"
+                              onClick={(e) => e.stopPropagation()}
                             >
-                              <Eye className="h-[12px] w-[12px]" />
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => router.push("/faqs/new")}
-                              className="grid h-[30px] w-[30px] place-items-center rounded-[5px] border border-[#e1e5e9] bg-white text-[#4b5871] hover:bg-slate-50"
+                              <input type="checkbox" />
+                            </td>
+
+                            <td className="px-[8px]">
+                              <div className="flex items-center gap-[10px] min-w-[300px]">
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    toggleExpand(item.id);
+                                  }}
+                                  className="grid h-[24px] w-[24px] shrink-0 place-items-center rounded-[4px] border border-[#d8e0e7] bg-white text-[#34425e] transition hover:border-[#075b33] hover:text-[#075b33]"
+                                >
+                                  <ChevronDown
+                                    className={`h-[14px] w-[14px] transition-transform duration-200 ${
+                                      isExpanded ? "rotate-180 text-[#075b33]" : ""
+                                    }`}
+                                  />
+                                </button>
+
+                                <div>
+                                  <p className="text-[10.5px] font-extrabold leading-tight text-[#19274a]">
+                                    {item.question}
+                                  </p>
+                                  <p className="mt-[3px] max-w-[340px] text-[8.8px] font-semibold leading-[1.35] text-[#53627c]">
+                                    {item.summary}
+                                  </p>
+                                </div>
+                              </div>
+                            </td>
+
+                            <td className="px-[8px]">
+                              <span
+                                className={`inline-flex whitespace-nowrap rounded-[5px] px-[8px] py-[4px] text-[8px] font-bold ${categoryTone[item.category]}`}
+                              >
+                                {item.category}
+                              </span>
+                            </td>
+
+                            <td className="px-[8px]">
+                              <span className="inline-flex items-center gap-[5px] rounded-[5px] bg-emerald-50 px-[8px] py-[4px] text-[8px] font-bold text-emerald-700">
+                                <span className="h-[5px] w-[5px] rounded-full bg-emerald-500" />
+                                {item.status}
+                              </span>
+                            </td>
+
+                            <td className="px-[8px] text-center">
+                              <span className="text-[9.5px] font-bold tabular-nums text-[#2f3d58]">
+                                {item.views.toLocaleString()}
+                              </span>
+                            </td>
+
+                            <td className="px-[8px]">
+                              <div className="flex items-center justify-center gap-[6px] text-emerald-700">
+                                <ThumbsUp className="h-[12px] w-[12px]" />
+                                <span className="text-[9.5px] font-bold tabular-nums">
+                                  {item.votes}
+                                </span>
+                              </div>
+                            </td>
+
+                            <td className="px-[8px]">
+                              <p className="whitespace-nowrap text-[9px] font-bold text-[#2c3a58]">
+                                {item.updatedOn}
+                              </p>
+                              <p className="mt-[4px] whitespace-nowrap text-[8px] font-semibold text-[#68758d]">
+                                By {item.updatedBy}
+                              </p>
+                            </td>
+
+                            <td
+                              className="px-[8px]"
+                              onClick={(e) => e.stopPropagation()}
                             >
-                              <Pencil className="h-[12px] w-[12px]" />
-                            </button>
-                            <button
-                              type="button"
-                              className="grid h-[30px] w-[30px] place-items-center rounded-[5px] border border-[#e1e5e9] bg-white text-[#4b5871] hover:bg-slate-50"
-                            >
-                              <MoreVertical className="h-[12px] w-[12px]" />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
+                              <div className="flex items-center justify-center gap-[8px]">
+                                <button
+                                  type="button"
+                                  onClick={() => router.push("/faqs/new")}
+                                  className="grid h-[30px] w-[30px] place-items-center rounded-[5px] border border-[#e1e5e9] bg-white text-[#4b5871] hover:bg-slate-50"
+                                >
+                                  <Eye className="h-[12px] w-[12px]" />
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => router.push("/faqs/new")}
+                                  className="grid h-[30px] w-[30px] place-items-center rounded-[5px] border border-[#e1e5e9] bg-white text-[#4b5871] hover:bg-slate-50"
+                                >
+                                  <Pencil className="h-[12px] w-[12px]" />
+                                </button>
+                                <button
+                                  type="button"
+                                  className="grid h-[30px] w-[30px] place-items-center rounded-[5px] border border-[#e1e5e9] bg-white text-[#4b5871] hover:bg-slate-50"
+                                >
+                                  <MoreVertical className="h-[12px] w-[12px]" />
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+
+                          {/* EXPANDED ACCORDION PANEL */}
+                          {isExpanded && (
+                            <tr className="bg-[#f7fbf8] border-b border-[#e5ece7]">
+                              <td colSpan={8} className="px-[24px] py-[14px]">
+                                <div className="rounded-[7px] border border-[#d6e6dc] bg-white p-[14px] shadow-[0_2px_6px_rgba(7,91,51,0.04)]">
+                                  <div className="flex items-center justify-between gap-[12px]">
+                                    <div className="flex items-center gap-[8px]">
+                                      <span className="grid h-[22px] w-[22px] place-items-center rounded-full bg-[#eaf4ee] text-[10px] font-extrabold text-[#075b33]">
+                                        Q
+                                      </span>
+                                      <h4 className="text-[12px] font-extrabold text-[#172648]">
+                                        {item.question}
+                                      </h4>
+                                    </div>
+                                    <span className="rounded-[4px] border border-[#d0e4d7] bg-[#f2f8f4] px-[8px] py-[2px] text-[8.5px] font-bold text-[#075b33]">
+                                      Visibility: {item.visibility}
+                                    </span>
+                                  </div>
+
+                                  <div className="mt-[10px] pl-[30px]">
+                                    <p className="text-[10px] font-semibold leading-[1.6] text-[#34435e]">
+                                      {item.summary} Moksha Sewa provides dignified, scripture-guided humanitarian final journey services, cremation assistance, ambulance support, and Vedic rituals with utmost reverence and zero cost for families in need.
+                                    </p>
+
+                                    <div className="mt-[12px] flex items-center justify-between border-t border-[#f0f4f2] pt-[10px]">
+                                      <div className="flex items-center gap-[14px] text-[9px] font-bold text-[#5c6a83]">
+                                        <span>Category: <strong className="text-[#075b33]">{item.category}</strong></span>
+                                        <span>Total Views: <strong className="text-[#19274a]">{item.views.toLocaleString()}</strong></span>
+                                        <span>Helpful Votes: <strong className="text-emerald-700">{item.votes} 👍</strong></span>
+                                      </div>
+
+                                      <div className="flex items-center gap-[8px]">
+                                        <button
+                                          type="button"
+                                          onClick={() => router.push("/faqs/new")}
+                                          className="inline-flex h-[28px] items-center gap-[6px] rounded-[5px] border border-[#d6ded9] bg-white px-[10px] text-[8.5px] font-extrabold text-[#075b33] hover:bg-emerald-50"
+                                        >
+                                          <Pencil className="h-[10px] w-[10px]" />
+                                          Edit FAQ
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                          )}
+                        </React.Fragment>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>

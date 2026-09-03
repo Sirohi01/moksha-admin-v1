@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
@@ -56,16 +56,24 @@ function SectionHeading({
   optional?: boolean;
 }) {
   return (
-    <div>
-      <h2 className="text-[14px] font-extrabold tracking-[-0.01em] text-[#1a254b]">
-        {number}. {title}
-        {optional ? (
-          <span className="font-semibold text-[#5d6a84]"> (Optional)</span>
+    <div className="flex items-center gap-[10px]">
+      <div className="grid h-[24px] w-[24px] place-items-center rounded-full bg-[#eef7f1] text-[11px] font-extrabold text-[#096739]">
+        {number}
+      </div>
+
+      <div>
+        <h2 className="text-[14px] font-extrabold leading-none tracking-[-0.01em] text-[#1c2847]">
+          {title}
+          {optional ? (
+            <span className="font-semibold text-[#627088]"> (Optional)</span>
+          ) : null}
+        </h2>
+        {subtitle ? (
+          <p className="mt-[3px] text-[10.5px] font-semibold leading-none text-[#627088]">
+            {subtitle}
+          </p>
         ) : null}
-      </h2>
-      <p className="mt-[3px] text-[11px] font-semibold text-[#60708b]">
-        {subtitle}
-      </p>
+      </div>
     </div>
   );
 }
@@ -73,14 +81,19 @@ function SectionHeading({
 function FieldLabel({
   children,
   required,
+  optional,
 }: {
   children: React.ReactNode;
   required?: boolean;
+  optional?: boolean;
 }) {
   return (
-    <label className="mb-[6px] block text-[12px] font-bold text-[#24345e]">
+    <label className="mb-[5px] block text-[11px] font-extrabold text-[#24345e]">
       {children}
       {required ? <span className="ml-[2px] text-[#df3e3e]">*</span> : null}
+      {optional ? (
+        <span className="font-semibold text-[#627088]"> (Optional)</span>
+      ) : null}
     </label>
   );
 }
@@ -110,6 +123,8 @@ function Toggle({
 
 export default function UploadNewMediaPage() {
   const router = useRouter();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [title, setTitle] = useState("");
   const [altText, setAltText] = useState("");
   const [caption, setCaption] = useState("");
@@ -123,13 +138,23 @@ export default function UploadNewMediaPage() {
   const [optimizeImage, setOptimizeImage] = useState(true);
   const [watermark, setWatermark] = useState(false);
 
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const filesArray = Array.from(e.target.files);
+      setSelectedFiles(filesArray);
+      if (!title && filesArray[0]) {
+        setTitle(filesArray[0].name.replace(/\.[^/.]+$/, ""));
+      }
+    }
+  };
+
   const supportedFormats = useMemo(
     () => "jpg, jpeg, png, gif, webp, pdf, doc, docx, mp4, mp3, zip",
     [],
   );
 
   return (
-    <main className="h-full min-h-0 overflow-y-auto overflow-x-hidden bg-[#fffefb] px-[18px] py-[10px] text-[#16233f] [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-300">
+    <main className="h-full min-h-0 overflow-y-auto overflow-x-hidden bg-[#fffefb] px-[18px] py-[10px] pb-[24px] text-[#16233f] [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-300">
       <div className="grid min-h-full grid-rows-[52px_auto_56px] gap-[8px]">
         {/* HEADER */}
         <header className="flex min-h-0 items-start justify-between gap-[18px]">
@@ -163,35 +188,107 @@ export default function UploadNewMediaPage() {
                 subtitle="Drag & drop files here or click to browse"
               />
 
-              <div className="mt-[10px] flex h-[272px] items-center justify-center rounded-[8px] border border-dashed border-[#d9e6de] bg-[linear-gradient(180deg,#fbfefc_0%,#f6fbf8_100%)]">
+              <input
+                type="file"
+                ref={fileInputRef}
+                className="hidden"
+                multiple
+                accept="image/*,video/*,application/pdf,audio/*"
+                onChange={handleFileSelect}
+              />
+
+              <div
+                onClick={() => fileInputRef.current?.click()}
+                className="mt-[10px] flex h-[220px] cursor-pointer items-center justify-center rounded-[8px] border border-dashed border-[#d9e6de] bg-[linear-gradient(180deg,#fbfefc_0%,#f6f8fa_100%)] transition hover:border-[#096739] hover:bg-[#f0f7f2]"
+              >
                 <div className="text-center">
-                  <div className="mx-auto grid h-[60px] w-[60px] place-items-center rounded-full text-[#096739]">
-                    <UploadCloud className="h-[48px] w-[48px]" strokeWidth={1.8} />
+                  <div className="mx-auto grid h-[52px] w-[52px] place-items-center rounded-full text-[#096739]">
+                    <UploadCloud className="h-[42px] w-[42px]" strokeWidth={1.8} />
                   </div>
 
-                  <h3 className="mt-[5px] text-[15px] font-extrabold text-[#1d2432]">
-                    Drag &amp; drop your files here
+                  <h3 className="mt-[4px] text-[14px] font-extrabold text-[#1d2432]">
+                    {selectedFiles.length > 0
+                      ? `${selectedFiles.length} file(s) selected for upload`
+                      : "Drag & drop your files here"}
                   </h3>
 
-                  <p className="mt-[4px] text-[12px] font-semibold text-[#4b5567]">or</p>
+                  <p className="mt-[3px] text-[11px] font-semibold text-[#4b5567]">
+                    {selectedFiles.length > 0
+                      ? "Click to select more files or replace"
+                      : "or"}
+                  </p>
 
                   <button
                     type="button"
-                    className="mt-[8px] inline-flex h-[40px] items-center gap-[10px] rounded-[6px] bg-[linear-gradient(180deg,#066434_0%,#03562d_100%)] px-[34px] text-[12px] font-bold text-white shadow-[0_8px_18px_rgba(4,91,48,0.12)]"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      fileInputRef.current?.click();
+                    }}
+                    className="mt-[8px] inline-flex h-[36px] items-center gap-[8px] rounded-[6px] bg-[linear-gradient(180deg,#066434_0%,#03562d_100%)] px-[28px] text-[11px] font-bold text-white shadow-[0_8px_18px_rgba(4,91,48,0.12)] transition hover:opacity-95"
                   >
-                    <FolderClosed className="h-[16px] w-[16px]" strokeWidth={2.2} />
-                    Browse Files
+                    <FolderClosed className="h-[15px] w-[15px]" strokeWidth={2.2} />
+                    {selectedFiles.length > 0 ? "Add / Replace Files" : "Browse Files"}
                   </button>
 
-                  <p className="mx-auto mt-[18px] max-w-[520px] text-[11px] font-semibold leading-[1.55] text-[#4d596d]">
-                    Supported formats: {supportedFormats}
-                  </p>
-
-                  <p className="mt-[8px] text-[11px] font-semibold text-[#434f64]">
-                    Maximum file size: 10 MB per file
+                  <p className="mx-auto mt-[12px] max-w-[520px] text-[10.5px] font-semibold leading-[1.4] text-[#4d596d]">
+                    Supported formats: {supportedFormats} • Max size: 10 MB
                   </p>
                 </div>
               </div>
+
+              {/* SELECTED FILES LIST */}
+              {selectedFiles.length > 0 && (
+                <div className="mt-[14px] space-y-[10px]">
+                  <p className="text-[11.5px] font-extrabold text-[#1e2a4a]">
+                    Selected Files ({selectedFiles.length}):
+                  </p>
+
+                  <div className="space-y-[8px]">
+                    {selectedFiles.map((file, idx) => (
+                      <div
+                        key={idx}
+                        className="flex items-center justify-between gap-[12px] rounded-[7px] border border-[#e2e7ec] bg-[#fbfcfd] px-[12px] py-[9px]"
+                      >
+                        <div className="flex min-w-0 items-center gap-[10px]">
+                          <div className="grid h-[36px] w-[36px] shrink-0 place-items-center rounded-[6px] bg-emerald-100 text-[#096739]">
+                            {file.type.startsWith("image/") ? (
+                              <ImageUp className="h-[20px] w-[20px]" />
+                            ) : (
+                              <UploadCloud className="h-[20px] w-[20px]" />
+                            )}
+                          </div>
+
+                          <div className="min-w-0">
+                            <p className="truncate text-[11px] font-extrabold text-[#1e2a4a]">
+                              {file.name}
+                            </p>
+                            <p className="text-[9.5px] font-semibold text-[#627088]">
+                              {(file.size / 1024).toFixed(1)} KB • Ready to upload
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-[10px]">
+                          <span className="rounded-full bg-emerald-100 px-[8px] py-[3px] text-[9px] font-extrabold text-[#066434]">
+                            Ready ✓
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setSelectedFiles((prev) =>
+                                prev.filter((_, i) => i !== idx),
+                              )
+                            }
+                            className="grid h-[26px] w-[26px] place-items-center rounded-[5px] text-slate-400 hover:bg-rose-50 hover:text-rose-600"
+                          >
+                            <X className="h-[14px] w-[14px]" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </section>
 
             {/* Media Information */}
@@ -451,7 +548,10 @@ export default function UploadNewMediaPage() {
           <div className="flex items-center gap-[14px]">
             <button
               type="button"
-              onClick={() => router.push("/gallery/uploaded")}
+              onClick={() => {
+                alert("Saved as Draft!");
+                router.push("/gallery");
+              }}
               className="inline-flex h-[38px] items-center gap-[9px] rounded-[7px] border border-[#e1e4e8] bg-white px-[22px] text-[11px] font-bold text-[#24345e] transition hover:bg-slate-50"
             >
               <Bookmark className="h-[16px] w-[16px]" strokeWidth={2.1} />
@@ -460,7 +560,10 @@ export default function UploadNewMediaPage() {
 
             <button
               type="button"
-              onClick={() => router.push("/gallery/uploaded")}
+              onClick={() => {
+                alert("Media Uploaded & Saved Successfully!");
+                router.push("/gallery");
+              }}
               className="inline-flex h-[38px] items-center gap-[9px] rounded-[7px] bg-[linear-gradient(180deg,#066434_0%,#03552c_100%)] px-[24px] text-[11px] font-bold text-white shadow-[0_8px_18px_rgba(4,91,48,0.12)] transition hover:opacity-95"
             >
               <Upload className="h-[16px] w-[16px]" strokeWidth={2.1} />

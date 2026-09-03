@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
@@ -107,6 +107,8 @@ function RatingStars({
 
 export default function AddNewTestimonialPage() {
   const router = useRouter();
+  const photoInputRef = useRef<HTMLInputElement>(null);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
 
   const [fullName, setFullName] = useState("");
   const [role, setRole] = useState("");
@@ -124,6 +126,13 @@ export default function AddNewTestimonialPage() {
   const [otherPages, setOtherPages] = useState(false);
   const [order, setOrder] = useState("0");
   const [tags, setTags] = useState("");
+
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setPhotoPreview(URL.createObjectURL(file));
+    }
+  };
 
   const previewName = useMemo(
     () => fullName.trim() || "Ramesh Kumar",
@@ -354,14 +363,23 @@ export default function AddNewTestimonialPage() {
                 Upload profile photo of the person (Optional).
               </p>
 
+              <input
+                type="file"
+                ref={photoInputRef}
+                className="hidden"
+                accept="image/*"
+                onChange={handlePhotoChange}
+              />
+
               <div className="mt-[14px] grid grid-cols-[320px_1fr] gap-[34px]">
                 <button
                   type="button"
-                  className="flex h-[96px] flex-col items-center justify-center rounded-[7px] border border-dashed border-[#d7dde5] bg-[#fffefc]"
+                  onClick={() => photoInputRef.current?.click()}
+                  className="flex h-[96px] flex-col items-center justify-center rounded-[7px] border border-dashed border-[#d7dde5] bg-[#fffefc] transition hover:border-[#0b6a3b] hover:bg-[#f0f7f2]"
                 >
                   <Upload className="h-[22px] w-[22px] text-[#35435e]" />
                   <span className="mt-[7px] text-[10px] font-semibold text-[#5d6981]">
-                    Click to upload or drag and drop
+                    {photoPreview ? "Click to change photo" : "Click to upload or drag and drop"}
                   </span>
                   <span className="mt-[5px] text-[9px] font-semibold text-[#8490a4]">
                     PNG, JPG or WEBP (Max. 2MB)
@@ -372,8 +390,12 @@ export default function AddNewTestimonialPage() {
                   <p className="text-[11px] font-bold text-[#24345e]">
                     Photo Preview
                   </p>
-                  <div className="mt-[8px] grid h-[76px] w-[76px] place-items-center rounded-full border border-[#dce1e7] bg-[#f1f3f6] text-[#b5becd]">
-                    <UserRound className="h-[46px] w-[46px]" />
+                  <div className="mt-[8px] grid h-[76px] w-[76px] place-items-center overflow-hidden rounded-full border border-[#dce1e7] bg-[#f1f3f6] text-[#b5becd]">
+                    {photoPreview ? (
+                      <img src={photoPreview} alt="" className="h-full w-full object-cover" />
+                    ) : (
+                      <UserRound className="h-[46px] w-[46px]" />
+                    )}
                   </div>
                 </div>
               </div>

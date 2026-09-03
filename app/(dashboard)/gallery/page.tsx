@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   ChevronDown,
@@ -222,6 +222,7 @@ function FilePreview({ item }: { item: MediaItem }) {
 
 export default function MediaLibraryPage() {
   const router = useRouter();
+  const quickUploadRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState("");
   const [type, setType] = useState("All Types");
   const [folder, setFolder] = useState("All Folders");
@@ -278,6 +279,19 @@ export default function MediaLibraryPage() {
           </div>
 
           <div className="flex items-center gap-[10px]">
+            <input
+              type="file"
+              ref={quickUploadRef}
+              className="hidden"
+              multiple
+              accept="image/*,video/*,application/pdf,audio/*"
+              onChange={(e) => {
+                if (e.target.files && e.target.files.length > 0) {
+                  router.push("/gallery/created");
+                }
+              }}
+            />
+
             <button
               type="button"
               onClick={() => router.push("/gallery/1")}
@@ -289,7 +303,7 @@ export default function MediaLibraryPage() {
 
             <button
               type="button"
-              onClick={() => router.push("/gallery/created")}
+              onClick={() => quickUploadRef.current?.click()}
               className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] border border-[#b9d7c4] bg-white px-[18px] text-[10.5px] font-bold text-[#14683d] transition hover:bg-emerald-50"
             >
               <Upload className="h-[15px] w-[15px]" />
@@ -724,7 +738,7 @@ export default function MediaLibraryPage() {
                 <div className="mt-[12px] grid grid-cols-3 gap-[7px]">
                   <button
                     type="button"
-                    onClick={() => router.push("/gallery/created")}
+                    onClick={() => alert(`Editing details for ${selected.name}`)}
                     className="inline-flex h-[34px] items-center justify-center gap-[6px] rounded-[5px] border border-[#e0e4e8] bg-white text-[8.5px] font-bold text-[#33415b] transition hover:bg-slate-50"
                   >
                     <Pencil className="h-[12px] w-[12px]" />
@@ -732,7 +746,7 @@ export default function MediaLibraryPage() {
                   </button>
                   <button
                     type="button"
-                    onClick={() => router.push("/gallery/created")}
+                    onClick={() => quickUploadRef.current?.click()}
                     className="inline-flex h-[34px] items-center justify-center gap-[6px] rounded-[5px] border border-[#e0e4e8] bg-white text-[8.5px] font-bold text-[#33415b] transition hover:bg-slate-50"
                   >
                     <RefreshCw className="h-[12px] w-[12px]" />
@@ -775,14 +789,6 @@ export default function MediaLibraryPage() {
                   ),
                 )}
               </div>
-
-              <button
-                type="button"
-                onClick={() => router.push("/gallery/uploaded")}
-                className="mt-[14px] h-[34px] w-full rounded-[5px] border border-[#dfe4e8] bg-white text-[8.5px] font-bold text-[#14683d] transition hover:bg-emerald-50"
-              >
-                View All Usage
-              </button>
             </section>
 
             {/* QUICK ACTIONS */}
@@ -794,7 +800,10 @@ export default function MediaLibraryPage() {
               <div className="mt-[10px] grid grid-cols-2 gap-[8px]">
                 <button
                   type="button"
-                  onClick={() => router.push("/gallery/1")}
+                  onClick={() => {
+                    const name = prompt("Enter new folder name:");
+                    if (name) alert(`Folder '${name}' created!`);
+                  }}
                   className="inline-flex h-[36px] items-center justify-center gap-[7px] rounded-[5px] border border-[#e2e6ea] bg-white text-[8.5px] font-bold text-[#33415b] transition hover:bg-slate-50"
                 >
                   <FolderClosed className="h-[13px] w-[13px]" />
@@ -803,7 +812,7 @@ export default function MediaLibraryPage() {
 
                 <button
                   type="button"
-                  onClick={() => router.push("/gallery/uploaded")}
+                  onClick={() => alert("Media Settings Window Opened")}
                   className="inline-flex h-[36px] items-center justify-center gap-[7px] rounded-[5px] border border-[#e2e6ea] bg-white text-[8.5px] font-bold text-[#33415b] transition hover:bg-slate-50"
                 >
                   <Settings className="h-[13px] w-[13px]" />

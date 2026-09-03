@@ -134,10 +134,10 @@ export default function AddNewFolderPage() {
   );
 
   return (
-    <main className="h-full min-h-0 overflow-hidden bg-[#fffefb] px-[18px] py-[10px] text-[#16233f]">
-      <div className="grid h-full min-h-0 grid-rows-[48px_minmax(0,1fr)_54px] gap-[8px]">
+    <main className="h-full min-h-0 overflow-y-auto overflow-x-hidden bg-[#fffefb] px-[18px] py-[12px] pb-[24px] text-[#16233f] [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-300">
+      <div className="min-h-full w-full">
         {/* Header */}
-        <header className="flex min-h-0 items-start justify-between gap-[18px]">
+        <header className="flex items-start justify-between gap-[18px]">
           <div className="min-w-0">
             <h1 className="text-[24px] font-extrabold leading-none tracking-[-0.02em] text-[#075b33]">
               Add New Folder
@@ -167,7 +167,10 @@ export default function AddNewFolderPage() {
 
             <button
               type="button"
-              onClick={() => router.push("/gallery/created")}
+              onClick={() => {
+                alert("Folder Created Successfully!");
+                router.push("/gallery");
+              }}
               className="inline-flex h-[40px] items-center gap-[9px] rounded-[7px] bg-[linear-gradient(180deg,#066434_0%,#03552c_100%)] px-[22px] text-[11.5px] font-bold text-white shadow-[0_8px_18px_rgba(4,91,48,0.12)] transition hover:opacity-95"
             >
               <FolderPlus className="h-[16px] w-[16px]" strokeWidth={2.2} />
@@ -177,25 +180,25 @@ export default function AddNewFolderPage() {
         </header>
 
         {/* Content */}
-        <section className="grid min-h-0 grid-cols-[minmax(0,1.95fr)_minmax(330px,0.95fr)] gap-[16px]">
+        <section className="mt-[16px] grid items-start gap-[16px] xl:grid-cols-[minmax(0,1.95fr)_minmax(330px,0.95fr)]">
           {/* Left Column */}
-          <div className="grid min-h-0 grid-rows-[minmax(0,1.42fr)_minmax(0,0.88fr)_minmax(0,0.56fr)] gap-[8px]">
+          <div className="space-y-[12px]">
             {/* Section 1 */}
-            <section className="min-h-0 overflow-hidden rounded-[10px] border border-[#e8ebee] bg-white px-[16px] py-[11px] shadow-[0_1px_3px_rgba(15,23,42,0.02)]">
+            <section className="rounded-[10px] border border-[#e8ebee] bg-white px-[16px] py-[14px] shadow-[0_1px_3px_rgba(15,23,42,0.02)]">
               <SectionTitle
                 number="1"
                 title="Folder Information"
                 subtitle="Create a new folder to organize your media files."
               />
 
-              <div className="mt-[11px] grid grid-cols-2 gap-x-[18px] gap-y-[10px]">
+              <div className="mt-[14px] grid grid-cols-2 gap-x-[18px] gap-y-[12px]">
                 <div>
                   <FieldLabel required>Folder Name</FieldLabel>
                   <input
                     value={folderName}
                     onChange={(e) => setFolderName(e.target.value)}
                     placeholder="Enter folder name"
-                    className="h-[36px] w-full rounded-[7px] border border-[#dfe3e8] bg-white px-[14px] text-[11.5px] font-semibold text-[#24345e] outline-none placeholder:text-[#8c96ab]"
+                    className="h-[38px] w-full rounded-[7px] border border-[#dfe3e8] bg-white px-[14px] text-[11.5px] font-semibold text-[#24345e] outline-none placeholder:text-[#8c96ab]"
                   />
                   <p className="mt-[4px] text-[10px] font-semibold text-[#60708b]">
                     Choose a clear and meaningful name for the folder.
@@ -209,7 +212,7 @@ export default function AddNewFolderPage() {
                     <select
                       value={parentFolder}
                       onChange={(e) => setParentFolder(e.target.value)}
-                      className="h-[36px] w-full appearance-none rounded-[7px] border border-[#dfe3e8] bg-white pl-[40px] pr-[38px] text-[11.5px] font-bold text-[#24345e] outline-none"
+                      className="h-[38px] w-full appearance-none rounded-[7px] border border-[#dfe3e8] bg-white pl-[40px] pr-[38px] text-[11.5px] font-bold text-[#24345e] outline-none"
                     >
                       <option>Root (Media Library)</option>
                       <option>Events</option>
@@ -231,8 +234,8 @@ export default function AddNewFolderPage() {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder="Enter folder description"
-                    rows={4}
-                    className="h-[58px] w-full resize-none rounded-[7px] border border-[#dfe3e8] bg-white px-[14px] py-[9px] text-[11.5px] font-semibold text-[#24345e] outline-none placeholder:text-[#8c96ab]"
+                    rows={3}
+                    className="h-[68px] w-full resize-none rounded-[7px] border border-[#dfe3e8] bg-white px-[14px] py-[9px] text-[11.5px] font-semibold text-[#24345e] outline-none placeholder:text-[#8c96ab]"
                   />
                   <p className="mt-[4px] text-[10px] font-semibold text-[#60708b]">
                     Describe the purpose of this folder.
@@ -240,8 +243,8 @@ export default function AddNewFolderPage() {
                 </div>
               </div>
 
-              <div className="mt-[9px] flex h-[40px] items-center gap-[10px] rounded-[7px] bg-[linear-gradient(90deg,#eef7f1_0%,#f4faf6_100%)] px-[14px]">
-                <div className="grid h-[28px] w-[28px] place-items-center rounded-full border border-[#cadece] bg-white text-[#0d6b3e]">
+              <div className="mt-[12px] flex h-[42px] items-center gap-[10px] rounded-[7px] bg-[linear-gradient(90deg,#eef7f1_0%,#f4faf6_100%)] px-[14px]">
+                <div className="grid h-[28px] w-[28px] shrink-0 place-items-center rounded-full border border-[#cadece] bg-white text-[#0d6b3e]">
                   <CircleHelp className="h-[16px] w-[16px]" strokeWidth={2.2} />
                 </div>
                 <p className="text-[10.5px] font-bold text-[#2d3b4a]">
@@ -252,14 +255,14 @@ export default function AddNewFolderPage() {
             </section>
 
             {/* Section 2 */}
-            <section className="min-h-0 overflow-hidden rounded-[10px] border border-[#e8ebee] bg-white px-[16px] py-[11px] shadow-[0_1px_3px_rgba(15,23,42,0.02)]">
+            <section className="rounded-[10px] border border-[#e8ebee] bg-white px-[16px] py-[14px] shadow-[0_1px_3px_rgba(15,23,42,0.02)]">
               <SectionTitle
                 number="2"
                 title="Folder Settings"
                 subtitle="Configure settings and permissions for this folder."
               />
 
-              <div className="mt-[11px]">
+              <div className="mt-[14px]">
                 <FieldLabel required>Access / Visibility</FieldLabel>
 
                 <div className="grid grid-cols-3 gap-[12px]">
@@ -272,7 +275,7 @@ export default function AddNewFolderPage() {
                         key={item.id}
                         type="button"
                         onClick={() => setVisibility(item.id)}
-                        className={`relative flex h-[60px] items-center gap-[12px] rounded-[8px] border px-[12px] text-left transition ${active
+                        className={`relative flex h-[62px] items-center gap-[12px] rounded-[8px] border px-[12px] text-left transition ${active
                             ? "border-[#8fc5a8] bg-[#f5fbf7] shadow-[inset_0_0_0_1px_rgba(29,117,72,0.08)]"
                             : "border-[#e2e6ea] bg-white"
                           }`}
@@ -303,7 +306,7 @@ export default function AddNewFolderPage() {
                   })}
                 </div>
 
-                <div className="mt-[9px] flex items-center justify-between gap-[20px]">
+                <div className="mt-[12px] flex items-center justify-between gap-[20px]">
                   <div>
                     <p className="text-[12px] font-bold text-[#24345e]">
                       Set as Featured Folder <span className="font-semibold text-[#5f6c87]">(Optional)</span>
@@ -330,14 +333,14 @@ export default function AddNewFolderPage() {
             </section>
 
             {/* Section 3 */}
-            <section className="min-h-0 overflow-hidden rounded-[10px] border border-[#e8ebee] bg-white px-[16px] py-[11px] shadow-[0_1px_3px_rgba(15,23,42,0.02)]">
+            <section className="rounded-[10px] border border-[#e8ebee] bg-white px-[16px] py-[14px] shadow-[0_1px_3px_rgba(15,23,42,0.02)]">
               <SectionTitle
                 number="3"
                 title="Folder Preview"
                 subtitle="This is how the folder will appear in the media library."
               />
 
-              <div className="mt-[8px] flex h-[68px] items-center rounded-[9px] border border-[#edf0f3] bg-[#fffefc] px-[18px]">
+              <div className="mt-[10px] flex h-[72px] items-center rounded-[9px] border border-[#edf0f3] bg-[#fffefc] px-[18px]">
                 <div className="grid h-[46px] w-[46px] place-items-center rounded-[10px] bg-[#fff9dc]">
                   <FolderClosed className="h-[28px] w-[28px] fill-[#f6c61b] text-[#ebb611]" strokeWidth={1.8} />
                 </div>
@@ -358,8 +361,8 @@ export default function AddNewFolderPage() {
           </div>
 
           {/* Right Column */}
-          <div className="grid min-h-0 grid-rows-[minmax(0,1.04fr)_minmax(0,0.82fr)] gap-[8px]">
-            <section className="min-h-0 overflow-hidden rounded-[10px] border border-[#e8ebee] bg-white px-[18px] py-[12px] shadow-[0_1px_3px_rgba(15,23,42,0.02)]">
+          <div className="space-y-[12px]">
+            <section className="rounded-[10px] border border-[#e8ebee] bg-white px-[18px] py-[14px] shadow-[0_1px_3px_rgba(15,23,42,0.02)]">
               <h3 className="text-[14px] font-extrabold tracking-[-0.01em] text-[#18224d]">
                 Folder Guidelines
               </h3>
@@ -367,13 +370,13 @@ export default function AddNewFolderPage() {
                 Follow these best practices for better organization.
               </p>
 
-              <div className="mt-[11px] space-y-[11px]">
+              <div className="mt-[14px] space-y-[12px]">
                 {folderGuidelines.map((item) => {
                   const Icon = item.icon;
 
                   return (
                     <div key={item.title} className="flex gap-[14px]">
-                      <div className="grid h-[30px] w-[30px] shrink-0 place-items-center rounded-[8px] bg-[#eef7f0] text-[#2b7d50]">
+                      <div className="grid h-[32px] w-[32px] shrink-0 place-items-center rounded-[8px] bg-[#eef7f0] text-[#2b7d50]">
                         <Icon className="h-[16px] w-[16px]" strokeWidth={2} />
                       </div>
 
@@ -391,7 +394,7 @@ export default function AddNewFolderPage() {
               </div>
             </section>
 
-            <section className="min-h-0 overflow-hidden rounded-[10px] border border-[#e8ebee] bg-white px-[18px] py-[12px] shadow-[0_1px_3px_rgba(15,23,42,0.02)]">
+            <section className="rounded-[10px] border border-[#e8ebee] bg-white px-[18px] py-[14px] shadow-[0_1px_3px_rgba(15,23,42,0.02)]">
               <h3 className="text-[14px] font-extrabold tracking-[-0.01em] text-[#18224d]">
                 Quick Tips
               </h3>
@@ -399,7 +402,7 @@ export default function AddNewFolderPage() {
                 Tips for managing your media library effectively.
               </p>
 
-              <div className="mt-[10px] rounded-[8px] border border-[#edf1f5] bg-[#fbfcfe] px-[18px] py-[10px]">
+              <div className="mt-[12px] rounded-[8px] border border-[#edf1f5] bg-[#fbfcfe] px-[18px] py-[12px]">
                 <ul className="space-y-[9px]">
                   {quickTips.map((tip) => (
                     <li
@@ -417,7 +420,7 @@ export default function AddNewFolderPage() {
         </section>
 
         {/* Footer actions */}
-        <footer className="flex items-center justify-between gap-[18px] border-t border-[#eef0f3] px-[8px] pt-[6px]">
+        <footer className="sticky bottom-0 z-20 mt-[16px] flex items-center justify-between gap-[18px] border-t border-[#edf1f3] bg-[#fffefb]/95 px-[8px] py-[10px] backdrop-blur-sm">
           <button
             type="button"
             onClick={() => router.push("/gallery")}
@@ -430,7 +433,10 @@ export default function AddNewFolderPage() {
           <div className="flex items-center gap-[14px]">
             <button
               type="button"
-              onClick={() => router.push("/gallery/created")}
+              onClick={() => {
+                alert("Saved as Draft!");
+                router.push("/gallery");
+              }}
               className="inline-flex h-[38px] items-center gap-[9px] rounded-[7px] border border-[#e1e4e8] bg-white px-[22px] text-[11px] font-bold text-[#24345e] transition hover:bg-[#f8fafc]"
             >
               <Bookmark className="h-[16px] w-[16px]" strokeWidth={2.1} />
@@ -439,7 +445,10 @@ export default function AddNewFolderPage() {
 
             <button
               type="button"
-              onClick={() => router.push("/gallery/created")}
+              onClick={() => {
+                alert("Folder Created Successfully!");
+                router.push("/gallery");
+              }}
               className="inline-flex h-[38px] items-center gap-[9px] rounded-[7px] bg-[linear-gradient(180deg,#066434_0%,#03552c_100%)] px-[22px] text-[11px] font-bold text-white shadow-[0_8px_18px_rgba(4,91,48,0.12)] transition hover:opacity-95"
             >
               <FolderPlus className="h-[16px] w-[16px]" strokeWidth={2.2} />
