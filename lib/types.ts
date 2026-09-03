@@ -346,6 +346,7 @@ export interface ExternalService {
   expiryDate: string;
   autoRenews?: boolean;
   notes?: string;
+  details?: Record<string, string>;
   popupReminderDays?: number;
   emailReminderDays?: number;
   notifyEmails?: string[];

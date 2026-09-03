@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect, useRef, useMemo, type ReactNode, type ChangeEvent } from "react";
+import { useState, useEffect, useRef, useMemo, type ReactNode, type ChangeEvent, type ComponentType } from "react";
 import {
   Plus, Pencil, Trash2, ExternalLink, BellRing, BellOff, Upload, FileText, X,
-  Globe, Server, CreditCard, Mail, MessageSquare, Cloud, ShieldCheck, Sparkles,
+  Globe, Server, CreditCard, Mail, Cloud, ShieldCheck, Sparkles,
   BarChart3, Database, Network, KeyRound, Share2, Plug, Package, Check,
-  AlertTriangle, Search, Clock3, type LucideIcon,
+  AlertTriangle, Search, Eye, type LucideIcon,
 } from "lucide-react";
 import { externalServiceApi } from "@/lib/externalServiceApi";
 import { settingsApi } from "@/lib/settingsApi";
@@ -29,6 +29,7 @@ type FormState = {
   autoRenews: boolean; notes: string; popupReminderDays: string; emailReminderDays: string;
   notifyEmails: string; remindersEnabled: boolean; pricingType: "FREE" | "PAID"; costAmount: string;
   currency: string; billingCycle: ExternalServiceBillingCycle | ""; receipts: ExternalServiceReceipt[];
+  details: Record<string, string>;
 };
 const CATEGORIES: { value: ExternalServiceCategory; label: string }[] = [
   { value: "DOMAIN", label: "Domain" },
@@ -50,11 +51,170 @@ const CATEGORIES: { value: ExternalServiceCategory; label: string }[] = [
 
 const CAT_LABEL = Object.fromEntries(CATEGORIES.map((c) => [c.value, c.label])) as Record<ExternalServiceCategory, string>;
 
-const CAT_ICON: Record<ExternalServiceCategory, LucideIcon> = {
+type ServiceIcon = ComponentType<{ size?: number; className?: string }>;
+
+function WhatsAppIcon({ size = 16, className }: { size?: number; className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} className={className} aria-hidden="true">
+      <path fill="#25D366" d="M12 2a9.8 9.8 0 0 0-8.4 14.9L2 22l5.2-1.5A10 10 0 1 0 12 2Z" />
+      <path fill="#fff" d="M17.4 14.5c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.2-.7.2l-1 1.2c-.2.2-.4.2-.7.1a8 8 0 0 1-2.4-1.5 9 9 0 0 1-1.7-2.1c-.2-.3 0-.5.1-.6l.5-.6.3-.6c.1-.2 0-.4 0-.6l-1-2.2c-.2-.5-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.4-1.2 1.2-1.2 2.9s1.2 3.3 1.4 3.5c.2.2 2.4 3.7 5.9 5.2.8.4 1.5.6 2 .7.8.3 1.6.2 2.2.1.7-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.2-.3-.3-.6-.4Z" />
+    </svg>
+  );
+}
+
+const CAT_ICON: Record<ExternalServiceCategory, ServiceIcon> = {
   DOMAIN: Globe, HOSTING: Server, SSL_CERTIFICATE: ShieldCheck, PAYMENT_GATEWAY: CreditCard,
-  EMAIL_SMTP: Mail, SMS_WHATSAPP: MessageSquare, MEDIA_STORAGE: Cloud, AI_API: Sparkles,
+  EMAIL_SMTP: Mail, SMS_WHATSAPP: WhatsAppIcon, MEDIA_STORAGE: Cloud, AI_API: Sparkles,
   ANALYTICS: BarChart3, DATABASE: Database, CDN: Network, SOFTWARE_LICENSE: KeyRound,
   SOCIAL_MEDIA: Share2, API_SERVICE: Plug, OTHER: Package,
+};
+
+const CAT_ICON_TONE: Record<ExternalServiceCategory, string> = {
+  DOMAIN: "bg-emerald-50 text-emerald-700 ring-emerald-200", HOSTING: "bg-blue-50 text-blue-700 ring-blue-200",
+  SSL_CERTIFICATE: "bg-cyan-50 text-cyan-700 ring-cyan-200", PAYMENT_GATEWAY: "bg-violet-50 text-violet-700 ring-violet-200",
+  EMAIL_SMTP: "bg-sky-50 text-sky-700 ring-sky-200", SMS_WHATSAPP: "bg-green-50 text-green-700 ring-green-200",
+  MEDIA_STORAGE: "bg-indigo-50 text-indigo-700 ring-indigo-200", AI_API: "bg-fuchsia-50 text-fuchsia-700 ring-fuchsia-200",
+  ANALYTICS: "bg-orange-50 text-orange-700 ring-orange-200", DATABASE: "bg-teal-50 text-teal-700 ring-teal-200",
+  CDN: "bg-purple-50 text-purple-700 ring-purple-200", SOFTWARE_LICENSE: "bg-amber-50 text-amber-700 ring-amber-200",
+  SOCIAL_MEDIA: "bg-pink-50 text-pink-700 ring-pink-200", API_SERVICE: "bg-rose-50 text-rose-700 ring-rose-200",
+  OTHER: "bg-slate-100 text-slate-700 ring-slate-200",
+};
+
+type DetailField = { key: string; label: string; placeholder: string; type?: "text" | "number" | "url" };
+const CATEGORY_FIELDS: Record<ExternalServiceCategory, DetailField[]> = {
+  DOMAIN: [
+    { key: "domainName", label: "Domain Name", placeholder: "mokshasewa.org" },
+    { key: "registrar", label: "Registrar", placeholder: "GoDaddy / Namecheap" },
+    { key: "dnsProvider", label: "DNS Provider", placeholder: "Cloudflare" },
+    { key: "nameservers", label: "Nameservers", placeholder: "ns1.example.com, ns2.example.com" },
+    { key: "registrantEmail", label: "Registrant Email", placeholder: "admin@example.org" },
+  ],
+  HOSTING: [
+    { key: "serverType", label: "Server Type", placeholder: "VPS / Dedicated / Shared" },
+    { key: "publicIp", label: "Public IP", placeholder: "203.0.113.10" },
+    { key: "region", label: "Region", placeholder: "Mumbai / ap-south-1" },
+    { key: "operatingSystem", label: "Operating System", placeholder: "Ubuntu 24.04" },
+    { key: "specification", label: "CPU / RAM / Storage", placeholder: "4 vCPU · 8 GB · 160 GB" },
+    { key: "backupFrequency", label: "Backup Frequency", placeholder: "Daily / Weekly" },
+  ],
+  SSL_CERTIFICATE: [
+    { key: "coveredDomains", label: "Covered Domains", placeholder: "mokshasewa.org, *.mokshasewa.org" },
+    { key: "issuer", label: "Certificate Issuer", placeholder: "Let's Encrypt" },
+    { key: "certificateType", label: "Certificate Type", placeholder: "DV / OV / EV / Wildcard" },
+  ],
+  PAYMENT_GATEWAY: [
+    { key: "merchantId", label: "Merchant ID", placeholder: "Merchant/account identifier" },
+    { key: "environment", label: "Environment", placeholder: "Live / Test" },
+    { key: "settlementCycle", label: "Settlement Cycle", placeholder: "T+1 / T+2" },
+    { key: "webhookUrl", label: "Webhook URL", placeholder: "https://example.org/api/webhook", type: "url" },
+  ],
+  EMAIL_SMTP: [
+    { key: "smtpHost", label: "SMTP Host", placeholder: "smtp.gmail.com" },
+    { key: "smtpPort", label: "SMTP Port", placeholder: "587", type: "number" },
+    { key: "encryption", label: "Encryption", placeholder: "TLS / SSL" },
+    { key: "senderEmail", label: "Sender Email", placeholder: "support@example.org" },
+    { key: "dailyLimit", label: "Daily Sending Limit", placeholder: "500", type: "number" },
+  ],
+  SMS_WHATSAPP: [
+    { key: "phoneNumber", label: "WhatsApp Number", placeholder: "+91 98765 43210" },
+    { key: "wabaId", label: "WhatsApp Business Account ID", placeholder: "WABA ID" },
+    { key: "phoneNumberId", label: "Phone Number ID", placeholder: "Meta/AiSensy phone ID" },
+    { key: "templateNamespace", label: "Template Namespace", placeholder: "Template namespace/name" },
+    { key: "webhookUrl", label: "Webhook URL", placeholder: "https://example.org/api/whatsapp", type: "url" },
+    { key: "messageLimit", label: "Monthly Message Limit", placeholder: "10000", type: "number" },
+  ],
+  MEDIA_STORAGE: [
+    { key: "bucketName", label: "Bucket / Cloud Name", placeholder: "moksha-media" },
+    { key: "region", label: "Region", placeholder: "Asia / ap-south-1" },
+    { key: "storageLimit", label: "Storage Limit", placeholder: "25 GB" },
+    { key: "deliveryUrl", label: "Delivery URL", placeholder: "https://cdn.example.org", type: "url" },
+  ],
+  AI_API: [
+    { key: "model", label: "Model", placeholder: "GPT / Gemini model name" },
+    { key: "projectId", label: "Project ID", placeholder: "Cloud/API project" },
+    { key: "usageLimit", label: "Usage / Token Limit", placeholder: "Monthly limit" },
+    { key: "apiBaseUrl", label: "API Base URL", placeholder: "https://api.example.com", type: "url" },
+  ],
+  ANALYTICS: [
+    { key: "propertyId", label: "Property ID", placeholder: "123456789" },
+    { key: "measurementId", label: "Measurement ID", placeholder: "G-XXXXXXXXXX" },
+    { key: "streamUrl", label: "Website / Stream URL", placeholder: "https://mokshasewa.org", type: "url" },
+  ],
+  DATABASE: [
+    { key: "engine", label: "Database Engine", placeholder: "MongoDB / PostgreSQL / MySQL" },
+    { key: "clusterHost", label: "Cluster / Host", placeholder: "Production cluster" },
+    { key: "databaseName", label: "Database Name", placeholder: "moksha-production" },
+    { key: "region", label: "Region", placeholder: "Mumbai" },
+    { key: "backupPolicy", label: "Backup Policy", placeholder: "Daily · 30-day retention" },
+  ],
+  CDN: [
+    { key: "zoneId", label: "Zone / Distribution ID", placeholder: "Cloudflare zone ID" },
+    { key: "distributionDomain", label: "Distribution Domain", placeholder: "cdn.example.org" },
+    { key: "origin", label: "Origin Server", placeholder: "origin.example.org" },
+  ],
+  SOFTWARE_LICENSE: [
+    { key: "product", label: "Product / Plan", placeholder: "Product and plan name" },
+    { key: "seats", label: "Licensed Seats", placeholder: "10", type: "number" },
+    { key: "assignedTo", label: "Assigned To", placeholder: "Team / employee" },
+    { key: "version", label: "Version", placeholder: "Current licensed version" },
+  ],
+  SOCIAL_MEDIA: [
+    { key: "platform", label: "Platform", placeholder: "Meta / Google Ads / LinkedIn" },
+    { key: "accountHandle", label: "Account Handle", placeholder: "@mokshasewa" },
+    { key: "adAccountId", label: "Ad Account ID", placeholder: "Advertising account ID" },
+    { key: "businessManagerId", label: "Business Manager ID", placeholder: "Meta business ID" },
+  ],
+  API_SERVICE: [
+    { key: "baseUrl", label: "API Base URL", placeholder: "https://api.example.com", type: "url" },
+    { key: "projectId", label: "Project / Account ID", placeholder: "Project identifier" },
+    { key: "quota", label: "Rate / Monthly Limit", placeholder: "100 requests/minute" },
+    { key: "apiVersion", label: "API Version", placeholder: "v1" },
+  ],
+  OTHER: [
+    { key: "reference", label: "Reference ID", placeholder: "Contract/account reference" },
+    { key: "supportContact", label: "Support Contact", placeholder: "Email or phone" },
+  ],
+};
+
+const PRIMARY_DETAIL: Record<ExternalServiceCategory, string> = {
+  DOMAIN: "domainName", HOSTING: "publicIp", SSL_CERTIFICATE: "coveredDomains", PAYMENT_GATEWAY: "merchantId",
+  EMAIL_SMTP: "senderEmail", SMS_WHATSAPP: "phoneNumber", MEDIA_STORAGE: "bucketName", AI_API: "model",
+  ANALYTICS: "measurementId", DATABASE: "clusterHost", CDN: "distributionDomain", SOFTWARE_LICENSE: "product",
+  SOCIAL_MEDIA: "accountHandle", API_SERVICE: "baseUrl", OTHER: "reference",
+};
+const REQUIRED_DETAILS: Record<ExternalServiceCategory, string[]> = {
+  DOMAIN: ["domainName", "registrar"], HOSTING: ["serverType", "publicIp", "region"],
+  SSL_CERTIFICATE: ["coveredDomains", "issuer"], PAYMENT_GATEWAY: ["merchantId", "environment"],
+  EMAIL_SMTP: ["smtpHost", "smtpPort", "senderEmail"], SMS_WHATSAPP: ["phoneNumber", "wabaId", "phoneNumberId"],
+  MEDIA_STORAGE: ["bucketName", "region"], AI_API: ["model", "projectId"], ANALYTICS: ["propertyId", "measurementId"],
+  DATABASE: ["engine", "clusterHost", "databaseName"], CDN: ["zoneId", "distributionDomain", "origin"],
+  SOFTWARE_LICENSE: ["product", "seats"], SOCIAL_MEDIA: ["platform", "accountHandle"],
+  API_SERVICE: ["baseUrl", "projectId"], OTHER: ["reference"],
+};
+
+const CATEGORY_HELP: Record<ExternalServiceCategory, string> = {
+  DOMAIN: "Ownership, DNS routing and registrar access required to keep the website reachable.",
+  HOSTING: "Infrastructure, capacity, location and recovery information for the running server.",
+  SSL_CERTIFICATE: "Certificate coverage and issuer information used for HTTPS renewals.",
+  PAYMENT_GATEWAY: "Merchant, settlement and webhook information for online payments.",
+  EMAIL_SMTP: "Sending server, security and quota information for transactional email.",
+  SMS_WHATSAPP: "WhatsApp Business identity, webhook and messaging capacity.",
+  MEDIA_STORAGE: "Storage bucket, delivery endpoint, region and capacity.",
+  AI_API: "Model, project, endpoint and spend/usage limit for the AI integration.",
+  ANALYTICS: "Google Analytics property, measurement stream and tracked website.",
+  DATABASE: "Database engine, production cluster, region and backup policy.",
+  CDN: "Distribution zone, public delivery domain and origin server.",
+  SOFTWARE_LICENSE: "Licensed product, version, seats and ownership assignment.",
+  SOCIAL_MEDIA: "Platform identity and advertising/business account references.",
+  API_SERVICE: "Endpoint, version, project and quota for an external API.",
+  OTHER: "Contract or support references that help identify and renew the service.",
+};
+
+const CREDENTIAL_NAME: Record<ExternalServiceCategory, string> = {
+  DOMAIN: "Registrar Password / Auth Code", HOSTING: "SSH Password / API Token", SSL_CERTIFICATE: "Private Key Reference",
+  PAYMENT_GATEWAY: "API Key / Secret", EMAIL_SMTP: "SMTP Password", SMS_WHATSAPP: "Access Token / API Key",
+  MEDIA_STORAGE: "API Secret", AI_API: "API Key", ANALYTICS: "Service Account Reference", DATABASE: "Database Password",
+  CDN: "API Token", SOFTWARE_LICENSE: "Licence Key", SOCIAL_MEDIA: "Access Token", API_SERVICE: "API Key", OTHER: "Password / Secret",
 };
 
 const CYCLE: Record<ExternalServiceBillingCycle, string> = {
@@ -82,7 +242,7 @@ const EMPTY: FormState = {
   secretLabel: "", secretValue: "", startDate: "", expiryDate: "", autoRenews: false,
   notes: "", popupReminderDays: "", emailReminderDays: "", notifyEmails: "",
   remindersEnabled: true, pricingType: "PAID", costAmount: "", currency: "INR",
-  billingCycle: "", receipts: [],
+  billingCycle: "", receipts: [], details: {},
 };
 
 const uiStatus = (s: ExternalService, settings: Settings | null): UIStatus => {
@@ -101,10 +261,10 @@ const errText = (err: unknown, fallback: string): string =>
 
 /* --------------------------------------------------------------- primitives */
 
-function Field({ label, hint, children }: { label: string; hint?: string; children: ReactNode }) {
+function Field({ label, hint, required, children }: { label: string; hint?: string; required?: boolean; children: ReactNode }) {
   return (
     <label className="block">
-      <span className="mb-[5px] block text-xs font-medium text-[#665B53]">{label}</span>
+      <span className="mb-[5px] block text-xs font-medium text-[#665B53]">{label}{required && <span className="ml-0.5 font-bold text-red-600">*</span>}</span>
       {children}
       {hint && <span className="mt-1 block text-[11.5px] text-[#81766E]">{hint}</span>}
     </label>
@@ -142,10 +302,25 @@ function Modal({
 
 function Countdown({ expiryDate, status }: { expiryDate: string; status: UIStatus }) {
   const c = useCountdown(expiryDate);
+  const tone = status === "EXPIRED"
+    ? { shell: "border-rose-200 bg-rose-50/70", cell: "border-rose-200 bg-white text-rose-700", unit: "text-rose-500" }
+    : status === "SOON"
+      ? { shell: "border-amber-200 bg-amber-50/70", cell: "border-amber-200 bg-white text-amber-800", unit: "text-amber-600" }
+      : status === "MUTED"
+        ? { shell: "border-slate-200 bg-slate-50", cell: "border-slate-200 bg-white text-slate-600", unit: "text-slate-400" }
+        : { shell: "border-emerald-200 bg-emerald-50/70", cell: "border-emerald-200 bg-white text-emerald-800", unit: "text-emerald-600" };
+  const parts = [
+    { value: c.days, unit: "Days" }, { value: c.hours, unit: "Hours" },
+    { value: c.minutes, unit: "Mins" }, { value: c.seconds, unit: "Secs" },
+  ];
   return (
-    <span className={`inline-flex w-fit items-center gap-1.5 whitespace-nowrap rounded-md border px-2.5 py-1 text-[11px] font-semibold tracking-[-.01em] shadow-sm tabular-nums ${status === "EXPIRED" ? "border-rose-200 bg-rose-50 text-rose-700" : status === "SOON" ? "border-amber-200 bg-amber-50 text-amber-700" : status === "MUTED" ? "border-slate-200 bg-slate-50 text-slate-500" : "border-emerald-200 bg-emerald-50 text-emerald-700"}`}>
-      <Clock3 size={12} className="shrink-0 opacity-75" />
-      {formatCountdown(c)}
+    <span className={`grid w-[174px] grid-cols-4 gap-1 rounded-lg border p-1 shadow-sm ${tone.shell}`} title={formatCountdown(c)}>
+      {parts.map((part) => (
+        <span key={part.unit} className={`flex h-[31px] flex-col items-center justify-center rounded-md border shadow-[0_1px_2px_rgba(15,23,42,.04)] ${tone.cell}`}>
+          <b className="font-mono text-[10.5px] leading-none tabular-nums">{String(part.value).padStart(2, "0")}</b>
+          <small className={`mt-0.5 text-[6px] font-bold uppercase leading-none ${tone.unit}`}>{part.unit}</small>
+        </span>
+      ))}
     </span>
   );
 }
@@ -267,6 +442,7 @@ export default function SystemServicesPage() {
   const [form, setForm] = useState<FormState>(EMPTY);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [showAccess, setShowAccess] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const [alertOpen, setAlertOpen] = useState(false);
@@ -274,6 +450,7 @@ export default function SystemServicesPage() {
   const [savingAlerts, setSavingAlerts] = useState(false);
 
   const [deleteTarget, setDeleteTarget] = useState<ExternalService | null>(null);
+  const [viewing, setViewing] = useState<ExternalService | null>(null);
   const [deleting, setDeleting] = useState(false);
 
   const toast = (text: string, type: "ok" | "err" = "ok") => {
@@ -307,10 +484,11 @@ export default function SystemServicesPage() {
 
   useEffect(() => { load(); }, []);
 
-  const openAdd = () => { setEditing(null); setForm(EMPTY); setFormOpen(true); };
+  const openAdd = () => { setEditing(null); setForm(EMPTY); setShowAccess(false); setFormOpen(true); };
 
   const openEdit = (s: ExternalService) => {
     setEditing(s);
+    setShowAccess(Boolean(s.accountIdentifier || s.loginUrl || s.secretLabel || s.secretValue));
     setForm({
       category: s.category,
       name: s.name,
@@ -332,6 +510,7 @@ export default function SystemServicesPage() {
       currency: s.currency ?? "INR",
       billingCycle: s.billingCycle ?? "",
       receipts: s.receipts ?? [],
+      details: s.details ?? {},
     });
     setFormOpen(true);
   };
@@ -357,11 +536,20 @@ export default function SystemServicesPage() {
     currency: f.pricingType === "PAID" ? f.currency.trim() || "INR" : undefined,
     billingCycle: f.pricingType === "PAID" && f.billingCycle ? f.billingCycle : undefined,
     receipts: f.receipts,
+    details: Object.fromEntries(Object.entries(f.details).map(([key, value]) => [key, value.trim()]).filter(([, value]) => value)),
   });
 
   const save = async () => {
     if (!form.name.trim()) { toast("Give the service a name first.", "err"); return; }
+    if (!form.provider.trim()) { toast("Provider is required — enter the company that supplies this service.", "err"); return; }
     if (!form.expiryDate) { toast("An expiry date is required — it drives every reminder.", "err"); return; }
+    const missingDetail = REQUIRED_DETAILS[form.category].find((key) => !form.details[key]?.trim());
+    if (missingDetail) {
+      const field = CATEGORY_FIELDS[form.category].find((item) => item.key === missingDetail);
+      toast(`${field?.label ?? "Required detail"} is required for ${CAT_LABEL[form.category]}.`, "err");
+      return;
+    }
+    if (form.pricingType === "PAID" && (!form.costAmount || !form.billingCycle)) { toast("Enter the paid amount and billing cycle.", "err"); return; }
 
     setSaving(true);
     try {
@@ -559,13 +747,14 @@ export default function SystemServicesPage() {
                     <div key={s._id} id={`svc-${s._id}`} className={`group grid min-h-[44px] grid-cols-[4px_minmax(180px,1.6fr)_minmax(120px,.9fr)_110px_minmax(150px,.9fr)_84px] items-center gap-2 border-b border-slate-100 pr-4 transition-colors last:border-b-0 hover:bg-slate-50/70 max-[820px]:grid-cols-[4px_1fr_auto_76px] max-[820px]:pr-2 max-[560px]:grid-cols-[4px_1fr_auto] ${highlight === s._id ? "animate-pulse bg-[#F5ECDD]" : ""}`}>
                       <div className={`self-stretch ${railClass(st)}`} />
                       <div className="flex min-w-0 items-center gap-2.5 [&_p]:m-0 [&_p]:truncate [&_p]:font-semibold [&_small]:text-[11.5px] [&_small]:text-[#81766E]">
-                        <span className={`flex size-7 shrink-0 items-center justify-center rounded-md ring-1 ring-inset ${st === "EXPIRED" ? "bg-rose-50 text-rose-700 ring-rose-100" : st === "SOON" ? "bg-amber-50 text-amber-700 ring-amber-100" : "bg-slate-50 text-slate-700 ring-slate-200"}`}>
+                        <span className={`flex size-7 shrink-0 items-center justify-center rounded-md ring-1 ring-inset ${CAT_ICON_TONE[s.category]}`}>
                           <Icon size={13} />
                         </span>
                         <div className="min-w-0">
                           <p>{s.name}</p>
                           <small>
                             {s.provider || CAT_LABEL[s.category]}
+                            {s.details?.[PRIMARY_DETAIL[s.category]] ? ` · ${s.details[PRIMARY_DETAIL[s.category]]}` : ""}
                             {s.autoRenews ? " · auto-renews" : ""}
                           </small>
                         </div>
@@ -599,6 +788,7 @@ export default function SystemServicesPage() {
                             <ExternalLink size={14} />
                           </a>
                         )}
+                        <button className="flex size-7 items-center justify-center rounded-[7px] border-0 bg-transparent text-[#81766E] hover:bg-[#FAF8F5] hover:text-[#261B15]" onClick={() => setViewing(s)} title="View details"><Eye size={14} /></button>
                         <button className="flex size-7 items-center justify-center rounded-[7px] border-0 bg-transparent text-[#81766E] hover:bg-[#FAF8F5] hover:text-[#261B15]" onClick={() => openEdit(s)} title="Edit"><Pencil size={14} /></button>
                         <button className="flex size-7 items-center justify-center rounded-[7px] border-0 bg-transparent text-[#81766E] hover:bg-[#FAF8F5] hover:text-[#261B15] hover:!bg-[#FAE7E7] hover:!text-[#A8202B]" onClick={() => setDeleteTarget(s)} title="Delete"><Trash2 size={14} /></button>
                       </div>
@@ -628,20 +818,27 @@ export default function SystemServicesPage() {
       >
         <div className="grid gap-3">
           <div className="grid grid-cols-2 gap-3 max-[820px]:grid-cols-1">
-            <Field label="Category">
+            <Field label="Category" required hint="Choose the service type; relevant fields appear automatically.">
               <select className="w-full rounded-lg border border-[#D8D0C7] bg-white px-2.5 py-2 text-[13px] text-[#261B15] placeholder:text-[#81766E] focus:border-[#8B6A3E] focus:outline-none focus:ring-4 focus:ring-[#F5ECDD]" value={form.category}
-                onChange={(e) => setForm({ ...form, category: e.target.value as ExternalServiceCategory })}>
+                onChange={(e) => setForm({ ...form, category: e.target.value as ExternalServiceCategory, details: {} })}>
                 {CATEGORIES.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
               </select>
             </Field>
-            <Field label="Name">
+            <Field label="Name" required hint="A short name your team will recognize.">
               <input className="w-full rounded-lg border border-[#D8D0C7] bg-white px-2.5 py-2 text-[13px] text-[#261B15] placeholder:text-[#81766E] focus:border-[#8B6A3E] focus:outline-none focus:ring-4 focus:ring-[#F5ECDD]" value={form.name} placeholder="Domain — mokshasewa.org"
                 onChange={(e) => setForm({ ...form, name: e.target.value })} />
             </Field>
-            <Field label="Provider">
+            <Field label="Provider" required hint="The company supplying it, for example Hostinger, Meta or Razorpay.">
               <input className="w-full rounded-lg border border-[#D8D0C7] bg-white px-2.5 py-2 text-[13px] text-[#261B15] placeholder:text-[#81766E] focus:border-[#8B6A3E] focus:outline-none focus:ring-4 focus:ring-[#F5ECDD]" value={form.provider} placeholder="GoDaddy, Razorpay, Cloudinary"
                 onChange={(e) => setForm({ ...form, provider: e.target.value })} />
             </Field>
+            <div className="col-span-2 max-[820px]:col-span-1">
+              <button type="button" className="flex w-full items-center justify-between rounded-lg border border-dashed border-[#CFC5BA] bg-[#FCFBF9] px-3 py-2.5 text-left text-[12px] font-semibold text-[#684A29] hover:bg-[#F8F3EC]" onClick={() => setShowAccess((value) => !value)}>
+                <span>{showAccess ? "Hide" : "Add"} Login Or Credential Details <small className="ml-1 font-normal text-[#81766E]">Optional</small></span>
+                <span>{showAccess ? "−" : "+"}</span>
+              </button>
+            </div>
+            {showAccess && <>
             <Field label="Account" hint="Login email, username or account id">
               <input className="w-full rounded-lg border border-[#D8D0C7] bg-white px-2.5 py-2 text-[13px] text-[#261B15] placeholder:text-[#81766E] focus:border-[#8B6A3E] focus:outline-none focus:ring-4 focus:ring-[#F5ECDD]" value={form.accountIdentifier}
                 onChange={(e) => setForm({ ...form, accountIdentifier: e.target.value })} />
@@ -651,22 +848,46 @@ export default function SystemServicesPage() {
                 onChange={(e) => setForm({ ...form, loginUrl: e.target.value })} />
             </Field>
             <Field label="Credential name">
-              <input className="w-full rounded-lg border border-[#D8D0C7] bg-white px-2.5 py-2 text-[13px] text-[#261B15] placeholder:text-[#81766E] focus:border-[#8B6A3E] focus:outline-none focus:ring-4 focus:ring-[#F5ECDD]" value={form.secretLabel} placeholder="API secret, SMTP password"
+              <input className="w-full rounded-lg border border-[#D8D0C7] bg-white px-2.5 py-2 text-[13px] text-[#261B15] placeholder:text-[#81766E] focus:border-[#8B6A3E] focus:outline-none focus:ring-4 focus:ring-[#F5ECDD]" value={form.secretLabel} placeholder={CREDENTIAL_NAME[form.category]}
                 onChange={(e) => setForm({ ...form, secretLabel: e.target.value })} />
             </Field>
+            </>}
           </div>
 
-          <Field label="Credential value" hint="Stored encrypted. Anyone with access to this page can read it.">
+          <div className="rounded-[10px] border border-[#EAE5DE] bg-[#FCFBF9] p-[13px]">
+            <div className="mb-2.5 flex items-center gap-2">
+              {(() => { const CategoryIcon = CAT_ICON[form.category]; return <CategoryIcon size={15} className="text-[#684A29]" />; })()}
+              <div>
+                <p className="m-0 text-xs font-semibold">{CAT_LABEL[form.category]} Details</p>
+                <p className="m-0 mt-0.5 text-[11px] text-[#81766E]">{CATEGORY_HELP[form.category]}</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3 max-[820px]:grid-cols-1">
+              {CATEGORY_FIELDS[form.category].map((field) => (
+                <Field key={field.key} label={field.label} required={REQUIRED_DETAILS[form.category].includes(field.key)} hint={REQUIRED_DETAILS[form.category].includes(field.key) ? `Required to identify this ${CAT_LABEL[form.category].toLowerCase()} correctly.` : "Optional — fill only if available."}>
+                  <input
+                    className="w-full rounded-lg border border-[#D8D0C7] bg-white px-2.5 py-2 text-[13px] text-[#261B15] placeholder:text-[#81766E] focus:border-[#8B6A3E] focus:outline-none focus:ring-4 focus:ring-[#F5ECDD]"
+                    type={field.type ?? "text"}
+                    value={form.details[field.key] ?? ""}
+                    placeholder={field.placeholder}
+                    onChange={(e) => setForm((current) => ({ ...current, details: { ...current.details, [field.key]: e.target.value } }))}
+                  />
+                </Field>
+              ))}
+            </div>
+          </div>
+
+          {showAccess && <Field label="Credential value" hint="Optional. Stored encrypted; add only a password, token or API key your team needs.">
             <textarea className="w-full rounded-lg border border-[#D8D0C7] bg-white px-2.5 py-2 text-[13px] text-[#261B15] placeholder:text-[#81766E] focus:border-[#8B6A3E] focus:outline-none focus:ring-4 focus:ring-[#F5ECDD]" rows={2} value={form.secretValue}
               onChange={(e) => setForm({ ...form, secretValue: e.target.value })} />
-          </Field>
+          </Field>}
 
           <div className="grid grid-cols-2 gap-3 max-[820px]:grid-cols-1">
             <Field label="Started on">
               <input className="w-full rounded-lg border border-[#D8D0C7] bg-white px-2.5 py-2 text-[13px] text-[#261B15] placeholder:text-[#81766E] focus:border-[#8B6A3E] focus:outline-none focus:ring-4 focus:ring-[#F5ECDD]" type="date" value={form.startDate}
                 onChange={(e) => setForm({ ...form, startDate: e.target.value })} />
             </Field>
-            <Field label="Expires on" hint="Drives the countdown and every reminder">
+            <Field label="Expires on" required hint="Used for the renewal countdown and alerts.">
               <input className="w-full rounded-lg border border-[#D8D0C7] bg-white px-2.5 py-2 text-[13px] text-[#261B15] placeholder:text-[#81766E] focus:border-[#8B6A3E] focus:outline-none focus:ring-4 focus:ring-[#F5ECDD]" type="date" value={form.expiryDate}
                 onChange={(e) => setForm({ ...form, expiryDate: e.target.value })} />
             </Field>
@@ -684,15 +905,15 @@ export default function SystemServicesPage() {
             </div>
             {form.pricingType === "PAID" && (
               <div className="mt-3 grid grid-cols-3 gap-3 max-[820px]:grid-cols-1">
-                <Field label="Currency">
+                <Field label="Currency" required>
                   <input className="w-full rounded-lg border border-[#D8D0C7] bg-white px-2.5 py-2 text-[13px] text-[#261B15] placeholder:text-[#81766E] focus:border-[#8B6A3E] focus:outline-none focus:ring-4 focus:ring-[#F5ECDD]" value={form.currency}
                     onChange={(e) => setForm({ ...form, currency: e.target.value })} />
                 </Field>
-                <Field label="Amount">
+                <Field label="Amount" required hint="Exact amount charged each billing cycle.">
                   <input className="w-full rounded-lg border border-[#D8D0C7] bg-white px-2.5 py-2 text-[13px] text-[#261B15] placeholder:text-[#81766E] focus:border-[#8B6A3E] focus:outline-none focus:ring-4 focus:ring-[#F5ECDD]" type="number" min={0} value={form.costAmount} placeholder="999"
                     onChange={(e) => setForm({ ...form, costAmount: e.target.value })} />
                 </Field>
-                <Field label="Billed">
+                <Field label="Billed" required hint="How often this service charges you.">
                   <select className="w-full rounded-lg border border-[#D8D0C7] bg-white px-2.5 py-2 text-[13px] text-[#261B15] placeholder:text-[#81766E] focus:border-[#8B6A3E] focus:outline-none focus:ring-4 focus:ring-[#F5ECDD]" value={form.billingCycle}
                     onChange={(e) => setForm({ ...form, billingCycle: e.target.value as ExternalServiceBillingCycle | "" })}>
                     <option value="">Choose</option>
@@ -769,9 +990,75 @@ export default function SystemServicesPage() {
           <label className="flex items-start gap-[9px] text-[13px] font-medium [&_input]:mt-0.5 [&_input]:size-[15px] [&_input]:accent-[#8B6A3E]">
             <input type="checkbox" checked={form.autoRenews}
               onChange={(e) => setForm({ ...form, autoRenews: e.target.checked })} />
-            <span>Renews automatically on the card on file</span>
+            <span>Renews automatically with the provider</span>
           </label>
         </div>
+      </Modal>
+
+      {/* service details */}
+      <Modal
+        open={!!viewing}
+        onClose={() => setViewing(null)}
+        title={viewing ? `${viewing.name} Details` : "Service Details"}
+        width={620}
+        footer={viewing ? (
+          <>
+            <button className="inline-flex min-h-[38px] items-center justify-center rounded-[10px] border border-[#D8D0C7] bg-white px-[15px] text-[12.5px] font-semibold text-[#261B15] hover:bg-[#FAF8F5]" onClick={() => setViewing(null)}>Close</button>
+            <button className="inline-flex min-h-[38px] items-center justify-center gap-2 rounded-[10px] bg-[#8B6A3E] px-[15px] text-[12.5px] font-semibold text-white hover:bg-[#684A29]" onClick={() => { const service = viewing; setViewing(null); openEdit(service); }}><Pencil size={14} /> Edit Service</button>
+          </>
+        ) : undefined}
+      >
+        {viewing && (() => {
+          const DetailIcon = CAT_ICON[viewing.category];
+          const technicalRows = CATEGORY_FIELDS[viewing.category]
+            .map((field) => ({ label: field.label, value: viewing.details?.[field.key] }))
+            .filter((row) => row.value);
+          const price = viewing.pricingType === "FREE"
+            ? "Free"
+            : viewing.costAmount != null
+              ? `${viewing.currency && viewing.currency !== "INR" ? `${viewing.currency} ` : "₹"}${viewing.costAmount.toLocaleString("en-IN")}${viewing.billingCycle ? ` / ${CYCLE[viewing.billingCycle]}` : ""}`
+              : "Amount Not Set";
+          const overviewRows = [
+            { label: "Provider", value: viewing.provider },
+            { label: "Account", value: viewing.accountIdentifier },
+            { label: "Started On", value: viewing.startDate ? new Date(viewing.startDate).toLocaleDateString("en-IN") : undefined },
+            { label: "Expires On", value: viewing.expiryDate ? new Date(viewing.expiryDate).toLocaleDateString("en-IN") : undefined },
+            { label: "Billing", value: price },
+            { label: "Renewal", value: viewing.autoRenews ? "Automatic" : "Manual" },
+            { label: "Reminders", value: viewing.remindersEnabled ? "Enabled" : "Disabled" },
+            { label: "Receipts", value: `${viewing.receipts?.length ?? 0} Attached` },
+          ].filter((row) => row.value);
+          return (
+            <div className="grid gap-4">
+              <div className="flex items-start gap-3 rounded-xl border border-[#EAE5DE] bg-[#FCFBF9] p-3.5">
+                <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#F5ECDD] text-[#684A29]"><DetailIcon size={20} /></span>
+                <div className="min-w-0">
+                  <p className="m-0 text-sm font-bold text-[#261B15]">{CAT_LABEL[viewing.category]}</p>
+                  <p className="mb-0 mt-1 text-[12px] leading-5 text-[#665B53]">{CATEGORY_HELP[viewing.category]}</p>
+                  {viewing.loginUrl && <a className="mt-1.5 inline-flex items-center gap-1 text-[12px] font-semibold text-[#684A29] hover:underline" href={viewing.loginUrl} target="_blank" rel="noreferrer">Open Provider Dashboard <ExternalLink size={12} /></a>}
+                </div>
+              </div>
+
+              <section>
+                <p className="mb-2 text-[11px] font-bold uppercase tracking-[.08em] text-[#81766E]">Service Overview</p>
+                <div className="grid grid-cols-2 overflow-hidden rounded-xl border border-[#EAE5DE] max-[620px]:grid-cols-1">
+                  {overviewRows.map((row) => <div key={row.label} className="border-b border-r border-[#EEE9E3] px-3 py-2.5 last:border-b-0"><p className="m-0 text-[10px] font-semibold uppercase tracking-wide text-[#81766E]">{row.label}</p><p className="mb-0 mt-1 break-words text-[12.5px] font-semibold text-[#261B15]">{row.value}</p></div>)}
+                </div>
+              </section>
+
+              <section>
+                <p className="mb-2 text-[11px] font-bold uppercase tracking-[.08em] text-[#81766E]">{CAT_LABEL[viewing.category]} Technical Details</p>
+                {technicalRows.length ? (
+                  <div className="grid grid-cols-2 gap-2 max-[620px]:grid-cols-1">
+                    {technicalRows.map((row) => <div key={row.label} className="rounded-lg border border-[#EAE5DE] bg-white px-3 py-2.5"><p className="m-0 text-[10px] font-semibold text-[#81766E]">{row.label}</p><p className="mb-0 mt-1 break-all text-[12.5px] font-semibold text-[#261B15]">{row.value}</p></div>)}
+                  </div>
+                ) : <p className="m-0 rounded-lg border border-dashed border-[#D8D0C7] bg-[#FCFBF9] px-3 py-4 text-center text-[12px] text-[#81766E]">No technical details added yet. Edit this service to complete them.</p>}
+              </section>
+
+              {viewing.notes && <section><p className="mb-2 text-[11px] font-bold uppercase tracking-[.08em] text-[#81766E]">Notes</p><p className="m-0 whitespace-pre-wrap rounded-lg bg-[#FAF8F5] p-3 text-[12.5px] leading-5 text-[#4A4039]">{viewing.notes}</p></section>}
+            </div>
+          );
+        })()}
       </Modal>
 
       {/* reminder defaults */}
