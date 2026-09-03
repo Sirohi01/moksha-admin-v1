@@ -175,10 +175,10 @@ function ServiceClock({
   const days = daysRemaining(expiryDate);
   const urgent = countdown.isExpired || days <= URGENT_DAYS;
   const palette = countdown.isExpired
-    ? { card: "border-red-300 bg-gradient-to-br from-red-50 via-white to-rose-50 hover:border-red-400", label: "text-red-800", digit: "text-red-800", unit: "text-red-600", dot: "animate-pulse bg-red-500 shadow-red-300" }
+    ? { card: "border-red-200 bg-gradient-to-br from-red-50 via-white to-rose-50 hover:border-red-300", label: "text-red-700", digit: "text-red-700", unit: "text-red-600", dot: "animate-pulse bg-red-500", icon: "border-red-200 bg-red-50 text-red-600", live: "bg-red-100 text-red-700" }
     : urgent
-      ? { card: "border-amber-300 bg-gradient-to-br from-amber-50 via-white to-yellow-50 hover:border-amber-400", label: "text-amber-800", digit: "text-amber-800", unit: "text-amber-600", dot: "animate-pulse bg-amber-500 shadow-amber-300" }
-      : { card: "border-emerald-300 bg-gradient-to-br from-emerald-50 via-white to-green-50 hover:border-emerald-400", label: "text-emerald-800", digit: "text-emerald-800", unit: "text-emerald-600", dot: "bg-emerald-500 shadow-emerald-300" };
+      ? { card: "border-amber-200 bg-gradient-to-br from-amber-50 via-white to-orange-50 hover:border-amber-300", label: "text-amber-700", digit: "text-amber-700", unit: "text-amber-600", dot: "animate-pulse bg-amber-500", icon: "border-amber-200 bg-amber-50 text-amber-600", live: "bg-amber-100 text-amber-700" }
+      : { card: "border-emerald-200 bg-gradient-to-br from-emerald-50 via-white to-teal-50 hover:border-emerald-300", label: "text-emerald-700", digit: "text-emerald-700", unit: "text-emerald-600", dot: "bg-emerald-500", icon: "border-emerald-200 bg-emerald-50 text-emerald-600", live: "bg-emerald-100 text-emerald-700" };
   const parts = [
     { value: countdown.days, unit: "Days" },
     { value: countdown.hours, unit: "Hours" },
@@ -191,20 +191,27 @@ function ServiceClock({
       type="button"
       onClick={onClick}
       title={`${name} — renews ${new Date(expiryDate).toLocaleDateString()}`}
-      className={`min-w-[190px] rounded-xl border px-2 py-1 text-left shadow-sm transition-all hover:-translate-y-px hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent ${palette.card}`}
+      className={`group flex h-[46px] min-w-[210px] items-center gap-2 rounded-xl border px-2.5 text-left shadow-[0_4px_14px_rgba(15,23,42,0.06)] transition-all hover:-translate-y-px hover:shadow-[0_7px_20px_rgba(15,23,42,0.10)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent ${palette.card}`}
     >
-      <span className={`mb-0.5 flex items-center justify-center gap-1.5 text-[8px] font-semibold uppercase leading-none tracking-[.18em] ${palette.label}`}>
-        <span className={`h-1.5 w-1.5 rounded-full shadow-[0_0_6px_currentColor] ${palette.dot}`} />
-        <Icon className="h-2.5 w-2.5" /> {label} Renews In
-        <span className={`h-1.5 w-1.5 rounded-full shadow-[0_0_6px_currentColor] ${palette.dot}`} />
+      <span className={`grid h-8 w-8 shrink-0 place-items-center rounded-full border shadow-inner ${palette.icon}`}>
+        <Icon className="h-4 w-4" />
       </span>
-      <span className="grid grid-cols-4 gap-1">
-        {parts.map((part) => (
-          <span key={part.unit} className={`flex h-[27px] flex-col items-center justify-center rounded-md ${palette.digit}`}>
-            <span className="font-mono text-[11px] font-medium leading-none tabular-nums">{String(part.value).padStart(2, "0")}</span>
-            <small className={`mt-0.5 text-[6px] font-bold uppercase leading-none ${palette.unit}`}>{part.unit}</small>
+      <span className="min-w-0 flex-1">
+        <span className="mb-0.5 flex items-center justify-between gap-2">
+          <span className={`truncate text-[10px] font-extrabold ${palette.label}`}>{label} Renews In</span>
+          <span className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[8px] font-bold ${palette.live}`}>
+            <span className={`h-1.5 w-1.5 rounded-full ${palette.dot}`} />
+            {countdown.isExpired ? "Expired" : "Live"}
           </span>
-        ))}
+        </span>
+        <span className="grid grid-cols-4 divide-x divide-current/15">
+          {parts.map((part) => (
+            <span key={part.unit} className={`flex flex-col items-center justify-center px-1 ${palette.digit}`}>
+              <span className="font-mono text-[12px] font-extrabold leading-none tabular-nums">{String(part.value).padStart(2, "0")}</span>
+              <small className={`mt-0.5 text-[5.5px] font-extrabold uppercase leading-none tracking-wide ${palette.unit}`}>{part.unit}</small>
+            </span>
+          ))}
+        </span>
       </span>
     </button>
   );
@@ -460,7 +467,7 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
 
   return (
     <>
-      <header className="relative z-30 flex h-14 shrink-0 items-center justify-between border-b border-slate-200/80 bg-white/80 px-4 backdrop-blur-xl">
+      <header className="relative z-30 flex h-[62px] shrink-0 items-center justify-between border-b border-slate-200/80 bg-white/90 px-4 backdrop-blur-xl">
         <div className="flex min-w-0 items-center gap-3">
           <button
             onClick={onMenuClick}
@@ -471,13 +478,19 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
           </button>
 
           {isDashboard ? (
-            <div className="min-w-0">
-              <h1 className="truncate text-[15px] font-semibold leading-tight tracking-tight text-slate-900">
-                Welcome back, {firstName}
-              </h1>
-              <p className="hidden truncate text-[11px] leading-tight text-slate-500 sm:block">
-                Here&apos;s what happened on your website today
-              </p>
+            <div className="min-w-[238px]">
+              <div className="rounded-xl border border-emerald-100 bg-gradient-to-r from-emerald-50/80 via-white to-white px-3 py-1.5 shadow-[0_4px_14px_rgba(15,23,42,0.06)]">
+                <p className="flex items-center gap-1.5 text-[8.5px] font-bold uppercase leading-none tracking-[0.11em] text-slate-400">
+                  <span className="text-emerald-700">Dashboard</span>
+                  <span className="h-1 w-1 rounded-full bg-emerald-400" />
+                </p>
+                <h1 className="mt-1 truncate text-[14px] font-extrabold leading-none tracking-tight text-slate-900">
+                  Welcome back, <span className="text-emerald-700">{firstName}</span>
+                </h1>
+                <p className="mt-1 hidden truncate text-[9.5px] font-medium leading-none text-slate-500 sm:block">
+                  Everything is ready for you
+                </p>
+              </div>
             </div>
           ) : pagesSubRouteLabel(pathname) ? (
             <h1 className="flex min-w-0 items-center gap-1.5 text-[15px] font-semibold tracking-tight">
@@ -539,8 +552,8 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
                     aria-expanded={expiringOpen}
                     title={`${otherServices.length} other services`}
                     className={`relative flex h-8 w-8 items-center justify-center rounded-lg transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent ${expiringOpen
-                        ? "bg-slate-900/5 text-slate-900"
-                        : "text-slate-500 hover:bg-slate-900/5 hover:text-slate-900"
+                      ? "bg-slate-900/5 text-slate-900"
+                      : "text-slate-500 hover:bg-slate-900/5 hover:text-slate-900"
                       }`}
                   >
                     <LayoutGrid className="h-4 w-4" />
@@ -592,10 +605,10 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
                             </span>
                             <span
                               className={`shrink-0 font-mono tabular-nums ${days < 0
-                                  ? "text-red-600"
-                                  : days <= URGENT_DAYS
-                                    ? "text-amber-700"
-                                    : "text-slate-400"
+                                ? "text-red-600"
+                                : days <= URGENT_DAYS
+                                  ? "text-amber-700"
+                                  : "text-slate-400"
                                 }`}
                             >
                               {days < 0 ? `${Math.abs(days)}d over` : `${days}d`}
@@ -653,8 +666,8 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
                         setDateOpen(false);
                       }}
                       className={`flex w-full items-center justify-between px-3 py-2 text-left text-xs font-medium transition-colors ${selectedDate === date
-                          ? "text-slate-900"
-                          : "text-slate-600 hover:bg-slate-900/5"
+                        ? "text-slate-900"
+                        : "text-slate-600 hover:bg-slate-900/5"
                         }`}
                     >
                       {date}
