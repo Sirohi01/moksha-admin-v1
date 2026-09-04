@@ -27,7 +27,20 @@ const SERVICES: Service[] = [
 const categoryTone = { Transport: "bg-blue-50 text-blue-600", Cremation: "bg-orange-50 text-orange-600", Rituals: "bg-violet-50 text-violet-600", Support: "bg-emerald-50 text-emerald-600" };
 
 function MetricCard({ icon: Icon, tone, surface, valueTone, label, value, note }: { icon: typeof Grid2X2; tone: string; surface: string; valueTone: string; label: string; value: string; note: string }) {
-  return <div className={`relative flex h-[92px] min-w-0 items-center gap-3 overflow-hidden rounded-lg border px-3.5 py-2.5 shadow-[0_4px_14px_rgba(15,23,42,.045)] ${surface}`}><span className={`grid size-9 shrink-0 place-items-center rounded-full bg-white/80 ring-1 ring-inset ring-black/5 ${tone}`}><Icon size={18} strokeWidth={1.8} /></span><div className="flex min-w-0 flex-1 flex-col justify-center"><p className="truncate text-[10.5px] font-semibold leading-none tracking-[.005em] text-slate-900">{label}</p><p className={`mt-1.5 text-[24px] font-semibold leading-none tracking-[-.04em] ${valueTone}`}>{value}</p><p className={`mt-1.5 truncate text-[9.5px] font-bold leading-none ${note.startsWith("↑") ? "text-emerald-700" : "text-[#536987]"}`}>{note}</p></div></div>;
+  return (
+    <div className={`relative flex h-[56px] min-w-0 items-center gap-[10px] overflow-hidden rounded-[7px] border px-[12px] py-[7px] shadow-[0_1px_2px_rgba(15,23,42,0.02)] ${surface}`}>
+      <span className={`grid h-[34px] w-[34px] shrink-0 place-items-center rounded-full bg-white/80 ring-1 ring-inset ring-black/5 ${tone}`}>
+        <Icon size={16} strokeWidth={1.8} />
+      </span>
+      <div className="flex min-w-0 flex-1 flex-col justify-center">
+        <p className="truncate text-[9.5px] font-extrabold leading-none text-slate-800">{label}</p>
+        <div className="mt-[2px] flex items-baseline gap-[6px]">
+          <span className={`text-[17px] font-extrabold leading-none tracking-[-.03em] ${valueTone}`}>{value}</span>
+          <span className={`truncate text-[8.5px] font-bold leading-none ${note.startsWith("↑") ? "text-emerald-700" : "text-[#536987]"}`}>{note}</span>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default function ServicesManagementView() {

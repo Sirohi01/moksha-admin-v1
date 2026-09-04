@@ -60,7 +60,7 @@ export const NAV_SECTIONS: NavSection[] = [
       { label: "Media Library", href: "/gallery", icon: GalleryHorizontalEnd },
       { label: "Testimonials", href: "/testimonials", icon: MessageSquare },
       { label: "FAQs", href: "/faqs", icon: MessageSquare },
-      { label: "Navigation Menus", href: "/website?section=navbar", icon: ListTree },
+      { label: "Navigation Menus", href: "/navigation-menus", icon: ListTree },
     ],
   },
   {

@@ -104,35 +104,28 @@ function MetricCard({
   label,
   value,
   lines,
-  action,
 }: {
   icon: React.ReactNode;
   iconClass: string;
   label: string;
   value: string;
   lines: React.ReactNode;
-  action: string;
 }) {
   return (
-    <article className="relative min-h-[150px] overflow-hidden rounded-[10px] border border-[#e6e9ec] bg-white px-[20px] py-[18px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-      <div className="flex items-start gap-[18px]">
-        <div className={`grid h-[64px] w-[64px] shrink-0 place-items-center rounded-full ${iconClass}`}>
-          {icon}
-        </div>
-
-        <div className="min-w-0 pt-[4px]">
-          <p className="text-[12px] font-extrabold text-[#253454]">{label}</p>
-          <p className="mt-[7px] text-[27px] font-extrabold leading-none tracking-[-0.03em] text-[#10204a]">
-            {value}
-          </p>
-          <div className="mt-[10px] text-[10.5px] font-semibold text-[#66738b]">{lines}</div>
-        </div>
+    <article className="flex min-h-[56px] items-center gap-[10px] rounded-[7px] border border-[#e7e9ec] bg-white px-[12px] py-[7px] shadow-[0_1px_2px_rgba(15,23,42,0.02)]">
+      <div className={`grid h-[34px] w-[34px] shrink-0 place-items-center rounded-full ${iconClass}`}>
+        {icon}
       </div>
 
-      <button type="button" className="absolute bottom-[16px] left-[20px] inline-flex items-center gap-[9px] text-[10.5px] font-extrabold text-[#14683d]">
-        {action}
-        <ArrowRight className="h-[13px] w-[13px]" />
-      </button>
+      <div className="min-w-0">
+        <p className="text-[9.5px] font-extrabold text-[#34435e]">{label}</p>
+        <div className="mt-[2px] flex items-baseline gap-[6px]">
+          <span className="text-[17px] font-extrabold leading-none tracking-[-0.03em] text-[#10204a]">
+            {value}
+          </span>
+          <div className="truncate text-[8.5px] font-semibold text-[#66738b]">{lines}</div>
+        </div>
+      </div>
     </article>
   );
 }
@@ -202,53 +195,49 @@ export default function BlogAwarenessPage() {
           </div>
         </header>
 
-        <section className="mt-[24px] grid grid-cols-4 gap-[20px]">
+        <section className="mt-[10px] grid grid-cols-4 gap-[10px]">
           <MetricCard
-            icon={<FileText className="h-[29px] w-[29px]" strokeWidth={1.7} />}
+            icon={<FileText className="h-[16px] w-[16px]" strokeWidth={1.7} />}
             iconClass="bg-emerald-50 text-emerald-700"
             label="Total Posts"
             value="86"
             lines={
-              <div className="flex items-center gap-[12px]">
-                <span>Published: 72</span>
+              <div className="flex items-center gap-[6px]">
+                <span>Pub: 72</span>
                 <span className="text-[#9aa4b5]">|</span>
                 <span>Draft: 14</span>
               </div>
             }
-            action="View all posts"
           />
 
           <MetricCard
-            icon={<Eye className="h-[31px] w-[31px]" strokeWidth={1.7} />}
+            icon={<Eye className="h-[16px] w-[16px]" strokeWidth={1.7} />}
             iconClass="bg-blue-50 text-blue-700"
             label="Total Views"
             value="24,580"
-            lines={<span className="font-bold text-emerald-700">+18.6% vs last month</span>}
-            action="View analytics"
+            lines={<span className="font-bold text-emerald-700">+18.6%</span>}
           />
 
           <MetricCard
-            icon={<Megaphone className="h-[30px] w-[30px]" strokeWidth={1.7} />}
+            icon={<Megaphone className="h-[16px] w-[16px]" strokeWidth={1.7} />}
             iconClass="bg-violet-50 text-violet-700"
-            label="Awareness Campaigns"
+            label="Campaigns"
             value="12"
             lines={
-              <div className="flex items-center gap-[12px]">
+              <div className="flex items-center gap-[6px]">
                 <span>Active: 5</span>
                 <span className="text-[#9aa4b5]">|</span>
-                <span>Completed: 7</span>
+                <span>Done: 7</span>
               </div>
             }
-            action="View campaigns"
           />
 
           <MetricCard
-            icon={<CalendarDays className="h-[28px] w-[28px]" strokeWidth={1.7} />}
+            icon={<CalendarDays className="h-[16px] w-[16px]" strokeWidth={1.7} />}
             iconClass="bg-amber-50 text-amber-700"
             label="Scheduled Posts"
             value="8"
-            lines={<span>Next: 02 Jun 2026</span>}
-            action="View schedule"
+            lines={<span>Next: 02 Jun</span>}
           />
         </section>
 

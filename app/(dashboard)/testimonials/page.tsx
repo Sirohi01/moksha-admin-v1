@@ -216,26 +216,25 @@ function MetricCard({
   stars?: boolean;
 }) {
   return (
-    <div className="flex h-[104px] min-w-0 items-center gap-[15px] rounded-[8px] border border-[#e6e9ec] bg-white px-[16px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-      <div className={`grid h-[50px] w-[50px] shrink-0 place-items-center rounded-full ${iconClass}`}>
+    <div className="relative flex h-[56px] min-w-0 items-center gap-[10px] overflow-hidden rounded-[7px] border border-[#e7e9ec] bg-white px-[12px] py-[7px] shadow-[0_1px_2px_rgba(15,23,42,0.02)]">
+      <div className={`grid h-[34px] w-[34px] shrink-0 place-items-center rounded-full ${iconClass}`}>
         {icon}
       </div>
 
       <div className="min-w-0 flex-1">
-        <p className="truncate text-[9.5px] font-bold text-[#34435e]">{label}</p>
-        <p className="mt-[5px] text-[21px] font-semibold leading-none tracking-[-0.03em] text-[#10204a]">
-          {value}
-        </p>
-
-        {stars ? (
-          <div className="mt-[8px]">
-            <RatingStars value={5} size={13} />
-          </div>
-        ) : (
-          <p className="mt-[7px] truncate text-[9px] font-semibold text-[#61708c]">
-            {note}
-          </p>
-        )}
+        <p className="truncate text-[9.5px] font-extrabold text-[#34435e]">{label}</p>
+        <div className="mt-[2px] flex items-baseline gap-[6px]">
+          <span className="text-[17px] font-extrabold leading-none tracking-[-0.03em] text-[#10204a]">
+            {value}
+          </span>
+          {stars ? (
+            <RatingStars value={5} size={11} />
+          ) : (
+            <span className="truncate text-[8.5px] font-semibold text-[#66738b]">
+              {note}
+            </span>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -322,7 +321,7 @@ export default function TestimonialsManagementPage() {
         {/* TOP STATS */}
         <section className="mt-[18px] grid grid-cols-5 gap-[14px]">
           <MetricCard
-            icon={<MessageCircleMore className="h-[25px] w-[25px]" strokeWidth={1.8} />}
+            icon={<MessageCircleMore className="h-[16px] w-[16px]" strokeWidth={1.8} />}
             iconClass="bg-emerald-50 text-emerald-700"
             label="Total Testimonials"
             value="56"
@@ -330,7 +329,7 @@ export default function TestimonialsManagementPage() {
           />
 
           <MetricCard
-            icon={<Star className="h-[25px] w-[25px]" strokeWidth={1.8} />}
+            icon={<Star className="h-[16px] w-[16px]" strokeWidth={1.8} />}
             iconClass="bg-violet-50 text-violet-600"
             label="Published"
             value="48"
@@ -338,7 +337,7 @@ export default function TestimonialsManagementPage() {
           />
 
           <MetricCard
-            icon={<Clock3 className="h-[25px] w-[25px]" strokeWidth={1.8} />}
+            icon={<Clock3 className="h-[16px] w-[16px]" strokeWidth={1.8} />}
             iconClass="bg-orange-50 text-orange-500"
             label="Pending Review"
             value="5"
@@ -346,7 +345,7 @@ export default function TestimonialsManagementPage() {
           />
 
           <MetricCard
-            icon={<EyeOff className="h-[25px] w-[25px]" strokeWidth={1.8} />}
+            icon={<EyeOff className="h-[16px] w-[16px]" strokeWidth={1.8} />}
             iconClass="bg-blue-50 text-blue-600"
             label="Hidden"
             value="3"
@@ -354,7 +353,7 @@ export default function TestimonialsManagementPage() {
           />
 
           <MetricCard
-            icon={<Star className="h-[25px] w-[25px]" strokeWidth={1.8} />}
+            icon={<Star className="h-[16px] w-[16px]" strokeWidth={1.8} />}
             iconClass="bg-emerald-50 text-emerald-700"
             label="Average Rating"
             value="4.8 / 5"

@@ -131,17 +131,19 @@ function MetricCard({
   note: string;
 }) {
   return (
-    <article className="flex min-h-[112px] items-center gap-[14px] rounded-[10px] border border-[#e7e9ec] bg-white px-[18px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-      <div className={`grid h-[58px] w-[58px] shrink-0 place-items-center rounded-full ${iconClass}`}>
+    <article className="flex min-h-[56px] items-center gap-[10px] rounded-[7px] border border-[#e7e9ec] bg-white px-[12px] py-[7px] shadow-[0_1px_2px_rgba(15,23,42,0.02)]">
+      <div className={`grid h-[34px] w-[34px] shrink-0 place-items-center rounded-full ${iconClass}`}>
         {icon}
       </div>
 
       <div className="min-w-0">
-        <p className="text-[11px] font-extrabold text-[#34435e]">{label}</p>
-        <p className="mt-[5px] text-[26px] font-extrabold leading-none tracking-[-0.03em] text-[#10204a]">
-          {value}
-        </p>
-        <p className="mt-[7px] text-[10px] font-semibold text-[#66738b]">{note}</p>
+        <p className="text-[9.5px] font-extrabold text-[#34435e]">{label}</p>
+        <div className="mt-[2px] flex items-baseline gap-[6px]">
+          <span className="text-[17px] font-extrabold leading-none tracking-[-0.03em] text-[#10204a]">
+            {value}
+          </span>
+          <span className="truncate text-[8.5px] font-semibold text-[#66738b]">{note}</span>
+        </div>
       </div>
     </article>
   );
@@ -183,17 +185,17 @@ export default function ManageCategoriesPage() {
         fontFamily:
           'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
       }}
-      className="h-full min-h-0 w-full overflow-y-auto overflow-x-hidden bg-[#fffefb] px-[18px] py-[14px] text-[#142347] [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-300"
+      className="h-full min-h-0 w-full overflow-y-auto overflow-x-hidden bg-[#fffefb] px-[14px] py-[10px] text-[#142347] [&::-webkit-scrollbar]:w-[5px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-300"
     >
       <div className="min-h-full w-full">
         {/* HEADER */}
-        <header className="flex items-start justify-between gap-[16px]">
+        <header className="flex items-center justify-between gap-[12px]">
           <div>
-            <h1 className="text-[28px] font-extrabold leading-none tracking-[-0.03em] text-[#075b33]">
+            <h1 className="text-[22px] font-extrabold leading-none tracking-[-0.03em] text-[#075b33]">
               Manage Categories
             </h1>
 
-            <nav className="mt-[10px] flex items-center gap-[8px] text-[11px] font-semibold text-[#1d2b58]">
+            <nav className="mt-[4px] flex items-center gap-[6px] text-[10px] font-semibold text-[#1d2b58]">
               <span>Dashboard</span>
               <span className="text-[#7b8597]">›</span>
               <span>Blog &amp; Awareness</span>
@@ -204,25 +206,25 @@ export default function ManageCategoriesPage() {
 
           <button
             type="button"
-            className="inline-flex h-[42px] items-center gap-[9px] rounded-[7px] bg-[linear-gradient(180deg,#076636_0%,#03542c_100%)] px-[22px] text-[10.5px] font-bold text-white shadow-[0_7px_16px_rgba(5,94,49,.12)]"
+            className="inline-flex h-[34px] items-center gap-[6px] rounded-[6px] bg-[linear-gradient(180deg,#076636_0%,#03542c_100%)] px-[16px] text-[10px] font-bold text-white shadow-[0_4px_10px_rgba(5,94,49,.12)]"
           >
-            <Plus className="h-[15px] w-[15px]" />
+            <Plus className="h-[14px] w-[14px]" />
             Add New Category
           </button>
         </header>
 
         {/* STATS */}
-        <section className="mt-[18px] grid grid-cols-4 gap-[14px]">
+        <section className="mt-[10px] grid grid-cols-4 gap-[10px]">
           <MetricCard
-            icon={<FolderClosed className="h-[30px] w-[30px]" strokeWidth={1.7} />}
+            icon={<FolderClosed className="h-[16px] w-[16px]" strokeWidth={1.7} />}
             iconClass="bg-emerald-50 text-emerald-700"
             label="Total Categories"
             value="12"
-            note="All Blog & Awareness Categories"
+            note="All Blog &amp; Awareness Categories"
           />
 
           <MetricCard
-            icon={<FileText className="h-[30px] w-[30px]" strokeWidth={1.7} />}
+            icon={<FileText className="h-[16px] w-[16px]" strokeWidth={1.7} />}
             iconClass="bg-violet-50 text-violet-700"
             label="Published"
             value="10"
@@ -230,7 +232,7 @@ export default function ManageCategoriesPage() {
           />
 
           <MetricCard
-            icon={<EyeOff className="h-[30px] w-[30px]" strokeWidth={1.7} />}
+            icon={<EyeOff className="h-[16px] w-[16px]" strokeWidth={1.7} />}
             iconClass="bg-amber-50 text-amber-700"
             label="Hidden"
             value="2"
@@ -238,7 +240,7 @@ export default function ManageCategoriesPage() {
           />
 
           <MetricCard
-            icon={<FileText className="h-[30px] w-[30px]" strokeWidth={1.7} />}
+            icon={<FileText className="h-[16px] w-[16px]" strokeWidth={1.7} />}
             iconClass="bg-blue-50 text-blue-700"
             label="Total Posts"
             value="86"

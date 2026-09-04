@@ -167,23 +167,25 @@ function MetricCard({
   progress?: number;
 }) {
   return (
-    <div className="relative flex h-[118px] min-w-0 items-center gap-[14px] overflow-hidden rounded-[9px] border border-[#e7e9ec] bg-white px-[16px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-      <div className={`grid h-[46px] w-[46px] shrink-0 place-items-center rounded-full ${iconClass}`}>
+    <div className="relative flex h-[56px] min-w-0 items-center gap-[10px] overflow-hidden rounded-[7px] border border-[#e7e9ec] bg-white px-[12px] py-[7px] shadow-[0_1px_2px_rgba(15,23,42,0.02)]">
+      <div className={`grid h-[34px] w-[34px] shrink-0 place-items-center rounded-full ${iconClass}`}>
         {icon}
       </div>
 
       <div className="min-w-0 flex-1">
-        <p className="truncate text-[10px] font-bold text-[#34435e]">{label}</p>
-        <p className="mt-[6px] text-[22px] font-semibold leading-none tracking-[-0.03em] text-[#10204a]">
-          {value}
-        </p>
-        <p className="mt-[8px] truncate text-[9px] font-semibold text-[#64748b]">
-          {note}
-        </p>
+        <p className="truncate text-[9.5px] font-extrabold text-[#34435e]">{label}</p>
+        <div className="mt-[2px] flex items-baseline gap-[6px]">
+          <span className="text-[17px] font-extrabold leading-none tracking-[-0.03em] text-[#10204a]">
+            {value}
+          </span>
+          <span className="truncate text-[8.5px] font-semibold text-[#64748b]">
+            {note}
+          </span>
+        </div>
       </div>
 
       {typeof progress === "number" ? (
-        <div className="absolute inset-x-0 bottom-0 h-[5px] bg-[#eef2f0]">
+        <div className="absolute inset-x-0 bottom-0 h-[3px] bg-[#eef2f0]">
           <div
             className="h-full rounded-r-full bg-[#0b6a3b]"
             style={{ width: `${progress}%` }}
@@ -330,9 +332,9 @@ export default function MediaLibraryPage() {
         </header>
 
         {/* STATS */}
-        <section className="mt-[18px] grid grid-cols-6 gap-[14px]">
+        <section className="mt-[10px] grid grid-cols-6 gap-[10px]">
           <MetricCard
-            icon={<FolderClosed className="h-[22px] w-[22px]" />}
+            icon={<FolderClosed className="h-[16px] w-[16px]" />}
             iconClass="bg-emerald-50 text-emerald-700"
             label="Total Files"
             value="1,248"
@@ -340,7 +342,7 @@ export default function MediaLibraryPage() {
           />
 
           <MetricCard
-            icon={<ImageIcon className="h-[22px] w-[22px]" />}
+            icon={<ImageIcon className="h-[16px] w-[16px]" />}
             iconClass="bg-emerald-50 text-emerald-700"
             label="Images"
             value="832"
@@ -348,7 +350,7 @@ export default function MediaLibraryPage() {
           />
 
           <MetricCard
-            icon={<Video className="h-[22px] w-[22px]" />}
+            icon={<Video className="h-[16px] w-[16px]" />}
             iconClass="bg-blue-50 text-blue-700"
             label="Videos"
             value="148"
@@ -356,7 +358,7 @@ export default function MediaLibraryPage() {
           />
 
           <MetricCard
-            icon={<FileText className="h-[22px] w-[22px]" />}
+            icon={<FileText className="h-[16px] w-[16px]" />}
             iconClass="bg-emerald-50 text-emerald-700"
             label="Documents"
             value="196"
@@ -364,7 +366,7 @@ export default function MediaLibraryPage() {
           />
 
           <MetricCard
-            icon={<Music2 className="h-[22px] w-[22px]" />}
+            icon={<Music2 className="h-[16px] w-[16px]" />}
             iconClass="bg-violet-50 text-violet-700"
             label="Audio"
             value="72"
@@ -372,11 +374,11 @@ export default function MediaLibraryPage() {
           />
 
           <MetricCard
-            icon={<HardDrive className="h-[22px] w-[22px]" />}
+            icon={<HardDrive className="h-[16px] w-[16px]" />}
             iconClass="bg-stone-100 text-stone-700"
             label="Storage Used"
             value="2.48 GB"
-            note="of 10 GB (24.8%)"
+            note="24.8% of 10GB"
             progress={24.8}
           />
         </section>

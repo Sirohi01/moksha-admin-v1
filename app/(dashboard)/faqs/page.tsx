@@ -211,19 +211,21 @@ function MetricCard({
   noteTone?: string;
 }) {
   return (
-    <div className="flex h-[104px] min-w-0 items-center gap-[14px] rounded-[9px] border border-[#e6e9ec] bg-white px-[16px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-      <div className={`grid h-[50px] w-[50px] shrink-0 place-items-center rounded-full ${iconClass}`}>
+    <div className="relative flex h-[56px] min-w-0 items-center gap-[10px] overflow-hidden rounded-[7px] border border-[#e7e9ec] bg-white px-[12px] py-[7px] shadow-[0_1px_2px_rgba(15,23,42,0.02)]">
+      <div className={`grid h-[34px] w-[34px] shrink-0 place-items-center rounded-full ${iconClass}`}>
         {icon}
       </div>
 
       <div className="min-w-0 flex-1">
-        <p className="truncate text-[9.5px] font-bold text-[#34435e]">{label}</p>
-        <p className="mt-[5px] text-[21px] font-semibold leading-none tracking-[-0.03em] text-[#10204a]">
-          {value}
-        </p>
-        <p className={`mt-[7px] truncate text-[9px] font-semibold ${noteTone}`}>
-          {note}
-        </p>
+        <p className="truncate text-[9.5px] font-extrabold text-[#34435e]">{label}</p>
+        <div className="mt-[2px] flex items-baseline gap-[6px]">
+          <span className="text-[17px] font-extrabold leading-none tracking-[-0.03em] text-[#10204a]">
+            {value}
+          </span>
+          <span className={`truncate text-[8.5px] font-semibold ${noteTone}`}>
+            {note}
+          </span>
+        </div>
       </div>
     </div>
   );
@@ -315,7 +317,7 @@ export default function FAQsManagementPage() {
         {/* STATS */}
         <section className="mt-[18px] grid grid-cols-5 gap-[14px]">
           <MetricCard
-            icon={<MessageCircleMore className="h-[24px] w-[24px]" strokeWidth={1.8} />}
+            icon={<MessageCircleMore className="h-[16px] w-[16px]" strokeWidth={1.8} />}
             iconClass="bg-emerald-50 text-emerald-700"
             label="Total FAQs"
             value="68"
@@ -323,7 +325,7 @@ export default function FAQsManagementPage() {
           />
 
           <MetricCard
-            icon={<SlidersHorizontal className="h-[24px] w-[24px]" strokeWidth={1.8} />}
+            icon={<SlidersHorizontal className="h-[16px] w-[16px]" strokeWidth={1.8} />}
             iconClass="bg-violet-50 text-violet-600"
             label="Categories"
             value="8"
@@ -331,7 +333,7 @@ export default function FAQsManagementPage() {
           />
 
           <MetricCard
-            icon={<Eye className="h-[24px] w-[24px]" strokeWidth={1.8} />}
+            icon={<Eye className="h-[16px] w-[16px]" strokeWidth={1.8} />}
             iconClass="bg-orange-50 text-orange-500"
             label="Total Views"
             value="7,842"
@@ -340,7 +342,7 @@ export default function FAQsManagementPage() {
           />
 
           <MetricCard
-            icon={<ThumbsUp className="h-[24px] w-[24px]" strokeWidth={1.8} />}
+            icon={<ThumbsUp className="h-[16px] w-[16px]" strokeWidth={1.8} />}
             iconClass="bg-blue-50 text-blue-600"
             label="Helpful Votes"
             value="2,156"
@@ -349,7 +351,7 @@ export default function FAQsManagementPage() {
           />
 
           <MetricCard
-            icon={<CircleHelp className="h-[24px] w-[24px]" strokeWidth={1.8} />}
+            icon={<CircleHelp className="h-[16px] w-[16px]" strokeWidth={1.8} />}
             iconClass="bg-rose-50 text-rose-500"
             label="Unanswered"
             value="2"
