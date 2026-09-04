@@ -804,16 +804,17 @@ export default function RequestsPage() {
           TOP STATS
       ====================================================== */}
 
-      <div
-        className="
-          mt-[16px]
-          grid
-          w-full
-          min-w-0
-          grid-cols-6
-          gap-[10px]
-        "
-      >
+      <div className="w-full min-w-0 overflow-x-auto">
+        <div
+          className="
+            mt-[16px]
+            grid
+            w-full
+            min-w-[1100px]
+            grid-cols-6
+            gap-[10px]
+          "
+        >
         <StatCard
           label="Total Sewa Requests"
           value={total}
@@ -919,19 +920,24 @@ export default function RequestsPage() {
         />
 
         <StatCard
-          label="Rejected Requests"
-          value={
-            rejectedCount
-          }
-          icon={XCircle}
-          iconBg="#FDEAE7"
-          iconColor="#DD473D"
+          label="Duplicates Flagged"
+          value={duplicateCount}
+          icon={AlertTriangle}
+          iconBg="#FFF5E5"
+          iconColor="#D88615"
           footer={
-            <span>
-              Closed intake
-            </span>
+            <>
+              <span className="text-[#D88615]">
+                ● Flagged
+              </span>
+
+              <span>
+                for review
+              </span>
+            </>
           }
         />
+      </div>
       </div>
 
       {/* ======================================================
@@ -1224,7 +1230,7 @@ export default function RequestsPage() {
         <div
           className="
             min-w-0
-            overflow-hidden
+            overflow-x-auto
             rounded-[6px]
             border
             border-[#E1E6EA]
@@ -1234,6 +1240,7 @@ export default function RequestsPage() {
           <table
             className="
               w-full
+              min-w-[1100px]
               table-fixed
               border-collapse
             "
@@ -1313,31 +1320,31 @@ export default function RequestsPage() {
                   />
                 </th>
 
-                <th className="text-[6.7px] font-[700]">
+                <th className="text-[7.5px] font-[700]">
                   ID
                 </th>
 
-                <th className="text-[6.7px] font-[700]">
+                <th className="text-[7.5px] font-[700]">
                   RECEIVED
                 </th>
 
-                <th className="text-[6.7px] font-[700]">
+                <th className="text-[7.5px] font-[700]">
                   REQUESTER
                 </th>
 
-                <th className="text-[6.7px] font-[700]">
+                <th className="text-[7.5px] font-[700]">
                   LOCATION
                 </th>
 
-                <th className="text-[6.7px] font-[700]">
+                <th className="text-[7.5px] font-[700]">
                   REQUEST TYPE
                 </th>
 
-                <th className="text-[6.7px] font-[700]">
+                <th className="text-[7.5px] font-[700]">
                   STATUS
                 </th>
 
-                <th className="text-[6.7px] font-[700]">
+                <th className="text-[7.5px] font-[700]">
                   ALERT
                 </th>
 
@@ -1451,7 +1458,7 @@ export default function RequestsPage() {
                             className="
                               block
                               truncate
-                              text-[6.6px]
+                              text-[7.5px]
                               font-[700]
                               text-[#176D45]
                             "
@@ -1464,20 +1471,12 @@ export default function RequestsPage() {
 
                         {/* DATE */}
 
-                        <td className="align-middle">
-                          <p
-                            className="
-                              line-clamp-2
-                              pr-[6px]
-                              text-[6.4px]
-                              font-[600]
-                              leading-[10px]
-                              text-[#314172]
-                            "
-                          >
-                            {formatDateTime(
-                              request.createdAt
-                            )}
+                        <td className="px-[10px] align-middle">
+                          <p className="whitespace-nowrap text-[7.5px] font-[700] text-[#182A65]">
+                            {formatDateTime(request.createdAt).split(",")[0]}
+                          </p>
+                          <p className="mt-[1px] whitespace-nowrap text-[7px] font-[500] text-[#556488]">
+                            {formatDateTime(request.createdAt).split(",")[1] || ""}
                           </p>
                         </td>
 
@@ -1509,12 +1508,11 @@ export default function RequestsPage() {
                                 className="text-[#263A70]"
                               />
                             </div>
-
                             <div className="min-w-0">
                               <p
                                 className="
                                   truncate
-                                  text-[7px]
+                                  text-[7.5px]
                                   font-[700]
                                   text-[#20316A]
                                 "
@@ -1529,7 +1527,7 @@ export default function RequestsPage() {
                                 className="
                                   mt-[2px]
                                   truncate
-                                  text-[5.8px]
+                                  text-[7px]
                                   font-[500]
                                   text-[#45547A]
                                 "
@@ -1549,9 +1547,9 @@ export default function RequestsPage() {
                             className="
                               line-clamp-2
                               pr-[6px]
-                              text-[6.3px]
+                              text-[7.5px]
                               font-[600]
-                              leading-[9px]
+                              leading-[11px]
                               text-[#314172]
                             "
                           >
@@ -1579,7 +1577,7 @@ export default function RequestsPage() {
                               <>
                                 <AlertTriangle
                                   size={
-                                    8
+                                    11
                                   }
                                 />
 
@@ -1664,10 +1662,16 @@ export default function RequestsPage() {
                         </td>
 
                         <td className="align-middle">
-                          <MoreVertical
-                            size={13}
-                            className="text-[#283D75]"
-                          />
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              selectRequest(request);
+                            }}
+                            className="flex h-[28px] w-[28px] items-center justify-center rounded-[5px] border border-[#E3E7EC] bg-white text-[#263C76] hover:bg-[#F8FAFC]"
+                          >
+                            <Eye size={14} />
+                          </button>
                         </td>
                       </tr>
                     );
@@ -1833,16 +1837,16 @@ export default function RequestsPage() {
                     setPage(1);
                   }}
                   className="
-                    h-[28px]
-                    w-[84px]
+                    h-[30px]
+                    w-[96px]
                     appearance-none
                     rounded-[4px]
                     border
                     border-[#E0E5EA]
                     bg-white
                     px-[8px]
-                    pr-[22px]
-                    text-[6.3px]
+                    pr-[24px]
+                    text-[7.5px]
                     font-[700]
                     text-[#334574]
                     outline-none
@@ -1859,16 +1863,21 @@ export default function RequestsPage() {
                   <option value={20}>
                     20 / page
                   </option>
+
+                  <option value={50}>
+                    50 / page
+                  </option>
                 </select>
 
                 <ChevronDown
-                  size={9}
+                  size={11}
                   className="
                     pointer-events-none
                     absolute
                     right-[7px]
                     top-1/2
                     -translate-y-1/2
+                    text-[#334574]
                   "
                 />
               </div>
@@ -2023,9 +2032,9 @@ export default function RequestsPage() {
 
                     <p
                       className="
-                        text-[6.2px]
+                        text-[7.5px]
                         font-[600]
-                        leading-[10px]
+                        leading-[11px]
                         text-[#324575]
                       "
                     >
@@ -2228,13 +2237,13 @@ export default function RequestsPage() {
                         "
                       >
                         <FileText
-                          size={11}
+                          size={13}
                           className="text-[#304575]"
                         />
 
                         <span
                           className="
-                            text-[6.6px]
+                            text-[7.5px]
                             font-[700]
                             text-[#273A70]
                           "
@@ -2256,9 +2265,9 @@ export default function RequestsPage() {
                       >
                         <p
                           className="
-                            text-[6.2px]
+                            text-[7.5px]
                             font-[500]
-                            leading-[10px]
+                            leading-[11px]
                             text-[#415178]
                           "
                         >
@@ -2311,20 +2320,20 @@ export default function RequestsPage() {
                               )
                             }
                             className="
-                            h-[33px]
-                            w-full
-                            appearance-none
-                            rounded-[5px]
-                            border
-                            border-[#DDE3E9]
-                            bg-white
-                            px-[10px]
-                            pr-[28px]
-                            text-[7px]
-                            font-[700]
-                            text-[#283A70]
-                            outline-none
-                          "
+                              h-[33px]
+                              w-full
+                              appearance-none
+                              rounded-[5px]
+                              border
+                              border-[#DDE3E9]
+                              bg-white
+                              px-[10px]
+                              pr-[28px]
+                              text-[7.5px]
+                              font-[700]
+                              text-[#182A65]
+                              outline-none
+                            "
                           >
                             <option value="LOW">
                               Low
@@ -2344,14 +2353,15 @@ export default function RequestsPage() {
                           </select>
 
                           <ChevronDown
-                            size={10}
+                            size={11}
                             className="
-                            pointer-events-none
-                            absolute
-                            right-[9px]
-                            top-1/2
-                            -translate-y-1/2
-                          "
+                              pointer-events-none
+                              absolute
+                              right-[9px]
+                              top-1/2
+                              -translate-y-1/2
+                              text-[#182A65]
+                            "
                           />
                         </div>
                       </div>
@@ -2407,7 +2417,7 @@ export default function RequestsPage() {
                           }
                           className="
                           flex
-                          h-[32px]
+                          h-[34px]
                           items-center
                           justify-center
                           gap-[6px]
@@ -2415,14 +2425,14 @@ export default function RequestsPage() {
                           border
                           border-[#F1D2D2]
                           bg-white
-                          text-[7px]
+                          text-[7.5px]
                           font-[700]
                           text-[#CB4040]
                           disabled:opacity-60
                         "
                         >
                           <XCircle
-                            size={11}
+                            size={12}
                           />
 
                           Reject
@@ -2432,7 +2442,7 @@ export default function RequestsPage() {
                           type="button"
                           className="
                           flex
-                          h-[32px]
+                          h-[34px]
                           items-center
                           justify-center
                           gap-[6px]
@@ -2440,13 +2450,13 @@ export default function RequestsPage() {
                           border
                           border-[#DDE3E9]
                           bg-white
-                          text-[7px]
+                          text-[7.5px]
                           font-[700]
-                          text-[#273A70]
+                          text-[#182A65]
                         "
                         >
                           <Eye
-                            size={11}
+                            size={12}
                           />
 
                           Full Details
@@ -2462,22 +2472,22 @@ export default function RequestsPage() {
                       className="
                       mt-[13px]
                       flex
-                      h-[33px]
+                      h-[36px]
                       w-full
                       items-center
                       justify-center
-                      gap-[6px]
-                      rounded-[4px]
+                      gap-[7px]
+                      rounded-[5px]
                       border
                       border-[#DDE3E9]
                       bg-white
-                      text-[7px]
+                      text-[7.5px]
                       font-[700]
-                      text-[#273A70]
+                      text-[#182A65]
                     "
                     >
                       <Eye
-                        size={11}
+                        size={13}
                       />
 
                       View Full Details
@@ -2533,14 +2543,16 @@ export default function RequestsPage() {
           Quick Actions
         </h2>
 
-        <div
-          className="
-            mt-[7px]
-            grid
-            grid-cols-6
-            gap-[10px]
-          "
-        >
+        <div className="mt-[7px] w-full min-w-0 overflow-x-auto pb-[4px]">
+          <div
+            className="
+              grid
+              w-full
+              min-w-[1100px]
+              grid-cols-6
+              gap-[10px]
+            "
+          >
           <QuickAction
             icon={
               CalendarDays
@@ -2633,6 +2645,7 @@ export default function RequestsPage() {
           </QuickAction>
         </div>
       </div>
+      </div>
     </section>
   );
 }
@@ -2670,7 +2683,7 @@ function StatCard({
         flex
         flex-col
         justify-between
-        h-[102px]
+        h-[116px]
         min-w-0
         overflow-hidden
         rounded-[7px]
@@ -2880,9 +2893,9 @@ function MetaBadge({
         whitespace-nowrap
         rounded-[4px]
         border
-        px-[8px]
+        px-[9px]
         py-[4px]
-        text-[5.9px]
+        text-[7.5px]
         font-[700]
         leading-none
       "
@@ -2965,7 +2978,7 @@ function PanelTab({
       className={`
         relative
         h-[36px]
-        text-[7px]
+        text-[7.5px]
         font-[700]
 
         ${active
@@ -3009,9 +3022,9 @@ function DetailSection({
       <h3
         className="
           mb-[8px]
-          text-[7.3px]
+          text-[8.5px]
           font-[800]
-          text-[#283A6D]
+          text-[#182A65]
         "
       >
         {title}
@@ -3051,7 +3064,7 @@ function DetailRow({
       "
     >
       <Icon
-        size={11}
+        size={13}
         className="
           mt-[1px]
           shrink-0
@@ -3063,10 +3076,10 @@ function DetailRow({
         className="
           min-w-0
           break-words
-          text-[6.3px]
+          text-[7.5px]
           font-[500]
-          leading-[9px]
-          text-[#334574]
+          leading-[11px]
+          text-[#20316A]
         "
       >
         {children}
@@ -3110,7 +3123,7 @@ function QuickAction({
       className="
         relative
         flex
-        h-[45px]
+        h-[60px]
         min-w-0
         items-center
         gap-[9px]
@@ -3127,8 +3140,8 @@ function QuickAction({
       <div
         className="
           flex
-          h-[28px]
-          w-[28px]
+          h-[32px]
+          w-[32px]
           shrink-0
           items-center
           justify-center
@@ -3140,7 +3153,7 @@ function QuickAction({
         }}
       >
         <Icon
-          size={13}
+          size={15}
           style={{
             color:
               iconColor,
@@ -3151,10 +3164,10 @@ function QuickAction({
       <span
         className="
           min-w-0
-          text-[6.4px]
+          text-[7.5px]
           font-[700]
-          leading-[9px]
-          text-[#273A70]
+          leading-[11px]
+          text-[#182A65]
         "
       >
         {children}
@@ -3166,16 +3179,16 @@ function QuickAction({
             className="
             absolute
             right-[7px]
-            top-[-6px]
+            top-[6px]
             flex
-            h-[17px]
-            min-w-[17px]
+            h-[18px]
+            min-w-[18px]
             items-center
             justify-center
             rounded-full
             bg-[#F18C13]
             px-[4px]
-            text-[5.7px]
+            text-[7px]
             font-[800]
             text-white
           "

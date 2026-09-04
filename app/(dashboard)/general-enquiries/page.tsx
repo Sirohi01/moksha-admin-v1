@@ -2047,18 +2047,14 @@ export default function GeneralEnquiriesPage() {
                             >
                               <button
                                 type="button"
-                                onClick={(
-                                  event
-                                ) => {
+                                onClick={(event) => {
                                   event.stopPropagation();
-
-                                  setSelected(
-                                    enquiry
-                                  );
+                                  setSelected(enquiry);
                                 }}
+                                title="View Details"
                                 className="
                                   flex
-                                  h-[27px]
+                                  h-[28px]
                                   w-[28px]
                                   items-center
                                   justify-center
@@ -2070,23 +2066,18 @@ export default function GeneralEnquiriesPage() {
                                   hover:bg-[#F7F9FB]
                                 "
                               >
-                                <Eye
-                                  size={
-                                    11
-                                  }
-                                />
+                                <Eye size={14} />
                               </button>
 
                               <button
                                 type="button"
-                                onClick={(
-                                  event
-                                ) => {
+                                onClick={(event) => {
                                   event.stopPropagation();
                                 }}
+                                title="Reply / View"
                                 className="
                                   flex
-                                  h-[27px]
+                                  h-[28px]
                                   w-[28px]
                                   items-center
                                   justify-center
@@ -2098,11 +2089,7 @@ export default function GeneralEnquiriesPage() {
                                   hover:bg-[#F7F9FB]
                                 "
                               >
-                                <ArrowLeft
-                                  size={
-                                    11
-                                  }
-                                />
+                                <ArrowLeft size={14} />
                               </button>
                             </div>
                           </td>

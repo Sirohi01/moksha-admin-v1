@@ -561,9 +561,9 @@ function Badge({
         whitespace-nowrap
         rounded-[4px]
         border
-        px-[6px]
+        px-[9px]
         py-[4px]
-        text-[7px]
+        text-[7.5px]
         font-[700]
         leading-none
       "
@@ -1432,12 +1432,13 @@ export default function CommunicationsFollowUps() {
                         {/* ACTIONS */}
 
                         <td className="px-[8px] align-middle">
-                          <div className="flex items-center justify-center gap-[4px]">
+                          <div className="flex items-center justify-center gap-[5px]">
                             <button
+                              title="View Details"
                               className="
                                 flex
-                                h-[26px]
-                                w-[27px]
+                                h-[28px]
+                                w-[28px]
                                 shrink-0
                                 items-center
                                 justify-center
@@ -1449,14 +1450,15 @@ export default function CommunicationsFollowUps() {
                                 hover:bg-[#F8FAFC]
                               "
                             >
-                              <Eye size={11} />
+                              <Eye size={14} />
                             </button>
 
                             <button
+                              title="More Options"
                               className="
                                 flex
-                                h-[26px]
-                                w-[27px]
+                                h-[28px]
+                                w-[28px]
                                 shrink-0
                                 items-center
                                 justify-center
@@ -1468,7 +1470,7 @@ export default function CommunicationsFollowUps() {
                                 hover:bg-[#F8FAFC]
                               "
                             >
-                              <MoreVertical size={11} />
+                              <MoreVertical size={14} />
                             </button>
                           </div>
                         </td>

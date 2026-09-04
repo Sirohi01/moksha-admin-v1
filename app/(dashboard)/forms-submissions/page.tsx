@@ -707,82 +707,83 @@ export default function FormsSubmissionsPage() {
           STATS
       ====================================================== */}
 
-      <div
-        className="
-          mt-[15px]
-          grid
-          min-w-0
-          grid-cols-5
-          gap-[10px]
-        "
-      >
-        <StatCard
-          label="Total Submissions"
-          value="1,248"
-          icon={FileSpreadsheet}
-          iconBg="#E5F5E9"
-          iconColor="#267E4A"
-          change="18.6%"
-        />
+      <div className="mt-[15px] w-full min-w-0 overflow-x-auto pb-[4px]">
+        <div
+          className="
+            grid
+            w-full
+            min-w-[950px]
+            grid-cols-5
+            gap-[10px]
+          "
+        >
+          <StatCard
+            label="Total Submissions"
+            value="1,248"
+            icon={FileSpreadsheet}
+            iconBg="#E5F5E9"
+            iconColor="#267E4A"
+            change="18.6%"
+          />
 
-        <StatCard
-          label="New This Week"
-          value="342"
-          icon={FileSpreadsheet}
-          iconBg="#E9F2FE"
-          iconColor="#3479D3"
-          change="22.4%"
-        />
+          <StatCard
+            label="New This Week"
+            value="342"
+            icon={FileSpreadsheet}
+            iconBg="#E9F2FE"
+            iconColor="#3479D3"
+            change="22.4%"
+          />
 
-        <StatCard
-          label="Pending / Unread"
-          value="186"
-          icon={Clock3}
-          iconBg="#FFF0E0"
-          iconColor="#F08324"
-          change="8.3%"
-          negative
-        />
+          <StatCard
+            label="Pending / Unread"
+            value="186"
+            icon={Clock3}
+            iconBg="#FFF0E0"
+            iconColor="#F08324"
+            change="8.3%"
+            negative
+          />
 
-        <StatCard
-          label="Responded"
-          value="876"
-          icon={CheckCircle2}
-          iconBg="#F0E8FD"
-          iconColor="#7650D5"
-          change="16.2%"
-        />
+          <StatCard
+            label="Responded"
+            value="876"
+            icon={CheckCircle2}
+            iconBg="#F0E8FD"
+            iconColor="#7650D5"
+            change="16.2%"
+          />
 
-        <StatCard
-          label="Conversion Rate"
-          value="6.24%"
-          icon={Filter}
-          iconBg="#E3F4EF"
-          iconColor="#2A8871"
-          change="1.35%"
-        />
+          <StatCard
+            label="Conversion Rate"
+            value="6.24%"
+            icon={Filter}
+            iconBg="#E3F4EF"
+            iconColor="#2A8871"
+            change="1.35%"
+          />
+        </div>
       </div>
 
       {/* ======================================================
           FILTER BAR
       ====================================================== */}
 
-      <div
-        className="
-          mt-[15px]
-          grid
-          w-full
-          min-w-0
-          grid-cols-[minmax(220px,1.25fr)_150px_150px_230px_minmax(0,1fr)_105px]
-          gap-[9px]
-          overflow-hidden
-          rounded-[6px]
-          border
-          border-[#E5E8EC]
-          bg-white
-          p-[8px]
-        "
-      >
+      <div className="mt-[15px] w-full min-w-0 overflow-x-auto pb-[4px]">
+        <div
+          className="
+            grid
+            w-full
+            min-w-[950px]
+            grid-cols-[minmax(220px,1.25fr)_150px_150px_230px_minmax(0,1fr)_105px]
+            gap-[9px]
+            rounded-[6px]
+            border
+            border-[#E5E8EC]
+            bg-white
+            p-[8px]
+          "
+        >
         {/* SEARCH */}
 
         <div
@@ -825,7 +826,7 @@ export default function FormsSubmissionsPage() {
               min-w-0
               flex-1
               bg-transparent
-              text-[7px]
+              text-[7.5px]
               font-[600]
               text-[#334574]
               outline-none
@@ -911,7 +912,7 @@ export default function FormsSubmissionsPage() {
             border-[#DFE4EA]
             bg-white
             px-[10px]
-            text-[7px]
+            text-[7.5px]
             font-[600]
             text-[#334574]
           "
@@ -954,7 +955,7 @@ export default function FormsSubmissionsPage() {
             border
             border-[#DFE4EA]
             bg-white
-            text-[7px]
+            text-[7.5px]
             font-[700]
             text-[#263A70]
           "
@@ -963,6 +964,7 @@ export default function FormsSubmissionsPage() {
 
           More Filters
         </button>
+        </div>
       </div>
 
       {/* ======================================================
@@ -975,9 +977,9 @@ export default function FormsSubmissionsPage() {
           grid
           w-full
           min-w-0
-          grid-cols-[245px_minmax(0,1fr)]
+          grid-cols-1
           gap-[10px]
-          overflow-hidden
+          lg:grid-cols-[245px_minmax(0,1fr)]
         "
       >
         {/* ====================================================
@@ -1003,98 +1005,79 @@ export default function FormsSubmissionsPage() {
               pt-[11px]
             "
           >
-            <h2
-              className="
-                text-[9px]
-                font-[800]
-                text-[#203470]
-              "
-            >
+            <h2 className="text-[10px] font-[800] text-[#182A65]">
               Form Types
             </h2>
 
-            <div
-              className="
-                mt-[11px]
-                space-y-[10px]
-              "
-            >
-              {FORM_TYPES.map(
-                (item) => {
-                  const Icon =
-                    item.icon;
+            <div className="mt-[11px] space-y-[10px]">
+              {FORM_TYPES.map((item) => {
+                const Icon = item.icon;
 
-                  return (
-                    <button
-                      type="button"
-                      key={item.type}
-                      onClick={() => {
-                        setFormFilter(
-                          item.type
-                        );
-
-                        setPage(1);
-                      }}
+                return (
+                  <button
+                    type="button"
+                    key={item.type}
+                    onClick={() => {
+                      setFormFilter(item.type);
+                      setPage(1);
+                    }}
+                    className="
+                      flex
+                      w-full
+                      min-w-0
+                      items-center
+                      gap-[8px]
+                    "
+                  >
+                    <div
                       className="
                         flex
-                        w-full
-                        min-w-0
+                        h-[22px]
+                        w-[22px]
+                        shrink-0
                         items-center
-                        gap-[8px]
+                        justify-center
+                        rounded-full
+                      "
+                      style={{
+                        backgroundColor: item.bg,
+                      }}
+                    >
+                      <Icon
+                        size={11}
+                        style={{
+                          color: item.color,
+                        }}
+                      />
+                    </div>
+
+                    <span
+                      className="
+                        min-w-0
+                        flex-1
+                        truncate
+                        text-left
+                        text-[7.5px]
+                        font-[700]
+                        text-[#293B70]
                       "
                     >
-                      <div
-                        className="
-                          flex
-                          h-[22px]
-                          w-[22px]
-                          shrink-0
-                          items-center
-                          justify-center
-                          rounded-full
-                        "
-                        style={{
-                          backgroundColor:
-                            item.bg,
-                        }}
-                      >
-                        <Icon
-                          size={11}
-                          style={{
-                            color:
-                              item.color,
-                          }}
-                        />
-                      </div>
+                      {item.type}
+                    </span>
 
-                      <span
-                        className="
-                          min-w-0
-                          flex-1
-                          truncate
-                          text-left
-                          text-[6.6px]
-                          font-[700]
-                          text-[#293B70]
-                        "
-                      >
-                        {item.type}
-                      </span>
-
-                      <span
-                        className="
-                          shrink-0
-                          text-[6.2px]
-                          font-[700]
-                          text-[#526080]
-                        "
-                      >
-                        {item.count}
-                      </span>
-                    </button>
-                  );
-                }
-              )}
+                    <span
+                      className="
+                        shrink-0
+                        text-[7.5px]
+                        font-[700]
+                        text-[#526080]
+                      "
+                    >
+                      {item.count}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
 
             <button
@@ -1106,16 +1089,14 @@ export default function FormsSubmissionsPage() {
                 items-center
                 justify-center
                 gap-[7px]
-                text-[6.7px]
+                text-[7.5px]
                 font-[700]
                 text-[#385084]
+                hover:text-[#182A65]
               "
             >
               View All Forms
-
-              <ArrowRight
-                size={10}
-              />
+              <ArrowRight size={10} />
             </button>
           </div>
 
@@ -1133,13 +1114,7 @@ export default function FormsSubmissionsPage() {
               pt-[11px]
             "
           >
-            <h2
-              className="
-                text-[9px]
-                font-[800]
-                text-[#203470]
-              "
-            >
+            <h2 className="text-[10px] font-[800] text-[#182A65]">
               Submission Status
             </h2>
 
@@ -1188,7 +1163,7 @@ export default function FormsSubmissionsPage() {
                 >
                   <strong
                     className="
-                      text-[13px]
+                      text-[16px]
                       font-[800]
                       leading-none
                       text-[#182A65]
@@ -1200,7 +1175,7 @@ export default function FormsSubmissionsPage() {
                   <span
                     className="
                       mt-[4px]
-                      text-[5.5px]
+                      text-[7.5px]
                       font-[600]
                       text-[#5D6983]
                     "
@@ -1252,16 +1227,14 @@ export default function FormsSubmissionsPage() {
                 items-center
                 justify-center
                 gap-[7px]
-                text-[6.6px]
+                text-[7.5px]
                 font-[700]
                 text-[#385084]
+                hover:text-[#182A65]
               "
             >
               View Status Report
-
-              <ArrowRight
-                size={10}
-              />
+              <ArrowRight size={10} />
             </button>
           </div>
         </aside>
@@ -1274,7 +1247,6 @@ export default function FormsSubmissionsPage() {
           className="
             w-full
             min-w-0
-            overflow-hidden
             rounded-[7px]
             border
             border-[#E2E7EB]
@@ -1296,7 +1268,7 @@ export default function FormsSubmissionsPage() {
           >
             <h2
               className="
-                text-[9px]
+                text-[10px]
                 font-[800]
                 text-[#203470]
               "
@@ -1314,13 +1286,12 @@ export default function FormsSubmissionsPage() {
             >
               <span
                 className="
-                  text-[5.8px]
+                  text-[7.5px]
                   font-[600]
                   text-[#5D6985]
                 "
               >
-                Showing 1 to 10 of
-                1,248
+                Showing 1 to 10 of 1,248
               </span>
 
               <div
@@ -1331,22 +1302,14 @@ export default function FormsSubmissionsPage() {
                 "
               >
                 <SmallPageButton>
-                  <ChevronLeft
-                    size={9}
-                  />
+                  <ChevronLeft size={9} />
                 </SmallPageButton>
 
-                <SmallPageButton active>
-                  1
-                </SmallPageButton>
+                <SmallPageButton active>1</SmallPageButton>
 
-                <SmallPageButton>
-                  2
-                </SmallPageButton>
+                <SmallPageButton>2</SmallPageButton>
 
-                <SmallPageButton>
-                  3
-                </SmallPageButton>
+                <SmallPageButton>3</SmallPageButton>
 
                 <span
                   className="
@@ -1358,77 +1321,36 @@ export default function FormsSubmissionsPage() {
                   ...
                 </span>
 
-                <SmallPageButton>
-                  125
-                </SmallPageButton>
+                <SmallPageButton>125</SmallPageButton>
 
                 <SmallPageButton>
-                  <ChevronRight
-                    size={9}
-                  />
+                  <ChevronRight size={9} />
                 </SmallPageButton>
               </div>
             </div>
           </div>
 
-          {/* TABLE */}
+          {/* TABLE SCROLL WRAPPER */}
 
-          <table
-            className="
-              w-full
-              table-fixed
-              border-collapse
-            "
-          >
-            <colgroup>
-              <col
-                style={{
-                  width: "4%",
-                }}
-              />
-
-              <col
-                style={{
-                  width: "21%",
-                }}
-              />
-
-              <col
-                style={{
-                  width: "17%",
-                }}
-              />
-
-              <col
-                style={{
-                  width: "14%",
-                }}
-              />
-
-              <col
-                style={{
-                  width: "14%",
-                }}
-              />
-
-              <col
-                style={{
-                  width: "13%",
-                }}
-              />
-
-              <col
-                style={{
-                  width: "13%",
-                }}
-              />
-
-              <col
-                style={{
-                  width: "4%",
-                }}
-              />
-            </colgroup>
+          <div className="w-full min-w-0 overflow-x-auto">
+            <table
+              className="
+                w-full
+                min-w-[1100px]
+                table-fixed
+                border-collapse
+              "
+            >
+              <colgroup>
+                <col style={{ width: "4%" }} />
+                <col style={{ width: "22%" }} />
+                <col style={{ width: "18%" }} />
+                <col style={{ width: "14%" }} />
+                <col style={{ width: "14%" }} />
+                <col style={{ width: "12%" }} />
+                <col style={{ width: "11%" }} />
+                <col style={{ width: "5%" }} />
+              </colgroup>
 
             <thead>
               <tr
@@ -1639,55 +1561,40 @@ export default function FormsSubmissionsPage() {
 
                       {/* DATE */}
 
-                      <td
-                        className="
-                          align-middle
-                        "
-                      >
+                      <td className="px-[10px] align-middle">
                         <p
                           className="
-                            text-xs
-                            font-[600]
-                            leading-[12px]
-                            text-[#415079]
+                            whitespace-nowrap
+                            text-[7.5px]
+                            font-[700]
+                            leading-[11px]
+                            text-[#26396D]
                           "
                         >
-                          {
-                            item.submittedDate
-                          }
+                          {item.submittedDate}
                         </p>
 
                         <p
                           className="
-                            mt-[2px]
-                            text-[5.6px]
+                            mt-[1px]
+                            whitespace-nowrap
+                            text-[7px]
                             font-[500]
-                            text-[#596783]
+                            leading-[10px]
+                            text-[#556488]
                           "
                         >
-                          {
-                            item.submittedTime
-                          }
+                          {item.submittedTime}
                         </p>
                       </td>
 
                       {/* STATUS */}
 
-                      <td
-                        className="
-                          align-middle
-                        "
-                      >
+                      <td className="align-middle">
                         <MetaBadge
-                          bg={
-                            statusMeta.bg
-                          }
-                          color={
-                            statusMeta.color
-                          }
-                          border={
-                            statusMeta.border
-                          }
+                          bg={statusMeta.bg}
+                          color={statusMeta.color}
+                          border={statusMeta.border}
                         >
                           {item.status}
                         </MetaBadge>
@@ -1695,24 +1602,17 @@ export default function FormsSubmissionsPage() {
 
                       {/* ASSIGNED */}
 
-                      <td
-                        className="
-                          min-w-0
-                          align-middle
-                        "
-                      >
+                      <td className="min-w-0 align-middle">
                         <p
                           className="
                             truncate
                             pr-[8px]
-                            text-[5.9px]
+                            text-[7.5px]
                             font-[600]
                             text-[#344574]
                           "
                         >
-                          {
-                            item.assignedTo
-                          }
+                          {item.assignedTo}
                         </p>
                       </td>
 
@@ -1723,38 +1623,30 @@ export default function FormsSubmissionsPage() {
                           align-middle
                         "
                       >
-                        <div
-                          className="
-                            flex
-                            items-center
-                            justify-end
-                            gap-[10px]
-                            pr-[8px]
-                          "
-                        >
-                          <Eye
-                            size={10}
-                            className="
-                              cursor-pointer
-                              text-[#354978]
-                            "
-                          />
+                        <div className="flex items-center justify-end gap-[6px] pr-[8px]">
+                          <button
+                            type="button"
+                            title="View Details"
+                            className="flex h-[28px] w-[28px] items-center justify-center rounded-[5px] border border-[#E3E7EC] bg-white text-[#263C76] hover:bg-[#F8FAFC]"
+                          >
+                            <Eye size={14} />
+                          </button>
 
-                          <Mail
-                            size={10}
-                            className="
-                              cursor-pointer
-                              text-[#354978]
-                            "
-                          />
+                          <button
+                            type="button"
+                            title="Send Email"
+                            className="flex h-[28px] w-[28px] items-center justify-center rounded-[5px] border border-[#E3E7EC] bg-white text-[#263C76] hover:bg-[#F8FAFC]"
+                          >
+                            <Mail size={14} />
+                          </button>
 
-                          <MoreHorizontal
-                            size={11}
-                            className="
-                              cursor-pointer
-                              text-[#354978]
-                            "
-                          />
+                          <button
+                            type="button"
+                            title="More Actions"
+                            className="flex h-[28px] w-[28px] items-center justify-center rounded-[5px] border border-[#E3E7EC] bg-white text-[#263C76] hover:bg-[#F8FAFC]"
+                          >
+                            <MoreHorizontal size={14} />
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -1763,6 +1655,7 @@ export default function FormsSubmissionsPage() {
               )}
             </tbody>
           </table>
+          </div>
 
           {/* =================================================
               TABLE FOOT
@@ -1784,16 +1677,16 @@ export default function FormsSubmissionsPage() {
             <div className="relative">
               <select
                 className="
-                  h-[27px]
-                  w-[100px]
+                  h-[30px]
+                  w-[110px]
                   appearance-none
                   rounded-[4px]
                   border
                   border-[#DFE4EA]
                   bg-white
                   px-[8px]
-                  pr-[22px]
-                  text-[6px]
+                  pr-[24px]
+                  text-[7.5px]
                   font-[700]
                   text-[#344574]
                   outline-none
@@ -1817,13 +1710,14 @@ export default function FormsSubmissionsPage() {
               </select>
 
               <ChevronDown
-                size={8}
+                size={11}
                 className="
                   pointer-events-none
                   absolute
                   right-[7px]
                   top-1/2
                   -translate-y-1/2
+                  text-[#344574]
                 "
               />
             </div>
@@ -1930,282 +1824,160 @@ export default function FormsSubmissionsPage() {
       </div>
 
       {/* ======================================================
-          BOTTOM REPORT CARDS
+          BOTTOM REPORT CARDS (OVERFLOW X ENABLED)
       ====================================================== */}
 
-      <div
-        className="
-          mt-[10px]
-          grid
-          min-w-0
-          grid-cols-4
-          gap-[10px]
-        "
-      >
-        {/* TOP PERFORMING */}
+      <div className="mt-[10px] w-full min-w-0 overflow-x-auto pb-[4px]">
+        <div
+          className="
+            grid
+            w-full
+            min-w-[850px]
+            grid-cols-4
+            gap-[10px]
+          "
+        >
+          {/* TOP PERFORMING */}
 
-        <BottomCard>
-          <div
-            className="
-              flex
-              items-center
-              gap-[7px]
-            "
-          >
-            <FileSpreadsheet
-              size={12}
-              className="
-                text-[#42578B]
-              "
-            />
+          <BottomCard>
+            <div className="flex items-center gap-[7px]">
+              <FileSpreadsheet size={13} className="text-[#42578B]" />
 
-            <h3
-              className="
-                text-[7px]
-                font-[800]
-                text-[#334575]
-              "
-            >
-              Top Performing Forms
-            </h3>
-          </div>
+              <h3 className="text-[10px] font-[800] text-[#182A65]">
+                Top Performing Forms
+              </h3>
+            </div>
 
-          <div
-            className="
-              mt-[10px]
-              space-y-[7px]
-            "
-          >
-            <RankRow
-              number={1}
-              label="Sewa Help Request"
-              value="6.8%"
-            />
+            <div className="mt-[10px] space-y-[7px]">
+              <RankRow
+                number={1}
+                label="Sewa Help Request"
+                value="6.8%"
+              />
 
-            <RankRow
-              number={2}
-              label="Volunteer Registration"
-              value="5.4%"
-            />
+              <RankRow
+                number={2}
+                label="Volunteer Registration"
+                value="5.4%"
+              />
 
-            <RankRow
-              number={3}
-              label="CSR / Partner Enquiry"
-              value="4.9%"
-            />
-          </div>
-
-          <ReportLink>
-            View Full Report
-          </ReportLink>
-        </BottomCard>
-
-        {/* SOURCES */}
-
-        <BottomCard>
-          <div
-            className="
-              flex
-              items-center
-              gap-[7px]
-            "
-          >
-            <Users
-              size={12}
-              className="
-                text-[#42578B]
-              "
-            />
-
-            <h3
-              className="
-                text-[7px]
-                font-[800]
-                text-[#334575]
-              "
-            >
-              Top Sources
-            </h3>
-          </div>
-
-          <div
-            className="
-              mt-[10px]
-              space-y-[7px]
-            "
-          >
-            <RankRow
-              number={1}
-              label="Direct / Type"
-              value="33.7%"
-            />
-
-            <RankRow
-              number={2}
-              label="Organic Search"
-              value="25.0%"
-            />
-
-            <RankRow
-              number={3}
-              label="Social Media"
-              value="15.9%"
-            />
-          </div>
-
-          <ReportLink>
-            View Source Report
-          </ReportLink>
-        </BottomCard>
-
-        {/* RESPONSE */}
-
-        <BottomCard>
-          <div
-            className="
-              flex
-              items-center
-              gap-[7px]
-            "
-          >
-            <Clock3
-              size={12}
-              className="
-                text-[#42578B]
-              "
-            />
-
-            <h3
-              className="
-                text-[7px]
-                font-[800]
-                text-[#334575]
-              "
-            >
-              Response Time (Avg.)
-            </h3>
-          </div>
-
-          <div
-            className="
-              mt-[13px]
-              flex
-              items-center
-              gap-[10px]
-            "
-          >
-            <div
-              className="
-                flex
-                h-[27px]
-                w-[27px]
-                items-center
-                justify-center
-                rounded-full
-                bg-[#E7F3EC]
-              "
-            >
-              <Clock3
-                size={13}
-                className="
-                  text-[#33865A]
-                "
+              <RankRow
+                number={3}
+                label="CSR / Partner Enquiry"
+                value="4.9%"
               />
             </div>
 
-            <div>
-              <p
-                className="
-                  text-[15px]
-                  font-[800]
-                  leading-none
-                  text-[#182A65]
-                "
-              >
-                2h 45m
-              </p>
+            <ReportLink>View Full Report</ReportLink>
+          </BottomCard>
 
-              <p
-                className="
-                  mt-[7px]
-                  text-[6px]
-                  font-[700]
-                  text-[#299252]
-                "
-              >
-                ↓ 12.6%
-                <span
-                  className="
-                    ml-[4px]
-                    text-[#66728A]
-                  "
-                >
-                  vs last 7 days
-                </span>
-              </p>
+          {/* SOURCES */}
+
+          <BottomCard>
+            <div className="flex items-center gap-[7px]">
+              <Users size={13} className="text-[#42578B]" />
+
+              <h3 className="text-[10px] font-[800] text-[#182A65]">
+                Top Sources
+              </h3>
             </div>
-          </div>
 
-          <ReportLink>
-            View Response Report
-          </ReportLink>
-        </BottomCard>
+            <div className="mt-[10px] space-y-[7px]">
+              <RankRow
+                number={1}
+                label="Direct / Type"
+                value="33.7%"
+              />
 
-        {/* UNREAD */}
+              <RankRow
+                number={2}
+                label="Organic Search"
+                value="25.0%"
+              />
 
-        <BottomCard>
-          <h3
-            className="
-              text-[8px]
-              font-[800]
-              text-[#334575]
-            "
-          >
-            Unread Submissions
-          </h3>
-
-          <div
-            className="
-              mt-[15px]
-              flex
-              items-center
-              gap-[10px]
-            "
-          >
-            <div
-              className="
-                flex
-                h-[30px]
-                w-[30px]
-                items-center
-                justify-center
-                rounded-full
-                bg-[#F1F3F6]
-              "
-            >
-              <Mail
-                size={15}
-                className="
-                  text-[#425A90]
-                "
+              <RankRow
+                number={3}
+                label="Social Media"
+                value="15.9%"
               />
             </div>
 
-            <strong
-              className="
-                text-[17px]
-                font-[800]
-                text-[#182A65]
-              "
-            >
-              186
-            </strong>
-          </div>
+            <ReportLink>View Source Report</ReportLink>
+          </BottomCard>
 
-          <ReportLink>
-            View Unread
-          </ReportLink>
-        </BottomCard>
+          {/* RESPONSE */}
+
+          <BottomCard>
+            <div className="flex items-center gap-[7px]">
+              <Clock3 size={13} className="text-[#42578B]" />
+
+              <h3 className="text-[10px] font-[800] text-[#182A65]">
+                Response Time (Avg.)
+              </h3>
+            </div>
+
+            <div className="mt-[13px] flex items-center gap-[10px]">
+              <div
+                className="
+                  flex
+                  h-[30px]
+                  w-[30px]
+                  items-center
+                  justify-center
+                  rounded-full
+                  bg-[#E7F3EC]
+                "
+              >
+                <Clock3 size={14} className="text-[#33865A]" />
+              </div>
+
+              <div>
+                <p className="text-[18px] font-[800] leading-none text-[#182A65]">
+                  2h 45m
+                </p>
+
+                <p className="mt-[5px] text-[7.5px] font-[700] text-[#299252]">
+                  ↓ 12.6%
+                  <span className="ml-[4px] font-[500] text-[#66728A]">
+                    vs last 7 days
+                  </span>
+                </p>
+              </div>
+            </div>
+
+            <ReportLink>View Response Report</ReportLink>
+          </BottomCard>
+
+          {/* UNREAD */}
+
+          <BottomCard>
+            <h3 className="text-[10px] font-[800] text-[#182A65]">
+              Unread Submissions
+            </h3>
+
+            <div className="mt-[15px] flex items-center gap-[10px]">
+              <div
+                className="
+                  flex
+                  h-[32px]
+                  w-[32px]
+                  items-center
+                  justify-center
+                  rounded-full
+                  bg-[#F1F3F6]
+                "
+              >
+                <Mail size={15} className="text-[#425A90]" />
+              </div>
+
+              <strong className="text-[18px] font-[800] text-[#182A65]">
+                186
+              </strong>
+            </div>
+
+            <ReportLink>View Unread</ReportLink>
+          </BottomCard>
+        </div>
       </div>
     </section>
   );
@@ -2246,15 +2018,14 @@ function StatCard({
         flex
         flex-col
         justify-between
-        h-[102px]
+        h-[116px]
         min-w-0
-        overflow-hidden
         rounded-[7px]
         border
         border-[#E3E7EB]
         bg-white
-        px-[10px]
-        py-[9px]
+        px-[12px]
+        py-[11px]
       "
     >
       <div
@@ -2262,14 +2033,14 @@ function StatCard({
           flex
           min-w-0
           items-center
-          gap-[9px]
+          gap-[10px]
         "
       >
         <div
           className="
             flex
-            h-[40px]
-            w-[40px]
+            h-[44px]
+            w-[44px]
             shrink-0
             items-center
             justify-center
@@ -2280,7 +2051,7 @@ function StatCard({
           }}
         >
           <Icon
-            size={20}
+            size={22}
             style={{
               color: iconColor,
             }}
@@ -2414,9 +2185,9 @@ function FilterSelect({
           bg-white
           px-[10px]
           pr-[26px]
-          text-[7px]
+          text-[7.5px]
           font-[700]
-          text-[#334574]
+          text-[#182A65]
           outline-none
         "
       >
@@ -2424,14 +2195,14 @@ function FilterSelect({
       </select>
 
       <ChevronDown
-        size={9}
+        size={11}
         className="
           pointer-events-none
           absolute
           right-[8px]
           top-1/2
           -translate-y-1/2
-          text-[#334574]
+          text-[#182A65]
         "
       />
     </div>
@@ -2450,11 +2221,11 @@ function TableHead({
   return (
     <th
       className="
-        text-xs
+        text-[7.5px]
         font-[700]
         uppercase
         tracking-wider
-        text-[#46567D]
+        text-[#182A65]
       "
     >
       {children}
@@ -2487,9 +2258,9 @@ function MetaBadge({
         whitespace-nowrap
         rounded-[4px]
         border
-        px-[7px]
-        py-[3px]
-        text-xs
+        px-[9px]
+        py-[4px]
+        text-[7.5px]
         font-[700]
         leading-none
       "
@@ -2537,21 +2308,20 @@ function LegendRow({
       >
         <span
           className="
-            h-[6px]
-            w-[6px]
+            h-[8px]
+            w-[8px]
             shrink-0
             rounded-full
           "
           style={{
-            backgroundColor:
-              color,
+            backgroundColor: color,
           }}
         />
 
         <span
           className="
             truncate
-            text-[5.7px]
+            text-[7.5px]
             font-[600]
             text-[#324575]
           "
@@ -2564,8 +2334,8 @@ function LegendRow({
         className="
           shrink-0
           whitespace-nowrap
-          text-[5.3px]
-          font-[600]
+          text-[7.5px]
+          font-[700]
           text-[#324575]
         "
       >
@@ -2587,9 +2357,7 @@ function PageButton({
 }: {
   active?: boolean;
   disabled?: boolean;
-
   onClick?: () => void;
-
   children: ReactNode;
 }) {
   return (
@@ -2606,7 +2374,7 @@ function PageButton({
         rounded-[4px]
         border
         px-[5px]
-        text-[6px]
+        text-[7.5px]
         font-[700]
         disabled:opacity-40
 
@@ -2644,7 +2412,7 @@ function SmallPageButton({
         rounded-[3px]
         border
         px-[4px]
-        text-[5.6px]
+        text-[7px]
         font-[700]
 
         ${active
@@ -2671,7 +2439,7 @@ function BottomCard({
     <div
       className="
         relative
-        min-h-[119px]
+        min-h-[125px]
         min-w-0
         overflow-hidden
         rounded-[7px]
@@ -2706,14 +2474,14 @@ function RankRow({
       className="
         grid
         min-w-0
-        grid-cols-[18px_minmax(0,1fr)_35px]
+        grid-cols-[20px_minmax(0,1fr)_42px]
         items-center
         gap-[4px]
       "
     >
       <span
         className="
-          text-[6px]
+          text-[7.5px]
           font-[700]
           text-[#354979]
         "
@@ -2724,7 +2492,7 @@ function RankRow({
       <span
         className="
           truncate
-          text-[6.2px]
+          text-[7.5px]
           font-[600]
           text-[#354979]
         "
@@ -2735,7 +2503,7 @@ function RankRow({
       <span
         className="
           text-right
-          text-[6px]
+          text-[7.5px]
           font-[700]
           text-[#354979]
         "
@@ -2765,16 +2533,15 @@ function ReportLink({
         flex
         items-center
         gap-[6px]
-        text-[5.9px]
+        text-[7.5px]
         font-[700]
         text-[#42578B]
+        hover:text-[#182A65]
       "
     >
       {children}
 
-      <ArrowRight
-        size={9}
-      />
+      <ArrowRight size={10} />
     </button>
   );
 }

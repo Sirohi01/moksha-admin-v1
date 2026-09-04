@@ -3,12 +3,14 @@
 import {
   useRef,
   useState,
+  useEffect,
+  Suspense,
   type ChangeEvent,
   type FormEvent,
   type ReactNode,
 } from "react";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import {
   CalendarDays,
@@ -313,8 +315,10 @@ const popularCategories = [
    PAGE
 ============================================================ */
 
-export default function AddNewEnquiryPage() {
+function AddNewEnquiryContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const urlCategory = searchParams.get("category");
 
   const fileInputRef =
     useRef<HTMLInputElement>(null);
@@ -340,6 +344,23 @@ export default function AddNewEnquiryPage() {
 
   const [submitted, setSubmitted] =
     useState(false);
+
+  useEffect(() => {
+    if (!urlCategory) return;
+    const cat = urlCategory.toLowerCase();
+    if (cat === "csr") {
+      setForm((prev) => ({ ...prev, category: "CSR & Partnership" }));
+    } else if (cat === "contact" || cat === "general") {
+      setForm((prev) => ({ ...prev, category: "Sewa Support" }));
+    } else {
+      const match = categoryOptions.find(
+        (c) => c.toLowerCase() === cat
+      );
+      if (match) {
+        setForm((prev) => ({ ...prev, category: match }));
+      }
+    }
+  }, [urlCategory]);
 
   /* ==========================================================
      UPDATE FIELD
@@ -1598,7 +1619,7 @@ export default function AddNewEnquiryPage() {
                     <p
                       className="
                         mt-[3px]
-                        text-[5.9px]
+                        text-[7px]
                         font-[500]
                         text-[#728099]
                       "
@@ -1658,7 +1679,7 @@ export default function AddNewEnquiryPage() {
             <p
               className="
                 mt-[11px]
-                text-[6.8px]
+                text-[7.5px]
                 font-[500]
                 text-[#4C5978]
               "
@@ -1829,7 +1850,7 @@ export default function AddNewEnquiryPage() {
                           className="
                             mt-[2px]
                             truncate
-                            text-[5.9px]
+                            text-[7px]
                             font-[500]
                             text-[#68758F]
                           "
@@ -1892,7 +1913,7 @@ export default function AddNewEnquiryPage() {
                 <p
                   className="
                     mt-[7px]
-                    text-[6.6px]
+                    text-[7.5px]
                     font-[500]
                     leading-[10px]
                     text-[#46567D]
@@ -1932,7 +1953,7 @@ export default function AddNewEnquiryPage() {
                 <p
                   className="
                     mt-[12px]
-                    text-[6px]
+                    text-[7px]
                     font-[600]
                     text-[#61708B]
                   "
@@ -2045,6 +2066,14 @@ export default function AddNewEnquiryPage() {
         </div>
       </div>
     </form>
+  );
+}
+
+export default function AddNewEnquiryPage() {
+  return (
+    <Suspense fallback={<div className="p-4 text-[7.5px] font-[700] text-[#182A65]">Loading form...</div>}>
+      <AddNewEnquiryContent />
+    </Suspense>
   );
 }
 
@@ -2194,7 +2223,7 @@ const inputClass = `
   border-[#DFE4EA]
   bg-white
   px-[10px]
-  text-[7.3px]
+  text-[7.5px]
   font-[500]
   text-[#253970]
   outline-none
@@ -2247,9 +2276,9 @@ function SelectBox({
           bg-white
           px-[10px]
           pr-[28px]
-          text-[7.3px]
-          font-[600]
-          text-[#253970]
+          text-[7.5px]
+          font-[700]
+          text-[#182A65]
           outline-none
           focus:border-[#78B58F]
         "
@@ -2258,14 +2287,14 @@ function SelectBox({
       </select>
 
       <ChevronDown
-        size={10}
+        size={11}
         className="
           pointer-events-none
           absolute
           right-[9px]
           top-1/2
           -translate-y-1/2
-          text-[#253970]
+          text-[#182A65]
         "
       />
     </div>
@@ -2351,9 +2380,9 @@ function PrioritySelect({
           bg-white
           pl-[28px]
           pr-[28px]
-          text-[7.3px]
-          font-[600]
-          text-[#253970]
+          text-[7.5px]
+          font-[700]
+          text-[#182A65]
           outline-none
         "
       >
@@ -2375,13 +2404,14 @@ function PrioritySelect({
       </select>
 
       <ChevronDown
-        size={10}
+        size={11}
         className="
           pointer-events-none
           absolute
           right-[9px]
           top-1/2
           -translate-y-1/2
+          text-[#182A65]
         "
       />
     </div>
@@ -2441,9 +2471,9 @@ function PhoneField({
             bg-white
             px-[8px]
             pr-[20px]
-            text-[7.2px]
+            text-[7.5px]
             font-[700]
-            text-[#253970]
+            text-[#182A65]
             outline-none
           "
         >
@@ -2576,7 +2606,7 @@ function ContactMethodSelector({
                 gap-[5px]
                 border-r
                 border-[#DFE4EA]
-                text-[6.4px]
+                text-[7.5px]
                 font-[700]
                 last:border-r-0
 
@@ -2587,7 +2617,7 @@ function ContactMethodSelector({
               `}
             >
               <Icon
-                size={10}
+                size={12}
               />
 
               <span className="truncate">
@@ -2636,7 +2666,7 @@ function RadioGroup({
               items-center
               gap-[6px]
               whitespace-nowrap
-              text-[6.8px]
+              text-[7.5px]
               font-[600]
               text-[#354573]
             "
@@ -2732,16 +2762,16 @@ function InfoPoint({
         />
       </span>
 
-      <p
-        className="
-          text-[6.5px]
-          font-[500]
-          leading-[10px]
-          text-[#46557A]
-        "
-      >
-        {children}
-      </p>
+        <p
+          className="
+            text-[7.5px]
+            font-[500]
+            leading-[11px]
+            text-[#46557A]
+          "
+        >
+          {children}
+        </p>
     </div>
   );
 }
