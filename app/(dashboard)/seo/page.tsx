@@ -1,11 +1,16 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
 import {
+  Activity,
   AlertTriangle,
+  ArrowUpRight,
   BellRing,
   Check,
+  FileCheck2,
   Gauge,
+  Globe2,
   Link2Off,
   Play,
   RefreshCw,
@@ -18,22 +23,28 @@ import Spinner from "@/components/ui/Spinner";
 import {
   seoAuditApi,
   type SeoBrokenLink,
+  type SeoCompetitor,
+  type SeoCompetitorComparison,
   type SeoInsights,
   type SeoOverview,
   type SeoRecommendationResponse,
   type SeoScoreExplanation,
 } from "@/lib/seoAuditApi";
-import { ScorePill, SeverityBadge, formatDateTime, formatMs, formatNumber } from "@/components/seo/SeoBadges";
+import { Input } from "@/components/ui/Input";
+import { SeverityBadge, formatDateTime, formatMs, formatNumber } from "@/components/seo/SeoBadges";
+import { DonutChart } from "@/components/charts/DonutChart";
+import { MagnitudeBarChart } from "@/components/charts/MagnitudeBarChart";
+import { TrendChart } from "@/components/charts/TrendChart";
 
-type Tab = "Overview" | "Why this score" | "Broken links" | "Search insights" | "Alerts" | "AI plan";
+type Tab = "Overview" | "Why this score" | "Broken links" | "Search insights" | "Alerts" | "Competitors" | "AI plan";
 
-const TABS: Tab[] = ["Overview", "Why this score", "Broken links", "Search insights", "Alerts", "AI plan"];
+const TABS: Tab[] = ["Overview", "Why this score", "Broken links", "Search insights", "Alerts", "Competitors", "AI plan"];
 
 function Panel({ title, children, note }: { title: string; children: React.ReactNode; note?: string }) {
   return (
-    <div className="rounded-lg border border-surface-border bg-surface-card p-3">
-      <h3 className="mb-1 text-[13px] font-semibold text-text-primary">{title}</h3>
-      {note && <p className="mb-2 text-[11px] text-text-muted">{note}</p>}
+    <div className="rounded-xl border border-surface-border bg-surface-card p-3 shadow-sm">
+      <h3 className="mb-1 text-sm font-semibold text-text-primary">{title}</h3>
+      {note && <p className="mb-2 text-[11px] leading-4 text-text-muted">{note}</p>}
       {children}
     </div>
   );
@@ -51,7 +62,7 @@ function Metric({
   danger?: boolean;
 }) {
   return (
-    <div className="rounded-lg border border-surface-border bg-surface-card px-3 py-2">
+    <div className="rounded-lg border border-surface-border bg-surface-card px-3 py-2 shadow-sm">
       <span className="block text-[10px] uppercase tracking-wide text-text-muted">{label}</span>
       <span
         className={`text-[18px] font-semibold tabular-nums ${danger ? "text-status-danger-text" : "text-text-primary"}`}
@@ -75,6 +86,10 @@ export default function SeoDashboardPage() {
   const [brokenLinks, setBrokenLinks] = useState<SeoBrokenLink[]>([]);
   const [insights, setInsights] = useState<SeoInsights | null>(null);
   const [aiPlan, setAiPlan] = useState<SeoRecommendationResponse | null>(null);
+  const [competitors, setCompetitors] = useState<SeoCompetitor[]>([]);
+  const [comparison, setComparison] = useState<SeoCompetitorComparison | null>(null);
+  const [competitorLabel, setCompetitorLabel] = useState("");
+  const [competitorUrl, setCompetitorUrl] = useState("");
   const [tab, setTab] = useState<Tab>("Overview");
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
@@ -84,16 +99,20 @@ export default function SeoDashboardPage() {
     setLoading(true);
     setError(null);
     try {
-      const [overviewData, scoreData, linksData, insightsData] = await Promise.all([
+      const [overviewData, scoreData, linksData, insightsData, competitorData, comparisonData] = await Promise.all([
         seoAuditApi.overview(),
         seoAuditApi.score(),
         seoAuditApi.brokenLinks({ limit: 50 }),
         seoAuditApi.insights(),
+        seoAuditApi.competitors(),
+        seoAuditApi.competitorComparison(),
       ]);
       setOverview(overviewData);
       setScore(scoreData);
       setBrokenLinks(linksData.links);
       setInsights(insightsData);
+      setCompetitors(competitorData);
+      setComparison(comparisonData);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Could not load the SEO dashboard");
     } finally {
@@ -137,6 +156,21 @@ export default function SeoDashboardPage() {
     void load();
   };
 
+  const addCompetitor = async () => {
+    setBusy(true);
+    setError(null);
+    try {
+      await seoAuditApi.addCompetitor({ label: competitorLabel.trim(), url: competitorUrl.trim() });
+      setCompetitorLabel("");
+      setCompetitorUrl("");
+      await load();
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Could not add competitor");
+    } finally {
+      setBusy(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex h-full items-center justify-center">
@@ -148,19 +182,45 @@ export default function SeoDashboardPage() {
   const counts = overview?.counts ?? {};
   const search = overview?.search;
   const analytics = overview?.analytics;
+  const categoryScores = overview?.scores
+    ? [
+        { label: "Technical", value: overview.scores.technical ?? 0 },
+        { label: "On-page", value: overview.scores.onPage ?? 0 },
+        { label: "Content", value: overview.scores.content ?? 0 },
+        { label: "Performance", value: overview.scores.performance ?? 0 },
+        { label: "Visibility", value: overview.scores.visibility ?? 0 },
+      ]
+    : [];
+  const issueMix = [
+    { key: "critical", label: "Critical", value: counts.criticalIssues ?? 0 },
+    { key: "warning", label: "Warnings", value: counts.warnings ?? 0 },
+    { key: "notice", label: "Notices", value: counts.notices ?? 0 },
+  ].filter((item) => item.value > 0);
+  const searchTrend = search?.available
+    ? search.daily.map((item) => ({
+        label: new Date(item.key).toLocaleDateString("en-IN", { day: "2-digit", month: "short" }),
+        value: item.clicks,
+      }))
+    : [];
 
   return (
-    <div className="h-full overflow-y-auto bg-surface-page p-4">
-      <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
+    <div className="h-full overflow-y-auto bg-surface-page p-3 lg:p-4">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-surface-border bg-surface-card px-4 py-3 shadow-sm">
         <div>
-          <h1 className="text-[18px] font-bold text-text-primary">SEO Audit</h1>
-          <p className="text-[11px] text-text-secondary">
+          <div className="mb-1 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-accent">
+            <Activity className="h-3.5 w-3.5" /> SEO intelligence
+          </div>
+          <h1 className="text-xl font-bold tracking-tight text-text-primary">Site health command center</h1>
+          <p className="mt-1 text-[11px] text-text-secondary">
             {overview?.site.url}
             {overview?.crawl?.completedAt ? ` · last audit ${formatDateTime(overview.crawl.completedAt)}` : ""}
             {overview?.runningCrawl ? " · an audit is running now" : ""}
           </p>
         </div>
         <div className="flex gap-2">
+          <Link href="/auditpage" className="flex h-8 items-center gap-1.5 rounded-lg border border-surface-border bg-surface-card px-3 text-[11px] font-medium text-text-secondary hover:text-text-primary">
+            <Search className="h-3.5 w-3.5" /> Audited pages
+          </Link>
           <Button variant="secondary" size="sm" onClick={() => void load()}>
             <RefreshCw className="h-3.5 w-3.5" />
             Refresh
@@ -187,14 +247,14 @@ export default function SeoDashboardPage() {
 
       {overview?.hasData && (
         <>
-          <div className="mb-3 flex gap-1 overflow-x-auto border-b border-surface-border">
+          <div className="mb-3 flex gap-1 overflow-x-auto rounded-xl border border-surface-border bg-surface-card p-1 shadow-sm">
             {TABS.map((item) => (
               <button
                 key={item}
                 type="button"
                 onClick={() => setTab(item)}
-                className={`whitespace-nowrap border-b-2 px-3 py-2 text-[12px] font-medium transition-colors ${
-                  tab === item ? "border-accent text-accent" : "border-transparent text-text-secondary hover:text-text-primary"
+                className={`whitespace-nowrap rounded-lg px-3 py-2 text-[12px] font-medium transition-colors ${
+                  tab === item ? "bg-accent text-white shadow-sm" : "text-text-secondary hover:bg-surface-sunken hover:text-text-primary"
                 }`}
               >
                 {item}
@@ -203,52 +263,65 @@ export default function SeoDashboardPage() {
           </div>
 
           {tab === "Overview" && (
-            <div className="flex flex-col gap-3">
-              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-6">
-                {[
-                  { label: "Overall", value: overview.scores?.overall },
-                  { label: "Technical", value: overview.scores?.technical },
-                  { label: "On-page", value: overview.scores?.onPage },
-                  { label: "Content", value: overview.scores?.content },
-                  { label: "Performance", value: overview.scores?.performance },
-                  { label: "Visibility", value: overview.scores?.visibility },
-                ].map((item) => (
-                  <div
-                    key={item.label}
-                    className="flex flex-col items-center gap-1.5 rounded-lg border border-surface-border bg-surface-card py-3"
-                  >
-                    <ScorePill score={item.value ?? null} size="lg" />
-                    <span className="text-[11px] text-text-secondary">{item.label}</span>
+            <div className="flex flex-col gap-2.5">
+              <div className="grid gap-2 md:grid-cols-2 xl:grid-cols-4">
+                <div className="relative overflow-hidden rounded-xl border border-accent/25 bg-accent-soft p-3 shadow-sm">
+                  <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full border-[18px] border-accent/10" />
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-accent">Overall health</span>
+                  <div className="mt-1.5 flex items-end justify-between">
+                    <span className="text-3xl font-bold tabular-nums text-text-primary">{overview.scores?.overall ?? "—"}</span>
+                    <Gauge className="h-6 w-6 text-accent" />
                   </div>
-                ))}
+                  <p className="mt-1 text-[11px] text-text-secondary">Weighted score across all measured SEO signals</p>
+                </div>
+                <div className="rounded-xl border border-surface-border bg-surface-card p-3 shadow-sm">
+                  <div className="flex items-start justify-between"><span className="text-[10px] font-semibold uppercase tracking-wider text-text-muted">Crawl coverage</span><Globe2 className="h-5 w-5 text-accent" /></div>
+                  <div className="mt-1.5 flex items-baseline gap-2"><span className="text-2xl font-bold tabular-nums">{formatNumber(counts.urlsCrawled)}</span><span className="text-xs text-text-muted">URLs</span></div>
+                  <p className="mt-1 text-[11px] text-text-secondary">{formatNumber(counts.indexablePages)} indexable · {formatNumber(counts.healthyPages)} healthy</p>
+                </div>
+                <div className="rounded-xl border border-surface-border bg-surface-card p-3 shadow-sm">
+                  <div className="flex items-start justify-between"><span className="text-[10px] font-semibold uppercase tracking-wider text-text-muted">Open issues</span><AlertTriangle className="h-5 w-5 text-status-danger-text" /></div>
+                  <div className="mt-1.5 flex items-baseline gap-2"><span className="text-2xl font-bold tabular-nums">{formatNumber((counts.criticalIssues ?? 0) + (counts.warnings ?? 0) + (counts.notices ?? 0))}</span><span className="text-xs text-text-muted">signals</span></div>
+                  <p className="mt-1 text-[11px] text-text-secondary"><span className="font-semibold text-status-danger-text">{formatNumber(counts.criticalIssues)} critical</span> · {formatNumber(counts.warnings)} warnings</p>
+                </div>
+                <div className="rounded-xl border border-surface-border bg-surface-card p-3 shadow-sm">
+                  <div className="flex items-start justify-between"><span className="text-[10px] font-semibold uppercase tracking-wider text-text-muted">Search visibility</span><TrendingUp className="h-5 w-5 text-accent" /></div>
+                  <div className="mt-1.5 flex items-baseline gap-2"><span className="text-2xl font-bold tabular-nums">{search?.available ? formatNumber(search.totals.clicks) : "—"}</span><span className="text-xs text-text-muted">clicks</span></div>
+                  <p className="mt-1 text-[11px] text-text-secondary">{search?.available ? `${formatNumber(search.totals.impressions)} impressions · ${search.totals.ctr.toFixed(1)}% CTR` : "Connect Search Console to unlock"}</p>
+                </div>
               </div>
 
-              <div className="grid gap-2 sm:grid-cols-3 lg:grid-cols-6">
-                <Metric label="URLs crawled" value={formatNumber(counts.urlsCrawled)} />
-                <Metric label="Indexable" value={formatNumber(counts.indexablePages)} />
-                <Metric label="Healthy pages" value={formatNumber(counts.healthyPages)} />
-                <Metric
-                  label="Critical issues"
-                  value={formatNumber(counts.criticalIssues)}
-                  danger={(counts.criticalIssues ?? 0) > 0}
-                />
-                <Metric label="Warnings" value={formatNumber(counts.warnings)} />
-                <Metric label="Notices" value={formatNumber(counts.notices)} />
-                <Metric
-                  label="Broken links"
-                  value={formatNumber((counts.brokenInternalLinks ?? 0) + (counts.brokenExternalLinks ?? 0))}
-                  danger={(counts.brokenInternalLinks ?? 0) > 0}
-                />
-                <Metric label="Redirect issues" value={formatNumber(counts.redirectIssues)} />
-                <Metric label="Missing title" value={formatNumber(counts.pagesMissingTitle)} />
-                <Metric label="Missing description" value={formatNumber(counts.pagesMissingDescription)} />
-                <Metric label="Missing H1" value={formatNumber(counts.pagesMissingH1)} />
-                <Metric label="Canonical issues" value={formatNumber(counts.canonicalIssues)} />
-                <Metric label="Schema issues" value={formatNumber(counts.schemaIssues)} />
-                <Metric label="Orphan pages" value={formatNumber(counts.orphanPages)} />
-                <Metric label="Thin content" value={formatNumber(counts.thinContentPages)} />
-                <Metric label="Duplicate titles" value={formatNumber(counts.duplicateTitlePages)} />
+              <div className="grid gap-2 lg:grid-cols-3">
+                <Panel title="Category scores" note="Latest audit score out of 100 for each measured area.">
+                  <MagnitudeBarChart data={categoryScores} valueFormatter={(value) => `${value}/100`} emptyLabel="No score data yet" />
+                </Panel>
+                <Panel title="Issue distribution" note="Open findings grouped by severity in the latest crawl.">
+                  <DonutChart data={issueMix} colorFor={(key) => key === "critical" ? "#b42318" : key === "warning" ? "#c7861b" : "#8b6a3e"} valueFormatter={(value) => `${value} issues`} emptyLabel="No open issues" />
+                </Panel>
+                <Panel title="Technical watchlist" note="High-signal checks that need regular attention.">
+                  <div className="space-y-1.5">
+                    {[
+                      { label: "Broken links", value: (counts.brokenInternalLinks ?? 0) + (counts.brokenExternalLinks ?? 0), icon: Link2Off },
+                      { label: "Redirect issues", value: counts.redirectIssues ?? 0, icon: ArrowUpRight },
+                      { label: "Canonical issues", value: counts.canonicalIssues ?? 0, icon: FileCheck2 },
+                      { label: "Orphan pages", value: counts.orphanPages ?? 0, icon: Globe2 },
+                      { label: "Schema issues", value: counts.schemaIssues ?? 0, icon: Sparkles },
+                    ].map((item) => (
+                      <div key={item.label} className="flex items-center gap-2 rounded-lg border border-surface-border/70 bg-surface-sunken/60 px-2.5 py-1.5">
+                        <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-surface-card text-accent"><item.icon className="h-3.5 w-3.5" /></span>
+                        <span className="text-[12px] text-text-secondary">{item.label}</span>
+                        <span className={`ml-auto text-sm font-bold tabular-nums ${item.value > 0 ? "text-text-primary" : "text-status-success-text"}`}>{formatNumber(item.value)}</span>
+                      </div>
+                    ))}
+                  </div>
+                </Panel>
               </div>
+
+              {search?.available && searchTrend.length >= 8 && (
+                <Panel title="Organic clicks" note={`${search.rangeStart} to ${search.rangeEnd} · daily Search Console clicks`}>
+                  <TrendChart data={searchTrend} valueFormatter={(value) => `${formatNumber(value)} clicks`} />
+                </Panel>
+              )}
 
               <div className="grid gap-3 lg:grid-cols-2">
                 <Panel
@@ -364,12 +437,50 @@ export default function SeoDashboardPage() {
                       />
                     </div>
                   )}
+                  <div className="mt-3 border-t border-surface-border pt-3">
+                    <div className="mb-2">
+                      <h4 className="text-[12px] font-semibold text-text-primary">Score &amp; issue trend</h4>
+                      <p className="text-[10px] text-text-muted">One point per completed audit.</p>
+                    </div>
+                    {(overview.history ?? []).length < 2 ? (
+                      <p className="text-[11px] text-text-secondary">
+                        Trends appear after the second audit. {overview.history?.length ?? 0} snapshot stored so far.
+                      </p>
+                    ) : (
+                      <div className="overflow-x-auto">
+                        <table className="w-full min-w-[480px] text-[10px]">
+                          <thead>
+                            <tr className="border-b border-surface-border text-text-secondary">
+                              <th className="py-1 text-left font-medium">Audit</th>
+                              <th className="py-1 text-right font-medium">Overall</th>
+                              <th className="py-1 text-right font-medium">Critical</th>
+                              <th className="py-1 text-right font-medium">Broken links</th>
+                              <th className="py-1 text-right font-medium">Clicks</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {(overview.history ?? []).map((entry) => (
+                              <tr key={entry.capturedAt} className="border-b border-surface-border/50 last:border-0">
+                                <td className="py-1">{formatDateTime(entry.capturedAt)}</td>
+                                <td className="py-1 text-right tabular-nums">{entry.scores.overall ?? "—"}</td>
+                                <td className="py-1 text-right tabular-nums">{entry.counts.criticalIssues}</td>
+                                <td className="py-1 text-right tabular-nums">
+                                  {(entry.counts.brokenInternalLinks ?? 0) + (entry.counts.brokenExternalLinks ?? 0)}
+                                </td>
+                                <td className="py-1 text-right tabular-nums">{entry.search?.clicks ?? "—"}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  </div>
                 </Panel>
 
                 <Panel title="Top issues by affected pages">
-                  {(overview.topIssues ?? []).slice(0, 10).map((issue) => (
+                  {(overview.topIssues ?? []).slice(0, 10).map((issue, index) => (
                     <div
-                      key={`${issue.ruleId}-${issue.severity}`}
+                      key={`${issue.ruleId}-${issue.severity}-${index}`}
                       className="flex items-center justify-between border-b border-surface-border/50 py-1.5 text-[11px] last:border-0"
                     >
                       <span className="flex items-center gap-2">
@@ -382,38 +493,6 @@ export default function SeoDashboardPage() {
                 </Panel>
               </div>
 
-              <Panel title="Score & issue trend" note="One point per completed audit.">
-                {(overview.history ?? []).length < 2 ? (
-                  <p className="text-[12px] text-text-secondary">
-                    Trends appear after the second audit. {overview.history?.length ?? 0} snapshot stored so far.
-                  </p>
-                ) : (
-                  <table className="w-full text-[11px]">
-                    <thead>
-                      <tr className="border-b border-surface-border text-text-secondary">
-                        <th className="py-1 text-left font-medium">Audit</th>
-                        <th className="py-1 text-right font-medium">Overall</th>
-                        <th className="py-1 text-right font-medium">Critical</th>
-                        <th className="py-1 text-right font-medium">Broken links</th>
-                        <th className="py-1 text-right font-medium">Clicks</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {(overview.history ?? []).map((entry) => (
-                        <tr key={entry.capturedAt} className="border-b border-surface-border/50">
-                          <td className="py-1">{formatDateTime(entry.capturedAt)}</td>
-                          <td className="py-1 text-right tabular-nums">{entry.scores.overall ?? "—"}</td>
-                          <td className="py-1 text-right tabular-nums">{entry.counts.criticalIssues}</td>
-                          <td className="py-1 text-right tabular-nums">
-                            {(entry.counts.brokenInternalLinks ?? 0) + (entry.counts.brokenExternalLinks ?? 0)}
-                          </td>
-                          <td className="py-1 text-right tabular-nums">{entry.search?.clicks ?? "—"}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                )}
-              </Panel>
             </div>
           )}
 
@@ -617,6 +696,53 @@ export default function SeoDashboardPage() {
                 ))
               )}
             </Panel>
+          )}
+
+          {tab === "Competitors" && (
+            <div className="space-y-3">
+              <Panel
+                title="Observed competitor comparison"
+                note="Only facts observed from each public website crawl are shown. Traffic, backlinks, search volume and live rankings are not inferred."
+              >
+                <div className="mb-3 grid gap-2 md:grid-cols-[1fr_2fr_auto]">
+                  <Input label="Label" value={competitorLabel} onChange={(event) => setCompetitorLabel(event.target.value)} placeholder="Competitor name" />
+                  <Input label="Public URL" type="url" value={competitorUrl} onChange={(event) => setCompetitorUrl(event.target.value)} placeholder="https://example.org" />
+                  <Button className="self-end" size="sm" loading={busy} disabled={!competitorLabel.trim() || !competitorUrl.trim()} onClick={() => void addCompetitor()}>
+                    <Globe2 className="h-3.5 w-3.5" /> Add competitor
+                  </Button>
+                </div>
+                {competitors.length === 0 ? (
+                  <p className="text-[12px] text-text-secondary">No competitors configured.</p>
+                ) : competitors.map((competitor) => {
+                  const profile = comparison?.competitors.find((item) => item.siteId === competitor.id);
+                  return (
+                    <div key={competitor.id} className="mb-2 rounded border border-surface-border p-2.5 last:mb-0">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div>
+                          <p className="text-[12px] font-semibold text-text-primary">{competitor.label}</p>
+                          <p className="text-[10px] text-text-muted">{competitor.url}</p>
+                        </div>
+                        <div className="flex gap-2">
+                          <Button variant="secondary" size="sm" loading={busy} onClick={async () => { setBusy(true); try { await seoAuditApi.auditCompetitor(competitor.id); } finally { setBusy(false); } }}>
+                            <Play className="h-3.5 w-3.5" /> Crawl
+                          </Button>
+                          <Button variant="secondary" size="sm" onClick={async () => { await seoAuditApi.deleteCompetitor(competitor.id); await load(); }}>Remove</Button>
+                        </div>
+                      </div>
+                      {profile ? (
+                        <div className="mt-2 grid grid-cols-2 gap-2 md:grid-cols-5">
+                          <Metric label="Pages" value={typeof profile.observed.pagesCrawled === "number" ? profile.observed.pagesCrawled : "Not available"} />
+                          <Metric label="Indexable" value={typeof profile.observed.indexablePages === "number" ? profile.observed.indexablePages : "Not available"} />
+                          <Metric label="Avg words" value={typeof profile.observed.averageWordCount === "number" ? profile.observed.averageWordCount : "Not available"} />
+                          <Metric label="With schema" value={typeof profile.observed.pagesWithSchema === "number" ? profile.observed.pagesWithSchema : "Not available"} />
+                          <Metric label="SEO score" value={profile.scores?.overall ?? "Not available"} />
+                        </div>
+                      ) : <p className="mt-2 text-[11px] text-text-muted">Run the first crawl to populate observed metrics.</p>}
+                    </div>
+                  );
+                })}
+              </Panel>
+            </div>
           )}
 
           {tab === "AI plan" && (
