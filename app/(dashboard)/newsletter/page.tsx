@@ -278,7 +278,7 @@ function StatCard({
       <div
         className="
           flex
-          min-h-[86px]
+          h-[116px]
           min-w-0
           items-center
           gap-[9px]
@@ -313,7 +313,7 @@ function StatCard({
         <div className="min-w-0 flex-1">
           <p
             className="
-              text-[8px]
+              text-[7.5px]
               font-[700]
               leading-[11px]
               text-[#172863]
@@ -326,7 +326,7 @@ function StatCard({
             className="
               mt-[4px]
               whitespace-nowrap
-              text-[23px]
+              text-[22px]
               font-[800]
               leading-[25px]
             "
@@ -359,7 +359,7 @@ function StatCard({
               <span
                 className="
                   shrink-0
-                  text-[6.8px]
+                  text-[7.5px]
                   font-[700]
                   text-[#169248]
                 "
@@ -371,7 +371,7 @@ function StatCard({
                 <span
                   className="
                     shrink-0
-                    text-[6.2px]
+                    text-[7px]
                     font-[600]
                     text-[#506083]
                   "
@@ -386,10 +386,6 @@ function StatCard({
     </div>
   );
 }
-
-/* ============================================================
-   FILTER BUTTON
-============================================================ */
 
 function FilterButton({
   children,
@@ -411,7 +407,7 @@ function FilterButton({
         border-[#E0E5EB]
         bg-white
         px-[11px]
-        text-[8.5px]
+        text-[7.5px]
         font-[700]
         text-[#172762]
       "
@@ -421,7 +417,7 @@ function FilterButton({
       </span>
 
       <ChevronDown
-        size={12}
+        size={11}
         className="shrink-0"
       />
     </button>
@@ -900,78 +896,80 @@ export default function NewsletterPage() {
               STATS
           ================================================== */}
 
-          <div
-            className="
-              grid
-              w-full
-              min-w-0
-              grid-cols-5
-              gap-[10px]
-            "
-          >
-            <StatCard
-              label="Total Subscribers"
-              value={String(
-                totalSubscribers
-              )}
-              change={
-                totalSubscribers
-                  ? "Live"
-                  : undefined
-              }
-              compare="total"
-              icon={Mail}
-              iconBg="#E6F6E9"
-              iconColor="#198F45"
-            />
+          <div className="w-full min-w-0 overflow-x-auto pb-[4px]">
+            <div
+              className="
+                grid
+                w-full
+                min-w-[1100px]
+                grid-cols-5
+                gap-[10px]
+              "
+            >
+              <StatCard
+                label="Total Subscribers"
+                value={String(
+                  totalSubscribers
+                )}
+                change={
+                  totalSubscribers
+                    ? "Live"
+                    : undefined
+                }
+                compare="total"
+                icon={Mail}
+                iconBg="#E6F6E9"
+                iconColor="#198F45"
+              />
 
-            <StatCard
-              label="New This Month"
-              value={String(newThisMonth)}
-              change={
-                newThisMonth
-                  ? `${calculatePercentage(
-                    newThisMonth,
-                    totalSubscribers
-                  ).toFixed(1)}%`
-                  : undefined
-              }
-              compare="of total"
-              icon={Send}
-              iconBg="#E8F2FF"
-              iconColor="#2578E8"
-              valueColor="#172969"
-            />
+              <StatCard
+                label="New This Month"
+                value={String(newThisMonth)}
+                change={
+                  newThisMonth
+                    ? `${calculatePercentage(
+                      newThisMonth,
+                      totalSubscribers
+                    ).toFixed(1)}%`
+                    : undefined
+                }
+                compare="of total"
+                icon={Send}
+                iconBg="#E8F2FF"
+                iconColor="#2578E8"
+                valueColor="#172969"
+              />
 
-            <StatCard
-              label="Emails Sent"
-              value={String(emailsSent)}
-              icon={MailOpen}
-              iconBg="#F1E6FD"
-              iconColor="#9438E8"
-              valueColor="#172969"
-            />
+              <StatCard
+                label="Emails Sent"
+                value={String(emailsSent)}
+                icon={MailOpen}
+                iconBg="#F1E6FD"
+                iconColor="#9438E8"
+                valueColor="#172969"
+              />
 
-            <StatCard
-              label="Open Rate"
-              value={`${openRate.toFixed(
-                1
-              )}%`}
-              icon={MailOpen}
-              iconBg="#FFF0DB"
-              iconColor="#F79413"
-              valueColor="#111111"
-            />
+              <StatCard
+                label="Open Rate"
+                value={`${openRate.toFixed(
+                  1
+                )}%`}
+                icon={MailOpen}
+                iconBg="#FFF0DB"
+                iconColor="#F79413"
+                valueColor="#111111"
+              />
 
-            <StatCard
-              label="Click Rate"
-              value={`${clickRate.toFixed(
-                1
-              )}%`}
-              icon={MousePointer2}
-              iconBg="#E0F6F2"
-              iconColor="#1CA99C"
-            />
+              <StatCard
+                label="Click Rate"
+                value={`${clickRate.toFixed(
+                  1
+                )}%`}
+                icon={MousePointer2}
+                iconBg="#E0F6F2"
+                iconColor="#1CA99C"
+              />
+            </div>
           </div>
 
           {/* ==================================================
@@ -1026,7 +1024,7 @@ export default function NewsletterPage() {
                   min-w-0
                   flex-1
                   bg-transparent
-                  text-[8.4px]
+                  text-[7.5px]
                   font-[600]
                   text-[#172762]
                   outline-none
@@ -1056,7 +1054,7 @@ export default function NewsletterPage() {
                   bg-white
                   px-[11px]
                   pr-[30px]
-                  text-[8.4px]
+                  text-[7.5px]
                   font-[700]
                   text-[#172762]
                   outline-none
@@ -1084,7 +1082,7 @@ export default function NewsletterPage() {
               </select>
 
               <ChevronDown
-                size={12}
+                size={11}
                 className="
                   pointer-events-none
                   absolute
@@ -1117,7 +1115,7 @@ export default function NewsletterPage() {
                   bg-white
                   px-[11px]
                   pr-[30px]
-                  text-[8.4px]
+                  text-[7.5px]
                   font-[700]
                   text-[#172762]
                   outline-none
@@ -1140,7 +1138,7 @@ export default function NewsletterPage() {
               </select>
 
               <ChevronDown
-                size={12}
+                size={11}
                 className="
                   pointer-events-none
                   absolute
@@ -1169,8 +1167,8 @@ export default function NewsletterPage() {
                 border-[#E0E5EB]
                 bg-white
                 px-[11px]
-                text-[8.2px]
-                font-[600]
+                text-[7.5px]
+                font-[700]
                 text-[#536080]
               "
             >
@@ -1201,7 +1199,7 @@ export default function NewsletterPage() {
                 border-[#E0E5EB]
                 bg-white
                 px-[7px]
-                text-[7.8px]
+                text-[7.5px]
                 font-[700]
                 text-[#172762]
               "
@@ -1221,7 +1219,7 @@ export default function NewsletterPage() {
               mt-[11px]
               w-full
               min-w-0
-              overflow-hidden
+              overflow-x-auto
               rounded-[6px]
               border
               border-[#E2E6EB]
@@ -1231,6 +1229,7 @@ export default function NewsletterPage() {
             <table
               className="
                 w-full
+                min-w-[1100px]
                 table-fixed
                 border-collapse
               "
@@ -1268,8 +1267,10 @@ export default function NewsletterPage() {
                   <th
                     className="
                       px-[7px]
-                      text-[7.6px]
+                      text-[7.5px]
                       font-[700]
+                      uppercase
+                      tracking-wider
                     "
                   >
                     Subscriber
@@ -1278,8 +1279,10 @@ export default function NewsletterPage() {
                   <th
                     className="
                       px-[7px]
-                      text-[7.6px]
+                      text-[7.5px]
                       font-[700]
+                      uppercase
+                      tracking-wider
                     "
                   >
                     Email
@@ -1288,8 +1291,10 @@ export default function NewsletterPage() {
                   <th
                     className="
                       px-[7px]
-                      text-[7.6px]
+                      text-[7.5px]
                       font-[700]
+                      uppercase
+                      tracking-wider
                     "
                   >
                     Status
@@ -1298,8 +1303,10 @@ export default function NewsletterPage() {
                   <th
                     className="
                       px-[7px]
-                      text-[7.6px]
+                      text-[7.5px]
                       font-[700]
+                      uppercase
+                      tracking-wider
                     "
                   >
                     Source
@@ -1308,8 +1315,10 @@ export default function NewsletterPage() {
                   <th
                     className="
                       px-[7px]
-                      text-[7.6px]
+                      text-[7.5px]
                       font-[700]
+                      uppercase
+                      tracking-wider
                     "
                   >
                     Subscribed On
@@ -1318,8 +1327,10 @@ export default function NewsletterPage() {
                   <th
                     className="
                       px-[7px]
-                      text-[7.6px]
+                      text-[7.5px]
                       font-[700]
+                      uppercase
+                      tracking-wider
                     "
                   >
                     Location
@@ -1328,8 +1339,10 @@ export default function NewsletterPage() {
                   <th
                     className="
                       px-[5px]
-                      text-[7.6px]
+                      text-[7.5px]
                       font-[700]
+                      uppercase
+                      tracking-wider
                     "
                   >
                     Actions
@@ -1397,6 +1410,11 @@ export default function NewsletterPage() {
                         getStatusStyle(
                           status
                         );
+
+                      const formattedDate = formatDateTime(subscriber.createdAt);
+                      const dateParts = formattedDate ? formattedDate.split(",") : ["—"];
+                      const dateStr = dateParts[0] || "—";
+                      const timeStr = dateParts.slice(1).join(",").trim();
 
                       return (
                         <tr
@@ -1471,7 +1489,7 @@ export default function NewsletterPage() {
                                 <p
                                   className="
                                     truncate
-                                    text-[7.8px]
+                                    text-[7.5px]
                                     font-[700]
                                     leading-[11px]
                                     text-[#192B66]
@@ -1486,7 +1504,7 @@ export default function NewsletterPage() {
                                   className="
                                     mt-[3px]
                                     whitespace-nowrap
-                                    text-[6.8px]
+                                    text-[7px]
                                     font-[500]
                                     leading-[10px]
                                     text-[#2F4074]
@@ -1511,7 +1529,7 @@ export default function NewsletterPage() {
                             <p
                               className="
                                 truncate
-                                text-[7px]
+                                text-[7.5px]
                                 font-[500]
                                 text-[#2A3D72]
                               "
@@ -1540,9 +1558,9 @@ export default function NewsletterPage() {
                                 whitespace-nowrap
                                 rounded-[4px]
                                 border
-                                px-[7px]
+                                px-[8px]
                                 py-[4px]
-                                text-[7px]
+                                text-[7.5px]
                                 font-[700]
                                 leading-none
                               "
@@ -1587,7 +1605,7 @@ export default function NewsletterPage() {
                               <span
                                 className="
                                   truncate
-                                  text-[7px]
+                                  text-[7.5px]
                                   font-[500]
                                   text-[#354273]
                                 "
@@ -1606,18 +1624,31 @@ export default function NewsletterPage() {
                               align-middle
                             "
                           >
-                            <p
-                              className="
-                                text-[6.8px]
-                                font-[500]
-                                leading-[11px]
-                                text-[#283A70]
-                              "
-                            >
-                              {formatDateTime(
-                                subscriber.createdAt
+                            <div>
+                              <p
+                                className="
+                                  text-[7.5px]
+                                  font-[700]
+                                  leading-[11px]
+                                  text-[#192B66]
+                                "
+                              >
+                                {dateStr}
+                              </p>
+                              {timeStr && (
+                                <p
+                                  className="
+                                    mt-[2px]
+                                    text-[7px]
+                                    font-[500]
+                                    leading-[10px]
+                                    text-[#556586]
+                                  "
+                                >
+                                  {timeStr}
+                                </p>
                               )}
-                            </p>
+                            </div>
                           </td>
 
                           {/* LOCATION */}
@@ -1633,7 +1664,7 @@ export default function NewsletterPage() {
                               className="
                                 block
                                 truncate
-                                text-[6.8px]
+                                text-[7.5px]
                                 font-[500]
                                 text-[#304176]
                               "
@@ -1656,7 +1687,7 @@ export default function NewsletterPage() {
                               className="
                                 flex
                                 h-[28px]
-                                w-[29px]
+                                w-[28px]
                                 items-center
                                 justify-center
                                 rounded-[5px]
@@ -1670,7 +1701,7 @@ export default function NewsletterPage() {
                             >
                               <MoreHorizontal
                                 size={
-                                  12
+                                  14
                                 }
                               />
                             </button>
@@ -1771,7 +1802,7 @@ export default function NewsletterPage() {
                 className="
                   shrink-0
                   whitespace-nowrap
-                  text-[6.8px]
+                  text-[7.5px]
                   font-[600]
                   text-[#475A83]
                 "
@@ -1804,8 +1835,8 @@ export default function NewsletterPage() {
                   }
                   className="
                     flex
-                    h-[27px]
-                    w-[27px]
+                    h-[28px]
+                    w-[28px]
                     items-center
                     justify-center
                     rounded-[4px]
@@ -1841,8 +1872,8 @@ export default function NewsletterPage() {
                       }
                       className={`
                         flex
-                        h-[27px]
-                        w-[27px]
+                        h-[28px]
+                        w-[28px]
                         items-center
                         justify-center
                         rounded-[4px]
@@ -1866,8 +1897,8 @@ export default function NewsletterPage() {
                   <span
                     className="
                       flex
-                      h-[27px]
-                      w-[27px]
+                      h-[28px]
+                      w-[28px]
                       items-center
                       justify-center
                       rounded-[4px]
@@ -1892,8 +1923,8 @@ export default function NewsletterPage() {
                     }
                     className={`
                       flex
-                      h-[27px]
-                      min-w-[27px]
+                      h-[28px]
+                      min-w-[28px]
                       items-center
                       justify-center
                       rounded-[4px]
@@ -1929,8 +1960,8 @@ export default function NewsletterPage() {
                   }
                   className="
                     flex
-                    h-[27px]
-                    w-[27px]
+                    h-[28px]
+                    w-[28px]
                     items-center
                     justify-center
                     rounded-[4px]
@@ -1960,8 +1991,8 @@ export default function NewsletterPage() {
                     setPage(1);
                   }}
                   className="
-                    h-[28px]
-                    w-[94px]
+                    h-[30px]
+                    w-[100px]
                     appearance-none
                     rounded-[4px]
                     border
@@ -1969,9 +2000,9 @@ export default function NewsletterPage() {
                     bg-white
                     px-[9px]
                     pr-[27px]
-                    text-[6.8px]
+                    text-[7.5px]
                     font-[700]
-                    text-[#536180]
+                    text-[#182A65]
                     outline-none
                   "
                 >
@@ -1989,13 +2020,14 @@ export default function NewsletterPage() {
                 </select>
 
                 <ChevronDown
-                  size={10}
+                  size={11}
                   className="
                     pointer-events-none
                     absolute
                     right-[8px]
                     top-1/2
                     -translate-y-1/2
+                    text-[#182A65]
                   "
                 />
               </div>
@@ -2039,9 +2071,9 @@ export default function NewsletterPage() {
               <h2
                 className="
                   whitespace-nowrap
-                  text-[8.7px]
-                  font-[700]
-                  text-[#1F2430]
+                  text-[8.5px]
+                  font-[800]
+                  text-[#182A65]
                 "
               >
                 Subscriber Overview
@@ -2054,7 +2086,7 @@ export default function NewsletterPage() {
                   shrink-0
                   items-center
                   gap-[3px]
-                  text-[6.7px]
+                  text-[7.5px]
                   font-[700]
                   text-[#167E48]
                 "
@@ -2062,7 +2094,7 @@ export default function NewsletterPage() {
                 View Report
 
                 <ArrowRight
-                  size={9}
+                  size={10}
                 />
               </button>
             </div>
@@ -2156,7 +2188,7 @@ export default function NewsletterPage() {
                   <span
                     className="
                       mt-[4px]
-                      text-[6.4px]
+                      text-[7.5px]
                       font-[600]
                       text-[#44537B]
                     "
@@ -2237,9 +2269,9 @@ export default function NewsletterPage() {
                       <span
                         className="
                           whitespace-nowrap
-                          text-[6px]
-                          font-[600]
-                          text-[#26386D]
+                          text-[7.5px]
+                          font-[700]
+                          text-[#182A65]
                         "
                       >
                         {item.label}
@@ -2250,7 +2282,7 @@ export default function NewsletterPage() {
                       className="
                         shrink-0
                         whitespace-nowrap
-                        text-[5.7px]
+                        text-[7px]
                         font-[600]
                         text-[#26386D]
                       "
@@ -2286,9 +2318,9 @@ export default function NewsletterPage() {
           >
             <h2
               className="
-                text-[8.8px]
-                font-[700]
-                text-[#1F2430]
+                text-[8.5px]
+                font-[800]
+                text-[#182A65]
               "
             >
               Top Subscription Sources
@@ -2324,9 +2356,9 @@ export default function NewsletterPage() {
                         <span
                           className="
                             truncate
-                            text-[6.2px]
+                            text-[7.5px]
                             font-[700]
-                            text-[#344477]
+                            text-[#182A65]
                           "
                           title={
                             item.label
@@ -2369,7 +2401,7 @@ export default function NewsletterPage() {
                           className="
                             whitespace-nowrap
                             text-right
-                            text-[5.8px]
+                            text-[7px]
                             font-[600]
                             text-[#344477]
                           "
@@ -2390,7 +2422,7 @@ export default function NewsletterPage() {
                 className="
                   py-[30px]
                   text-center
-                  text-[7px]
+                  text-[7.5px]
                   text-[#667085]
                 "
               >
@@ -2422,9 +2454,9 @@ export default function NewsletterPage() {
             >
               <h2
                 className="
-                  text-[9.7px]
-                  font-[700]
-                  text-[#193775]
+                  text-[8.5px]
+                  font-[800]
+                  text-[#182A65]
                 "
               >
                 Quick Actions
@@ -2467,7 +2499,7 @@ export default function NewsletterPage() {
                   key={action.label}
                   className="
                     flex
-                    h-[34px]
+                    h-[36px]
                     w-full
                     items-center
                     justify-between
@@ -2495,7 +2527,7 @@ export default function NewsletterPage() {
                     <span
                       className="
                         whitespace-nowrap
-                        text-[7.1px]
+                        text-[7.5px]
                         font-[700]
                       "
                     >
@@ -2504,7 +2536,7 @@ export default function NewsletterPage() {
                   </span>
 
                   <ArrowRight
-                    size={10}
+                    size={12}
                     className="shrink-0"
                   />
                 </button>
@@ -2548,7 +2580,7 @@ export default function NewsletterPage() {
               <div>
                 <h2
                   className="
-                    text-[10px]
+                    text-[9.5px]
                     font-[800]
                     text-[#08602E]
                   "
@@ -2559,7 +2591,7 @@ export default function NewsletterPage() {
                 <p
                   className="
                     mt-[7px]
-                    text-[7px]
+                    text-[7.5px]
                     font-[500]
                     text-[#44537C]
                   "
@@ -2620,7 +2652,7 @@ export default function NewsletterPage() {
               <span
                 className="
                   whitespace-nowrap
-                  text-[7.2px]
+                  text-[7.5px]
                   font-[700]
                   text-[#283C74]
                 "

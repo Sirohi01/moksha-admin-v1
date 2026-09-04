@@ -753,7 +753,7 @@ export default function AddVolunteerPage() {
             flex
             items-center
             gap-[6px]
-            text-[8px]
+            text-[10px]
             font-[600]
             text-[#44537D]
           "
@@ -795,7 +795,7 @@ export default function AddVolunteerPage() {
             border
             px-[12px]
             py-[8px]
-            text-[8px]
+            text-[10px]
             font-[600]
 
             ${error
@@ -1925,7 +1925,7 @@ export default function AddVolunteerPage() {
                       <div className="min-w-0">
                         <p
                           className="
-                            text-[7.2px]
+                            text-[10px]
                             font-[700]
                             text-[#253870]
                           "
@@ -1937,7 +1937,7 @@ export default function AddVolunteerPage() {
                           className="
                             mt-[2px]
                             truncate
-                            text-[6px]
+                            text-[7.5px]
                             font-[500]
                             text-[#64718B]
                           "
@@ -2051,7 +2051,7 @@ export default function AddVolunteerPage() {
                 <p
                   className="
                     mt-[5px]
-                    text-[6.5px]
+                    text-[7.5px]
                     font-[500]
                     text-[#4B597B]
                   "
@@ -2075,7 +2075,7 @@ export default function AddVolunteerPage() {
 
                   <span
                     className="
-                      text-[8.5px]
+                      text-[10px]
                       font-[800]
                       text-[#22733D]
                     "
@@ -2099,7 +2099,7 @@ export default function AddVolunteerPage() {
 
                   <span
                     className="
-                      text-[7px]
+                      text-[10px]
                       font-[700]
                       text-[#314276]
                     "
@@ -2140,7 +2140,7 @@ export default function AddVolunteerPage() {
             border-[#DDE3E9]
             bg-white
             px-[16px]
-            text-[8px]
+            text-[10px]
             font-[700]
             text-[#20336C]
           "
@@ -2170,7 +2170,7 @@ export default function AddVolunteerPage() {
               border-[#DDE3E9]
               bg-white
               px-[18px]
-              text-[8px]
+              text-[10px]
               font-[700]
               text-[#20336C]
             "
@@ -2193,7 +2193,7 @@ export default function AddVolunteerPage() {
               rounded-[5px]
               bg-[#005F2E]
               px-[20px]
-              text-[8px]
+              text-[10px]
               font-[700]
               text-white
               shadow-[0_2px_5px_rgba(0,95,46,0.15)]
@@ -2312,7 +2312,7 @@ function FormField({
       <p
         className="
           mb-[6px]
-          text-[7.5px]
+          text-[10px]
           font-[700]
           text-[#192A65]
         "
@@ -2358,7 +2358,7 @@ const inputClass = `
   border-[#DFE4EA]
   bg-white
   px-[10px]
-  text-[7.3px]
+  text-[10px]
   font-[500]
   text-[#253970]
   outline-none
@@ -2396,7 +2396,7 @@ function SelectBox({
           bg-white
           px-[10px]
           pr-[28px]
-          text-[7.3px]
+          text-[10px]
           font-[600]
           text-[#253970]
           outline-none
@@ -2468,7 +2468,7 @@ function PhoneField({
             bg-white
             px-[8px]
             pr-[20px]
-            text-[7.3px]
+            text-[10px]
             font-[700]
             text-[#253970]
             outline-none
@@ -2557,7 +2557,7 @@ function MultiSelect({
       <p
         className="
           mb-[6px]
-          text-[7.5px]
+          text-[10px]
           font-[700]
           text-[#192A65]
         "
@@ -2582,7 +2582,7 @@ function MultiSelect({
           border-[#DFE4EA]
           bg-white
           px-[10px]
-          text-[7.3px]
+          text-[10px]
           font-[600]
           text-[#253970]
         "
@@ -2638,7 +2638,7 @@ function MultiSelect({
                     px-[7px]
                     py-[6px]
                     text-left
-                    text-[7px]
+                    text-[10px]
                     font-[600]
                     text-[#273A70]
                     hover:bg-[#F5F8F6]
@@ -2724,9 +2724,9 @@ function ConsentRow({
 
       <span
         className="
-          text-[6.8px]
+          text-[10px]
           font-[600]
-          leading-[10px]
+          leading-[14px]
           text-[#334677]
         "
       >
@@ -2804,9 +2804,9 @@ function TipRow({
 
       <p
         className="
-          text-[6.5px]
-          font-[500]
-          leading-[10px]
+          text-[7.5px]
+          font-[600]
+          leading-[11px]
           text-[#445379]
         "
       >
@@ -2831,13 +2831,13 @@ function GuideRow({
     <div
       className="
         grid
-        grid-cols-[60px_minmax(0,1fr)]
+        grid-cols-[70px_minmax(0,1fr)]
         gap-[6px]
       "
     >
       <span
         className="
-          text-[6.5px]
+          text-[7.5px]
           font-[800]
           text-[#273A70]
         "
@@ -2847,8 +2847,8 @@ function GuideRow({
 
       <span
         className="
-          text-[6.5px]
-          font-[500]
+          text-[7.5px]
+          font-[600]
           text-[#4D5B7E]
         "
       >

@@ -8,6 +8,7 @@ import {
   type CSSProperties,
   type ReactNode,
 } from "react";
+import Link from "next/link";
 
 import {
   ArrowDown,
@@ -482,6 +483,9 @@ function StatCard({
   return (
     <div
       className="
+        flex
+        flex-col
+        justify-between
         h-[102px]
         min-w-0
         rounded-[7px]
@@ -495,10 +499,10 @@ function StatCard({
           cardBg ?? "#FFFFFF",
       }}
     >
+      {/* TOP: ICON + METRICS */}
       <div
         className="
           flex
-          h-full
           min-w-0
           items-center
           gap-[9px]
@@ -507,8 +511,8 @@ function StatCard({
         <div
           className="
             flex
-            h-[43px]
-            w-[43px]
+            h-[40px]
+            w-[40px]
             shrink-0
             items-center
             justify-center
@@ -519,7 +523,7 @@ function StatCard({
           }}
         >
           <Icon
-            size={22}
+            size={20}
             strokeWidth={2}
             style={{
               color: iconColor,
@@ -530,9 +534,10 @@ function StatCard({
         <div className="min-w-0">
           <p
             className="
-              text-[7.5px]
+              text-[10px]
               font-[700]
-              leading-[10px]
+              uppercase
+              tracking-wider
               text-[#182A65]
             "
           >
@@ -541,35 +546,46 @@ function StatCard({
 
           <p
             className="
-              mt-[4px]
+              mt-[2px]
               whitespace-nowrap
-              text-[21px]
+              text-2xl
               font-[800]
-              leading-[23px]
+              leading-none
               text-[#152965]
             "
           >
             {value}
           </p>
+        </div>
+      </div>
 
-          <div
-            className="
-              mt-[7px]
-              flex
-              items-center
-              gap-[3px]
-              whitespace-nowrap
-            "
-          >
+      {/* BOTTOM: LEFT ALIGNED SUBTEXT */}
+      <div
+        className="
+          flex
+          w-full
+          items-center
+          justify-start
+          gap-[4px]
+          whitespace-nowrap
+          text-left
+        "
+      >
+        {change === "Live" ? (
+          <span className="rounded-[4px] bg-[#E4F5E8] px-[5px] py-[1px] text-[8.5px] font-bold text-[#238B4C]">
+            Live
+          </span>
+        ) : (
+          <>
             {negative ? (
               <ArrowDown
-                size={8}
+                size={10}
                 strokeWidth={3}
                 className="text-[#E44747]"
               />
             ) : (
               <ArrowUp
-                size={8}
+                size={10}
                 strokeWidth={3}
                 className="text-[#15944B]"
               />
@@ -577,7 +593,7 @@ function StatCard({
 
             <span
               className={`
-                text-[6.4px]
+                text-[8.5px]
                 font-[700]
 
                 ${negative
@@ -588,18 +604,18 @@ function StatCard({
             >
               {change}
             </span>
+          </>
+        )}
 
-            <span
-              className="
-                text-[5.9px]
-                font-[600]
-                text-[#596685]
-              "
-            >
-              current data
-            </span>
-          </div>
-        </div>
+        <span
+          className="
+            text-[8.5px]
+            font-[500]
+            text-[#596685]
+          "
+        >
+          current data
+        </span>
       </div>
     </div>
   );
@@ -639,7 +655,7 @@ function FilterSelect({
           bg-white
           px-[11px]
           pr-[30px]
-          text-[8px]
+          text-[10px]
           font-[700]
           text-[#182A65]
           outline-none
@@ -691,7 +707,7 @@ function SidebarBar({
     <div
       className="
         grid
-        grid-cols-[85px_minmax(0,1fr)_52px]
+        grid-cols-[100px_minmax(0,1fr)_60px]
         items-center
         gap-[6px]
       "
@@ -708,8 +724,8 @@ function SidebarBar({
           <span
             className="
               flex
-              h-[17px]
-              w-[17px]
+              h-[20px]
+              w-[20px]
               shrink-0
               items-center
               justify-center
@@ -722,7 +738,7 @@ function SidebarBar({
             }}
           >
             <Icon
-              size={9}
+              size={11}
               strokeWidth={2}
             />
           </span>
@@ -731,7 +747,7 @@ function SidebarBar({
         <span
           className="
             truncate
-            text-[5.9px]
+            text-[10px]
             font-[700]
             text-[#334475]
           "
@@ -742,7 +758,7 @@ function SidebarBar({
 
       <div
         className="
-          h-[5px]
+          h-[6px]
           overflow-hidden
           rounded-full
           bg-[#E9EDF2]
@@ -769,7 +785,7 @@ function SidebarBar({
         className="
           whitespace-nowrap
           text-right
-          text-[5.5px]
+          text-[10px]
           font-[600]
           text-[#334475]
         "
@@ -1188,9 +1204,9 @@ export default function GeneralEnquiriesPage() {
           <p
             className="
               mt-[2px]
-              text-[9px]
+              text-[10px]
               font-[500]
-              leading-[14px]
+              leading-[16px]
               text-[#344574]
             "
           >
@@ -1221,7 +1237,7 @@ export default function GeneralEnquiriesPage() {
               border-[#E0E5EB]
               bg-white
               px-[15px]
-              text-[9px]
+              text-[10px]
               font-[700]
               text-[#172762]
             "
@@ -1242,7 +1258,7 @@ export default function GeneralEnquiriesPage() {
               border-[#E0E5EB]
               bg-white
               px-[15px]
-              text-[9px]
+              text-[10px]
               font-[700]
               text-[#172762]
             "
@@ -1251,8 +1267,8 @@ export default function GeneralEnquiriesPage() {
             Filters
           </button>
 
-          <button
-            type="button"
+          <Link
+            href="/enquiries/new?category=contact"
             className="
               flex
               h-[36px]
@@ -1261,15 +1277,17 @@ export default function GeneralEnquiriesPage() {
               rounded-[5px]
               bg-[#005F2E]
               px-[17px]
-              text-[9px]
+              text-[10px]
               font-[700]
               text-white
               shadow-[0_2px_5px_rgba(0,95,46,0.14)]
+              hover:bg-[#004d25]
+              transition
             "
           >
             <Plus size={15} />
             Add New Enquiry
-          </button>
+          </Link>
         </div>
       </div>
 
@@ -1285,7 +1303,7 @@ export default function GeneralEnquiriesPage() {
             bg-red-50
             px-[11px]
             py-[8px]
-            text-[8px]
+            text-[10px]
             font-[600]
             text-red-700
           "
@@ -1311,7 +1329,7 @@ export default function GeneralEnquiriesPage() {
             LEFT
         ==================================================== */}
 
-        <main className="min-w-0">
+        <main className="min-w-0 flex-1">
           {/* ==================================================
               STAT CARDS
           ================================================== */}
@@ -1319,7 +1337,6 @@ export default function GeneralEnquiriesPage() {
           <div
             className="
               grid
-              min-w-0
               grid-cols-5
               gap-[10px]
             "
@@ -1328,9 +1345,7 @@ export default function GeneralEnquiriesPage() {
               label="Total Enquiries"
               value={totalEnquiries}
               change="Live"
-              icon={
-                MessageCircleMore
-              }
+              icon={MessageCircleMore}
               iconBg="#E4F5E8"
               iconColor="#238B4C"
               cardBg="#FBFEFC"
@@ -1339,10 +1354,7 @@ export default function GeneralEnquiriesPage() {
             <StatCard
               label="New Enquiries"
               value={newCount}
-              change={`${percentage(
-                newCount,
-                totalEnquiries
-              ).toFixed(1)}%`}
+              change={`${percentage(newCount, totalEnquiries).toFixed(1)}%`}
               icon={Mail}
               iconBg="#E9F2FF"
               iconColor="#3378D4"
@@ -1352,10 +1364,7 @@ export default function GeneralEnquiriesPage() {
             <StatCard
               label="In Progress"
               value={progressCount}
-              change={`${percentage(
-                progressCount,
-                totalEnquiries
-              ).toFixed(1)}%`}
+              change={`${percentage(progressCount, totalEnquiries).toFixed(1)}%`}
               icon={Hourglass}
               iconBg="#FFF3DC"
               iconColor="#DE941B"
@@ -1365,10 +1374,7 @@ export default function GeneralEnquiriesPage() {
             <StatCard
               label="Resolved"
               value={resolvedCount}
-              change={`${percentage(
-                resolvedCount,
-                totalEnquiries
-              ).toFixed(1)}%`}
+              change={`${percentage(resolvedCount, totalEnquiries).toFixed(1)}%`}
               icon={CheckCircle2}
               iconBg="#F0E7FD"
               iconColor="#8047D8"
@@ -1378,10 +1384,7 @@ export default function GeneralEnquiriesPage() {
             <StatCard
               label="Closed"
               value={closedCount}
-              change={`${percentage(
-                closedCount,
-                totalEnquiries
-              ).toFixed(1)}%`}
+              change={`${percentage(closedCount, totalEnquiries).toFixed(1)}%`}
               negative
               icon={CircleX}
               iconBg="#FDE5E5"
@@ -1391,15 +1394,13 @@ export default function GeneralEnquiriesPage() {
           </div>
 
           {/* ==================================================
-              FILTERS
+              SEARCH & FILTERS
           ================================================== */}
 
           <div
             className="
-              mt-[19px]
+              mt-[14px]
               flex
-              w-full
-              flex-wrap
               items-center
               gap-[8px]
             "
@@ -1410,9 +1411,10 @@ export default function GeneralEnquiriesPage() {
               className="
                 flex
                 h-[40px]
-                min-w-[220px]
+                min-w-0
                 flex-1
                 items-center
+                gap-[8px]
                 rounded-[6px]
                 border
                 border-[#E0E5EB]
@@ -1421,19 +1423,17 @@ export default function GeneralEnquiriesPage() {
               "
             >
               <Search
-                size={15}
+                size={14}
                 className="
-                  mr-[8px]
                   shrink-0
-                  text-[#263D7A]
+                  text-[#687698]
                 "
               />
 
               <input
+                type="text"
                 value={search}
-                onChange={(
-                  event
-                ) => {
+                onChange={(event) => {
                   setSearch(
                     event.target.value
                   );
@@ -1446,7 +1446,7 @@ export default function GeneralEnquiriesPage() {
                   min-w-0
                   flex-1
                   bg-transparent
-                  text-[8.1px]
+                  text-[10px]
                   font-[600]
                   text-[#172762]
                   outline-none
@@ -1561,7 +1561,7 @@ export default function GeneralEnquiriesPage() {
                 border-[#E0E5EB]
                 bg-white
                 px-[11px]
-                text-[7.8px]
+                text-[10px]
                 font-[600]
                 text-[#586480]
               "
@@ -1596,7 +1596,7 @@ export default function GeneralEnquiriesPage() {
                 border-[#E0E5EB]
                 bg-white
                 px-[12px]
-                text-[7.5px]
+                text-[10px]
                 font-[700]
                 text-[#1C306A]
               "
@@ -1615,8 +1615,9 @@ export default function GeneralEnquiriesPage() {
           <div
             className="
               mt-[11px]
+              w-full
               min-w-0
-              overflow-hidden
+              overflow-x-auto
               rounded-[6px]
               border
               border-[#E2E6EB]
@@ -1626,6 +1627,7 @@ export default function GeneralEnquiriesPage() {
             <table
               className="
                 w-full
+                min-w-[1100px]
                 table-fixed
                 border-collapse
               "
@@ -1689,35 +1691,35 @@ export default function GeneralEnquiriesPage() {
                     text-[#172762]
                   "
                 >
-                  <th className="px-[9px] text-[7px] font-[700]">
+                  <th className="px-[9px] text-[10px] font-[700] uppercase tracking-wider">
                     ID
                   </th>
 
-                  <th className="px-[8px] text-[7px] font-[700]">
+                  <th className="px-[8px] text-[10px] font-[700] uppercase tracking-wider">
                     Name
                   </th>
 
-                  <th className="px-[8px] text-[7px] font-[700]">
+                  <th className="px-[8px] text-[10px] font-[700] uppercase tracking-wider">
                     Subject
                   </th>
 
-                  <th className="px-[7px] text-[7px] font-[700]">
+                  <th className="px-[7px] text-[10px] font-[700] uppercase tracking-wider">
                     Category
                   </th>
 
-                  <th className="px-[7px] text-[7px] font-[700]">
+                  <th className="px-[7px] text-[10px] font-[700] uppercase tracking-wider">
                     Source
                   </th>
 
-                  <th className="px-[7px] text-[7px] font-[700]">
+                  <th className="px-[7px] text-[10px] font-[700] uppercase tracking-wider">
                     Status
                   </th>
 
-                  <th className="px-[7px] text-[7px] font-[700]">
+                  <th className="px-[7px] text-[10px] font-[700] uppercase tracking-wider">
                     Date &amp; Time
                   </th>
 
-                  <th className="px-[6px] text-[7px] font-[700]">
+                  <th className="px-[6px] text-[10px] font-[700] uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
@@ -1816,7 +1818,7 @@ export default function GeneralEnquiriesPage() {
                               className="
                                 block
                                 truncate
-                                text-[6.6px]
+                                text-[10px]
                                 font-[700]
                                 text-[#14763F]
                               "
@@ -1838,9 +1840,9 @@ export default function GeneralEnquiriesPage() {
                             <p
                               className="
                                 truncate
-                                text-[7.3px]
+                                text-[10px]
                                 font-[700]
-                                leading-[10px]
+                                leading-[14px]
                                 text-[#192B66]
                               "
                             >
@@ -1852,9 +1854,9 @@ export default function GeneralEnquiriesPage() {
                               className="
                                 mt-[3px]
                                 truncate
-                                text-[5.9px]
+                                text-[10px]
                                 font-[500]
-                                leading-[9px]
+                                leading-[12px]
                                 text-[#52617F]
                               "
                             >
@@ -1876,9 +1878,9 @@ export default function GeneralEnquiriesPage() {
                             <p
                               className="
                                 line-clamp-2
-                                text-[6.9px]
+                                text-[10px]
                                 font-[600]
-                                leading-[10px]
+                                leading-[14px]
                                 text-[#314273]
                               "
                             >
@@ -1902,9 +1904,9 @@ export default function GeneralEnquiriesPage() {
                                 max-w-full
                                 rounded-[4px]
                                 border
-                                px-[7px]
+                                px-[8px]
                                 py-[4px]
-                                text-[6.1px]
+                                text-[10px]
                                 font-[700]
                                 leading-none
                               "
@@ -1957,7 +1959,7 @@ export default function GeneralEnquiriesPage() {
                               <span
                                 className="
                                   truncate
-                                  text-[6.6px]
+                                  text-[10px]
                                   font-[600]
                                   text-[#324374]
                                 "
@@ -1983,7 +1985,7 @@ export default function GeneralEnquiriesPage() {
                                 border
                                 px-[7px]
                                 py-[4px]
-                                text-[6.1px]
+                                text-[10px]
                                 font-[700]
                                 leading-none
                               "
@@ -2006,24 +2008,26 @@ export default function GeneralEnquiriesPage() {
 
                           {/* DATE */}
 
-                          <td
-                            className="
-                              px-[7px]
-                              align-middle
-                            "
-                          >
-                            <p
-                              className="
-                                text-[6.4px]
-                                font-[500]
-                                leading-[10px]
-                                text-[#334475]
-                              "
-                            >
-                              {formatDateTime(
-                                enquiry.createdAt
-                              )}
-                            </p>
+                          <td className="px-[10px] align-middle">
+                            {(() => {
+                              const formatted = formatDateTime(enquiry.createdAt);
+                              const parts = formatted.includes(", ")
+                                ? formatted.split(", ")
+                                : [formatted, ""];
+
+                              return (
+                                <>
+                                  <p className="whitespace-nowrap text-[7.5px] font-[700] leading-[11px] text-[#26396D]">
+                                    {parts[0]}
+                                  </p>
+                                  {parts[1] && (
+                                    <p className="mt-[1px] whitespace-nowrap text-[7px] font-[500] leading-[10px] text-[#556488]">
+                                      {parts[1]}
+                                    </p>
+                                  )}
+                                </>
+                              );
+                            })()}
                           </td>
 
                           {/* ACTION */}
@@ -2043,18 +2047,14 @@ export default function GeneralEnquiriesPage() {
                             >
                               <button
                                 type="button"
-                                onClick={(
-                                  event
-                                ) => {
+                                onClick={(event) => {
                                   event.stopPropagation();
-
-                                  setSelected(
-                                    enquiry
-                                  );
+                                  setSelected(enquiry);
                                 }}
+                                title="View Details"
                                 className="
                                   flex
-                                  h-[27px]
+                                  h-[28px]
                                   w-[28px]
                                   items-center
                                   justify-center
@@ -2066,23 +2066,18 @@ export default function GeneralEnquiriesPage() {
                                   hover:bg-[#F7F9FB]
                                 "
                               >
-                                <Eye
-                                  size={
-                                    11
-                                  }
-                                />
+                                <Eye size={14} />
                               </button>
 
                               <button
                                 type="button"
-                                onClick={(
-                                  event
-                                ) => {
+                                onClick={(event) => {
                                   event.stopPropagation();
                                 }}
+                                title="Reply / View"
                                 className="
                                   flex
-                                  h-[27px]
+                                  h-[28px]
                                   w-[28px]
                                   items-center
                                   justify-center
@@ -2094,11 +2089,7 @@ export default function GeneralEnquiriesPage() {
                                   hover:bg-[#F7F9FB]
                                 "
                               >
-                                <ArrowLeft
-                                  size={
-                                    11
-                                  }
-                                />
+                                <ArrowLeft size={14} />
                               </button>
                             </div>
                           </td>
@@ -2116,7 +2107,7 @@ export default function GeneralEnquiriesPage() {
                         className="
                           h-[150px]
                           text-center
-                          text-[8px]
+                          text-xs
                           font-[600]
                           text-[#667085]
                         "
@@ -2148,7 +2139,7 @@ export default function GeneralEnquiriesPage() {
               <p
                 className="
                   whitespace-nowrap
-                  text-[6.6px]
+                  text-[10px]
                   font-[600]
                   text-[#475A83]
                 "
@@ -2226,7 +2217,7 @@ export default function GeneralEnquiriesPage() {
                           justify-center
                           rounded-[4px]
                           border
-                          text-[7.3px]
+                          text-[10px]
                           font-[700]
 
                           ${safePage ===
@@ -2297,11 +2288,11 @@ export default function GeneralEnquiriesPage() {
                     appearance-none
                     rounded-[4px]
                     border
-                    border-[#E3E7ED]
+                    border-[#E3E3ED]
                     bg-white
                     px-[9px]
                     pr-[25px]
-                    text-[6.5px]
+                    text-[10px]
                     font-[700]
                     text-[#536180]
                     outline-none
@@ -2360,8 +2351,10 @@ export default function GeneralEnquiriesPage() {
           >
             <h2
               className="
-                text-[9px]
+                text-[10px]
                 font-[800]
+                uppercase
+                tracking-wider
                 text-[#1D5E39]
               "
             >
@@ -2441,7 +2434,7 @@ export default function GeneralEnquiriesPage() {
                 >
                   <strong
                     className="
-                      text-[18px]
+                      text-[12px]
                       font-[800]
                       leading-none
                       text-[#141414]
@@ -2452,9 +2445,11 @@ export default function GeneralEnquiriesPage() {
 
                   <span
                     className="
-                      mt-[4px]
-                      text-[6px]
-                      font-[600]
+                      mt-[2px]
+                      text-[10px]
+                      font-[700]
+                      uppercase
+                      tracking-wide
                       text-[#44537B]
                     "
                   >
@@ -2469,7 +2464,7 @@ export default function GeneralEnquiriesPage() {
                 className="
                   min-w-0
                   flex-1
-                  space-y-[10px]
+                  space-y-[8px]
                 "
               >
                 {[
@@ -2505,7 +2500,8 @@ export default function GeneralEnquiriesPage() {
                       flex
                       items-center
                       justify-between
-                      gap-[5px]
+                      gap-[6px]
+                      text-left
                     "
                   >
                     <div
@@ -2532,8 +2528,8 @@ export default function GeneralEnquiriesPage() {
                       <span
                         className="
                           whitespace-nowrap
-                          text-[5.8px]
-                          font-[600]
+                          text-[7px]
+                          font-semibold
                           text-[#26386D]
                         "
                       >
@@ -2544,8 +2540,9 @@ export default function GeneralEnquiriesPage() {
                     <span
                       className="
                         whitespace-nowrap
-                        text-[5.4px]
-                        font-[600]
+                        text-left
+                        text-[7px]
+                        font-semibold
                         text-[#26386D]
                       "
                     >
@@ -2578,9 +2575,11 @@ export default function GeneralEnquiriesPage() {
           >
             <h2
               className="
-                text-[8.8px]
+                text-[10px]
                 font-[800]
-                text-[#20252F]
+                uppercase
+                tracking-wider
+                text-[#1D5E39]
               "
             >
               Enquiries by Source
@@ -2643,7 +2642,8 @@ export default function GeneralEnquiriesPage() {
                     className="
                     py-[15px]
                     text-center
-                    text-[6.5px]
+                    text-[10px]
+                    font-medium
                     text-[#667085]
                   "
                   >
@@ -2669,9 +2669,11 @@ export default function GeneralEnquiriesPage() {
           >
             <h2
               className="
-                text-[8.8px]
+                text-[10px]
                 font-[800]
-                text-[#20252F]
+                uppercase
+                tracking-wider
+                text-[#1D5E39]
               "
             >
               Popular Categories
@@ -2724,7 +2726,8 @@ export default function GeneralEnquiriesPage() {
                     className="
                     py-[15px]
                     text-center
-                    text-[6.5px]
+                    text-[10px]
+                    font-medium
                     text-[#667085]
                   "
                   >
@@ -2755,9 +2758,11 @@ export default function GeneralEnquiriesPage() {
             >
               <h2
                 className="
-                  text-[9.5px]
+                  text-[10px]
                   font-[800]
-                  text-[#1E3475]
+                  uppercase
+                  tracking-wider
+                  text-[#1D5E39]
                 "
               >
                 Quick Actions
@@ -2765,6 +2770,12 @@ export default function GeneralEnquiriesPage() {
             </div>
 
             {[
+              {
+                label:
+                  "Add New Enquiry",
+                icon: Plus,
+                href: "/enquiries/new?category=contact",
+              },
               {
                 label:
                   "View All Enquiries",
@@ -2789,24 +2800,8 @@ export default function GeneralEnquiriesPage() {
               const Icon =
                 action.icon;
 
-              return (
-                <button
-                  type="button"
-                  key={action.label}
-                  className="
-                    flex
-                    h-[34px]
-                    w-full
-                    items-center
-                    justify-between
-                    border-b
-                    border-[#EDF0F4]
-                    px-[12px]
-                    text-[#1A2F6D]
-                    last:border-b-0
-                    hover:bg-white
-                  "
-                >
+              const content = (
+                <>
                   <span
                     className="
                       flex
@@ -2816,14 +2811,14 @@ export default function GeneralEnquiriesPage() {
                     "
                   >
                     <Icon
-                      size={12}
+                      size={14}
                       className="shrink-0"
                     />
 
                     <span
                       className="
                         whitespace-nowrap
-                        text-[6.9px]
+                        text-[10px]
                         font-[700]
                       "
                     >
@@ -2832,9 +2827,34 @@ export default function GeneralEnquiriesPage() {
                   </span>
 
                   <ArrowRight
-                    size={10}
-                    className="shrink-0"
+                    size={14}
+                    className="shrink-0 text-[#909BB0]"
                   />
+                </>
+              );
+
+              const className =
+                "flex h-[40px] w-full items-center justify-between border-b border-[#EDF0F4] px-[12px] text-[#1A2F6D] last:border-b-0 hover:bg-white transition";
+
+              if (action.href) {
+                return (
+                  <Link
+                    key={action.label}
+                    href={action.href}
+                    className={className}
+                  >
+                    {content}
+                  </Link>
+                );
+              }
+
+              return (
+                <button
+                  type="button"
+                  key={action.label}
+                  className={className}
+                >
+                  {content}
                 </button>
               );
             })}
@@ -2860,7 +2880,7 @@ export default function GeneralEnquiriesPage() {
           <div
             className="
               space-y-4
-              text-sm
+              text-[10px]
             "
           >
             {/* STATUS */}
@@ -2879,7 +2899,7 @@ export default function GeneralEnquiriesPage() {
                   border
                   px-2.5
                   py-1
-                  text-xs
+                  text-[10px]
                   font-semibold
                 "
                 style={{
@@ -2918,7 +2938,7 @@ export default function GeneralEnquiriesPage() {
                 grid
                 grid-cols-2
                 gap-3
-                text-xs
+                text-[10px]
               "
             >
               <ModalField
@@ -2969,8 +2989,8 @@ export default function GeneralEnquiriesPage() {
             <div>
               <p
                 className="
-                  text-[11px]
-                  font-semibold
+                  text-[10px]
+                  font-bold
                   uppercase
                   tracking-wide
                   text-text-muted
@@ -2996,8 +3016,8 @@ export default function GeneralEnquiriesPage() {
             <div>
               <p
                 className="
-                  text-[11px]
-                  font-semibold
+                  text-[10px]
+                  font-bold
                   uppercase
                   tracking-wide
                   text-text-muted
@@ -3045,7 +3065,7 @@ export default function GeneralEnquiriesPage() {
                 rel="noreferrer"
                 className="
                   inline-flex
-                  text-xs
+                  text-[10px]
                   font-semibold
                   text-accent
                   hover:underline
@@ -3081,8 +3101,8 @@ function ModalField({
     <div>
       <p
         className="
-          text-[11px]
-          font-semibold
+          text-[10px]
+          font-bold
           uppercase
           tracking-wide
           text-text-muted

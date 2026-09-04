@@ -1,627 +1,2241 @@
 "use client";
 
 import {
-  useEffect,
-  useMemo,
+  useRef,
   useState,
-  type ComponentType,
-  type CSSProperties,
+  useEffect,
+  Suspense,
+  type ChangeEvent,
+  type FormEvent,
   type ReactNode,
 } from "react";
 
+import { useRouter, useSearchParams } from "next/navigation";
+
 import {
-  ArrowDown,
-  ArrowLeft,
-  ArrowRight,
-  ArrowUp,
   CalendarDays,
-  CheckCircle2,
+  Check,
   ChevronDown,
-  ChevronLeft,
   ChevronRight,
-  CircleX,
-  Download,
-  Eye,
-  Filter,
-  Globe2,
-  Hourglass,
+  CircleHelp,
+  CircleUserRound,
+  FileText,
+  HandHeart,
+  Headphones,
+  HeartHandshake,
+  Info,
   Mail,
+  MapPin,
   MessageCircleMore,
   Phone,
-  Plus,
-  RefreshCcw,
-  Search,
+  Save,
+  Send,
+  ShieldCheck,
+  Truck,
+  UploadCloud,
   UserRound,
-  Users,
+  UsersRound,
+  X,
 } from "lucide-react";
 
-import Modal from "@/components/ui/Modal";
-import Badge from "@/components/ui/Badge";
-
 import { enquiriesApi } from "@/lib/enquiriesApi";
-import { Enquiry } from "@/lib/types";
-import { formatDateTime } from "@/lib/statusMeta";
-import { ApiRequestError } from "@/lib/api";
 
 /* ============================================================
-   RUNTIME TYPE
+   TYPES
 ============================================================ */
 
-type RuntimeEnquiry = Omit<Enquiry, "status"> & {
-  status: string;
+type Priority =
+  | "Low"
+  | "Medium"
+  | "High"
+  | "Urgent";
+
+type ContactMethod =
+  | "Phone"
+  | "Email"
+  | "WhatsApp"
+  | "Any";
+
+type EnquiryForm = {
+  source: string;
+  enquiryDate: string;
+  responseTime: string;
+
+  subject: string;
+  category: string;
+  priority: Priority;
+
+  description: string;
+
+  fullName: string;
+  email: string;
+
+  countryCode: string;
+  phone: string;
+
+  alternatePhone: string;
+
+  city: string;
+  state: string;
+
+  relationship: string;
+
+  preferredContactMethod: ContactMethod;
+
+  communicationLanguage: string;
+
+  relatedToServices: string;
+  interestedService: string;
+
+  contactedBefore: string;
+
+  heardAbout: string;
+};
+
+type EnquiryCreatePayload = {
+  name: string;
+  email?: string;
+  phone: string;
+
+  message: string;
 
   subject?: string;
   source?: string;
-  enquirySource?: string;
-  categoryLabel?: string;
+  category?: string;
+
+  priority?: string;
+
+  city?: string;
+  state?: string;
+
+  relationship?: string;
+
+  preferredContactMethod?: string;
+
+  communicationLanguage?: string;
+
+  interestedService?: string;
+
+  contactedBefore?: string;
+
+  heardAbout?: string;
+
+  preferredResponseTime?: string;
+
+  enquiryDate?: string;
+
+  alternatePhone?: string;
+
+  attachment?: File | null;
 };
 
 /* ============================================================
-   FILTER TYPES
+   DEFAULT FORM
 ============================================================ */
 
-type UiStatus =
-  | ""
-  | "new"
-  | "progress"
-  | "resolved"
-  | "closed";
+function getCurrentLocalDateTime() {
+  const now = new Date();
+
+  const offset =
+    now.getTimezoneOffset() * 60000;
+
+  return new Date(
+    now.getTime() - offset
+  )
+    .toISOString()
+    .slice(0, 16);
+}
+
+const DEFAULT_FORM: EnquiryForm = {
+  source: "",
+  enquiryDate:
+    getCurrentLocalDateTime(),
+
+  responseTime: "",
+
+  subject: "",
+  category: "",
+  priority: "Medium",
+
+  description: "",
+
+  fullName: "",
+  email: "",
+
+  countryCode: "+91",
+  phone: "",
+
+  alternatePhone: "",
+
+  city: "",
+  state: "",
+
+  relationship: "",
+
+  preferredContactMethod:
+    "Phone",
+
+  communicationLanguage: "",
+
+  relatedToServices: "",
+  interestedService: "",
+
+  contactedBefore: "",
+
+  heardAbout: "",
+};
 
 /* ============================================================
-   HELPERS
+   OPTIONS
 ============================================================ */
 
-function parseDate(value?: string) {
-  if (!value) {
-    return null;
-  }
+const sourceOptions = [
+  "Website Form",
+  "Phone Call",
+  "WhatsApp",
+  "Email",
+  "Walk-in / Referral",
+  "Social Media",
+  "Other",
+];
 
-  const date = new Date(value);
+const categoryOptions = [
+  "Sewa Support",
+  "Last Rites Support",
+  "Ritual & Priest Support",
+  "Transport & Logistics",
+  "Donation & Contribution",
+  "Volunteer",
+  "CSR & Partnership",
+  "Documentation",
+  "Information",
+  "Others",
+];
 
-  if (Number.isNaN(date.getTime())) {
-    return null;
-  }
+const serviceOptions = [
+  "Final Journey & Transport",
+  "Cremation & Last Rites",
+  "Ritual & Priest Support",
+  "Family & On-Ground Support",
+  "Unclaimed Body Sewa",
+  "Volunteer Support",
+  "Donation Support",
+  "CSR Partnership",
+  "Other",
+];
 
-  return date;
-}
+const stateOptions = [
+  "Delhi",
+  "Uttar Pradesh",
+  "Haryana",
+  "Rajasthan",
+  "Punjab",
+  "Uttarakhand",
+  "Madhya Pradesh",
+  "Maharashtra",
+  "Gujarat",
+  "Bihar",
+  "West Bengal",
+  "Other",
+];
 
-function percentage(
-  value: number,
-  total: number
-) {
-  if (!total) {
-    return 0;
-  }
-
-  return (value / total) * 100;
-}
+const languageOptions = [
+  "Hindi",
+  "English",
+  "Hindi & English",
+  "Punjabi",
+  "Urdu",
+  "Bengali",
+  "Gujarati",
+  "Marathi",
+  "Other",
+];
 
 /* ============================================================
-   STATUS
+   POPULAR CATEGORIES
 ============================================================ */
 
-function normalizeStatus(
-  status?: string
-): Exclude<UiStatus, ""> {
-  const value = String(status ?? "")
-    .trim()
-    .toLowerCase();
+const popularCategories = [
+  {
+    title: "Sewa Support",
+    description:
+      "General assistance & support",
+    icon: ShieldCheck,
+    bg: "#EEEAFD",
+    color: "#6751D3",
+  },
 
-  if (
-    value === "resolved" ||
-    value === "completed"
-  ) {
-    return "resolved";
-  }
+  {
+    title: "Last Rites Support",
+    description:
+      "Cremation & last rites related help",
+    icon: CircleHelp,
+    bg: "#FDE9ED",
+    color: "#E54255",
+  },
 
-  if (
-    value === "contacted" ||
-    value === "in_progress" ||
-    value === "in progress" ||
-    value === "progress" ||
-    value === "pending"
-  ) {
-    return "progress";
-  }
+  {
+    title: "Ritual & Priest Support",
+    description:
+      "Pooja, rituals & priest arrangement",
+    icon: HandHeart,
+    bg: "#F3E8FD",
+    color: "#9450D5",
+  },
 
-  if (
-    value === "closed" ||
-    value === "rejected"
-  ) {
-    return "closed";
-  }
+  {
+    title: "Transport & Logistics",
+    description:
+      "Transport & vehicle assistance",
+    icon: Truck,
+    bg: "#E6F5FA",
+    color: "#2798B3",
+  },
 
-  return "new";
-}
+  {
+    title: "Donation & Contribution",
+    description:
+      "Donation, CSR & partnership",
+    icon: HeartHandshake,
+    bg: "#FFF1DE",
+    color: "#ED961E",
+  },
 
-function getStatusLabel(
-  status?: string
-) {
-  const normalized =
-    normalizeStatus(status);
-
-  switch (normalized) {
-    case "progress":
-      return "In Progress";
-
-    case "resolved":
-      return "Resolved";
-
-    case "closed":
-      return "Closed";
-
-    default:
-      return "New";
-  }
-}
-
-function getStatusStyle(
-  status?: string
-) {
-  const normalized =
-    normalizeStatus(status);
-
-  switch (normalized) {
-    case "progress":
-      return {
-        background: "#FFF3DB",
-        color: "#D68B16",
-        border: "#F4E1BB",
-      };
-
-    case "resolved":
-      return {
-        background: "#E5F5E9",
-        color: "#27814A",
-        border: "#CEE9D5",
-      };
-
-    case "closed":
-      return {
-        background: "#FDE9E9",
-        color: "#D94747",
-        border: "#F5D4D4",
-      };
-
-    default:
-      return {
-        background: "#E8F2FE",
-        color: "#2D73CA",
-        border: "#D3E5FA",
-      };
-  }
-}
+  {
+    title: "Others",
+    description:
+      "Other general enquiries",
+    icon: MessageCircleMore,
+    bg: "#EAF0FD",
+    color: "#506DC4",
+  },
+];
 
 /* ============================================================
-   CATEGORY
+   PAGE
 ============================================================ */
 
-function getCategoryLabel(
-  enquiry: RuntimeEnquiry
-) {
-  if (
-    enquiry.categoryLabel?.trim()
+function AddNewEnquiryContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const urlCategory = searchParams.get("category");
+
+  const fileInputRef =
+    useRef<HTMLInputElement>(null);
+
+  const [form, setForm] =
+    useState<EnquiryForm>(
+      DEFAULT_FORM
+    );
+
+  const [
+    attachment,
+    setAttachment,
+  ] = useState<File | null>(null);
+
+  const [saving, setSaving] =
+    useState(false);
+
+  const [error, setError] =
+    useState("");
+
+  const [success, setSuccess] =
+    useState("");
+
+  const [submitted, setSubmitted] =
+    useState(false);
+
+  useEffect(() => {
+    if (!urlCategory) return;
+    const cat = urlCategory.toLowerCase();
+    if (cat === "csr") {
+      setForm((prev) => ({ ...prev, category: "CSR & Partnership" }));
+    } else if (cat === "contact" || cat === "general") {
+      setForm((prev) => ({ ...prev, category: "Sewa Support" }));
+    } else {
+      const match = categoryOptions.find(
+        (c) => c.toLowerCase() === cat
+      );
+      if (match) {
+        setForm((prev) => ({ ...prev, category: match }));
+      }
+    }
+  }, [urlCategory]);
+
+  /* ==========================================================
+     UPDATE FIELD
+  ========================================================== */
+
+  function updateField<
+    K extends keyof EnquiryForm
+  >(
+    key: K,
+    value: EnquiryForm[K]
   ) {
-    return enquiry.categoryLabel;
+    setForm((current) => ({
+      ...current,
+      [key]: value,
+    }));
+
+    setError("");
+    setSuccess("");
   }
 
-  switch (enquiry.category) {
-    case "unclaimed_body":
-      return "Sewa Support";
+  /* ==========================================================
+     FILE
+  ========================================================== */
 
-    case "partnership":
-      return "Partnership";
-
-    case "csr":
-      return "Partnership";
-
-    case "contact":
-    default:
-      break;
-  }
-
-  const interest =
-    enquiry.interest
-      ?.trim()
-      .toLowerCase();
-
-  if (
-    interest?.includes("volunteer")
+  function handleFileChange(
+    event: ChangeEvent<HTMLInputElement>
   ) {
-    return "Volunteer";
-  }
+    const file =
+      event.target.files?.[0];
 
-  if (
-    interest?.includes("donat")
-  ) {
-    return "Donation";
-  }
+    if (!file) return;
 
-  if (
-    interest?.includes("document")
-  ) {
-    return "Documentation";
-  }
+    const allowed = [
+      "image/jpeg",
+      "image/png",
+      "application/pdf",
+    ];
 
-  if (
-    interest?.includes("financial")
-  ) {
-    return "Financial Help";
-  }
-
-  if (
-    interest?.includes("information")
-  ) {
-    return "Information";
-  }
-
-  return "General";
-}
-
-function categoryStyle(
-  label: string
-) {
-  const value =
-    label.toLowerCase();
-
-  if (
-    value.includes("sewa")
-  ) {
-    return {
-      background: "#E5F5E9",
-      color: "#25804A",
-      border: "#CEE9D5",
-    };
-  }
-
-  if (
-    value.includes("volunteer")
-  ) {
-    return {
-      background: "#F0E7FD",
-      color: "#8B48DA",
-      border: "#E4D6F9",
-    };
-  }
-
-  if (
-    value.includes("partner")
-  ) {
-    return {
-      background: "#E8F2FE",
-      color: "#2C76CE",
-      border: "#D1E5F9",
-    };
-  }
-
-  if (
-    value.includes("information")
-  ) {
-    return {
-      background: "#E8F2FE",
-      color: "#2B79CE",
-      border: "#D4E6FA",
-    };
-  }
-
-  if (
-    value.includes("financial")
-  ) {
-    return {
-      background: "#FFF3DE",
-      color: "#D88715",
-      border: "#F7E2BA",
-    };
-  }
-
-  if (
-    value.includes("document")
-  ) {
-    return {
-      background: "#EDF0F5",
-      color: "#4D5D80",
-      border: "#DEE3EB",
-    };
-  }
-
-  if (
-    value.includes("donation")
-  ) {
-    return {
-      background: "#FCE8F6",
-      color: "#C83F9A",
-      border: "#F6D6EA",
-    };
-  }
-
-  return {
-    background: "#F1F3F6",
-    color: "#53617D",
-    border: "#E1E5EB",
-  };
-}
-
-/* ============================================================
-   SUBJECT
-============================================================ */
-
-function getSubject(
-  enquiry: RuntimeEnquiry
-) {
-  if (enquiry.subject?.trim()) {
-    return enquiry.subject;
-  }
-
-  if (enquiry.interest?.trim()) {
-    return enquiry.interest;
-  }
-
-  if (enquiry.message?.trim()) {
-    const text =
-      enquiry.message.trim();
-
-    if (text.length <= 52) {
-      return text;
+    if (
+      !allowed.includes(file.type)
+    ) {
+      setError(
+        "Only JPG, PNG and PDF files are allowed."
+      );
+      return;
     }
 
-    return `${text.slice(
-      0,
-      49
-    )}...`;
+    if (
+      file.size >
+      10 * 1024 * 1024
+    ) {
+      setError(
+        "Attachment must be less than 10MB."
+      );
+      return;
+    }
+
+    setAttachment(file);
+    setError("");
   }
 
-  return "General enquiry";
+  /* ==========================================================
+     VALIDATION
+  ========================================================== */
+
+  function validate() {
+    if (!form.source) {
+      return "Enquiry source is required.";
+    }
+
+    if (!form.enquiryDate) {
+      return "Enquiry date and time is required.";
+    }
+
+    if (!form.subject.trim()) {
+      return "Subject is required.";
+    }
+
+    if (!form.category) {
+      return "Category is required.";
+    }
+
+    if (
+      !form.description.trim()
+    ) {
+      return "Enquiry description is required.";
+    }
+
+    if (!form.fullName.trim()) {
+      return "Full name is required.";
+    }
+
+    if (!form.email.trim()) {
+      return "Email address is required.";
+    }
+
+    if (
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+        form.email.trim()
+      )
+    ) {
+      return "Please enter a valid email address.";
+    }
+
+    if (!form.phone.trim()) {
+      return "Phone number is required.";
+    }
+
+    return "";
+  }
+
+  /* ==========================================================
+     PAYLOAD
+  ========================================================== */
+
+  function buildPayload():
+    EnquiryCreatePayload {
+    return {
+      name:
+        form.fullName.trim(),
+
+      email:
+        form.email
+          .trim()
+          .toLowerCase(),
+
+      phone:
+        `${form.countryCode} ${form.phone.trim()}`,
+
+      alternatePhone:
+        form.alternatePhone.trim() ||
+        undefined,
+
+      message:
+        form.description.trim(),
+
+      subject:
+        form.subject.trim(),
+
+      source:
+        form.source ||
+        undefined,
+
+      category:
+        form.category ||
+        undefined,
+
+      priority:
+        form.priority ||
+        undefined,
+
+      city:
+        form.city.trim() ||
+        undefined,
+
+      state:
+        form.state ||
+        undefined,
+
+      relationship:
+        form.relationship ||
+        undefined,
+
+      preferredContactMethod:
+        form.preferredContactMethod,
+
+      communicationLanguage:
+        form.communicationLanguage ||
+        undefined,
+
+      interestedService:
+        form.interestedService ||
+        undefined,
+
+      contactedBefore:
+        form.contactedBefore ||
+        undefined,
+
+      heardAbout:
+        form.heardAbout ||
+        undefined,
+
+      preferredResponseTime:
+        form.responseTime ||
+        undefined,
+
+      enquiryDate:
+        form.enquiryDate ||
+        undefined,
+
+      attachment,
+    };
+  }
+
+  /* ==========================================================
+     SUBMIT
+  ========================================================== */
+
+  async function handleSubmit(
+    event: FormEvent
+  ) {
+    event.preventDefault();
+
+    const validation =
+      validate();
+
+    if (validation) {
+      setError(validation);
+      return;
+    }
+
+    setSaving(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      const payload =
+        buildPayload();
+
+      /*
+       * Keeps your existing API safe.
+       * If create() already exists, it is used directly.
+       */
+
+      const api =
+        enquiriesApi as typeof enquiriesApi & {
+          create?: (
+            payload:
+              EnquiryCreatePayload
+          ) => Promise<unknown>;
+        };
+
+      if (
+        typeof api.create !==
+        "function"
+      ) {
+        throw new Error(
+          "enquiriesApi.create() is not configured."
+        );
+      }
+
+      await api.create(payload);
+
+      setSuccess(
+        "Enquiry created successfully."
+      );
+      setSubmitted(true);
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Could not create enquiry."
+      );
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  /* ==========================================================
+     DRAFT
+  ========================================================== */
+
+  function saveDraft() {
+    try {
+      localStorage.setItem(
+        "moksha-new-enquiry-draft",
+        JSON.stringify(form)
+      );
+
+      setSuccess(
+        "Draft saved successfully."
+      );
+
+      setError("");
+    } catch {
+      setError(
+        "Could not save draft."
+      );
+    }
+  }
+
+  /* ==========================================================
+     UI
+  ========================================================== */
+
+  if (submitted) {
+    return (
+      <div className="mx-auto max-w-[800px] p-[30px]">
+        <div className="flex flex-col items-center justify-center rounded-[12px] border border-[#DCE3EA] bg-white p-[48px] text-center shadow-sm">
+          <div className="flex h-[64px] w-[64px] items-center justify-center rounded-full bg-[#EBF7F0] text-[#005F2E]">
+            <Check size={36} strokeWidth={3} />
+          </div>
+          <h2 className="mt-[20px] text-[22px] font-[800] text-[#17234A]">
+            Enquiry Recorded Successfully!
+          </h2>
+          <p className="mt-[8px] max-w-[450px] text-[12px] font-[600] text-[#52607D]">
+            The enquiry for <span className="font-[800] text-[#17234A]">{form.fullName}</span> ({form.category || "General"}) has been registered.
+          </p>
+          <div className="mt-[28px] flex items-center gap-[12px]">
+            <button
+              type="button"
+              onClick={() => {
+                setSubmitted(false);
+                setForm(DEFAULT_FORM);
+                setAttachment(null);
+                setSuccess("");
+              }}
+              className="inline-flex h-[38px] items-center gap-[8px] rounded-[6px] border border-[#DCE3EA] bg-white px-[18px] text-[11px] font-[700] text-[#24345E] hover:bg-slate-50 transition"
+            >
+              Add Another Enquiry
+            </button>
+
+            <button
+              type="button"
+              onClick={() => router.push("/general-enquiries")}
+              className="inline-flex h-[38px] items-center gap-[8px] rounded-[6px] bg-[#005F2E] px-[22px] text-[11px] font-[700] text-white shadow-sm hover:bg-[#004d25] transition"
+            >
+              Return to General Enquiries
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="
+        w-full
+        min-w-0
+        overflow-hidden
+        bg-white
+        px-[15px]
+        pb-[18px]
+        pt-[11px]
+      "
+    >
+      {/* ======================================================
+          HEADER
+      ====================================================== */}
+
+      <div className="min-w-0">
+        <h1
+          className="
+            text-[20px]
+            font-[800]
+            leading-[25px]
+            tracking-[-0.35px]
+            text-[#005E2E]
+          "
+        >
+          Add New Enquiry
+        </h1>
+
+        {/* BREADCRUMB */}
+
+        <div
+          className="
+            mt-[6px]
+            flex
+            items-center
+            gap-[6px]
+            text-[8px]
+            font-[600]
+            text-[#46567D]
+          "
+        >
+          <button
+            type="button"
+            className="
+              hover:text-[#087740]
+            "
+          >
+            Dashboard
+          </button>
+
+          <ChevronRight
+            size={10}
+          />
+
+          <button
+            type="button"
+            onClick={() =>
+              router.back()
+            }
+            className="
+              hover:text-[#087740]
+            "
+          >
+            General Enquiries
+          </button>
+
+          <ChevronRight
+            size={10}
+          />
+
+          <span
+            className="
+              text-[#263970]
+            "
+          >
+            Add New Enquiry
+          </span>
+        </div>
+      </div>
+
+      {/* ======================================================
+          ALERT
+      ====================================================== */}
+
+      {(error || success) && (
+        <div
+          className={`
+            mt-[10px]
+            rounded-[6px]
+            border
+            px-[12px]
+            py-[8px]
+            text-[8px]
+            font-[600]
+
+            ${error
+              ? "border-red-200 bg-red-50 text-red-700"
+              : "border-[#CEE8D5] bg-[#F2FAF4] text-[#177541]"
+            }
+          `}
+        >
+          {error || success}
+        </div>
+      )}
+
+      {/* ======================================================
+          MAIN GRID
+      ====================================================== */}
+
+      <div
+        className="
+          mt-[14px]
+          grid
+          w-full
+          min-w-0
+          grid-cols-[minmax(0,1fr)_275px]
+          gap-[16px]
+          overflow-hidden
+        "
+      >
+        {/* ====================================================
+            LEFT
+        ==================================================== */}
+
+        <main
+          className="
+            w-full
+            min-w-0
+            space-y-[10px]
+          "
+        >
+          {/* ==================================================
+              1. ENQUIRY DETAILS
+          ================================================== */}
+
+          <FormSection>
+            <SectionHeading
+              number={1}
+              title="Enquiry Details"
+              icon={FileText}
+            />
+
+            <div
+              className="
+                mt-[12px]
+                grid
+                min-w-0
+                grid-cols-3
+                gap-x-[18px]
+                gap-y-[14px]
+              "
+            >
+              {/* SOURCE */}
+
+              <FormField
+                label="Enquiry Source"
+                required
+              >
+                <SelectBox
+                  value={form.source}
+                  onChange={(value) =>
+                    updateField(
+                      "source",
+                      value
+                    )
+                  }
+                >
+                  <option value="">
+                    Select Source
+                  </option>
+
+                  {sourceOptions.map(
+                    (source) => (
+                      <option
+                        key={source}
+                        value={source}
+                      >
+                        {source}
+                      </option>
+                    )
+                  )}
+                </SelectBox>
+              </FormField>
+
+              {/* DATE */}
+
+              <FormField
+                label="Enquiry Date & Time"
+                required
+              >
+                <div
+                  className="
+                    relative
+                    min-w-0
+                  "
+                >
+                  <CalendarDays
+                    size={13}
+                    className="
+                      pointer-events-none
+                      absolute
+                      left-[10px]
+                      top-1/2
+                      z-10
+                      -translate-y-1/2
+                      text-[#34477A]
+                    "
+                  />
+
+                  <input
+                    type="datetime-local"
+                    value={
+                      form.enquiryDate
+                    }
+                    onChange={(event) =>
+                      updateField(
+                        "enquiryDate",
+                        event.target
+                          .value
+                      )
+                    }
+                    className={`
+                      ${inputClass}
+                      pl-[31px]
+                    `}
+                  />
+                </div>
+              </FormField>
+
+              {/* RESPONSE TIME */}
+
+              <FormField label="Preferred Response Time">
+                <SelectBox
+                  value={
+                    form.responseTime
+                  }
+                  onChange={(value) =>
+                    updateField(
+                      "responseTime",
+                      value
+                    )
+                  }
+                >
+                  <option value="">
+                    Select Time
+                  </option>
+
+                  <option value="As soon as possible">
+                    As soon as possible
+                  </option>
+
+                  <option value="Morning">
+                    Morning
+                  </option>
+
+                  <option value="Afternoon">
+                    Afternoon
+                  </option>
+
+                  <option value="Evening">
+                    Evening
+                  </option>
+
+                  <option value="Any Time">
+                    Any Time
+                  </option>
+                </SelectBox>
+              </FormField>
+
+              {/* SUBJECT */}
+
+              <FormField
+                label="Subject"
+                required
+              >
+                <input
+                  value={
+                    form.subject
+                  }
+                  onChange={(event) =>
+                    updateField(
+                      "subject",
+                      event.target
+                        .value
+                    )
+                  }
+                  placeholder="Enter enquiry subject"
+                  className={
+                    inputClass
+                  }
+                />
+              </FormField>
+
+              {/* CATEGORY */}
+
+              <FormField
+                label="Category"
+                required
+              >
+                <SelectBox
+                  value={
+                    form.category
+                  }
+                  onChange={(value) =>
+                    updateField(
+                      "category",
+                      value
+                    )
+                  }
+                >
+                  <option value="">
+                    Select Category
+                  </option>
+
+                  {categoryOptions.map(
+                    (category) => (
+                      <option
+                        key={
+                          category
+                        }
+                        value={
+                          category
+                        }
+                      >
+                        {
+                          category
+                        }
+                      </option>
+                    )
+                  )}
+                </SelectBox>
+              </FormField>
+
+              {/* PRIORITY */}
+
+              <FormField label="Priority">
+                <PrioritySelect
+                  value={
+                    form.priority
+                  }
+                  onChange={(value) =>
+                    updateField(
+                      "priority",
+                      value
+                    )
+                  }
+                />
+              </FormField>
+            </div>
+
+            {/* DESCRIPTION */}
+
+            <div className="mt-[13px]">
+              <FormField
+                label="Enquiry Description"
+                required
+              >
+                <div
+                  className="
+                    relative
+                    min-w-0
+                  "
+                >
+                  <textarea
+                    value={
+                      form.description
+                    }
+                    maxLength={1000}
+                    onChange={(event) =>
+                      updateField(
+                        "description",
+                        event.target
+                          .value
+                      )
+                    }
+                    placeholder="Please provide detailed information about the enquiry..."
+                    className="
+                      h-[66px]
+                      w-full
+                      resize-none
+                      rounded-[5px]
+                      border
+                      border-[#DFE4EA]
+                      bg-white
+                      px-[10px]
+                      py-[8px]
+                      pr-[52px]
+                      text-[7.4px]
+                      font-[500]
+                      text-[#26396F]
+                      outline-none
+                      placeholder:text-[#6B7690]
+                      focus:border-[#78B58F]
+                    "
+                  />
+
+                  <span
+                    className="
+                      absolute
+                      bottom-[8px]
+                      right-[9px]
+                      text-[6px]
+                      font-[600]
+                      text-[#6A7690]
+                    "
+                  >
+                    {
+                      form.description
+                        .length
+                    }
+                    /1000
+                  </span>
+                </div>
+              </FormField>
+            </div>
+          </FormSection>
+
+          {/* ==================================================
+              2. ENQUIRER INFORMATION
+          ================================================== */}
+
+          <FormSection>
+            <SectionHeading
+              number={2}
+              title="Enquirer Information"
+              icon={UserRound}
+            />
+
+            <div
+              className="
+                mt-[12px]
+                grid
+                min-w-0
+                grid-cols-3
+                gap-x-[18px]
+                gap-y-[14px]
+              "
+            >
+              {/* NAME */}
+
+              <FormField
+                label="Full Name"
+                required
+              >
+                <input
+                  value={
+                    form.fullName
+                  }
+                  onChange={(event) =>
+                    updateField(
+                      "fullName",
+                      event.target
+                        .value
+                    )
+                  }
+                  placeholder="Enter full name"
+                  className={
+                    inputClass
+                  }
+                />
+              </FormField>
+
+              {/* EMAIL */}
+
+              <FormField label="Email Address">
+                <input
+                  type="email"
+                  value={form.email}
+                  onChange={(event) =>
+                    updateField(
+                      "email",
+                      event.target
+                        .value
+                    )
+                  }
+                  placeholder="Enter email address"
+                  className={
+                    inputClass
+                  }
+                />
+              </FormField>
+
+              {/* PHONE */}
+
+              <FormField
+                label="Phone Number"
+                required
+              >
+                <PhoneField
+                  code={
+                    form.countryCode
+                  }
+                  phone={
+                    form.phone
+                  }
+                  onCodeChange={(
+                    value
+                  ) =>
+                    updateField(
+                      "countryCode",
+                      value
+                    )
+                  }
+                  onPhoneChange={(
+                    value
+                  ) =>
+                    updateField(
+                      "phone",
+                      value
+                    )
+                  }
+                />
+              </FormField>
+
+              {/* ALT PHONE */}
+
+              <FormField label="Alternate Phone (Optional)">
+                <input
+                  value={
+                    form.alternatePhone
+                  }
+                  onChange={(event) =>
+                    updateField(
+                      "alternatePhone",
+                      event.target.value.replace(
+                        /[^\d+\s]/g,
+                        ""
+                      )
+                    )
+                  }
+                  placeholder="Enter alternate number"
+                  className={
+                    inputClass
+                  }
+                />
+              </FormField>
+
+              {/* CITY */}
+
+              <FormField label="Location / City">
+                <input
+                  value={form.city}
+                  onChange={(event) =>
+                    updateField(
+                      "city",
+                      event.target
+                        .value
+                    )
+                  }
+                  placeholder="Enter city or area"
+                  className={
+                    inputClass
+                  }
+                />
+              </FormField>
+
+              {/* STATE */}
+
+              <FormField label="State">
+                <SelectBox
+                  value={form.state}
+                  onChange={(value) =>
+                    updateField(
+                      "state",
+                      value
+                    )
+                  }
+                >
+                  <option value="">
+                    Select State
+                  </option>
+
+                  {stateOptions.map(
+                    (state) => (
+                      <option
+                        key={state}
+                        value={state}
+                      >
+                        {state}
+                      </option>
+                    )
+                  )}
+                </SelectBox>
+              </FormField>
+            </div>
+
+            {/* SECOND ROW */}
+
+            <div
+              className="
+                mt-[13px]
+                grid
+                min-w-0
+                grid-cols-[0.82fr_1.35fr_1fr]
+                gap-[18px]
+              "
+            >
+              {/* RELATION */}
+
+              <FormField label="Relationship (If applicable)">
+                <SelectBox
+                  value={
+                    form.relationship
+                  }
+                  onChange={(value) =>
+                    updateField(
+                      "relationship",
+                      value
+                    )
+                  }
+                >
+                  <option value="">
+                    Select Relationship
+                  </option>
+
+                  <option value="Self">
+                    Self
+                  </option>
+
+                  <option value="Family Member">
+                    Family Member
+                  </option>
+
+                  <option value="Relative">
+                    Relative
+                  </option>
+
+                  <option value="Friend">
+                    Friend
+                  </option>
+
+                  <option value="Hospital">
+                    Hospital
+                  </option>
+
+                  <option value="Police / Authority">
+                    Police / Authority
+                  </option>
+
+                  <option value="NGO">
+                    NGO
+                  </option>
+
+                  <option value="Other">
+                    Other
+                  </option>
+                </SelectBox>
+              </FormField>
+
+              {/* CONTACT METHOD */}
+
+              <FormField label="Preferred Contact Method">
+                <ContactMethodSelector
+                  value={
+                    form.preferredContactMethod
+                  }
+                  onChange={(value) =>
+                    updateField(
+                      "preferredContactMethod",
+                      value
+                    )
+                  }
+                />
+              </FormField>
+
+              {/* LANGUAGE */}
+
+              <FormField label="Communication Language">
+                <SelectBox
+                  value={
+                    form.communicationLanguage
+                  }
+                  onChange={(value) =>
+                    updateField(
+                      "communicationLanguage",
+                      value
+                    )
+                  }
+                >
+                  <option value="">
+                    Select Language
+                  </option>
+
+                  {languageOptions.map(
+                    (language) => (
+                      <option
+                        key={
+                          language
+                        }
+                        value={
+                          language
+                        }
+                      >
+                        {
+                          language
+                        }
+                      </option>
+                    )
+                  )}
+                </SelectBox>
+              </FormField>
+            </div>
+          </FormSection>
+
+          {/* ==================================================
+              3. ADDITIONAL INFORMATION
+          ================================================== */}
+
+          <FormSection>
+            <SectionHeading
+              number={3}
+              title="Additional Information"
+              icon={FileText}
+            />
+
+            <div
+              className="
+                mt-[12px]
+                grid
+                min-w-0
+                grid-cols-3
+                gap-[18px]
+              "
+            >
+              {/* RELATED */}
+
+              <FormField label="Related to Our Services?">
+                <RadioGroup
+                  value={
+                    form.relatedToServices
+                  }
+                  options={[
+                    "Yes",
+                    "No",
+                    "Not Sure",
+                  ]}
+                  onChange={(value) =>
+                    updateField(
+                      "relatedToServices",
+                      value
+                    )
+                  }
+                />
+              </FormField>
+
+              {/* SERVICE */}
+
+              <FormField label="Interested Service (If any)">
+                <SelectBox
+                  value={
+                    form.interestedService
+                  }
+                  onChange={(value) =>
+                    updateField(
+                      "interestedService",
+                      value
+                    )
+                  }
+                >
+                  <option value="">
+                    Select Service
+                  </option>
+
+                  {serviceOptions.map(
+                    (service) => (
+                      <option
+                        key={
+                          service
+                        }
+                        value={
+                          service
+                        }
+                      >
+                        {service}
+                      </option>
+                    )
+                  )}
+                </SelectBox>
+              </FormField>
+
+              {/* PREVIOUS CONTACT */}
+
+              <FormField label="Have you contacted us before?">
+                <RadioGroup
+                  value={
+                    form.contactedBefore
+                  }
+                  options={[
+                    "Yes",
+                    "No",
+                  ]}
+                  onChange={(value) =>
+                    updateField(
+                      "contactedBefore",
+                      value
+                    )
+                  }
+                />
+              </FormField>
+            </div>
+
+            <div
+              className="
+                mt-[13px]
+                grid
+                min-w-0
+                grid-cols-[0.95fr_1.85fr]
+                gap-[18px]
+              "
+            >
+              {/* HEARD ABOUT */}
+
+              <FormField label="How did you hear about Moksha Sewa?">
+                <SelectBox
+                  value={
+                    form.heardAbout
+                  }
+                  onChange={(value) =>
+                    updateField(
+                      "heardAbout",
+                      value
+                    )
+                  }
+                >
+                  <option value="">
+                    Select Option
+                  </option>
+
+                  <option value="Website">
+                    Website
+                  </option>
+
+                  <option value="Google">
+                    Google
+                  </option>
+
+                  <option value="Social Media">
+                    Social Media
+                  </option>
+
+                  <option value="Friend / Family">
+                    Friend / Family
+                  </option>
+
+                  <option value="Hospital">
+                    Hospital
+                  </option>
+
+                  <option value="Police / Authority">
+                    Police / Authority
+                  </option>
+
+                  <option value="NGO">
+                    NGO
+                  </option>
+
+                  <option value="Event">
+                    Event
+                  </option>
+
+                  <option value="Other">
+                    Other
+                  </option>
+                </SelectBox>
+              </FormField>
+
+              {/* ATTACHMENT */}
+
+              <FormField label="Any Attachment (Optional)">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".jpg,.jpeg,.png,.pdf"
+                  onChange={
+                    handleFileChange
+                  }
+                  className="hidden"
+                />
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    fileInputRef.current?.click()
+                  }
+                  className="
+                    flex
+                    h-[62px]
+                    w-full
+                    min-w-0
+                    items-center
+                    justify-center
+                    gap-[12px]
+                    rounded-[6px]
+                    border
+                    border-dashed
+                    border-[#CBD4DD]
+                    bg-white
+                    px-[12px]
+                  "
+                >
+                  <UploadCloud
+                    size={22}
+                    strokeWidth={1.8}
+                    className="
+                      shrink-0
+                      text-[#247648]
+                    "
+                  />
+
+                  <div
+                    className="
+                      min-w-0
+                      text-left
+                    "
+                  >
+                    <p
+                      className="
+                        truncate
+                        text-[7.4px]
+                        font-[700]
+                        text-[#33416D]
+                      "
+                    >
+                      {attachment
+                        ? attachment.name
+                        : "Drag & drop files here or click to upload"}
+                    </p>
+
+                    <p
+                      className="
+                        mt-[3px]
+                        text-[7px]
+                        font-[500]
+                        text-[#728099]
+                      "
+                    >
+                      Supported formats:
+                      JPG, PNG, PDF
+                      (Max 10MB)
+                    </p>
+                  </div>
+                </button>
+              </FormField>
+            </div>
+          </FormSection>
+        </main>
+
+        {/* ====================================================
+            RIGHT SIDE
+        ==================================================== */}
+
+        <aside
+          className="
+            w-[275px]
+            min-w-0
+            shrink-0
+          "
+        >
+          {/* ==================================================
+              QUICK INFO
+          ================================================== */}
+
+          <SidebarCard>
+            <div
+              className="
+                flex
+                items-center
+                gap-[8px]
+              "
+            >
+              <Info
+                size={18}
+                className="
+                  text-[#3E75C4]
+                "
+              />
+
+              <h2
+                className="
+                  text-[10px]
+                  font-[800]
+                  text-[#175E39]
+                "
+              >
+                Quick Info
+              </h2>
+            </div>
+
+            <p
+              className="
+                mt-[11px]
+                text-[7.5px]
+                font-[500]
+                text-[#4C5978]
+              "
+            >
+              Fill in the details to
+              create a new enquiry.
+            </p>
+
+            <div
+              className="
+                mt-[15px]
+                space-y-[13px]
+              "
+            >
+              <InfoPoint>
+                Provide accurate contact
+                information.
+              </InfoPoint>
+
+              <InfoPoint>
+                Select appropriate category
+                and priority.
+              </InfoPoint>
+
+              <InfoPoint>
+                We will respond as soon as
+                possible.
+              </InfoPoint>
+            </div>
+
+            {/* decorative leaf */}
+
+            <div
+              className="
+                mt-[2px]
+                flex
+                justify-end
+              "
+            >
+              <svg
+                viewBox="0 0 60 70"
+                className="
+                  h-[47px]
+                  w-[40px]
+                  opacity-[0.15]
+                "
+              >
+                <path
+                  d="M30 68C30 45 33 24 51 5"
+                  fill="none"
+                  stroke="#15804A"
+                  strokeWidth="2"
+                />
+
+                <path
+                  d="M35 43C45 37 50 29 51 20C41 23 35 31 35 43Z"
+                  fill="none"
+                  stroke="#15804A"
+                  strokeWidth="2"
+                />
+
+                <path
+                  d="M29 51C19 45 14 36 14 26C24 30 30 38 29 51Z"
+                  fill="none"
+                  stroke="#15804A"
+                  strokeWidth="2"
+                />
+
+                <path
+                  d="M40 28C48 22 52 15 52 8C44 11 40 18 40 28Z"
+                  fill="none"
+                  stroke="#15804A"
+                  strokeWidth="2"
+                />
+              </svg>
+            </div>
+          </SidebarCard>
+
+          {/* ==================================================
+              POPULAR CATEGORIES
+          ================================================== */}
+
+          <SidebarCard className="mt-[13px]">
+            <h2
+              className="
+                text-[10px]
+                font-[800]
+                text-[#175E39]
+              "
+            >
+              Popular Categories
+            </h2>
+
+            <div
+              className="
+                mt-[12px]
+                divide-y
+                divide-[#EDF0F3]
+              "
+            >
+              {popularCategories.map(
+                (item) => {
+                  const Icon =
+                    item.icon;
+
+                  return (
+                    <button
+                      key={
+                        item.title
+                      }
+                      type="button"
+                      onClick={() =>
+                        updateField(
+                          "category",
+                          item.title
+                        )
+                      }
+                      className="
+                        flex
+                        w-full
+                        min-w-0
+                        items-center
+                        gap-[9px]
+                        py-[8px]
+                        text-left
+                        first:pt-0
+                        last:pb-0
+                      "
+                    >
+                      <div
+                        className="
+                          flex
+                          h-[28px]
+                          w-[28px]
+                          shrink-0
+                          items-center
+                          justify-center
+                          rounded-full
+                        "
+                        style={{
+                          backgroundColor:
+                            item.bg,
+                        }}
+                      >
+                        <Icon
+                          size={13}
+                          strokeWidth={2}
+                          style={{
+                            color:
+                              item.color,
+                          }}
+                        />
+                      </div>
+
+                      <div className="min-w-0">
+                        <p
+                          className="
+                            truncate
+                            text-[7.3px]
+                            font-[700]
+                            text-[#273970]
+                          "
+                        >
+                          {item.title}
+                        </p>
+
+                        <p
+                          className="
+                            mt-[2px]
+                            truncate
+                            text-[7px]
+                            font-[500]
+                            text-[#68758F]
+                          "
+                        >
+                          {
+                            item.description
+                          }
+                        </p>
+                      </div>
+                    </button>
+                  );
+                }
+              )}
+            </div>
+          </SidebarCard>
+
+          {/* ==================================================
+              NEED IMMEDIATE HELP
+          ================================================== */}
+
+          <div
+            className="
+              mt-[13px]
+              rounded-[7px]
+              border
+              border-[#DDE7F3]
+              bg-[#F4F8FF]
+              px-[16px]
+              pb-[16px]
+              pt-[15px]
+            "
+          >
+            <div
+              className="
+                flex
+                items-start
+                gap-[12px]
+              "
+            >
+              <Headphones
+                size={30}
+                strokeWidth={1.7}
+                className="
+                  shrink-0
+                  text-[#2F6DD1]
+                "
+              />
+
+              <div className="min-w-0">
+                <h2
+                  className="
+                    text-[10px]
+                    font-[800]
+                    text-[#243A78]
+                  "
+                >
+                  Need Immediate Help?
+                </h2>
+
+                <p
+                  className="
+                    mt-[7px]
+                    text-[7.5px]
+                    font-[500]
+                    leading-[10px]
+                    text-[#46567D]
+                  "
+                >
+                  For urgent support,
+                  please contact our 24x7
+                  helpline.
+                </p>
+
+                <a
+                  href="tel:+919876543210"
+                  className="
+                    mt-[12px]
+                    flex
+                    h-[34px]
+                    w-fit
+                    items-center
+                    gap-[8px]
+                    rounded-[5px]
+                    border
+                    border-[#9DB7AB]
+                    bg-white
+                    px-[12px]
+                    text-[9px]
+                    font-[800]
+                    text-[#216C3D]
+                  "
+                >
+                  <Phone
+                    size={13}
+                  />
+
+                  +91 98765 43210
+                </a>
+
+                <p
+                  className="
+                    mt-[12px]
+                    text-[7px]
+                    font-[600]
+                    text-[#61708B]
+                  "
+                >
+                  We are here to help
+                  with compassion.
+                </p>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      {/* ======================================================
+          BOTTOM ACTIONS
+      ====================================================== */}
+
+      <div
+        className="
+          mt-[14px]
+          flex
+          min-w-0
+          items-center
+          justify-between
+          gap-[15px]
+        "
+      >
+        <button
+          type="button"
+          onClick={() =>
+            router.back()
+          }
+          className="
+            flex
+            h-[36px]
+            items-center
+            gap-[7px]
+            rounded-[5px]
+            border
+            border-[#DDE3E9]
+            bg-white
+            px-[17px]
+            text-[8px]
+            font-[700]
+            text-[#20336C]
+          "
+        >
+          <X size={13} />
+
+          Cancel
+        </button>
+
+        <div
+          className="
+            flex
+            items-center
+            gap-[12px]
+          "
+        >
+          <button
+            type="button"
+            onClick={saveDraft}
+            className="
+              flex
+              h-[36px]
+              items-center
+              gap-[8px]
+              rounded-[5px]
+              border
+              border-[#DDE3E9]
+              bg-white
+              px-[18px]
+              text-[8px]
+              font-[700]
+              text-[#20336C]
+            "
+          >
+            <Save size={14} />
+
+            Save as Draft
+          </button>
+
+          <button
+            type="submit"
+            disabled={saving}
+            className="
+              flex
+              h-[36px]
+              min-w-[145px]
+              items-center
+              justify-center
+              gap-[8px]
+              rounded-[5px]
+              bg-[#005F2E]
+              px-[20px]
+              text-[8px]
+              font-[700]
+              text-white
+              shadow-[0_2px_5px_rgba(0,95,46,0.15)]
+              disabled:cursor-not-allowed
+              disabled:opacity-60
+            "
+          >
+            <Send size={14} />
+
+            {saving
+              ? "Submitting..."
+              : "Submit Enquiry"}
+          </button>
+        </div>
+      </div>
+    </form>
+  );
+}
+
+export default function AddNewEnquiryPage() {
+  return (
+    <Suspense fallback={<div className="p-4 text-[7.5px] font-[700] text-[#182A65]">Loading form...</div>}>
+      <AddNewEnquiryContent />
+    </Suspense>
+  );
 }
 
 /* ============================================================
-   SOURCE
+   FORM SECTION
 ============================================================ */
 
-function getSource(
-  enquiry: RuntimeEnquiry
-) {
-  const explicit =
-    enquiry.source?.trim() ||
-    enquiry.enquirySource?.trim();
-
-  if (explicit) {
-    return explicit;
-  }
-
-  return "Website Form";
-}
-
-function sourceIcon(
-  source: string
-) {
-  const value =
-    source.toLowerCase();
-
-  if (
-    value.includes("whatsapp")
-  ) {
-    return {
-      icon: MessageCircleMore,
-      color: "#22A75A",
-    };
-  }
-
-  if (
-    value.includes("email")
-  ) {
-    return {
-      icon: Mail,
-      color: "#253D82",
-    };
-  }
-
-  if (
-    value.includes("call") ||
-    value.includes("phone")
-  ) {
-    return {
-      icon: Phone,
-      color: "#544FA7",
-    };
-  }
-
-  if (
-    value.includes("social")
-  ) {
-    return {
-      icon: Globe2,
-      color: "#2487DC",
-    };
-  }
-
-  if (
-    value.includes("referral") ||
-    value.includes("walk")
-  ) {
-    return {
-      icon: UserRound,
-      color: "#42547E",
-    };
-  }
-
-  return {
-    icon: Globe2,
-    color: "#263A70",
-  };
-}
-
-/* ============================================================
-   STAT CARD
-============================================================ */
-
-function StatCard({
-  label,
-  value,
-  change,
-  negative,
-  icon: Icon,
-  iconBg,
-  iconColor,
-  cardBg,
+function FormSection({
+  children,
 }: {
-  label: string;
-  value: number;
-  change: string;
-  negative?: boolean;
-
-  icon: ComponentType<{
-    size?: number;
-    strokeWidth?: number;
-    style?: CSSProperties;
-  }>;
-
-  iconBg: string;
-  iconColor: string;
-  cardBg?: string;
+  children: ReactNode;
 }) {
   return (
-    <div
+    <section
       className="
-        h-[102px]
+        w-full
         min-w-0
         overflow-hidden
         rounded-[7px]
         border
-        border-[#E3E7EC]
-        px-[10px]
-        py-[9px]
+        border-[#E2E7EB]
+        bg-white
+        px-[14px]
+        pb-[13px]
+        pt-[11px]
       "
-      style={{
-        backgroundColor:
-          cardBg ?? "#FFFFFF",
-      }}
+    >
+      {children}
+    </section>
+  );
+}
+
+/* ============================================================
+   SECTION HEADING
+============================================================ */
+
+function SectionHeading({
+  number,
+  title,
+  icon: Icon,
+}: {
+  number: number;
+  title: string;
+
+  icon: React.ComponentType<{
+    size?: number;
+    strokeWidth?: number;
+  }>;
+}) {
+  return (
+    <div
+      className="
+        flex
+        items-center
+        gap-[9px]
+      "
     >
       <div
         className="
           flex
-          h-full
-          min-w-0
+          h-[27px]
+          w-[27px]
+          shrink-0
           items-center
-          gap-[8px]
+          justify-center
+          rounded-full
+          bg-[#E7F5E9]
+          text-[#217943]
         "
       >
-        <div
-          className="
-            flex
-            h-[42px]
-            w-[42px]
-            shrink-0
-            items-center
-            justify-center
-            rounded-full
-          "
-          style={{
-            backgroundColor: iconBg,
-          }}
-        >
-          <Icon
-            size={22}
-            strokeWidth={2}
-            style={{
-              color: iconColor,
-            }}
-          />
-        </div>
-
-        <div className="min-w-0 flex-1">
-          <p
-            className="
-              text-[7.2px]
-              font-[700]
-              leading-[10px]
-              text-[#182A65]
-            "
-          >
-            {label}
-          </p>
-
-          <p
-            className="
-              mt-[4px]
-              whitespace-nowrap
-              text-[21px]
-              font-[800]
-              leading-[23px]
-              text-[#152965]
-            "
-          >
-            {value}
-          </p>
-
-          <div
-            className="
-              mt-[7px]
-              flex
-              min-w-0
-              items-center
-              gap-[3px]
-              whitespace-nowrap
-            "
-          >
-            {negative ? (
-              <ArrowDown
-                size={8}
-                strokeWidth={3}
-                className="
-                  shrink-0
-                  text-[#E44747]
-                "
-              />
-            ) : (
-              <ArrowUp
-                size={8}
-                strokeWidth={3}
-                className="
-                  shrink-0
-                  text-[#15944B]
-                "
-              />
-            )}
-
-            <span
-              className={`
-                shrink-0
-                text-[6.2px]
-                font-[700]
-
-                ${negative
-                  ? "text-[#E44747]"
-                  : "text-[#15944B]"
-                }
-              `}
-            >
-              {change}
-            </span>
-
-            <span
-              className="
-                min-w-0
-                truncate
-                text-[5.7px]
-                font-[600]
-                text-[#596685]
-              "
-            >
-              current data
-            </span>
-          </div>
-        </div>
+        <Icon
+          size={14}
+          strokeWidth={2}
+        />
       </div>
+
+      <h2
+        className="
+          text-[10.5px]
+          font-[800]
+          text-[#17603A]
+        "
+      >
+        {number}. {title}
+      </h2>
     </div>
   );
 }
 
 /* ============================================================
-   FILTER SELECT
-   IMPORTANT: no overflow / no cut
+   FORM FIELD
 ============================================================ */
 
-function FilterSelect({
+function FormField({
+  label,
+  required,
+  children,
+}: {
+  label: string;
+  required?: boolean;
+  children: ReactNode;
+}) {
+  return (
+    <div
+      className="
+        w-full
+        min-w-0
+      "
+    >
+      <p
+        className="
+          mb-[6px]
+          text-[7.4px]
+          font-[700]
+          text-[#192A65]
+        "
+      >
+        {label}
+
+        {required && (
+          <span
+            className="
+              ml-[3px]
+              text-[#E14242]
+            "
+          >
+            *
+          </span>
+        )}
+      </p>
+
+      {children}
+    </div>
+  );
+}
+
+/* ============================================================
+   INPUT CLASS
+============================================================ */
+
+const inputClass = `
+  h-[34px]
+  w-full
+  min-w-0
+  rounded-[5px]
+  border
+  border-[#DFE4EA]
+  bg-white
+  px-[10px]
+  text-[7.5px]
+  font-[500]
+  text-[#253970]
+  outline-none
+  placeholder:text-[#6B7690]
+  focus:border-[#78B58F]
+`;
+
+/* ============================================================
+   SELECT
+============================================================ */
+
+function SelectBox({
   value,
   onChange,
   children,
@@ -649,23 +2263,24 @@ function FilterSelect({
           )
         }
         className="
-          h-[40px]
+          h-[34px]
           w-full
           min-w-0
           appearance-none
           overflow-hidden
           text-ellipsis
           whitespace-nowrap
-          rounded-[6px]
+          rounded-[5px]
           border
-          border-[#E0E5EB]
+          border-[#DFE4EA]
           bg-white
           px-[10px]
-          pr-[27px]
-          text-[8px]
+          pr-[28px]
+          text-[7.5px]
           font-[700]
           text-[#182A65]
           outline-none
+          focus:border-[#78B58F]
         "
       >
         {children}
@@ -678,9 +2293,8 @@ function FilterSelect({
           absolute
           right-[9px]
           top-1/2
-          shrink-0
           -translate-y-1/2
-          text-[#243A75]
+          text-[#182A65]
         "
       />
     </div>
@@ -688,2594 +2302,476 @@ function FilterSelect({
 }
 
 /* ============================================================
-   SIDEBAR BAR
+   PRIORITY
 ============================================================ */
 
-function SidebarBar({
-  label,
+function PrioritySelect({
   value,
-  percentageValue,
-  color,
-  icon: Icon,
-  iconBg,
+  onChange,
 }: {
-  label: string;
-  value: number;
-  percentageValue: number;
-  color: string;
-
-  icon?: ComponentType<{
-    size?: number;
-    strokeWidth?: number;
-  }>;
-
-  iconBg?: string;
+  value: Priority;
+  onChange: (
+    value: Priority
+  ) => void;
 }) {
+  const meta: Record<
+    Priority,
+    {
+      color: string;
+    }
+  > = {
+    Low: {
+      color: "#28A260",
+    },
+
+    Medium: {
+      color: "#F3B51D",
+    },
+
+    High: {
+      color: "#F08A21",
+    },
+
+    Urgent: {
+      color: "#E54242",
+    },
+  };
+
   return (
     <div
       className="
-        grid
-        grid-cols-[82px_minmax(0,1fr)_50px]
-        items-center
-        gap-[5px]
+        relative
+        min-w-0
       "
     >
-      <div
-        className="
-          flex
-          min-w-0
-          items-center
-          gap-[5px]
-        "
-      >
-        {Icon && (
-          <span
-            className="
-              flex
-              h-[17px]
-              w-[17px]
-              shrink-0
-              items-center
-              justify-center
-              rounded-full
-            "
-            style={{
-              backgroundColor:
-                iconBg ??
-                "#EEF2F6",
-            }}
-          >
-            <Icon
-              size={9}
-              strokeWidth={2}
-            />
-          </span>
-        )}
-
-        <span
-          className="
-            truncate
-            text-[5.7px]
-            font-[700]
-            text-[#334475]
-          "
-        >
-          {label}
-        </span>
-      </div>
-
-      <div
-        className="
-          h-[5px]
-          min-w-0
-          overflow-hidden
-          rounded-full
-          bg-[#E9EDF2]
-        "
-      >
-        <div
-          className="
-            h-full
-            rounded-full
-          "
-          style={{
-            width: `${Math.max(
-              percentageValue,
-              value > 0 ? 7 : 0
-            )}%`,
-
-            backgroundColor:
-              color,
-          }}
-        />
-      </div>
-
       <span
         className="
-          whitespace-nowrap
-          text-right
-          text-[5.2px]
-          font-[600]
-          text-[#334475]
+          pointer-events-none
+          absolute
+          left-[11px]
+          top-1/2
+          z-10
+          h-[8px]
+          w-[8px]
+          -translate-y-1/2
+          rounded-full
+        "
+        style={{
+          backgroundColor:
+            meta[value].color,
+        }}
+      />
+
+      <select
+        value={value}
+        onChange={(event) =>
+          onChange(
+            event.target
+              .value as Priority
+          )
+        }
+        className="
+          h-[34px]
+          w-full
+          appearance-none
+          rounded-[5px]
+          border
+          border-[#DFE4EA]
+          bg-white
+          pl-[28px]
+          pr-[28px]
+          text-[7.5px]
+          font-[700]
+          text-[#182A65]
+          outline-none
         "
       >
-        {value} (
-        {percentageValue.toFixed(
-          1
-        )}
-        %)
-      </span>
+        <option value="Low">
+          Low
+        </option>
+
+        <option value="Medium">
+          Medium
+        </option>
+
+        <option value="High">
+          High
+        </option>
+
+        <option value="Urgent">
+          Urgent
+        </option>
+      </select>
+
+      <ChevronDown
+        size={11}
+        className="
+          pointer-events-none
+          absolute
+          right-[9px]
+          top-1/2
+          -translate-y-1/2
+          text-[#182A65]
+        "
+      />
     </div>
   );
 }
 
 /* ============================================================
-   PAGE
+   PHONE
 ============================================================ */
 
-export default function GeneralEnquiriesPage() {
-  const [enquiries, setEnquiries] =
-    useState<RuntimeEnquiry[]>([]);
+function PhoneField({
+  code,
+  phone,
+  onCodeChange,
+  onPhoneChange,
+}: {
+  code: string;
+  phone: string;
 
-  const [loading, setLoading] =
-    useState(true);
+  onCodeChange: (
+    value: string
+  ) => void;
 
-  const [error, setError] =
-    useState("");
-
-  const [search, setSearch] =
-    useState("");
-
-  const [
-    statusFilter,
-    setStatusFilter,
-  ] = useState<UiStatus>("");
-
-  const [
-    categoryFilter,
-    setCategoryFilter,
-  ] = useState("");
-
-  const [
-    sourceFilter,
-    setSourceFilter,
-  ] = useState("");
-
-  const [selected, setSelected] =
-    useState<RuntimeEnquiry | null>(
-      null
-    );
-
-  const [page, setPage] =
-    useState(1);
-
-  const [perPage, setPerPage] =
-    useState(10);
-
-  /* ==========================================================
-     LOAD
-  ========================================================== */
-
-  useEffect(() => {
-    setLoading(true);
-    setError("");
-
-    enquiriesApi
-      .list()
-      .then((data) =>
-        setEnquiries(
-          (data ??
-            []) as RuntimeEnquiry[]
-        )
-      )
-      .catch((err) => {
-        setError(
-          err instanceof ApiRequestError
-            ? err.message
-            : "Could not load enquiries."
-        );
-      })
-      .finally(() =>
-        setLoading(false)
-      );
-  }, []);
-
-  /* ==========================================================
-     COUNTS
-  ========================================================== */
-
-  const totalEnquiries =
-    enquiries.length;
-
-  const newCount = useMemo(
-    () =>
-      enquiries.filter(
-        (item) =>
-          normalizeStatus(
-            item.status
-          ) === "new"
-      ).length,
-    [enquiries]
-  );
-
-  const progressCount =
-    useMemo(
-      () =>
-        enquiries.filter(
-          (item) =>
-            normalizeStatus(
-              item.status
-            ) ===
-            "progress"
-        ).length,
-      [enquiries]
-    );
-
-  const resolvedCount =
-    useMemo(
-      () =>
-        enquiries.filter(
-          (item) =>
-            normalizeStatus(
-              item.status
-            ) ===
-            "resolved"
-        ).length,
-      [enquiries]
-    );
-
-  const closedCount = useMemo(
-    () =>
-      enquiries.filter(
-        (item) =>
-          normalizeStatus(
-            item.status
-          ) === "closed"
-      ).length,
-    [enquiries]
-  );
-
-  /* ==========================================================
-     OPTIONS
-  ========================================================== */
-
-  const categories = useMemo(
-    () =>
-      Array.from(
-        new Set(
-          enquiries.map(
-            getCategoryLabel
-          )
-        )
-      ).sort(),
-    [enquiries]
-  );
-
-  const sources = useMemo(
-    () =>
-      Array.from(
-        new Set(
-          enquiries.map(
-            getSource
-          )
-        )
-      ).sort(),
-    [enquiries]
-  );
-
-  /* ==========================================================
-     FILTERED
-  ========================================================== */
-
-  const visible = useMemo(() => {
-    const query =
-      search
-        .trim()
-        .toLowerCase();
-
-    return enquiries
-      .filter((item) => {
-        if (!statusFilter) {
-          return true;
-        }
-
-        return (
-          normalizeStatus(
-            item.status
-          ) ===
-          statusFilter
-        );
-      })
-
-      .filter((item) => {
-        if (!categoryFilter) {
-          return true;
-        }
-
-        return (
-          getCategoryLabel(
-            item
-          ) ===
-          categoryFilter
-        );
-      })
-
-      .filter((item) => {
-        if (!sourceFilter) {
-          return true;
-        }
-
-        return (
-          getSource(item) ===
-          sourceFilter
-        );
-      })
-
-      .filter((item) => {
-        if (!query) {
-          return true;
-        }
-
-        return [
-          item._id,
-          item.reference,
-          item.name,
-          item.email,
-          item.phone,
-          item.message,
-          item.interest,
-          getSubject(item),
-          getCategoryLabel(item),
-          getSource(item),
-        ]
-          .filter(Boolean)
-          .join(" ")
-          .toLowerCase()
-          .includes(query);
-      })
-
-      .sort((a, b) => {
-        const first =
-          parseDate(
-            a.createdAt
-          )?.getTime() ?? 0;
-
-        const second =
-          parseDate(
-            b.createdAt
-          )?.getTime() ?? 0;
-
-        return second - first;
-      });
-  }, [
-    enquiries,
-    search,
-    statusFilter,
-    categoryFilter,
-    sourceFilter,
-  ]);
-
-  /* ==========================================================
-     PAGINATION
-  ========================================================== */
-
-  const totalPages = Math.max(
-    1,
-    Math.ceil(
-      visible.length /
-      perPage
-    )
-  );
-
-  const safePage = Math.min(
-    page,
-    totalPages
-  );
-
-  const startIndex =
-    (safePage - 1) *
-    perPage;
-
-  const endIndex = Math.min(
-    startIndex + perPage,
-    visible.length
-  );
-
-  const pageRows =
-    visible.slice(
-      startIndex,
-      endIndex
-    );
-
-  /* ==========================================================
-     SOURCE STATS
-  ========================================================== */
-
-  const sourceStats = useMemo(
-    () =>
-      sources
-        .map((source) => {
-          const value =
-            enquiries.filter(
-              (item) =>
-                getSource(
-                  item
-                ) === source
-            ).length;
-
-          return {
-            label: source,
-            value,
-            percentage:
-              percentage(
-                value,
-                totalEnquiries
-              ),
-          };
-        })
-        .sort(
-          (a, b) =>
-            b.value - a.value
-        )
-        .slice(0, 5),
-    [
-      sources,
-      enquiries,
-      totalEnquiries,
-    ]
-  );
-
-  /* ==========================================================
-     CATEGORY STATS
-  ========================================================== */
-
-  const categoryStats =
-    useMemo(
-      () =>
-        categories
-          .map(
-            (category) => {
-              const value =
-                enquiries.filter(
-                  (item) =>
-                    getCategoryLabel(
-                      item
-                    ) ===
-                    category
-                ).length;
-
-              return {
-                label:
-                  category,
-                value,
-                percentage:
-                  percentage(
-                    value,
-                    totalEnquiries
-                  ),
-              };
-            }
-          )
-          .sort(
-            (a, b) =>
-              b.value -
-              a.value
-          )
-          .slice(0, 5),
-      [
-        categories,
-        enquiries,
-        totalEnquiries,
-      ]
-    );
-
-  /* ==========================================================
-     RESET
-  ========================================================== */
-
-  function resetFilters() {
-    setSearch("");
-    setStatusFilter("");
-    setCategoryFilter("");
-    setSourceFilter("");
-    setPage(1);
-  }
-
-  /* ==========================================================
-     UI
-  ========================================================== */
-
+  onPhoneChange: (
+    value: string
+  ) => void;
+}) {
   return (
-    <section
+    <div
       className="
-        w-full
+        grid
         min-w-0
-        overflow-hidden
-        bg-white
-        px-[16px]
-        pb-[15px]
-        pt-[11px]
+        grid-cols-[57px_minmax(0,1fr)]
+        gap-[7px]
       "
     >
-      {/* ======================================================
-          HEADER
-      ====================================================== */}
-
       <div
         className="
-          flex
+          relative
           min-w-0
-          items-start
-          justify-between
-          gap-[20px]
         "
       >
-        <div className="min-w-0">
-          <h1
-            className="
-              text-[20px]
-              font-[800]
-              leading-[25px]
-              tracking-[-0.35px]
-              text-[#005E2E]
-            "
-          >
-            General Enquiries
-          </h1>
-
-          <p
-            className="
-              mt-[2px]
-              text-[9px]
-              font-[500]
-              leading-[14px]
-              text-[#344574]
-            "
-          >
-            View, manage and respond
-            to all general enquiries
-            from visitors.
-          </p>
-        </div>
-
-        <div
+        <select
+          value={code}
+          onChange={(event) =>
+            onCodeChange(
+              event.target.value
+            )
+          }
           className="
-            flex
-            shrink-0
-            items-center
-            gap-[12px]
-            pt-[2px]
+            h-[34px]
+            w-full
+            appearance-none
+            rounded-[5px]
+            border
+            border-[#DFE4EA]
+            bg-white
+            px-[8px]
+            pr-[20px]
+            text-[7.5px]
+            font-[700]
+            text-[#182A65]
+            outline-none
           "
         >
-          <button
-            type="button"
-            className="
-              flex
-              h-[36px]
-              items-center
-              gap-[8px]
-              rounded-[5px]
-              border
-              border-[#E0E5EB]
-              bg-white
-              px-[15px]
-              text-[9px]
-              font-[700]
-              text-[#172762]
-            "
-          >
-            <Download size={14} />
+          <option value="+91">
+            +91
+          </option>
 
-            Export
-          </button>
+          <option value="+1">
+            +1
+          </option>
 
-          <button
-            type="button"
-            className="
-              flex
-              h-[36px]
-              items-center
-              gap-[8px]
-              rounded-[5px]
-              border
-              border-[#E0E5EB]
-              bg-white
-              px-[15px]
-              text-[9px]
-              font-[700]
-              text-[#172762]
-            "
-          >
-            <Filter size={14} />
+          <option value="+44">
+            +44
+          </option>
 
-            Filters
-          </button>
+          <option value="+971">
+            +971
+          </option>
+        </select>
 
-          <button
-            type="button"
-            className="
-              flex
-              h-[36px]
-              items-center
-              gap-[8px]
-              rounded-[5px]
-              bg-[#005F2E]
-              px-[17px]
-              text-[9px]
-              font-[700]
-              text-white
-              shadow-[0_2px_5px_rgba(0,95,46,0.14)]
-            "
-          >
-            <Plus size={15} />
-
-            Add New Enquiry
-          </button>
-        </div>
+        <ChevronDown
+          size={8}
+          className="
+            pointer-events-none
+            absolute
+            right-[6px]
+            top-1/2
+            -translate-y-1/2
+          "
+        />
       </div>
 
-      {/* ERROR */}
+      <input
+        value={phone}
+        onChange={(event) =>
+          onPhoneChange(
+            event.target.value.replace(
+              /\D/g,
+              ""
+            )
+          )
+        }
+        placeholder="Enter phone number"
+        className={inputClass}
+      />
+    </div>
+  );
+}
 
-      {error && (
-        <div
-          className="
-            mt-[10px]
-            rounded-[6px]
-            border
-            border-red-200
-            bg-red-50
-            px-[11px]
-            py-[8px]
-            text-[8px]
-            font-[600]
-            text-red-700
-          "
-        >
-          {error}
-        </div>
-      )}
+/* ============================================================
+   CONTACT METHOD
+============================================================ */
 
-      {/* ======================================================
-          MAIN GRID
-          CRITICAL FIX:
-          left content can shrink properly
-      ====================================================== */}
+function ContactMethodSelector({
+  value,
+  onChange,
+}: {
+  value: ContactMethod;
 
-      <div
-        className="
-          mt-[22px]
-          grid
-          w-full
-          min-w-0
-          grid-cols-[minmax(0,1fr)_255px]
-          gap-[16px]
-          overflow-hidden
-        "
-      >
-        {/* ====================================================
-            LEFT
-        ==================================================== */}
+  onChange: (
+    value: ContactMethod
+  ) => void;
+}) {
+  const items: {
+    label: ContactMethod;
+    icon:
+    React.ComponentType<{
+      size?: number;
+    }>;
+  }[] = [
+      {
+        label: "Phone",
+        icon: Phone,
+      },
 
-        <main
-          className="
-            w-full
-            min-w-0
-            overflow-hidden
-          "
-        >
-          {/* ==================================================
-              STAT CARDS
-          ================================================== */}
+      {
+        label: "Email",
+        icon: Mail,
+      },
 
-          <div
-            className="
-              grid
-              w-full
-              min-w-0
-              grid-cols-5
-              gap-[9px]
-            "
-          >
-            <StatCard
-              label="Total Enquiries"
-              value={totalEnquiries}
-              change="Live"
-              icon={
-                MessageCircleMore
-              }
-              iconBg="#E4F5E8"
-              iconColor="#238B4C"
-              cardBg="#FBFEFC"
-            />
+      {
+        label: "WhatsApp",
+        icon:
+          MessageCircleMore,
+      },
 
-            <StatCard
-              label="New Enquiries"
-              value={newCount}
-              change={`${percentage(
-                newCount,
-                totalEnquiries
-              ).toFixed(1)}%`}
-              icon={Mail}
-              iconBg="#E9F2FF"
-              iconColor="#3378D4"
-              cardBg="#FCFDFF"
-            />
+      {
+        label: "Any",
+        icon:
+          CircleUserRound,
+      },
+    ];
 
-            <StatCard
-              label="In Progress"
-              value={progressCount}
-              change={`${percentage(
-                progressCount,
-                totalEnquiries
-              ).toFixed(1)}%`}
-              icon={Hourglass}
-              iconBg="#FFF3DC"
-              iconColor="#DE941B"
-              cardBg="#FFFCF6"
-            />
+  return (
+    <div
+      className="
+        grid
+        min-w-0
+        grid-cols-4
+        overflow-hidden
+        rounded-[5px]
+        border
+        border-[#DFE4EA]
+      "
+    >
+      {items.map(
+        (item, index) => {
+          const Icon =
+            item.icon;
 
-            <StatCard
-              label="Resolved"
-              value={resolvedCount}
-              change={`${percentage(
-                resolvedCount,
-                totalEnquiries
-              ).toFixed(1)}%`}
-              icon={CheckCircle2}
-              iconBg="#F0E7FD"
-              iconColor="#8047D8"
-              cardBg="#FDFAFF"
-            />
+          const selected =
+            value ===
+            item.label;
 
-            <StatCard
-              label="Closed"
-              value={closedCount}
-              change={`${percentage(
-                closedCount,
-                totalEnquiries
-              ).toFixed(1)}%`}
-              negative
-              icon={CircleX}
-              iconBg="#FDE5E5"
-              iconColor="#EA3939"
-              cardBg="#FFF9F9"
-            />
-          </div>
-
-          {/* ==================================================
-              FILTERS
-              FIXED — WILL NOT CUT
-          ================================================== */}
-
-          <div
-            className="
-              mt-[19px]
-              grid
-              w-full
-              min-w-0
-              grid-cols-[minmax(0,2.15fr)_minmax(88px,0.95fr)_minmax(96px,1.05fr)_minmax(88px,0.95fr)_minmax(118px,1.15fr)_70px]
-              gap-[7px]
-              overflow-hidden
-            "
-          >
-            {/* SEARCH */}
-
-            <div
-              className="
-                flex
-                h-[40px]
-                w-full
-                min-w-0
-                items-center
-                overflow-hidden
-                rounded-[6px]
-                border
-                border-[#E0E5EB]
-                bg-white
-                px-[10px]
-              "
-            >
-              <Search
-                size={15}
-                className="
-                  mr-[7px]
-                  shrink-0
-                  text-[#263D7A]
-                "
-              />
-
-              <input
-                value={search}
-                onChange={(
-                  event
-                ) => {
-                  setSearch(
-                    event.target
-                      .value
-                  );
-
-                  setPage(1);
-                }}
-                placeholder="Search by name, email, subject or message..."
-                className="
-                  h-full
-                  w-0
-                  min-w-0
-                  flex-1
-                  bg-transparent
-                  text-[8px]
-                  font-[600]
-                  text-[#172762]
-                  outline-none
-                  placeholder:text-[#566483]
-                "
-              />
-            </div>
-
-            {/* STATUS */}
-
-            <FilterSelect
-              value={
-                statusFilter
-              }
-              onChange={(
-                value
-              ) => {
-                setStatusFilter(
-                  value as UiStatus
-                );
-
-                setPage(1);
-              }}
-            >
-              <option value="">
-                All Status
-              </option>
-
-              <option value="new">
-                New
-              </option>
-
-              <option value="progress">
-                In Progress
-              </option>
-
-              <option value="resolved">
-                Resolved
-              </option>
-
-              <option value="closed">
-                Closed
-              </option>
-            </FilterSelect>
-
-            {/* CATEGORY */}
-
-            <FilterSelect
-              value={
-                categoryFilter
-              }
-              onChange={(
-                value
-              ) => {
-                setCategoryFilter(
-                  value
-                );
-
-                setPage(1);
-              }}
-            >
-              <option value="">
-                All Categories
-              </option>
-
-              {categories.map(
-                (category) => (
-                  <option
-                    key={
-                      category
-                    }
-                    value={
-                      category
-                    }
-                  >
-                    {category}
-                  </option>
-                )
-              )}
-            </FilterSelect>
-
-            {/* SOURCE */}
-
-            <FilterSelect
-              value={
-                sourceFilter
-              }
-              onChange={(
-                value
-              ) => {
-                setSourceFilter(
-                  value
-                );
-
-                setPage(1);
-              }}
-            >
-              <option value="">
-                All Sources
-              </option>
-
-              {sources.map(
-                (source) => (
-                  <option
-                    key={source}
-                    value={
-                      source
-                    }
-                  >
-                    {source}
-                  </option>
-                )
-              )}
-            </FilterSelect>
-
-            {/* DATE */}
-
+          return (
             <button
+              key={item.label}
               type="button"
-              className="
-                flex
-                h-[40px]
-                w-full
-                min-w-0
-                items-center
-                gap-[6px]
-                overflow-hidden
-                rounded-[6px]
-                border
-                border-[#E0E5EB]
-                bg-white
-                px-[9px]
-                text-[7.4px]
-                font-[600]
-                text-[#586480]
-              "
-            >
-              <CalendarDays
-                size={13}
-                className="
-                  shrink-0
-                  text-[#314578]
-                "
-              />
-
-              <span
-                className="
-                  min-w-0
-                  truncate
-                  whitespace-nowrap
-                "
-              >
-                Select Date Range
-              </span>
-            </button>
-
-            {/* RESET */}
-
-            <button
-              type="button"
-              onClick={
-                resetFilters
+              onClick={() =>
+                onChange(
+                  item.label
+                )
               }
-              className="
+              className={`
                 flex
-                h-[40px]
-                w-[70px]
-                shrink-0
+                h-[34px]
+                min-w-0
                 items-center
                 justify-center
-                gap-[4px]
-                rounded-[6px]
-                border
-                border-[#E0E5EB]
-                bg-white
-                text-[7.2px]
+                gap-[5px]
+                border-r
+                border-[#DFE4EA]
+                text-[7.5px]
                 font-[700]
-                text-[#1C306A]
-              "
+                last:border-r-0
+
+                ${selected
+                  ? "bg-[#F3FAF5] text-[#207447] ring-1 ring-inset ring-[#5EAE7B]"
+                  : "bg-white text-[#354573]"
+                }
+              `}
             >
-              <RefreshCcw
-                size={11}
-                className="shrink-0"
+              <Icon
+                size={12}
               />
 
-              Reset
-            </button>
-          </div>
-
-          {/* ==================================================
-              TABLE
-          ================================================== */}
-
-          <div
-            className="
-              mt-[11px]
-              w-full
-              min-w-0
-              overflow-hidden
-              rounded-[6px]
-              border
-              border-[#E2E6EB]
-              bg-white
-            "
-          >
-            <table
-              className="
-                w-full
-                table-fixed
-                border-collapse
-              "
-            >
-              <colgroup>
-                <col
-                  style={{
-                    width: "10%",
-                  }}
-                />
-
-                <col
-                  style={{
-                    width: "15%",
-                  }}
-                />
-
-                <col
-                  style={{
-                    width: "16%",
-                  }}
-                />
-
-                <col
-                  style={{
-                    width: "12%",
-                  }}
-                />
-
-                <col
-                  style={{
-                    width: "14%",
-                  }}
-                />
-
-                <col
-                  style={{
-                    width: "12%",
-                  }}
-                />
-
-                <col
-                  style={{
-                    width: "13%",
-                  }}
-                />
-
-                <col
-                  style={{
-                    width: "8%",
-                  }}
-                />
-              </colgroup>
-
-              <thead>
-                <tr
-                  className="
-                    h-[36px]
-                    bg-[#F7F8FC]
-                    text-left
-                    text-[#172762]
-                  "
-                >
-                  <th className="px-[8px] text-[7px] font-[700]">
-                    ID
-                  </th>
-
-                  <th className="px-[8px] text-[7px] font-[700]">
-                    Name
-                  </th>
-
-                  <th className="px-[8px] text-[7px] font-[700]">
-                    Subject
-                  </th>
-
-                  <th className="px-[7px] text-[7px] font-[700]">
-                    Category
-                  </th>
-
-                  <th className="px-[7px] text-[7px] font-[700]">
-                    Source
-                  </th>
-
-                  <th className="px-[7px] text-[7px] font-[700]">
-                    Status
-                  </th>
-
-                  <th className="px-[7px] text-[7px] font-[700]">
-                    Date &amp; Time
-                  </th>
-
-                  <th className="px-[5px] text-[7px] font-[700]">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {/* LOADING */}
-
-                {loading &&
-                  Array.from({
-                    length: 8,
-                  }).map(
-                    (
-                      _,
-                      index
-                    ) => (
-                      <tr
-                        key={`loading-${index}`}
-                        className="
-                          h-[59px]
-                          border-t
-                          border-[#E9ECF0]
-                        "
-                      >
-                        <td
-                          colSpan={
-                            8
-                          }
-                          className="px-[10px]"
-                        >
-                          <div
-                            className="
-                              h-[10px]
-                              w-full
-                              animate-pulse
-                              rounded
-                              bg-[#F1F3F5]
-                            "
-                          />
-                        </td>
-                      </tr>
-                    )
-                  )}
-
-                {/* DATA */}
-
-                {!loading &&
-                  pageRows.map(
-                    (enquiry) => {
-                      const category =
-                        getCategoryLabel(
-                          enquiry
-                        );
-
-                      const categoryMeta =
-                        categoryStyle(
-                          category
-                        );
-
-                      const statusMeta =
-                        getStatusStyle(
-                          enquiry.status
-                        );
-
-                      const source =
-                        getSource(
-                          enquiry
-                        );
-
-                      const sourceMeta =
-                        sourceIcon(
-                          source
-                        );
-
-                      const SourceIcon =
-                        sourceMeta.icon;
-
-                      return (
-                        <tr
-                          key={
-                            enquiry._id
-                          }
-                          onClick={() =>
-                            setSelected(
-                              enquiry
-                            )
-                          }
-                          className="
-                            h-[59px]
-                            cursor-pointer
-                            border-t
-                            border-[#E9ECF0]
-                            bg-white
-                            hover:bg-[#FBFCFD]
-                          "
-                        >
-                          {/* ID */}
-
-                          <td
-                            className="
-                              min-w-0
-                              px-[8px]
-                              align-middle
-                            "
-                          >
-                            <span
-                              className="
-                                block
-                                truncate
-                                text-[6.4px]
-                                font-[700]
-                                text-[#14763F]
-                              "
-                            >
-                              {enquiry.reference ||
-                                enquiry._id}
-                            </span>
-                          </td>
-
-                          {/* NAME */}
-
-                          <td
-                            className="
-                              min-w-0
-                              px-[8px]
-                              align-middle
-                            "
-                          >
-                            <p
-                              className="
-                                truncate
-                                text-[7.2px]
-                                font-[700]
-                                leading-[10px]
-                                text-[#192B66]
-                              "
-                            >
-                              {enquiry.name ||
-                                "—"}
-                            </p>
-
-                            <p
-                              className="
-                                mt-[3px]
-                                truncate
-                                text-[5.8px]
-                                font-[500]
-                                leading-[9px]
-                                text-[#52617F]
-                              "
-                            >
-                              {enquiry.email ||
-                                enquiry.phone ||
-                                "—"}
-                            </p>
-                          </td>
-
-                          {/* SUBJECT */}
-
-                          <td
-                            className="
-                              min-w-0
-                              px-[8px]
-                              align-middle
-                            "
-                          >
-                            <p
-                              className="
-                                line-clamp-2
-                                text-[6.8px]
-                                font-[600]
-                                leading-[10px]
-                                text-[#314273]
-                              "
-                            >
-                              {getSubject(
-                                enquiry
-                              )}
-                            </p>
-                          </td>
-
-                          {/* CATEGORY */}
-
-                          <td
-                            className="
-                              min-w-0
-                              px-[6px]
-                              align-middle
-                            "
-                          >
-                            <span
-                              className="
-                                inline-flex
-                                max-w-full
-                                rounded-[4px]
-                                border
-                                px-[6px]
-                                py-[4px]
-                                text-[5.9px]
-                                font-[700]
-                                leading-none
-                              "
-                              style={{
-                                backgroundColor:
-                                  categoryMeta.background,
-
-                                color:
-                                  categoryMeta.color,
-
-                                borderColor:
-                                  categoryMeta.border,
-                              }}
-                            >
-                              <span className="truncate">
-                                {category}
-                              </span>
-                            </span>
-                          </td>
-
-                          {/* SOURCE */}
-
-                          <td
-                            className="
-                              min-w-0
-                              px-[7px]
-                              align-middle
-                            "
-                          >
-                            <div
-                              className="
-                                flex
-                                min-w-0
-                                items-center
-                                gap-[6px]
-                              "
-                            >
-                              <SourceIcon
-                                size={
-                                  12
-                                }
-                                strokeWidth={
-                                  2
-                                }
-                                style={{
-                                  color:
-                                    sourceMeta.color,
-                                }}
-                                className="shrink-0"
-                              />
-
-                              <span
-                                className="
-                                  min-w-0
-                                  truncate
-                                  text-[6.3px]
-                                  font-[600]
-                                  text-[#324374]
-                                "
-                              >
-                                {source}
-                              </span>
-                            </div>
-                          </td>
-
-                          {/* STATUS */}
-
-                          <td
-                            className="
-                              px-[6px]
-                              align-middle
-                            "
-                          >
-                            <span
-                              className="
-                                inline-flex
-                                max-w-full
-                                whitespace-nowrap
-                                rounded-[4px]
-                                border
-                                px-[6px]
-                                py-[4px]
-                                text-[5.9px]
-                                font-[700]
-                                leading-none
-                              "
-                              style={{
-                                backgroundColor:
-                                  statusMeta.background,
-
-                                color:
-                                  statusMeta.color,
-
-                                borderColor:
-                                  statusMeta.border,
-                              }}
-                            >
-                              {getStatusLabel(
-                                enquiry.status
-                              )}
-                            </span>
-                          </td>
-
-                          {/* DATE */}
-
-                          <td
-                            className="
-                              min-w-0
-                              px-[7px]
-                              align-middle
-                            "
-                          >
-                            <p
-                              className="
-                                text-[6.2px]
-                                font-[500]
-                                leading-[9px]
-                                text-[#334475]
-                              "
-                            >
-                              {formatDateTime(
-                                enquiry.createdAt
-                              )}
-                            </p>
-                          </td>
-
-                          {/* ACTIONS */}
-
-                          <td
-                            className="
-                              px-[4px]
-                              align-middle
-                            "
-                          >
-                            <div
-                              className="
-                                flex
-                                items-center
-                                gap-[4px]
-                              "
-                            >
-                              <button
-                                type="button"
-                                onClick={(
-                                  event
-                                ) => {
-                                  event.stopPropagation();
-
-                                  setSelected(
-                                    enquiry
-                                  );
-                                }}
-                                className="
-                                  flex
-                                  h-[26px]
-                                  w-[27px]
-                                  shrink-0
-                                  items-center
-                                  justify-center
-                                  rounded-[5px]
-                                  border
-                                  border-[#E2E6EB]
-                                  bg-white
-                                  text-[#273D78]
-                                  hover:bg-[#F7F9FB]
-                                "
-                              >
-                                <Eye
-                                  size={
-                                    10
-                                  }
-                                />
-                              </button>
-
-                              <button
-                                type="button"
-                                onClick={(
-                                  event
-                                ) => {
-                                  event.stopPropagation();
-                                }}
-                                className="
-                                  flex
-                                  h-[26px]
-                                  w-[27px]
-                                  shrink-0
-                                  items-center
-                                  justify-center
-                                  rounded-[5px]
-                                  border
-                                  border-[#E2E6EB]
-                                  bg-white
-                                  text-[#273D78]
-                                  hover:bg-[#F7F9FB]
-                                "
-                              >
-                                <ArrowLeft
-                                  size={
-                                    10
-                                  }
-                                />
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    }
-                  )}
-
-                {/* EMPTY */}
-
-                {!loading &&
-                  pageRows.length ===
-                  0 && (
-                    <tr>
-                      <td
-                        colSpan={8}
-                        className="
-                          h-[150px]
-                          text-center
-                          text-[8px]
-                          font-[600]
-                          text-[#667085]
-                        "
-                      >
-                        No enquiries
-                        found.
-                      </td>
-                    </tr>
-                  )}
-              </tbody>
-            </table>
-
-            {/* =================================================
-                PAGINATION
-            ================================================= */}
-
-            <div
-              className="
-                flex
-                h-[49px]
-                min-w-0
-                items-center
-                justify-between
-                gap-[8px]
-                border-t
-                border-[#E6E9ED]
-                px-[14px]
-              "
-            >
-              <p
-                className="
-                  min-w-0
-                  truncate
-                  text-[6.4px]
-                  font-[600]
-                  text-[#475A83]
-                "
-              >
-                {visible.length >
-                  0
-                  ? `Showing ${startIndex +
-                  1
-                  } to ${endIndex} of ${visible.length
-                  } enquiries`
-                  : "Showing 0 enquiries"}
-              </p>
-
-              <div
-                className="
-                  flex
-                  shrink-0
-                  items-center
-                  gap-[4px]
-                "
-              >
-                <button
-                  type="button"
-                  disabled={
-                    safePage === 1
-                  }
-                  onClick={() =>
-                    setPage(
-                      Math.max(
-                        1,
-                        safePage -
-                        1
-                      )
-                    )
-                  }
-                  className="
-                    flex
-                    h-[27px]
-                    w-[27px]
-                    items-center
-                    justify-center
-                    rounded-[4px]
-                    border
-                    border-[#E3E7ED]
-                    bg-white
-                    text-[#536180]
-                    disabled:opacity-40
-                  "
-                >
-                  <ChevronLeft
-                    size={11}
-                  />
-                </button>
-
-                {Array.from({
-                  length:
-                    Math.min(
-                      4,
-                      totalPages
-                    ),
-                }).map(
-                  (
-                    _,
-                    index
-                  ) => {
-                    const number =
-                      index + 1;
-
-                    return (
-                      <button
-                        type="button"
-                        key={
-                          number
-                        }
-                        onClick={() =>
-                          setPage(
-                            number
-                          )
-                        }
-                        className={`
-                          flex
-                          h-[27px]
-                          w-[27px]
-                          items-center
-                          justify-center
-                          rounded-[4px]
-                          border
-                          text-[7.2px]
-                          font-[700]
-
-                          ${safePage ===
-                            number
-                            ? "border-[#006132] bg-[#006132] text-white"
-                            : "border-[#E3E7ED] bg-white text-[#334575]"
-                          }
-                        `}
-                      >
-                        {number}
-                      </button>
-                    );
-                  }
-                )}
-
-                <button
-                  type="button"
-                  disabled={
-                    safePage ===
-                    totalPages
-                  }
-                  onClick={() =>
-                    setPage(
-                      Math.min(
-                        totalPages,
-                        safePage +
-                        1
-                      )
-                    )
-                  }
-                  className="
-                    flex
-                    h-[27px]
-                    w-[27px]
-                    items-center
-                    justify-center
-                    rounded-[4px]
-                    border
-                    border-[#E3E7ED]
-                    bg-white
-                    text-[#334575]
-                    disabled:opacity-40
-                  "
-                >
-                  <ChevronRight
-                    size={11}
-                  />
-                </button>
-              </div>
-
-              <div
-                className="
-                  relative
-                  shrink-0
-                "
-              >
-                <select
-                  value={
-                    perPage
-                  }
-                  onChange={(
-                    event
-                  ) => {
-                    setPerPage(
-                      Number(
-                        event
-                          .target
-                          .value
-                      )
-                    );
-
-                    setPage(1);
-                  }}
-                  className="
-                    h-[28px]
-                    w-[92px]
-                    appearance-none
-                    rounded-[4px]
-                    border
-                    border-[#E3E7ED]
-                    bg-white
-                    px-[8px]
-                    pr-[24px]
-                    text-[6.4px]
-                    font-[700]
-                    text-[#536180]
-                    outline-none
-                  "
-                >
-                  <option
-                    value={10}
-                  >
-                    10 per page
-                  </option>
-
-                  <option
-                    value={20}
-                  >
-                    20 per page
-                  </option>
-
-                  <option
-                    value={50}
-                  >
-                    50 per page
-                  </option>
-                </select>
-
-                <ChevronDown
-                  size={9}
-                  className="
-                    pointer-events-none
-                    absolute
-                    right-[7px]
-                    top-1/2
-                    -translate-y-1/2
-                  "
-                />
-              </div>
-            </div>
-          </div>
-        </main>
-
-        {/* ====================================================
-            RIGHT SIDE
-        ==================================================== */}
-
-        <aside
-          className="
-            w-[255px]
-            min-w-0
-            shrink-0
-            overflow-hidden
-          "
-        >
-          {/* SUMMARY */}
-
-          <div
-            className="
-              rounded-[7px]
-              border
-              border-[#E2E6EB]
-              bg-white
-              px-[12px]
-              pb-[14px]
-              pt-[12px]
-            "
-          >
-            <h2
-              className="
-                text-[9px]
-                font-[800]
-                text-[#1D5E39]
-              "
-            >
-              Enquiry Summary
-            </h2>
-
-            <div
-              className="
-                mt-[15px]
-                flex
-                min-w-0
-                items-center
-                gap-[9px]
-              "
-            >
-              {/* DONUT */}
-
-              <div
-                className="
-                  flex
-                  h-[92px]
-                  w-[92px]
-                  shrink-0
-                  items-center
-                  justify-center
-                  rounded-full
-                "
-                style={{
-                  background:
-                    totalEnquiries >
-                      0
-                      ? `conic-gradient(
-                          #3379DE 0% ${percentage(
-                        newCount,
-                        totalEnquiries
-                      )}%,
-
-                          #F49B16 ${percentage(
-                        newCount,
-                        totalEnquiries
-                      )}% ${percentage(
-                        newCount +
-                        progressCount,
-                        totalEnquiries
-                      )}%,
-
-                          #2CA25F ${percentage(
-                        newCount +
-                        progressCount,
-                        totalEnquiries
-                      )}% ${percentage(
-                        newCount +
-                        progressCount +
-                        resolvedCount,
-                        totalEnquiries
-                      )}%,
-
-                          #E4463E ${percentage(
-                        newCount +
-                        progressCount +
-                        resolvedCount,
-                        totalEnquiries
-                      )}% 100%
-                        )`
-                      : "#EDF0F3",
-                }}
-              >
-                <div
-                  className="
-                    flex
-                    h-[58px]
-                    w-[58px]
-                    flex-col
-                    items-center
-                    justify-center
-                    rounded-full
-                    bg-white
-                  "
-                >
-                  <strong
-                    className="
-                      text-[18px]
-                      font-[800]
-                      leading-none
-                      text-[#141414]
-                    "
-                  >
-                    {
-                      totalEnquiries
-                    }
-                  </strong>
-
-                  <span
-                    className="
-                      mt-[4px]
-                      text-[6px]
-                      font-[600]
-                      text-[#44537B]
-                    "
-                  >
-                    Total
-                  </span>
-                </div>
-              </div>
-
-              {/* SUMMARY LIST */}
-
-              <div
-                className="
-                  min-w-0
-                  flex-1
-                  space-y-[9px]
-                "
-              >
-                {[
-                  {
-                    label: "New",
-                    value:
-                      newCount,
-                    color:
-                      "#3379DE",
-                  },
-                  {
-                    label:
-                      "In Progress",
-                    value:
-                      progressCount,
-                    color:
-                      "#F49B16",
-                  },
-                  {
-                    label:
-                      "Resolved",
-                    value:
-                      resolvedCount,
-                    color:
-                      "#2CA25F",
-                  },
-                  {
-                    label:
-                      "Closed",
-                    value:
-                      closedCount,
-                    color:
-                      "#E4463E",
-                  },
-                ].map(
-                  (item) => (
-                    <div
-                      key={
-                        item.label
-                      }
-                      className="
-                        flex
-                        min-w-0
-                        items-center
-                        justify-between
-                        gap-[4px]
-                      "
-                    >
-                      <div
-                        className="
-                          flex
-                          min-w-0
-                          items-center
-                          gap-[5px]
-                        "
-                      >
-                        <span
-                          className="
-                            h-[6px]
-                            w-[6px]
-                            shrink-0
-                            rounded-full
-                          "
-                          style={{
-                            backgroundColor:
-                              item.color,
-                          }}
-                        />
-
-                        <span
-                          className="
-                            min-w-0
-                            truncate
-                            text-[5.6px]
-                            font-[600]
-                            text-[#26386D]
-                          "
-                        >
-                          {
-                            item.label
-                          }
-                        </span>
-                      </div>
-
-                      <span
-                        className="
-                          shrink-0
-                          whitespace-nowrap
-                          text-[5.1px]
-                          font-[600]
-                          text-[#26386D]
-                        "
-                      >
-                        {item.value} (
-                        {percentage(
-                          item.value,
-                          totalEnquiries
-                        ).toFixed(
-                          1
-                        )}
-                        %)
-                      </span>
-                    </div>
-                  )
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* SOURCE */}
-
-          <div
-            className="
-              mt-[13px]
-              rounded-[7px]
-              border
-              border-[#E2E6EB]
-              bg-white
-              px-[12px]
-              pb-[14px]
-              pt-[12px]
-            "
-          >
-            <h2
-              className="
-                text-[8.8px]
-                font-[800]
-                text-[#20252F]
-              "
-            >
-              Enquiries by Source
-            </h2>
-
-            <div
-              className="
-                mt-[15px]
-                space-y-[11px]
-              "
-            >
-              {sourceStats.map(
-                (
-                  item,
-                  index
-                ) => {
-                  const meta =
-                    sourceIcon(
-                      item.label
-                    );
-
-                  const Icon =
-                    meta.icon;
-
-                  const colors =
-                    [
-                      "#327DDF",
-                      "#25A35F",
-                      "#F49D17",
-                      "#8750DB",
-                      "#D93A32",
-                    ];
-
-                  return (
-                    <SidebarBar
-                      key={
-                        item.label
-                      }
-                      label={
-                        item.label
-                      }
-                      value={
-                        item.value
-                      }
-                      percentageValue={
-                        item.percentage
-                      }
-                      color={
-                        colors[
-                        index %
-                        colors.length
-                        ]
-                      }
-                      icon={Icon}
-                      iconBg="#F3F6FA"
-                    />
-                  );
-                }
-              )}
-
-              {sourceStats.length ===
-                0 && (
-                  <p
-                    className="
-                    py-[15px]
-                    text-center
-                    text-[6.5px]
-                    text-[#667085]
-                  "
-                  >
-                    No source data
-                  </p>
-                )}
-            </div>
-          </div>
-
-          {/* CATEGORIES */}
-
-          <div
-            className="
-              mt-[13px]
-              rounded-[7px]
-              border
-              border-[#E2E6EB]
-              bg-white
-              px-[12px]
-              pb-[14px]
-              pt-[12px]
-            "
-          >
-            <h2
-              className="
-                text-[8.8px]
-                font-[800]
-                text-[#20252F]
-              "
-            >
-              Popular Categories
-            </h2>
-
-            <div
-              className="
-                mt-[15px]
-                space-y-[11px]
-              "
-            >
-              {categoryStats.map(
-                (
-                  item,
-                  index
-                ) => {
-                  const colors =
-                    [
-                      "#29A15D",
-                      "#2784E1",
-                      "#8851DA",
-                      "#F39B16",
-                      "#7C9DB7",
-                    ];
-
-                  return (
-                    <SidebarBar
-                      key={
-                        item.label
-                      }
-                      label={
-                        item.label
-                      }
-                      value={
-                        item.value
-                      }
-                      percentageValue={
-                        item.percentage
-                      }
-                      color={
-                        colors[
-                        index %
-                        colors.length
-                        ]
-                      }
-                    />
-                  );
-                }
-              )}
-
-              {categoryStats.length ===
-                0 && (
-                  <p
-                    className="
-                    py-[15px]
-                    text-center
-                    text-[6.5px]
-                    text-[#667085]
-                  "
-                  >
-                    No category data
-                  </p>
-                )}
-            </div>
-          </div>
-
-          {/* QUICK ACTIONS */}
-
-          <div
-            className="
-              mt-[13px]
-              overflow-hidden
-              rounded-[7px]
-              border
-              border-[#E2E6EB]
-              bg-[#FAFBFE]
-            "
-          >
-            <div
-              className="
-                px-[12px]
-                pb-[7px]
-                pt-[12px]
-              "
-            >
-              <h2
-                className="
-                  text-[9.5px]
-                  font-[800]
-                  text-[#1E3475]
-                "
-              >
-                Quick Actions
-              </h2>
-            </div>
-
-            {[
-              {
-                label:
-                  "View All Enquiries",
-                icon: Eye,
-              },
-              {
-                label:
-                  "Assign to Team Member",
-                icon: Users,
-              },
-              {
-                label:
-                  "Create Follow-up",
-                icon:
-                  CalendarDays,
-              },
-              {
-                label:
-                  "Download Report",
-                icon: Download,
-              },
-            ].map(
-              (action) => {
-                const Icon =
-                  action.icon;
-
-                return (
-                  <button
-                    type="button"
-                    key={
-                      action.label
-                    }
-                    className="
-                      flex
-                      h-[34px]
-                      w-full
-                      items-center
-                      justify-between
-                      border-b
-                      border-[#EDF0F4]
-                      px-[12px]
-                      text-[#1A2F6D]
-                      last:border-b-0
-                      hover:bg-white
-                    "
-                  >
-                    <span
-                      className="
-                        flex
-                        min-w-0
-                        items-center
-                        gap-[8px]
-                      "
-                    >
-                      <Icon
-                        size={
-                          12
-                        }
-                        className="shrink-0"
-                      />
-
-                      <span
-                        className="
-                          min-w-0
-                          truncate
-                          text-[6.8px]
-                          font-[700]
-                        "
-                      >
-                        {
-                          action.label
-                        }
-                      </span>
-                    </span>
-
-                    <ArrowRight
-                      size={10}
-                      className="shrink-0"
-                    />
-                  </button>
-                );
-              }
-            )}
-          </div>
-        </aside>
-      </div>
-
-      {/* ======================================================
-          DETAILS MODAL
-      ====================================================== */}
-
-      <Modal
-        isOpen={!!selected}
-        onClose={() =>
-          setSelected(null)
-        }
-        title={
-          selected?.name ??
-          "Enquiry"
-        }
-      >
-        {selected && (
-          <div
-            className="
-              space-y-4
-              text-sm
-            "
-          >
-            {/* STATUS */}
-
-            <div
-              className="
-                flex
-                flex-wrap
-                items-center
-                gap-2
-              "
-            >
-              <span
-                className="
-                  inline-flex
-                  rounded-md
-                  border
-                  px-2.5
-                  py-1
-                  text-xs
-                  font-semibold
-                "
-                style={{
-                  backgroundColor:
-                    getStatusStyle(
-                      selected.status
-                    ).background,
-
-                  color:
-                    getStatusStyle(
-                      selected.status
-                    ).color,
-
-                  borderColor:
-                    getStatusStyle(
-                      selected.status
-                    ).border,
-                }}
-              >
-                {getStatusLabel(
-                  selected.status
-                )}
+              <span className="truncate">
+                {item.label}
               </span>
+            </button>
+          );
+        }
+      )}
+    </div>
+  );
+}
 
-              <Badge tone="neutral">
-                {getCategoryLabel(
-                  selected
-                )}
-              </Badge>
-            </div>
+/* ============================================================
+   RADIO GROUP
+============================================================ */
 
-            {/* INFO */}
+function RadioGroup({
+  value,
+  options,
+  onChange,
+}: {
+  value: string;
+  options: string[];
 
-            <div
+  onChange: (
+    value: string
+  ) => void;
+}) {
+  return (
+    <div
+      className="
+        flex
+        h-[34px]
+        items-center
+        gap-[18px]
+      "
+    >
+      {options.map(
+        (option) => (
+          <label
+            key={option}
+            className="
+              flex
+              cursor-pointer
+              items-center
+              gap-[6px]
+              whitespace-nowrap
+              text-[7.5px]
+              font-[600]
+              text-[#354573]
+            "
+          >
+            <input
+              type="radio"
+              checked={
+                value ===
+                option
+              }
+              onChange={() =>
+                onChange(option)
+              }
               className="
-                grid
-                grid-cols-2
-                gap-3
-                text-xs
+                h-[12px]
+                w-[12px]
+                accent-[#147845]
               "
-            >
-              <ModalField
-                label="Name"
-                value={
-                  selected.name
-                }
-              />
+            />
 
-              <ModalField
-                label="Phone"
-                value={
-                  selected.phone
-                }
-              />
+            {option}
+          </label>
+        )
+      )}
+    </div>
+  );
+}
 
-              <ModalField
-                label="Email"
-                value={
-                  selected.email
-                }
-              />
+/* ============================================================
+   SIDEBAR CARD
+============================================================ */
 
-              <ModalField
-                label="Source"
-                value={getSource(
-                  selected
-                )}
-              />
-
-              <ModalField
-                label="Category"
-                value={getCategoryLabel(
-                  selected
-                )}
-              />
-
-              <ModalField
-                label="Received"
-                value={formatDateTime(
-                  selected.createdAt
-                )}
-              />
-            </div>
-
-            {/* SUBJECT */}
-
-            <div>
-              <p
-                className="
-                  text-[11px]
-                  font-semibold
-                  uppercase
-                  tracking-wide
-                  text-text-muted
-                "
-              >
-                Subject
-              </p>
-
-              <p
-                className="
-                  mt-1
-                  text-text-primary
-                "
-              >
-                {getSubject(
-                  selected
-                )}
-              </p>
-            </div>
-
-            {/* MESSAGE */}
-
-            <div>
-              <p
-                className="
-                  text-[11px]
-                  font-semibold
-                  uppercase
-                  tracking-wide
-                  text-text-muted
-                "
-              >
-                Message
-              </p>
-
-              <p
-                className="
-                  mt-1
-                  whitespace-pre-wrap
-                  text-text-primary
-                "
-              >
-                {selected.message ||
-                  "—"}
-              </p>
-            </div>
-
-            {selected.organization && (
-              <ModalField
-                label="Organisation"
-                value={
-                  selected.organization
-                }
-              />
-            )}
-
-            {selected.city && (
-              <ModalField
-                label="City / Area"
-                value={
-                  selected.city
-                }
-              />
-            )}
-
-            {selected.documentUrl && (
-              <a
-                href={
-                  selected.documentUrl
-                }
-                target="_blank"
-                rel="noreferrer"
-                className="
-                  inline-flex
-                  text-xs
-                  font-semibold
-                  text-accent
-                  hover:underline
-                "
-              >
-                View supporting
-                document
-              </a>
-            )}
-          </div>
-        )}
-      </Modal>
+function SidebarCard({
+  children,
+  className = "",
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <section
+      className={`
+        min-w-0
+        rounded-[7px]
+        border
+        border-[#E2E7EB]
+        bg-white
+        px-[16px]
+        py-[14px]
+        ${className}
+      `}
+    >
+      {children}
     </section>
   );
 }
 
 /* ============================================================
-   MODAL FIELD
+   INFO POINT
 ============================================================ */
 
-function ModalField({
-  label,
-  value,
+function InfoPoint({
+  children,
 }: {
-  label: string;
-  value?: string;
+  children: ReactNode;
 }) {
-  if (!value) {
-    return null;
-  }
-
   return (
-    <div>
-      <p
+    <div
+      className="
+        flex
+        items-start
+        gap-[8px]
+      "
+    >
+      <span
         className="
-          text-[11px]
-          font-semibold
-          uppercase
-          tracking-wide
-          text-text-muted
+          mt-[1px]
+          flex
+          h-[12px]
+          w-[12px]
+          shrink-0
+          items-center
+          justify-center
+          rounded-full
+          border
+          border-[#55AA77]
+          text-[#2E8952]
         "
       >
-        {label}
-      </p>
+        <Check
+          size={7}
+          strokeWidth={3}
+        />
+      </span>
 
-      <p
-        className="
-          mt-[2px]
-          break-words
-          text-text-primary
-        "
-      >
-        {value}
-      </p>
+        <p
+          className="
+            text-[7.5px]
+            font-[500]
+            leading-[11px]
+            text-[#46557A]
+          "
+        >
+          {children}
+        </p>
     </div>
   );
 }

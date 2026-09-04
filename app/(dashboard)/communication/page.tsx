@@ -422,24 +422,27 @@ function StatCard({
   return (
     <div
       className="
+        flex
         h-[108px]
         min-w-0
+        flex-col
+        justify-between
         rounded-[7px]
         border
         border-[#E1E6EC]
         bg-white
-        px-[9px]
-        py-[9px]
+        px-[10px]
+        py-[10px]
       "
     >
-      <div className="flex h-full min-w-0 items-center gap-[8px]">
+      {/* TOP ROW: Icon + Label/Value */}
+      <div className="flex items-start gap-[8px]">
         {/* ICON */}
-
         <div
           className="
             flex
-            h-[42px]
-            w-[42px]
+            h-[36px]
+            w-[36px]
             shrink-0
             items-center
             justify-center
@@ -450,7 +453,7 @@ function StatCard({
           }}
         >
           <Icon
-            size={24}
+            size={20}
             strokeWidth={2}
             style={{
               color: item.iconColor,
@@ -459,16 +462,13 @@ function StatCard({
         </div>
 
         {/* TEXT */}
-
         <div className="min-w-0 flex-1">
-          {/* TITLE */}
-
           <div
             className="
               w-full
-              text-[7.7px]
+              text-[10px]
               font-[700]
-              leading-[10px]
+              leading-[13px]
               text-[#172863]
               whitespace-normal
             "
@@ -476,74 +476,62 @@ function StatCard({
             {item.label}
           </div>
 
-          {/* VALUE */}
-
           <div
             className="
-              mt-[3px]
+              mt-[2px]
               whitespace-nowrap
-              text-[23px]
+              text-[22px]
               font-[800]
-              leading-[25px]
+              leading-[24px]
               text-[#00642F]
             "
           >
             {item.value}
           </div>
-
-          {/* CHANGE */}
-
-          <div
-            className="
-              mt-[6px]
-              flex
-              min-w-0
-              items-center
-              gap-[3px]
-              whitespace-nowrap
-            "
-          >
-            {item.direction === "up" ? (
-              <ArrowUp
-                size={8}
-                strokeWidth={3}
-                className="shrink-0 text-[#169248]"
-              />
-            ) : (
-              <ArrowDown
-                size={8}
-                strokeWidth={3}
-                className="shrink-0 text-[#F04438]"
-              />
-            )}
-
-            <span
-              className={`
-                shrink-0
-                text-[6.8px]
-                font-[700]
-                ${item.direction === "up"
-                  ? "text-[#169248]"
-                  : "text-[#F04438]"
-                }
-              `}
-            >
-              {item.change}
-            </span>
-
-            <span
-              className="
-                shrink-0
-                whitespace-nowrap
-                text-[6.2px]
-                font-[600]
-                text-[#506083]
-              "
-            >
-              {item.compare}
-            </span>
-          </div>
         </div>
+      </div>
+
+      {/* BOTTOM ROW: LEFT-ALIGNED SUBTEXT */}
+      <div className="flex w-full items-center justify-start gap-[4px] whitespace-nowrap text-left">
+        {item.direction === "up" ? (
+          <ArrowUp
+            size={10}
+            strokeWidth={3}
+            className="shrink-0 text-[#169248]"
+          />
+        ) : (
+          <ArrowDown
+            size={10}
+            strokeWidth={3}
+            className="shrink-0 text-[#F04438]"
+          />
+        )}
+
+        <span
+          className={`
+            shrink-0
+            text-[8.5px]
+            font-[700]
+            ${item.direction === "up"
+              ? "text-[#169248]"
+              : "text-[#F04438]"
+            }
+          `}
+        >
+          {item.change}
+        </span>
+
+        <span
+          className="
+            shrink-0
+            whitespace-nowrap
+            text-[8.5px]
+            font-[600]
+            text-[#506083]
+          "
+        >
+          {item.compare}
+        </span>
       </div>
     </div>
   );
@@ -573,9 +561,9 @@ function Badge({
         whitespace-nowrap
         rounded-[4px]
         border
-        px-[6px]
+        px-[9px]
         py-[4px]
-        text-[7px]
+        text-[7.5px]
         font-[700]
         leading-none
       "
@@ -594,37 +582,71 @@ function Badge({
    FILTER BUTTON
 ============================================================ */
 
-function FilterButton({ text }: { text: string }) {
+/* ============================================================
+   SELECT FILTER
+============================================================ */
+
+function SelectFilter({
+  value,
+  onChange,
+  options,
+}: {
+  value: string;
+  onChange: (val: string) => void;
+  options: { label: string; value: string }[];
+}) {
   return (
-    <button
-      type="button"
+    <div
       className="
+        relative
         flex
         h-[40px]
         min-w-0
         items-center
-        justify-between
-        gap-[7px]
         rounded-[6px]
         border
         border-[#E0E5EB]
         bg-white
         px-[11px]
-        text-[8.4px]
-        font-[700]
-        text-[#172762]
       "
     >
-      <span className="whitespace-nowrap">
-        {text}
-      </span>
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="
+          h-full
+          w-full
+          cursor-pointer
+          appearance-none
+          bg-transparent
+          pr-[18px]
+          text-[8.5px]
+          font-[700]
+          text-[#172762]
+          outline-none
+        "
+      >
+        {options.map((opt) => (
+          <option key={opt.value} value={opt.value}>
+            {opt.label}
+          </option>
+        ))}
+      </select>
 
       <ChevronDown
         size={12}
         strokeWidth={2.2}
-        className="shrink-0"
+        className="
+          pointer-events-none
+          absolute
+          right-[10px]
+          top-1/2
+          -translate-y-1/2
+          shrink-0
+          text-[#172762]
+        "
       />
-    </button>
+    </div>
   );
 }
 
@@ -634,33 +656,67 @@ function FilterButton({ text }: { text: string }) {
 
 export default function CommunicationsFollowUps() {
   const [search, setSearch] = useState("");
+  const [selectedChannel, setSelectedChannel] = useState("ALL");
+  const [selectedStatus, setSelectedStatus] = useState("ALL");
+  const [selectedEnquiry, setSelectedEnquiry] = useState("ALL");
+  const [selectedDateRange, setSelectedDateRange] = useState("ALL");
+  const [pageSize, setPageSize] = useState(10);
   const [page, setPage] = useState(1);
 
   const filteredRows = useMemo(() => {
-    const query = search.trim().toLowerCase();
-
-    if (!query) {
-      return communications;
-    }
-
     return communications.filter((item) => {
-      const completeText = [
-        item.id,
-        item.name,
-        item.email,
-        item.phone,
-        item.channel,
-        item.subject,
-        item.description,
-        item.enquiry,
-        item.status,
-      ]
-        .join(" ")
-        .toLowerCase();
+      if (search.trim()) {
+        const query = search.trim().toLowerCase();
+        const completeText = [
+          item.id,
+          item.name,
+          item.email,
+          item.phone,
+          item.channel,
+          item.subject,
+          item.description,
+          item.enquiry,
+          item.status,
+        ]
+          .join(" ")
+          .toLowerCase();
 
-      return completeText.includes(query);
+        if (!completeText.includes(query)) return false;
+      }
+
+      if (selectedChannel !== "ALL" && item.channel !== selectedChannel) {
+        return false;
+      }
+
+      if (selectedStatus !== "ALL" && item.status !== selectedStatus) {
+        return false;
+      }
+
+      if (selectedEnquiry !== "ALL" && item.enquiry !== selectedEnquiry) {
+        return false;
+      }
+
+      return true;
     });
-  }, [search]);
+  }, [search, selectedChannel, selectedStatus, selectedEnquiry, selectedDateRange]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredRows.length / pageSize));
+  const safePage = Math.min(page, totalPages);
+  const startIndex = filteredRows.length === 0 ? 0 : (safePage - 1) * pageSize;
+  const endIndex = Math.min(startIndex + pageSize, filteredRows.length);
+
+  const paginatedRows = useMemo(() => {
+    return filteredRows.slice(startIndex, endIndex);
+  }, [filteredRows, startIndex, endIndex]);
+
+  function handleReset() {
+    setSearch("");
+    setSelectedChannel("ALL");
+    setSelectedStatus("ALL");
+    setSelectedEnquiry("ALL");
+    setSelectedDateRange("ALL");
+    setPage(1);
+  }
 
   return (
     <section
@@ -849,16 +905,17 @@ export default function CommunicationsFollowUps() {
             >
               <input
                 value={search}
-                onChange={(event) =>
-                  setSearch(event.target.value)
-                }
+                onChange={(event) => {
+                  setSearch(event.target.value);
+                  setPage(1);
+                }}
                 placeholder="Search by name, email, subject or notes..."
                 className="
                   h-full
                   min-w-0
                   flex-1
                   bg-transparent
-                  text-[8.4px]
+                  text-[8.5px]
                   font-[600]
                   text-[#172762]
                   outline-none
@@ -873,16 +930,57 @@ export default function CommunicationsFollowUps() {
               />
             </div>
 
-            <FilterButton text="All Channels" />
+            <SelectFilter
+              value={selectedChannel}
+              onChange={(val) => {
+                setSelectedChannel(val);
+                setPage(1);
+              }}
+              options={[
+                { label: "All Channels", value: "ALL" },
+                { label: "Email", value: "Email" },
+                { label: "WhatsApp", value: "WhatsApp" },
+                { label: "Call", value: "Call" },
+                { label: "SMS", value: "SMS" },
+                { label: "Others", value: "Others" },
+              ]}
+            />
 
-            <FilterButton text="All Status" />
+            <SelectFilter
+              value={selectedStatus}
+              onChange={(val) => {
+                setSelectedStatus(val);
+                setPage(1);
+              }}
+              options={[
+                { label: "All Status", value: "ALL" },
+                { label: "Replied", value: "Replied" },
+                { label: "Pending", value: "Pending" },
+                { label: "Completed", value: "Completed" },
+              ]}
+            />
 
-            <FilterButton text="All Enquiry Types" />
+            <SelectFilter
+              value={selectedEnquiry}
+              onChange={(val) => {
+                setSelectedEnquiry(val);
+                setPage(1);
+              }}
+              options={[
+                { label: "All Enquiry Types", value: "ALL" },
+                { label: "CSR & Partners", value: "CSR & Partners" },
+                { label: "Volunteers", value: "Volunteers" },
+                { label: "General Enquiry", value: "General Enquiry" },
+                { label: "Sewa Help", value: "Sewa Help" },
+                { label: "Donation / Support", value: "Donation / Support" },
+              ]}
+            />
 
-            {/* DATE */}
+            {/* DATE RANGE DROPDOWN */}
 
-            <button
+            <div
               className="
+                relative
                 flex
                 h-[40px]
                 min-w-0
@@ -893,26 +991,59 @@ export default function CommunicationsFollowUps() {
                 border-[#E0E5EB]
                 bg-white
                 px-[11px]
-                text-[8.2px]
-                font-[600]
-                text-[#536080]
               "
             >
               <CalendarRange
                 size={14}
                 strokeWidth={2}
-                className="shrink-0 text-[#213C79]"
+                className="pointer-events-none shrink-0 text-[#213C79]"
               />
 
-              <span className="whitespace-nowrap">
-                Select Date Range
-              </span>
-            </button>
+              <select
+                value={selectedDateRange}
+                onChange={(e) => {
+                  setSelectedDateRange(e.target.value);
+                  setPage(1);
+                }}
+                className="
+                  h-full
+                  w-full
+                  cursor-pointer
+                  appearance-none
+                  bg-transparent
+                  pr-[18px]
+                  text-[8.5px]
+                  font-[600]
+                  text-[#536080]
+                  outline-none
+                "
+              >
+                <option value="ALL">Select Date Range</option>
+                <option value="TODAY">Today</option>
+                <option value="LAST_7_DAYS">Last 7 Days</option>
+                <option value="LAST_30_DAYS">Last 30 Days</option>
+                <option value="THIS_MONTH">This Month</option>
+              </select>
+
+              <ChevronDown
+                size={12}
+                strokeWidth={2.2}
+                className="
+                  pointer-events-none
+                  absolute
+                  right-[10px]
+                  top-1/2
+                  -translate-y-1/2
+                  shrink-0
+                  text-[#536080]
+                "
+              />
+            </div>
 
             {/* RESET */}
 
             <button
-              onClick={() => setSearch("")}
+              onClick={handleReset}
               className="
                 flex
                 h-[40px]
@@ -924,9 +1055,10 @@ export default function CommunicationsFollowUps() {
                 border-[#E0E5EB]
                 bg-white
                 px-[7px]
-                text-[7.8px]
+                text-[8.5px]
                 font-[700]
                 text-[#172762]
+                hover:bg-[#F8FAFC]
               "
             >
               <RotateCcw size={12} />
@@ -944,7 +1076,7 @@ export default function CommunicationsFollowUps() {
               mt-[11px]
               w-full
               min-w-0
-              overflow-hidden
+              overflow-x-auto
               rounded-[6px]
               border
               border-[#E2E6EB]
@@ -954,342 +1086,398 @@ export default function CommunicationsFollowUps() {
             <table
               className="
                 w-full
+                min-w-[1100px]
                 table-fixed
                 border-collapse
               "
             >
               <colgroup>
-                <col style={{ width: "8%" }} />
-                <col style={{ width: "17%" }} />
-                <col style={{ width: "9%" }} />
+                <col style={{ width: "6%" }} />
                 <col style={{ width: "18%" }} />
-                <col style={{ width: "11%" }} />
-                <col style={{ width: "8%" }} />
-                <col style={{ width: "10%" }} />
-                <col style={{ width: "10%" }} />
+                <col style={{ width: "6%" }} />
+                <col style={{ width: "19%" }} />
+                <col style={{ width: "12%" }} />
                 <col style={{ width: "9%" }} />
+                <col style={{ width: "12%" }} />
+                <col style={{ width: "12%" }} />
+                <col style={{ width: "6%" }} />
               </colgroup>
 
               <thead>
                 <tr
                   className="
-                    h-[34px]
+                    h-[32px]
                     bg-[#005F2E]
                     text-left
                     text-white
                   "
                 >
-                  <th className="px-[8px] text-[7.5px] font-[700]">
+                  <th className="px-[6px] text-[7.5px] font-[700] whitespace-nowrap">
                     ID
                   </th>
 
-                  <th className="px-[8px] text-[7.5px] font-[700]">
+                  <th className="px-[6px] text-[7.5px] font-[700] whitespace-nowrap">
                     Contact / Organization
                   </th>
 
-                  <th className="px-[6px] text-[7.5px] font-[700]">
+                  <th className="px-[4px] text-[7.5px] font-[700] whitespace-nowrap text-center">
                     Channel
                   </th>
 
-                  <th className="px-[8px] text-[7.5px] font-[700]">
+                  <th className="px-[6px] text-[7.5px] font-[700] whitespace-nowrap">
                     Subject / Conversation
                   </th>
 
-                  <th className="px-[6px] text-[7.5px] font-[700]">
+                  <th className="px-[5px] text-[7.5px] font-[700] whitespace-nowrap">
                     Enquiry Type
                   </th>
 
-                  <th className="px-[6px] text-[7.5px] font-[700]">
+                  <th className="px-[5px] text-[7.5px] font-[700] whitespace-nowrap">
                     Status
                   </th>
 
-                  <th className="px-[6px] text-[7.5px] font-[700]">
+                  <th className="px-[6px] text-[7.5px] font-[700] whitespace-nowrap">
                     Last Activity
                   </th>
 
-                  <th className="px-[6px] text-[7.5px] font-[700]">
+                  <th className="px-[6px] text-[7.5px] font-[700] whitespace-nowrap">
                     Next Follow-up
                   </th>
 
-                  <th className="px-[6px] text-[7.5px] font-[700]">
+                  <th className="px-[6px] text-[7.5px] font-[700] whitespace-nowrap text-center">
                     Actions
                   </th>
                 </tr>
               </thead>
 
               <tbody>
-                {filteredRows.map((row) => {
-                  const channelColors =
-                    getChannelStyle(row.channel);
-
-                  return (
-                    <tr
-                      key={row.id}
+                {paginatedRows.length === 0 ? (
+                  <tr>
+                    <td
+                      colSpan={9}
                       className="
-                        h-[67px]
-                        border-b
-                        border-[#E8EBEF]
-                        bg-white
-                        last:border-b-0
-                        hover:bg-[#FBFCFD]
+                        h-[120px]
+                        text-center
+                        text-[9px]
+                        font-[600]
+                        text-[#667085]
                       "
                     >
-                      {/* ID */}
+                      No communications found.
+                    </td>
+                  </tr>
+                ) : (
+                  paginatedRows.map((row) => {
+                    const channelColors =
+                      getChannelStyle(row.channel);
 
-                      <td className="px-[7px] align-middle">
-                        <span
-                          className="
-                            whitespace-nowrap
-                            text-[7px]
-                            font-[700]
-                            text-[#13763E]
-                          "
-                        >
-                          {row.id}
-                        </span>
-                      </td>
+                    return (
+                      <tr
+                        key={row.id}
+                        className="
+                          h-[44px]
+                          border-b
+                          border-[#E8EBEF]
+                          bg-white
+                          last:border-b-0
+                          hover:bg-[#FBFCFD]
+                        "
+                      >
+                        {/* ID */}
 
-                      {/* CONTACT */}
+                        <td className="px-[6px] align-middle">
+                          <span
+                            className="
+                              whitespace-nowrap
+                              text-[7.5px]
+                              font-[700]
+                              text-[#13763E]
+                            "
+                          >
+                            {row.id.replace("COM-2026-", "#")}
+                          </span>
+                        </td>
 
-                      <td className="min-w-0 px-[8px] align-middle">
-                        <div className="min-w-0">
+                        {/* CONTACT */}
+
+                        <td className="min-w-0 px-[6px] align-middle">
+                          <div className="min-w-0">
+                            <p
+                              className="
+                                truncate
+                                text-[7.5px]
+                                font-[700]
+                                leading-[11px]
+                                text-[#192B66]
+                              "
+                              title={row.name}
+                            >
+                              {row.name}
+                            </p>
+
+                            <div className="mt-[2px] flex items-center gap-[4px]">
+                              <a
+                                href={`mailto:${row.email}`}
+                                title={`Email: ${row.email}`}
+                                className="
+                                  flex
+                                  h-[16px]
+                                  w-[16px]
+                                  shrink-0
+                                  items-center
+                                  justify-center
+                                  rounded-[3px]
+                                  border
+                                  border-[#D5E6FB]
+                                  bg-[#E9F2FF]
+                                  text-[#2872CE]
+                                  hover:bg-[#D4E5FF]
+                                "
+                              >
+                                <Mail size={8} />
+                              </a>
+
+                              <a
+                                href={`https://wa.me/${row.phone.replace(/[^\d]/g, "")}`}
+                                target="_blank"
+                                rel="noreferrer"
+                                title={`WhatsApp: ${row.phone}`}
+                                className="
+                                  flex
+                                  h-[16px]
+                                  w-[16px]
+                                  shrink-0
+                                  items-center
+                                  justify-center
+                                  rounded-[3px]
+                                  border
+                                  border-[#CFEAD5]
+                                  bg-[#E6F6E9]
+                                  text-[#26894C]
+                                  hover:bg-[#D2EED8]
+                                "
+                              >
+                                <FaWhatsapp size={8} />
+                              </a>
+
+                              <span
+                                className="
+                                  whitespace-nowrap
+                                  text-[7px]
+                                  font-[600]
+                                  text-[#293B70]
+                                "
+                              >
+                                {row.phone}
+                              </span>
+                            </div>
+                          </div>
+                        </td>
+
+                        {/* CHANNEL */}
+
+                        <td className="px-[4px] text-center align-middle">
+                          <span
+                            title={row.channel}
+                            className="
+                              inline-flex
+                              h-[22px]
+                              w-[22px]
+                              items-center
+                              justify-center
+                              rounded-[5px]
+                              border
+                            "
+                            style={{
+                              background:
+                                channelColors.background,
+                              color: channelColors.color,
+                              borderColor:
+                                channelColors.border,
+                            }}
+                          >
+                            {row.channel === "Email" && (
+                              <Mail size={10} />
+                            )}
+
+                            {row.channel === "WhatsApp" && (
+                              <FaWhatsapp size={10} />
+                            )}
+
+                            {row.channel === "Call" && (
+                              <Phone size={10} />
+                            )}
+
+                            {row.channel !== "Email" &&
+                              row.channel !== "WhatsApp" &&
+                              row.channel !== "Call" && (
+                                <span className="text-[7px] font-[700]">
+                                  {row.channel.slice(0, 2)}
+                                </span>
+                              )}
+                          </span>
+                        </td>
+
+                        {/* SUBJECT */}
+
+                        <td className="min-w-0 px-[6px] align-middle">
                           <p
                             className="
                               truncate
-                              text-[7.8px]
+                              text-[7.5px]
                               font-[700]
                               leading-[11px]
                               text-[#192B66]
                             "
                           >
-                            {row.name}
+                            {row.subject}
                           </p>
 
                           <p
                             className="
-                              mt-[4px]
+                              mt-[2px]
                               truncate
-                              text-[6.7px]
+                              text-[7px]
                               font-[500]
                               leading-[10px]
-                              text-[#293B70]
+                              text-[#304276]
                             "
                           >
-                            {row.email}
+                            {row.description}
                           </p>
+                        </td>
 
-                          <p
-                            className="
-                              mt-[2px]
-                              whitespace-nowrap
-                              text-[6.7px]
-                              font-[500]
-                              leading-[10px]
-                              text-[#293B70]
-                            "
-                          >
-                            {row.phone}
-                          </p>
-                        </div>
-                      </td>
+                        {/* ENQUIRY */}
 
-                      {/* CHANNEL */}
-
-                      <td className="px-[5px] align-middle">
-                        <span
-                          className="
-                            inline-flex
-                            items-center
-                            gap-[3px]
-                            whitespace-nowrap
-                            rounded-[4px]
-                            border
-                            px-[5px]
-                            py-[4px]
-                            text-[6.7px]
-                            font-[700]
-                            leading-none
-                          "
-                          style={{
-                            background:
-                              channelColors.background,
-                            color: channelColors.color,
-                            borderColor:
-                              channelColors.border,
-                          }}
-                        >
-                          {row.channel === "Email" && (
-                            <Mail size={8} />
-                          )}
-
-                          {row.channel ===
-                            "WhatsApp" && (
-                              <FaWhatsapp size={8} />
+                        <td className="px-[5px] align-middle">
+                          <Badge
+                            text={row.enquiry}
+                            style={enquiryStyle(
+                              row.enquiry
                             )}
+                          />
+                        </td>
 
-                          {row.channel === "Call" && (
-                            <Phone size={8} />
-                          )}
+                        {/* STATUS */}
 
-                          {row.channel}
-                        </span>
-                      </td>
+                        <td className="px-[5px] align-middle">
+                          <Badge
+                            text={row.status}
+                            style={statusStyle(
+                              row.status
+                            )}
+                          />
+                        </td>
 
-                      {/* SUBJECT */}
+                        {/* LAST ACTIVITY */}
 
-                      <td className="min-w-0 px-[8px] align-middle">
-                        <p
-                          className="
-                            truncate
-                            text-[7.6px]
-                            font-[700]
-                            leading-[11px]
-                            text-[#192B66]
-                          "
-                        >
-                          {row.subject}
-                        </p>
-
-                        <p
-                          className="
-                            mt-[4px]
-                            truncate
-                            text-[6.7px]
-                            font-[500]
-                            leading-[10px]
-                            text-[#304276]
-                          "
-                        >
-                          {row.description}
-                        </p>
-                      </td>
-
-                      {/* ENQUIRY */}
-
-                      <td className="px-[5px] align-middle">
-                        <Badge
-                          text={row.enquiry}
-                          style={enquiryStyle(
-                            row.enquiry
-                          )}
-                        />
-                      </td>
-
-                      {/* STATUS */}
-
-                      <td className="px-[5px] align-middle">
-                        <Badge
-                          text={row.status}
-                          style={statusStyle(
-                            row.status
-                          )}
-                        />
-                      </td>
-
-                      {/* LAST ACTIVITY */}
-
-                      <td className="px-[5px] align-middle">
-                        <p
-                          className="
-                            whitespace-nowrap
-                            text-[6.7px]
-                            font-[500]
-                            leading-[10px]
-                            text-[#26396D]
-                          "
-                        >
-                          {row.lastDate}
-                        </p>
-
-                        <p
-                          className="
-                            mt-[2px]
-                            whitespace-nowrap
-                            text-[6.7px]
-                            font-[500]
-                            leading-[10px]
-                            text-[#26396D]
-                          "
-                        >
-                          {row.lastTime}
-                        </p>
-                      </td>
-
-                      {/* NEXT FOLLOW-UP */}
-
-                      <td className="px-[5px] align-middle">
-                        <p
-                          className="
-                            whitespace-nowrap
-                            text-[6.7px]
-                            font-[500]
-                            leading-[10px]
-                            text-[#26396D]
-                          "
-                        >
-                          {row.nextDate}
-                        </p>
-
-                        {row.nextTime && (
+                        <td className="px-[6px] align-middle">
                           <p
                             className="
-                              mt-[2px]
                               whitespace-nowrap
-                              text-[6.7px]
-                              font-[500]
-                              leading-[10px]
+                              text-[7.5px]
+                              font-[700]
+                              leading-[11px]
                               text-[#26396D]
                             "
                           >
-                            {row.nextTime}
+                            {row.lastDate}
                           </p>
-                        )}
-                      </td>
 
-                      {/* ACTIONS */}
-
-                      <td className="px-[5px] align-middle">
-                        <div className="flex items-center gap-[5px]">
-                          <button
+                          <p
                             className="
-                              flex
-                              h-[28px]
-                              w-[29px]
-                              shrink-0
-                              items-center
-                              justify-center
-                              rounded-[5px]
-                              border
-                              border-[#E3E7EC]
-                              bg-white
-                              text-[#263C76]
+                              mt-[1px]
+                              whitespace-nowrap
+                              text-[7px]
+                              font-[500]
+                              leading-[10px]
+                              text-[#556488]
                             "
                           >
-                            <Eye size={11} />
-                          </button>
+                            {row.lastTime}
+                          </p>
+                        </td>
 
-                          <button
+                        {/* NEXT FOLLOW-UP */}
+
+                        <td className="px-[6px] align-middle">
+                          <p
                             className="
-                              flex
-                              h-[28px]
-                              w-[29px]
-                              shrink-0
-                              items-center
-                              justify-center
-                              rounded-[5px]
-                              border
-                              border-[#E3E7EC]
-                              bg-white
-                              text-[#263C76]
+                              whitespace-nowrap
+                              text-[7.5px]
+                              font-[700]
+                              leading-[11px]
+                              text-[#26396D]
                             "
                           >
-                            <MoreVertical size={11} />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
+                            {row.nextDate}
+                          </p>
+
+                          {row.nextTime && (
+                            <p
+                              className="
+                                mt-[1px]
+                                whitespace-nowrap
+                                text-[7px]
+                                font-[500]
+                                leading-[10px]
+                                text-[#556488]
+                              "
+                            >
+                              {row.nextTime}
+                            </p>
+                          )}
+                        </td>
+
+                        {/* ACTIONS */}
+
+                        <td className="px-[8px] align-middle">
+                          <div className="flex items-center justify-center gap-[5px]">
+                            <button
+                              title="View Details"
+                              className="
+                                flex
+                                h-[28px]
+                                w-[28px]
+                                shrink-0
+                                items-center
+                                justify-center
+                                rounded-[5px]
+                                border
+                                border-[#E3E7EC]
+                                bg-white
+                                text-[#263C76]
+                                hover:bg-[#F8FAFC]
+                              "
+                            >
+                              <Eye size={14} />
+                            </button>
+
+                            <button
+                              title="More Options"
+                              className="
+                                flex
+                                h-[28px]
+                                w-[28px]
+                                shrink-0
+                                items-center
+                                justify-center
+                                rounded-[5px]
+                                border
+                                border-[#E3E7EC]
+                                bg-white
+                                text-[#263C76]
+                                hover:bg-[#F8FAFC]
+                              "
+                            >
+                              <MoreVertical size={14} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
               </tbody>
             </table>
 
@@ -1313,17 +1501,19 @@ export default function CommunicationsFollowUps() {
                 className="
                   shrink-0
                   whitespace-nowrap
-                  text-[6.7px]
+                  text-[8.5px]
                   font-[600]
                   text-[#475A83]
                 "
               >
-                Showing 1 to 8 of 562 communications
+                {filteredRows.length > 0
+                  ? `Showing ${startIndex + 1} to ${endIndex} of ${filteredRows.length} communications`
+                  : "Showing 0 communications"}
               </p>
 
               <div className="flex items-center gap-[5px]">
                 <button
-                  disabled={page === 1}
+                  disabled={safePage === 1}
                   onClick={() =>
                     setPage((current) =>
                       Math.max(1, current - 1)
@@ -1346,73 +1536,37 @@ export default function CommunicationsFollowUps() {
                   <ChevronLeft size={12} />
                 </button>
 
-                {[1, 2, 3].map((number) => (
-                  <button
-                    key={number}
-                    onClick={() => setPage(number)}
-                    className={`
-                      flex
-                      h-[27px]
-                      w-[27px]
-                      items-center
-                      justify-center
-                      rounded-[4px]
-                      border
-                      text-[7.5px]
-                      font-[700]
-                      ${page === number
-                        ? "border-[#006132] bg-[#006132] text-white"
-                        : "border-[#E3E7ED] bg-white text-[#334575]"
-                      }
-                    `}
-                  >
-                    {number}
-                  </button>
-                ))}
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                  (number) => (
+                    <button
+                      key={number}
+                      onClick={() => setPage(number)}
+                      className={`
+                        flex
+                        h-[27px]
+                        w-[27px]
+                        items-center
+                        justify-center
+                        rounded-[4px]
+                        border
+                        text-[8.5px]
+                        font-[700]
+                        ${safePage === number
+                          ? "border-[#006132] bg-[#006132] text-white"
+                          : "border-[#E3E7ED] bg-white text-[#334575]"
+                        }
+                      `}
+                    >
+                      {number}
+                    </button>
+                  )
+                )}
 
                 <button
-                  className="
-                    flex
-                    h-[27px]
-                    w-[27px]
-                    items-center
-                    justify-center
-                    rounded-[4px]
-                    border
-                    border-[#E3E7ED]
-                    bg-white
-                    text-[8px]
-                    text-[#596584]
-                  "
-                >
-                  ...
-                </button>
-
-                <button
-                  onClick={() => setPage(71)}
-                  className={`
-                    flex
-                    h-[27px]
-                    w-[27px]
-                    items-center
-                    justify-center
-                    rounded-[4px]
-                    border
-                    text-[7.5px]
-                    font-[700]
-                    ${page === 71
-                      ? "border-[#006132] bg-[#006132] text-white"
-                      : "border-[#E3E7ED] bg-white text-[#334575]"
-                    }
-                  `}
-                >
-                  71
-                </button>
-
-                <button
+                  disabled={safePage >= totalPages}
                   onClick={() =>
                     setPage((current) =>
-                      Math.min(71, current + 1)
+                      Math.min(totalPages, current + 1)
                     )
                   }
                   className="
@@ -1426,34 +1580,68 @@ export default function CommunicationsFollowUps() {
                     border-[#E3E7ED]
                     bg-white
                     text-[#334575]
+                    disabled:opacity-40
                   "
                 >
                   <ChevronRight size={12} />
                 </button>
               </div>
 
-              <button
+              {/* ROWS PER PAGE DROPDOWN */}
+
+              <div
                 className="
+                  relative
                   flex
                   h-[28px]
-                  w-[94px]
+                  w-[102px]
                   shrink-0
                   items-center
-                  justify-between
                   rounded-[4px]
                   border
                   border-[#E3E7ED]
                   bg-white
-                  px-[9px]
-                  text-[6.7px]
-                  font-[700]
-                  text-[#536180]
+                  px-[8px]
                 "
               >
-                10 per page
+                <select
+                  value={pageSize}
+                  onChange={(e) => {
+                    setPageSize(Number(e.target.value));
+                    setPage(1);
+                  }}
+                  className="
+                    h-full
+                    w-full
+                    cursor-pointer
+                    appearance-none
+                    bg-transparent
+                    pr-[16px]
+                    text-[8.5px]
+                    font-[700]
+                    text-[#536180]
+                    outline-none
+                  "
+                >
+                  <option value={5}>5 per page</option>
+                  <option value={10}>10 per page</option>
+                  <option value={20}>20 per page</option>
+                  <option value={50}>50 per page</option>
+                </select>
 
-                <ChevronDown size={11} />
-              </button>
+                <ChevronDown
+                  size={11}
+                  className="
+                    pointer-events-none
+                    absolute
+                    right-[8px]
+                    top-1/2
+                    -translate-y-1/2
+                    shrink-0
+                    text-[#536180]
+                  "
+                />
+              </div>
             </div>
           </div>
         </main>
@@ -1564,7 +1752,7 @@ export default function CommunicationsFollowUps() {
 
               {/* LEGEND */}
 
-              <div className="min-w-0 flex-1 space-y-[10px]">
+              <div className="min-w-0 flex-1 space-y-[8px]">
                 {[
                   {
                     label: "Email",
@@ -1595,6 +1783,7 @@ export default function CommunicationsFollowUps() {
                       items-center
                       justify-between
                       gap-[4px]
+                      text-left
                     "
                   >
                     <div
@@ -1621,8 +1810,8 @@ export default function CommunicationsFollowUps() {
                       <span
                         className="
                           whitespace-nowrap
-                          text-[6.3px]
-                          font-[600]
+                          text-[7px]
+                          font-semibold
                           text-[#26386D]
                         "
                       >
@@ -1634,8 +1823,8 @@ export default function CommunicationsFollowUps() {
                       className="
                         shrink-0
                         whitespace-nowrap
-                        text-[5.9px]
-                        font-[600]
+                        text-[7px]
+                        font-semibold
                         text-[#26386D]
                       "
                     >
@@ -1665,15 +1854,15 @@ export default function CommunicationsFollowUps() {
           >
             <h2
               className="
-                text-[8.8px]
-                font-[700]
+                text-[10px]
+                font-[800]
                 text-[#1F2430]
               "
             >
               Communication Channels
             </h2>
 
-            <div className="mt-[16px] space-y-[11px]">
+            <div className="mt-[14px] space-y-[10px]">
               {channelStats.map((item) => {
                 const Icon = item.icon;
 
@@ -1685,6 +1874,7 @@ export default function CommunicationsFollowUps() {
                       grid-cols-[77px_minmax(0,1fr)_53px]
                       items-center
                       gap-[5px]
+                      text-left
                     "
                   >
                     <div className="flex min-w-0 items-center gap-[5px]">
@@ -1714,8 +1904,8 @@ export default function CommunicationsFollowUps() {
                       <span
                         className="
                           whitespace-nowrap
-                          text-[6.6px]
-                          font-[700]
+                          text-[7px]
+                          font-semibold
                           text-[#26376D]
                         "
                       >
@@ -1746,8 +1936,8 @@ export default function CommunicationsFollowUps() {
                       className="
                         whitespace-nowrap
                         text-right
-                        text-[5.9px]
-                        font-[600]
+                        text-[7px]
+                        font-semibold
                         text-[#26376D]
                       "
                     >
@@ -1776,8 +1966,8 @@ export default function CommunicationsFollowUps() {
             <div className="px-[12px] pb-[7px] pt-[12px]">
               <h2
                 className="
-                  text-[9.7px]
-                  font-[700]
+                  text-[10px]
+                  font-[800]
                   text-[#193775]
                 "
               >
@@ -1800,6 +1990,7 @@ export default function CommunicationsFollowUps() {
                     border-b
                     border-[#EDF0F4]
                     px-[12px]
+                    text-left
                     text-[#1A2F6D]
                     last:border-b-0
                   "
@@ -1813,8 +2004,8 @@ export default function CommunicationsFollowUps() {
                     <span
                       className="
                         whitespace-nowrap
-                        text-[7.2px]
-                        font-[700]
+                        text-[7px]
+                        font-semibold
                       "
                     >
                       {action.label}
