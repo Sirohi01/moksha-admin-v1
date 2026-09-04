@@ -273,9 +273,14 @@ export default function NavigationMenusPage() {
             </h1>
 
             <nav className="mt-[4px] flex items-center gap-[6px] text-[10px] font-semibold text-[#1d2b58]">
-              <span>Dashboard</span>
+              <span
+                onClick={() => router.push("/")}
+                className="cursor-pointer transition hover:text-[#075b33]"
+              >
+                Dashboard
+              </span>
               <span className="text-[#7b8597]">›</span>
-              <span>Navigation Menus</span>
+              <span className="text-[#075b33]">Navigation Menus</span>
             </nav>
           </div>
 

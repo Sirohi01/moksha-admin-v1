@@ -49,6 +49,12 @@ export const NAV_SECTIONS: NavSection[] = [
     title: "Main Navigation",
     items: [
       { label: "Dashboard", href: "/", icon: LayoutDashboard },
+      { label: "General Enquiries", href: "/general-enquiries", icon: Mail },
+      { label: "CSR & Partners Enquiries", href: "/enquiries?category=csr", icon: Handshake },
+      { label: "Volunteers", href: "/volunteers", icon: HandHeart },
+      { label: "Sewa Help Requests", href: "/requests", icon: ClipboardList },
+      // { label: "Newsletter Subscribers", href: "/newsletter", icon: Mail },
+      { label: "Communication / Follow-ups", href: "/communication", icon: MessageSquare, badge: "NEW" },
     ],
   },
   {

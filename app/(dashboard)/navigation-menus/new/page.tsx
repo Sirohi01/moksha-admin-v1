@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   ArrowRight,
   Check,
@@ -101,6 +102,7 @@ function Panel({
 }
 
 export default function AddNewMenuPage() {
+  const router = useRouter();
   const [menuName, setMenuName] = useState("");
   const [menuLocation, setMenuLocation] = useState("");
   const [menuType, setMenuType] = useState("");
@@ -153,11 +155,21 @@ export default function AddNewMenuPage() {
           </h1>
 
           <nav className="mt-[10px] flex items-center gap-[8px] text-[11px] font-semibold text-[#1d2b58]">
-            <span>Dashboard</span>
+            <span
+              onClick={() => router.push("/")}
+              className="cursor-pointer transition hover:text-[#075b33]"
+            >
+              Dashboard
+            </span>
             <span className="text-[#7b8597]">›</span>
-            <span>Navigation Menus</span>
+            <span
+              onClick={() => router.push("/navigation-menus")}
+              className="cursor-pointer transition hover:text-[#075b33]"
+            >
+              Navigation Menus
+            </span>
             <span className="text-[#7b8597]">›</span>
-            <span>Add New Menu</span>
+            <span className="text-[#075b33]">Add New Menu</span>
           </nav>
         </header>
 
@@ -544,7 +556,8 @@ export default function AddNewMenuPage() {
         <footer className="sticky bottom-0 z-20 mt-[14px] flex min-h-[64px] items-center justify-between border-t border-[#edf0f2] bg-[#fffefb]/95 px-[10px] py-[9px] backdrop-blur-sm">
           <button
             type="button"
-            className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] border border-[#dfe3e7] bg-white px-[20px] text-[10px] font-bold text-[#273655]"
+            onClick={() => router.push("/navigation-menus")}
+            className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] border border-[#dfe3e7] bg-white px-[20px] text-[10px] font-bold text-[#273655] transition hover:bg-slate-50"
           >
             <X className="h-[14px] w-[14px]" />
             Cancel
@@ -553,7 +566,8 @@ export default function AddNewMenuPage() {
           <div className="flex items-center gap-[10px]">
             <button
               type="button"
-              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] border border-[#dfe3e7] bg-white px-[20px] text-[10px] font-bold text-[#273655]"
+              onClick={() => router.push("/navigation-menus")}
+              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] border border-[#dfe3e7] bg-white px-[20px] text-[10px] font-bold text-[#273655] transition hover:bg-slate-50"
             >
               <Save className="h-[14px] w-[14px]" />
               Save as Draft
@@ -561,7 +575,8 @@ export default function AddNewMenuPage() {
 
             <button
               type="button"
-              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] bg-[linear-gradient(180deg,#076636_0%,#03542c_100%)] px-[22px] text-[10px] font-bold text-white shadow-[0_7px_16px_rgba(5,94,49,.12)]"
+              onClick={() => router.push("/navigation-menus")}
+              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] bg-[linear-gradient(180deg,#076636_0%,#03542c_100%)] px-[22px] text-[10px] font-bold text-white shadow-[0_7px_16px_rgba(5,94,49,.12)] transition hover:opacity-95"
             >
               <ArrowRight className="h-[14px] w-[14px]" />
               Create Menu
