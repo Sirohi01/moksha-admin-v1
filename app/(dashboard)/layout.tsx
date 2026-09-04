@@ -1,14 +1,18 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import RequireAdminAuth from "@/components/auth/RequireAdminAuth";
 import Sidebar from "@/components/layout/Sidebar";
 import Topbar from "@/components/layout/Topbar";
 import AdminFooter from "@/components/layout/AdminFooter";
 import AdminSocialRail from "@/components/layout/AdminSocialRail";
+import contentScale from "./AdminContentScale.module.css";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const pathname = usePathname();
+  const useCompactReadableScale = pathname !== "/" && !pathname.startsWith("/pages");
 
   return (
     <RequireAdminAuth>
@@ -39,7 +43,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
         <div className="flex min-w-0 flex-1 flex-col relative z-10">
           <Topbar onMenuClick={() => setMobileNavOpen(true)} />
-          <main className="min-h-0 flex-1 overflow-y-auto pl-1.5 pr-1.5 pb-1.5 pt-1 lg:pl-1.5 lg:pr-1.5 lg:pb-1.5 lg:pt-1">{children}</main>
+          <main className={`min-h-0 flex-1 overflow-y-auto pl-1.5 pr-1.5 pb-1.5 pt-1 lg:pl-1.5 lg:pr-1.5 lg:pb-1.5 lg:pt-1 ${useCompactReadableScale ? contentScale.adminContent : ""}`}>{children}</main>
           <AdminFooter />
         </div>
         <AdminSocialRail />

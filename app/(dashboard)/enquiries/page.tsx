@@ -474,14 +474,17 @@ function StatCard({
   return (
     <div
       className="
+        flex
+        flex-col
+        justify-between
+        h-[102px]
         min-w-0
         rounded-[7px]
         border
         border-[#E2E6EB]
         bg-white
         px-[10px]
-        pb-[6px]
-        pt-[9px]
+        py-[9px]
       "
     >
       <div
@@ -495,8 +498,8 @@ function StatCard({
         <div
           className="
             flex
-            h-[41px]
-            w-[41px]
+            h-[40px]
+            w-[40px]
             shrink-0
             items-center
             justify-center
@@ -507,7 +510,7 @@ function StatCard({
           }}
         >
           <Icon
-            size={22}
+            size={20}
             strokeWidth={2}
             style={{
               color: iconColor,
@@ -518,9 +521,10 @@ function StatCard({
         <div className="min-w-0 flex-1">
           <p
             className="
-              text-[7.4px]
+              text-[10px]
               font-[700]
-              leading-[10px]
+              uppercase
+              tracking-wider
               text-[#172762]
             "
           >
@@ -529,64 +533,52 @@ function StatCard({
 
           <p
             className="
-              mt-[3px]
+              mt-[2px]
               whitespace-nowrap
-              text-[22px]
+              text-2xl
               font-[800]
-              leading-[24px]
+              leading-none
               text-[#00632F]
             "
           >
             {value}
           </p>
-
-          <div
-            className="
-              mt-[5px]
-              flex
-              items-center
-              gap-[3px]
-              whitespace-nowrap
-            "
-          >
-            <ArrowUp
-              size={8}
-              strokeWidth={3}
-              className="
-                shrink-0
-                text-[#179249]
-              "
-            />
-
-            <span
-              className="
-                shrink-0
-                text-[6.6px]
-                font-[700]
-                text-[#179249]
-              "
-            >
-              {change || "Live"}
-            </span>
-
-            <span
-              className="
-                shrink-0
-                text-[6px]
-                font-[600]
-                text-[#536181]
-              "
-            >
-              current data
-            </span>
-          </div>
         </div>
       </div>
 
-      <MiniTrend
-        color={graphColor}
-        points={graphPoints}
-      />
+      <div
+        className="
+          flex
+          w-full
+          items-center
+          justify-start
+          gap-[4px]
+          whitespace-nowrap
+          text-left
+        "
+      >
+        {change === "Live" || !change ? (
+          <span className="rounded-[4px] bg-[#E4F5E8] px-[5px] py-[1px] text-[8.5px] font-bold text-[#238B4C]">
+            Live
+          </span>
+        ) : (
+          <>
+            <ArrowUp
+              size={10}
+              strokeWidth={3}
+              className="shrink-0 text-[#179249]"
+            />
+
+            <span className="text-[8.5px] font-[700] text-[#179249]">
+              {change}
+            </span>
+          </>
+        )}
+
+        <span className="text-[8.5px] font-[500] text-[#536181]">
+          current data
+        </span>
+      </div>
     </div>
   );
 }
@@ -1565,35 +1557,35 @@ export default function EnquiriesPage() {
                     text-white
                   "
                 >
-                  <th className="px-[8px] text-[7.4px] font-[700]">
+                  <th className="px-[8px] text-xs font-[700] uppercase tracking-wider">
                     ID
                   </th>
 
-                  <th className="px-[8px] text-[7.4px] font-[700]">
+                  <th className="px-[8px] text-xs font-[700] uppercase tracking-wider">
                     Organization / Contact
                   </th>
 
-                  <th className="px-[7px] text-[7.4px] font-[700]">
+                  <th className="px-[7px] text-xs font-[700] uppercase tracking-wider">
                     Enquiry Type
                   </th>
 
-                  <th className="px-[8px] text-[7.4px] font-[700]">
+                  <th className="px-[8px] text-xs font-[700] uppercase tracking-wider">
                     Purpose / Interest
                   </th>
 
-                  <th className="px-[7px] text-[7.4px] font-[700]">
+                  <th className="px-[7px] text-xs font-[700] uppercase tracking-wider">
                     Status
                   </th>
 
-                  <th className="px-[7px] text-[7.4px] font-[700]">
+                  <th className="px-[7px] text-xs font-[700] uppercase tracking-wider">
                     Priority
                   </th>
 
-                  <th className="px-[7px] text-[7.4px] font-[700]">
+                  <th className="px-[7px] text-xs font-[700] uppercase tracking-wider">
                     Received On
                   </th>
 
-                  <th className="px-[7px] text-[7.4px] font-[700]">
+                  <th className="px-[7px] text-xs font-[700] uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
@@ -1683,7 +1675,7 @@ export default function EnquiriesPage() {
                               className="
                                 block
                                 truncate
-                                text-[6.8px]
+                                text-xs
                                 font-[700]
                                 text-[#13763E]
                               "
@@ -1708,9 +1700,9 @@ export default function EnquiriesPage() {
                             <p
                               className="
                                 truncate
-                                text-[7.8px]
+                                text-sm
                                 font-[700]
-                                leading-[11px]
+                                leading-[14px]
                                 text-[#192B66]
                               "
                             >
@@ -1726,9 +1718,9 @@ export default function EnquiriesPage() {
                                   className="
                                   mt-[3px]
                                   truncate
-                                  text-[6.8px]
+                                  text-xs
                                   font-[500]
-                                  leading-[10px]
+                                  leading-[12px]
                                   text-[#344576]
                                 "
                                 >
@@ -1742,9 +1734,9 @@ export default function EnquiriesPage() {
                               className="
                                 mt-[2px]
                                 truncate
-                                text-[6.4px]
+                                text-xs
                                 font-[500]
-                                leading-[9px]
+                                leading-[12px]
                                 text-[#344576]
                               "
                             >
@@ -1770,9 +1762,9 @@ export default function EnquiriesPage() {
                                 whitespace-nowrap
                                 rounded-[4px]
                                 border
-                                px-[6px]
+                                px-[7px]
                                 py-[4px]
-                                text-[6.5px]
+                                text-xs
                                 font-[700]
                                 leading-none
                               "

@@ -1556,7 +1556,7 @@ export default function FormsSubmissionsPage() {
                           className="
                             truncate
                             pr-[7px]
-                            text-[6.8px]
+                            text-sm
                             font-[700]
                             text-[#26396E]
                           "
@@ -1569,7 +1569,7 @@ export default function FormsSubmissionsPage() {
                             mt-[2px]
                             truncate
                             pr-[7px]
-                            text-[5.6px]
+                            text-xs
                             font-[500]
                             text-[#5F6C86]
                           "
@@ -1617,7 +1617,7 @@ export default function FormsSubmissionsPage() {
                           "
                         >
                           <Phone
-                            size={9}
+                            size={12}
                             className="
                               shrink-0
                               text-[#526181]
@@ -1627,7 +1627,7 @@ export default function FormsSubmissionsPage() {
                           <span
                             className="
                               truncate
-                              text-[5.9px]
+                              text-xs
                               font-[600]
                               text-[#415079]
                             "
@@ -1646,9 +1646,9 @@ export default function FormsSubmissionsPage() {
                       >
                         <p
                           className="
-                            text-[5.9px]
+                            text-xs
                             font-[600]
-                            leading-[8px]
+                            leading-[12px]
                             text-[#415079]
                           "
                         >
@@ -2243,7 +2243,10 @@ function StatCard({
   return (
     <div
       className="
-        h-[91px]
+        flex
+        flex-col
+        justify-between
+        h-[102px]
         min-w-0
         overflow-hidden
         rounded-[7px]
@@ -2257,7 +2260,6 @@ function StatCard({
       <div
         className="
           flex
-          h-full
           min-w-0
           items-center
           gap-[9px]
@@ -2266,38 +2268,33 @@ function StatCard({
         <div
           className="
             flex
-            h-[42px]
-            w-[42px]
+            h-[40px]
+            w-[40px]
             shrink-0
             items-center
             justify-center
             rounded-full
           "
           style={{
-            backgroundColor:
-              iconBg,
+            backgroundColor: iconBg,
           }}
         >
           <Icon
-            size={21}
+            size={20}
             style={{
-              color:
-                iconColor,
+              color: iconColor,
             }}
           />
         </div>
 
-        <div
-          className="
-            min-w-0
-            flex-1
-          "
-        >
+        <div className="min-w-0 flex-1">
           <p
             className="
               truncate
-              text-[6.7px]
+              text-[10px]
               font-[700]
+              uppercase
+              tracking-wider
               text-[#26386F]
             "
           >
@@ -2306,8 +2303,8 @@ function StatCard({
 
           <p
             className="
-              mt-[5px]
-              text-[19px]
+              mt-[2px]
+              text-2xl
               font-[800]
               leading-none
               text-[#172B68]
@@ -2315,61 +2312,57 @@ function StatCard({
           >
             {value}
           </p>
+        </div>
+      </div>
 
-          <div
-            className="
-              mt-[8px]
-              flex
-              min-w-0
-              items-center
-              gap-[3px]
-              whitespace-nowrap
-            "
-          >
+      <div
+        className="
+          flex
+          w-full
+          items-center
+          justify-start
+          gap-[4px]
+          whitespace-nowrap
+          text-left
+        "
+      >
+        {change === "Live" ? (
+          <span className="rounded-[4px] bg-[#E4F5E8] px-[5px] py-[1px] text-[8.5px] font-bold text-[#238B4C]">
+            Live
+          </span>
+        ) : (
+          <>
             {negative ? (
               <ArrowDown
-                size={8}
-                className="
-                  shrink-0
-                  text-[#EA4D4D]
-                "
+                size={10}
+                className="shrink-0 text-[#E34848]"
               />
             ) : (
               <ArrowUp
-                size={8}
-                className="
-                  shrink-0
-                  text-[#229151]
-                "
+                size={10}
+                className="shrink-0 text-[#1AA756]"
               />
             )}
 
             <span
               className={`
-                text-[5.8px]
+                text-[8.5px]
                 font-[700]
 
                 ${negative
-                  ? "text-[#EA4D4D]"
-                  : "text-[#229151]"
+                  ? "text-[#E34848]"
+                  : "text-[#1AA756]"
                 }
               `}
             >
               {change}
             </span>
+          </>
+        )}
 
-            <span
-              className="
-                truncate
-                text-[5.5px]
-                font-[600]
-                text-[#67738A]
-              "
-            >
-              vs last 7 days
-            </span>
-          </div>
-        </div>
+        <span className="text-[8.5px] font-[500] text-[#556384]">
+          current data
+        </span>
       </div>
     </div>
   );
@@ -2457,8 +2450,10 @@ function TableHead({
   return (
     <th
       className="
-        text-[5.8px]
+        text-xs
         font-[700]
+        uppercase
+        tracking-wider
         text-[#46567D]
       "
     >
@@ -2492,9 +2487,9 @@ function MetaBadge({
         whitespace-nowrap
         rounded-[4px]
         border
-        px-[6px]
+        px-[7px]
         py-[3px]
-        text-[5.3px]
+        text-xs
         font-[700]
         leading-none
       "

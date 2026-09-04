@@ -2667,6 +2667,9 @@ function StatCard({
   return (
     <div
       className="
+        flex
+        flex-col
+        justify-between
         h-[102px]
         min-w-0
         overflow-hidden
@@ -2681,7 +2684,6 @@ function StatCard({
       <div
         className="
           flex
-          h-full
           min-w-0
           items-center
           gap-[8px]
@@ -2690,8 +2692,8 @@ function StatCard({
         <div
           className="
             flex
-            h-[44px]
-            w-[44px]
+            h-[40px]
+            w-[40px]
             shrink-0
             items-center
             justify-center
@@ -2703,7 +2705,7 @@ function StatCard({
           }}
         >
           <Icon
-            size={22}
+            size={20}
             style={{
               color:
                 iconColor,
@@ -2719,9 +2721,10 @@ function StatCard({
         >
           <p
             className="
-              text-[6.9px]
+              text-[10px]
               font-[700]
-              leading-[9px]
+              uppercase
+              tracking-wider
               text-[#182A65]
             "
           >
@@ -2730,33 +2733,33 @@ function StatCard({
 
           <p
             className="
-              mt-[4px]
-              text-[21px]
+              mt-[2px]
+              text-2xl
               font-[800]
-              leading-[23px]
+              leading-none
               text-[#172B68]
             "
           >
             {value}
           </p>
-
-          <div
-            className="
-              mt-[8px]
-              flex
-              min-w-0
-              items-center
-              gap-[4px]
-              overflow-hidden
-              whitespace-nowrap
-              text-[5.6px]
-              font-[600]
-              text-[#65708A]
-            "
-          >
-            {footer}
-          </div>
         </div>
+      </div>
+
+      <div
+        className="
+          flex
+          w-full
+          items-center
+          justify-start
+          gap-[4px]
+          whitespace-nowrap
+          text-left
+          text-[8.5px]
+          font-[600]
+          text-[#65708A]
+        "
+      >
+        {footer}
       </div>
     </div>
   );
