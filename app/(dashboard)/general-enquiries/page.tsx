@@ -8,6 +8,7 @@ import {
   type CSSProperties,
   type ReactNode,
 } from "react";
+import Link from "next/link";
 
 import {
   ArrowDown,
@@ -1251,8 +1252,8 @@ export default function GeneralEnquiriesPage() {
             Filters
           </button>
 
-          <button
-            type="button"
+          <Link
+            href="/enquiries/new?category=contact"
             className="
               flex
               h-[36px]
@@ -1265,11 +1266,13 @@ export default function GeneralEnquiriesPage() {
               font-[700]
               text-white
               shadow-[0_2px_5px_rgba(0,95,46,0.14)]
+              hover:bg-[#004d25]
+              transition
             "
           >
             <Plus size={15} />
             Add New Enquiry
-          </button>
+          </Link>
         </div>
       </div>
 
@@ -2767,6 +2770,12 @@ export default function GeneralEnquiriesPage() {
             {[
               {
                 label:
+                  "Add New Enquiry",
+                icon: Plus,
+                href: "/enquiries/new?category=contact",
+              },
+              {
+                label:
                   "View All Enquiries",
                 icon: Eye,
               },
@@ -2789,24 +2798,8 @@ export default function GeneralEnquiriesPage() {
               const Icon =
                 action.icon;
 
-              return (
-                <button
-                  type="button"
-                  key={action.label}
-                  className="
-                    flex
-                    h-[34px]
-                    w-full
-                    items-center
-                    justify-between
-                    border-b
-                    border-[#EDF0F4]
-                    px-[12px]
-                    text-[#1A2F6D]
-                    last:border-b-0
-                    hover:bg-white
-                  "
-                >
+              const content = (
+                <>
                   <span
                     className="
                       flex
@@ -2832,9 +2825,34 @@ export default function GeneralEnquiriesPage() {
                   </span>
 
                   <ArrowRight
-                    size={10}
-                    className="shrink-0"
+                    size={11}
+                    className="shrink-0 text-[#909BB0]"
                   />
+                </>
+              );
+
+              const className =
+                "flex h-[34px] w-full items-center justify-between border-b border-[#EDF0F4] px-[12px] text-[#1A2F6D] last:border-b-0 hover:bg-white transition";
+
+              if (action.href) {
+                return (
+                  <Link
+                    key={action.label}
+                    href={action.href}
+                    className={className}
+                  >
+                    {content}
+                  </Link>
+                );
+              }
+
+              return (
+                <button
+                  type="button"
+                  key={action.label}
+                  className={className}
+                >
+                  {content}
                 </button>
               );
             })}
