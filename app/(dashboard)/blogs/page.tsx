@@ -156,9 +156,14 @@ export default function BlogAwarenessPage() {
             </h1>
 
             <nav className="mt-[10px] flex items-center gap-[8px] text-[11px] font-semibold text-[#1d2b58]">
-              <span>Dashboard</span>
+              <span
+                onClick={() => router.push("/")}
+                className="cursor-pointer transition hover:text-[#075b33]"
+              >
+                Dashboard
+              </span>
               <span className="text-[#7b8597]">›</span>
-              <span>Blog &amp; Awareness</span>
+              <span className="text-[#075b33]">Blog &amp; Awareness</span>
             </nav>
           </div>
 
@@ -174,24 +179,14 @@ export default function BlogAwarenessPage() {
               Manage Categories
             </Link>
 
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => setMenuOpen((v) => !v)}
-                className="inline-flex h-[42px] items-center gap-[9px] rounded-[7px] bg-[linear-gradient(180deg,#076636_0%,#03542c_100%)] px-[20px] text-[10.5px] font-bold text-white shadow-[0_7px_16px_rgba(5,94,49,.12)]"
-              >
-                <Plus className="h-[15px] w-[15px]" />
-                Add New Post
-                <ChevronDown className="h-[14px] w-[14px]" />
-              </button>
-
-              {menuOpen ? (
-                <div className="absolute right-0 top-[48px] z-30 w-[170px] rounded-[7px] border border-[#e2e6ea] bg-white p-[6px] shadow-lg">
-                  <button className="w-full rounded-[5px] px-[10px] py-[8px] text-left text-[10px] font-semibold hover:bg-slate-50">Standard Post</button>
-                  <button className="w-full rounded-[5px] px-[10px] py-[8px] text-left text-[10px] font-semibold hover:bg-slate-50">Awareness Post</button>
-                </div>
-              ) : null}
-            </div>
+            <button
+              type="button"
+              onClick={() => router.push("/blogs/new")}
+              className="inline-flex h-[42px] items-center gap-[9px] rounded-[7px] bg-[linear-gradient(180deg,#076636_0%,#03542c_100%)] px-[20px] text-[10.5px] font-bold text-white shadow-[0_7px_16px_rgba(5,94,49,.12)] transition hover:opacity-95"
+            >
+              <Plus className="h-[15px] w-[15px]" />
+              Add New Post
+            </button>
           </div>
         </header>
 
