@@ -1,0 +1,3281 @@
+"use client";
+
+import {
+  useEffect,
+  useMemo,
+  useState,
+  type ComponentType,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
+
+import {
+  ArrowDown,
+  ArrowLeft,
+  ArrowRight,
+  ArrowUp,
+  CalendarDays,
+  CheckCircle2,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  CircleX,
+  Download,
+  Eye,
+  Filter,
+  Globe2,
+  Hourglass,
+  Mail,
+  MessageCircleMore,
+  Phone,
+  Plus,
+  RefreshCcw,
+  Search,
+  UserRound,
+  Users,
+} from "lucide-react";
+
+import Modal from "@/components/ui/Modal";
+import Badge from "@/components/ui/Badge";
+
+import { enquiriesApi } from "@/lib/enquiriesApi";
+import { Enquiry } from "@/lib/types";
+import { formatDateTime } from "@/lib/statusMeta";
+import { ApiRequestError } from "@/lib/api";
+
+/* ============================================================
+   RUNTIME TYPE
+============================================================ */
+
+type RuntimeEnquiry = Omit<Enquiry, "status"> & {
+  status: string;
+
+  subject?: string;
+  source?: string;
+  enquirySource?: string;
+  categoryLabel?: string;
+};
+
+/* ============================================================
+   FILTER TYPES
+============================================================ */
+
+type UiStatus =
+  | ""
+  | "new"
+  | "progress"
+  | "resolved"
+  | "closed";
+
+/* ============================================================
+   HELPERS
+============================================================ */
+
+function parseDate(value?: string) {
+  if (!value) {
+    return null;
+  }
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return null;
+  }
+
+  return date;
+}
+
+function percentage(
+  value: number,
+  total: number
+) {
+  if (!total) {
+    return 0;
+  }
+
+  return (value / total) * 100;
+}
+
+/* ============================================================
+   STATUS
+============================================================ */
+
+function normalizeStatus(
+  status?: string
+): Exclude<UiStatus, ""> {
+  const value = String(status ?? "")
+    .trim()
+    .toLowerCase();
+
+  if (
+    value === "resolved" ||
+    value === "completed"
+  ) {
+    return "resolved";
+  }
+
+  if (
+    value === "contacted" ||
+    value === "in_progress" ||
+    value === "in progress" ||
+    value === "progress" ||
+    value === "pending"
+  ) {
+    return "progress";
+  }
+
+  if (
+    value === "closed" ||
+    value === "rejected"
+  ) {
+    return "closed";
+  }
+
+  return "new";
+}
+
+function getStatusLabel(
+  status?: string
+) {
+  const normalized =
+    normalizeStatus(status);
+
+  switch (normalized) {
+    case "progress":
+      return "In Progress";
+
+    case "resolved":
+      return "Resolved";
+
+    case "closed":
+      return "Closed";
+
+    default:
+      return "New";
+  }
+}
+
+function getStatusStyle(
+  status?: string
+) {
+  const normalized =
+    normalizeStatus(status);
+
+  switch (normalized) {
+    case "progress":
+      return {
+        background: "#FFF3DB",
+        color: "#D68B16",
+        border: "#F4E1BB",
+      };
+
+    case "resolved":
+      return {
+        background: "#E5F5E9",
+        color: "#27814A",
+        border: "#CEE9D5",
+      };
+
+    case "closed":
+      return {
+        background: "#FDE9E9",
+        color: "#D94747",
+        border: "#F5D4D4",
+      };
+
+    default:
+      return {
+        background: "#E8F2FE",
+        color: "#2D73CA",
+        border: "#D3E5FA",
+      };
+  }
+}
+
+/* ============================================================
+   CATEGORY
+============================================================ */
+
+function getCategoryLabel(
+  enquiry: RuntimeEnquiry
+) {
+  if (
+    enquiry.categoryLabel?.trim()
+  ) {
+    return enquiry.categoryLabel;
+  }
+
+  switch (enquiry.category) {
+    case "unclaimed_body":
+      return "Sewa Support";
+
+    case "partnership":
+      return "Partnership";
+
+    case "csr":
+      return "Partnership";
+
+    case "contact":
+    default:
+      break;
+  }
+
+  const interest =
+    enquiry.interest
+      ?.trim()
+      .toLowerCase();
+
+  if (
+    interest?.includes("volunteer")
+  ) {
+    return "Volunteer";
+  }
+
+  if (
+    interest?.includes("donat")
+  ) {
+    return "Donation";
+  }
+
+  if (
+    interest?.includes("document")
+  ) {
+    return "Documentation";
+  }
+
+  if (
+    interest?.includes("financial")
+  ) {
+    return "Financial Help";
+  }
+
+  if (
+    interest?.includes("information")
+  ) {
+    return "Information";
+  }
+
+  return "General";
+}
+
+function categoryStyle(
+  label: string
+) {
+  const value =
+    label.toLowerCase();
+
+  if (
+    value.includes("sewa")
+  ) {
+    return {
+      background: "#E5F5E9",
+      color: "#25804A",
+      border: "#CEE9D5",
+    };
+  }
+
+  if (
+    value.includes("volunteer")
+  ) {
+    return {
+      background: "#F0E7FD",
+      color: "#8B48DA",
+      border: "#E4D6F9",
+    };
+  }
+
+  if (
+    value.includes("partner")
+  ) {
+    return {
+      background: "#E8F2FE",
+      color: "#2C76CE",
+      border: "#D1E5F9",
+    };
+  }
+
+  if (
+    value.includes("information")
+  ) {
+    return {
+      background: "#E8F2FE",
+      color: "#2B79CE",
+      border: "#D4E6FA",
+    };
+  }
+
+  if (
+    value.includes("financial")
+  ) {
+    return {
+      background: "#FFF3DE",
+      color: "#D88715",
+      border: "#F7E2BA",
+    };
+  }
+
+  if (
+    value.includes("document")
+  ) {
+    return {
+      background: "#EDF0F5",
+      color: "#4D5D80",
+      border: "#DEE3EB",
+    };
+  }
+
+  if (
+    value.includes("donation")
+  ) {
+    return {
+      background: "#FCE8F6",
+      color: "#C83F9A",
+      border: "#F6D6EA",
+    };
+  }
+
+  return {
+    background: "#F1F3F6",
+    color: "#53617D",
+    border: "#E1E5EB",
+  };
+}
+
+/* ============================================================
+   SUBJECT
+============================================================ */
+
+function getSubject(
+  enquiry: RuntimeEnquiry
+) {
+  if (enquiry.subject?.trim()) {
+    return enquiry.subject;
+  }
+
+  if (enquiry.interest?.trim()) {
+    return enquiry.interest;
+  }
+
+  if (enquiry.message?.trim()) {
+    const text =
+      enquiry.message.trim();
+
+    if (text.length <= 52) {
+      return text;
+    }
+
+    return `${text.slice(
+      0,
+      49
+    )}...`;
+  }
+
+  return "General enquiry";
+}
+
+/* ============================================================
+   SOURCE
+============================================================ */
+
+function getSource(
+  enquiry: RuntimeEnquiry
+) {
+  const explicit =
+    enquiry.source?.trim() ||
+    enquiry.enquirySource?.trim();
+
+  if (explicit) {
+    return explicit;
+  }
+
+  return "Website Form";
+}
+
+function sourceIcon(
+  source: string
+) {
+  const value =
+    source.toLowerCase();
+
+  if (
+    value.includes("whatsapp")
+  ) {
+    return {
+      icon: MessageCircleMore,
+      color: "#22A75A",
+    };
+  }
+
+  if (
+    value.includes("email")
+  ) {
+    return {
+      icon: Mail,
+      color: "#253D82",
+    };
+  }
+
+  if (
+    value.includes("call") ||
+    value.includes("phone")
+  ) {
+    return {
+      icon: Phone,
+      color: "#544FA7",
+    };
+  }
+
+  if (
+    value.includes("social")
+  ) {
+    return {
+      icon: Globe2,
+      color: "#2487DC",
+    };
+  }
+
+  if (
+    value.includes("referral") ||
+    value.includes("walk")
+  ) {
+    return {
+      icon: UserRound,
+      color: "#42547E",
+    };
+  }
+
+  return {
+    icon: Globe2,
+    color: "#263A70",
+  };
+}
+
+/* ============================================================
+   STAT CARD
+============================================================ */
+
+function StatCard({
+  label,
+  value,
+  change,
+  negative,
+  icon: Icon,
+  iconBg,
+  iconColor,
+  cardBg,
+}: {
+  label: string;
+  value: number;
+  change: string;
+  negative?: boolean;
+
+  icon: ComponentType<{
+    size?: number;
+    strokeWidth?: number;
+    style?: CSSProperties;
+  }>;
+
+  iconBg: string;
+  iconColor: string;
+  cardBg?: string;
+}) {
+  return (
+    <div
+      className="
+        h-[102px]
+        min-w-0
+        overflow-hidden
+        rounded-[7px]
+        border
+        border-[#E3E7EC]
+        px-[10px]
+        py-[9px]
+      "
+      style={{
+        backgroundColor:
+          cardBg ?? "#FFFFFF",
+      }}
+    >
+      <div
+        className="
+          flex
+          h-full
+          min-w-0
+          items-center
+          gap-[8px]
+        "
+      >
+        <div
+          className="
+            flex
+            h-[42px]
+            w-[42px]
+            shrink-0
+            items-center
+            justify-center
+            rounded-full
+          "
+          style={{
+            backgroundColor: iconBg,
+          }}
+        >
+          <Icon
+            size={22}
+            strokeWidth={2}
+            style={{
+              color: iconColor,
+            }}
+          />
+        </div>
+
+        <div className="min-w-0 flex-1">
+          <p
+            className="
+              text-[7.2px]
+              font-[700]
+              leading-[10px]
+              text-[#182A65]
+            "
+          >
+            {label}
+          </p>
+
+          <p
+            className="
+              mt-[4px]
+              whitespace-nowrap
+              text-[21px]
+              font-[800]
+              leading-[23px]
+              text-[#152965]
+            "
+          >
+            {value}
+          </p>
+
+          <div
+            className="
+              mt-[7px]
+              flex
+              min-w-0
+              items-center
+              gap-[3px]
+              whitespace-nowrap
+            "
+          >
+            {negative ? (
+              <ArrowDown
+                size={8}
+                strokeWidth={3}
+                className="
+                  shrink-0
+                  text-[#E44747]
+                "
+              />
+            ) : (
+              <ArrowUp
+                size={8}
+                strokeWidth={3}
+                className="
+                  shrink-0
+                  text-[#15944B]
+                "
+              />
+            )}
+
+            <span
+              className={`
+                shrink-0
+                text-[6.2px]
+                font-[700]
+
+                ${negative
+                  ? "text-[#E44747]"
+                  : "text-[#15944B]"
+                }
+              `}
+            >
+              {change}
+            </span>
+
+            <span
+              className="
+                min-w-0
+                truncate
+                text-[5.7px]
+                font-[600]
+                text-[#596685]
+              "
+            >
+              current data
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================
+   FILTER SELECT
+   IMPORTANT: no overflow / no cut
+============================================================ */
+
+function FilterSelect({
+  value,
+  onChange,
+  children,
+}: {
+  value: string;
+  onChange: (
+    value: string
+  ) => void;
+  children: ReactNode;
+}) {
+  return (
+    <div
+      className="
+        relative
+        w-full
+        min-w-0
+        overflow-hidden
+      "
+    >
+      <select
+        value={value}
+        onChange={(event) =>
+          onChange(
+            event.target.value
+          )
+        }
+        className="
+          h-[40px]
+          w-full
+          min-w-0
+          appearance-none
+          overflow-hidden
+          text-ellipsis
+          whitespace-nowrap
+          rounded-[6px]
+          border
+          border-[#E0E5EB]
+          bg-white
+          px-[10px]
+          pr-[27px]
+          text-[8px]
+          font-[700]
+          text-[#182A65]
+          outline-none
+        "
+      >
+        {children}
+      </select>
+
+      <ChevronDown
+        size={11}
+        className="
+          pointer-events-none
+          absolute
+          right-[9px]
+          top-1/2
+          shrink-0
+          -translate-y-1/2
+          text-[#243A75]
+        "
+      />
+    </div>
+  );
+}
+
+/* ============================================================
+   SIDEBAR BAR
+============================================================ */
+
+function SidebarBar({
+  label,
+  value,
+  percentageValue,
+  color,
+  icon: Icon,
+  iconBg,
+}: {
+  label: string;
+  value: number;
+  percentageValue: number;
+  color: string;
+
+  icon?: ComponentType<{
+    size?: number;
+    strokeWidth?: number;
+  }>;
+
+  iconBg?: string;
+}) {
+  return (
+    <div
+      className="
+        grid
+        grid-cols-[82px_minmax(0,1fr)_50px]
+        items-center
+        gap-[5px]
+      "
+    >
+      <div
+        className="
+          flex
+          min-w-0
+          items-center
+          gap-[5px]
+        "
+      >
+        {Icon && (
+          <span
+            className="
+              flex
+              h-[17px]
+              w-[17px]
+              shrink-0
+              items-center
+              justify-center
+              rounded-full
+            "
+            style={{
+              backgroundColor:
+                iconBg ??
+                "#EEF2F6",
+            }}
+          >
+            <Icon
+              size={9}
+              strokeWidth={2}
+            />
+          </span>
+        )}
+
+        <span
+          className="
+            truncate
+            text-[5.7px]
+            font-[700]
+            text-[#334475]
+          "
+        >
+          {label}
+        </span>
+      </div>
+
+      <div
+        className="
+          h-[5px]
+          min-w-0
+          overflow-hidden
+          rounded-full
+          bg-[#E9EDF2]
+        "
+      >
+        <div
+          className="
+            h-full
+            rounded-full
+          "
+          style={{
+            width: `${Math.max(
+              percentageValue,
+              value > 0 ? 7 : 0
+            )}%`,
+
+            backgroundColor:
+              color,
+          }}
+        />
+      </div>
+
+      <span
+        className="
+          whitespace-nowrap
+          text-right
+          text-[5.2px]
+          font-[600]
+          text-[#334475]
+        "
+      >
+        {value} (
+        {percentageValue.toFixed(
+          1
+        )}
+        %)
+      </span>
+    </div>
+  );
+}
+
+/* ============================================================
+   PAGE
+============================================================ */
+
+export default function GeneralEnquiriesPage() {
+  const [enquiries, setEnquiries] =
+    useState<RuntimeEnquiry[]>([]);
+
+  const [loading, setLoading] =
+    useState(true);
+
+  const [error, setError] =
+    useState("");
+
+  const [search, setSearch] =
+    useState("");
+
+  const [
+    statusFilter,
+    setStatusFilter,
+  ] = useState<UiStatus>("");
+
+  const [
+    categoryFilter,
+    setCategoryFilter,
+  ] = useState("");
+
+  const [
+    sourceFilter,
+    setSourceFilter,
+  ] = useState("");
+
+  const [selected, setSelected] =
+    useState<RuntimeEnquiry | null>(
+      null
+    );
+
+  const [page, setPage] =
+    useState(1);
+
+  const [perPage, setPerPage] =
+    useState(10);
+
+  /* ==========================================================
+     LOAD
+  ========================================================== */
+
+  useEffect(() => {
+    setLoading(true);
+    setError("");
+
+    enquiriesApi
+      .list()
+      .then((data) =>
+        setEnquiries(
+          (data ??
+            []) as RuntimeEnquiry[]
+        )
+      )
+      .catch((err) => {
+        setError(
+          err instanceof ApiRequestError
+            ? err.message
+            : "Could not load enquiries."
+        );
+      })
+      .finally(() =>
+        setLoading(false)
+      );
+  }, []);
+
+  /* ==========================================================
+     COUNTS
+  ========================================================== */
+
+  const totalEnquiries =
+    enquiries.length;
+
+  const newCount = useMemo(
+    () =>
+      enquiries.filter(
+        (item) =>
+          normalizeStatus(
+            item.status
+          ) === "new"
+      ).length,
+    [enquiries]
+  );
+
+  const progressCount =
+    useMemo(
+      () =>
+        enquiries.filter(
+          (item) =>
+            normalizeStatus(
+              item.status
+            ) ===
+            "progress"
+        ).length,
+      [enquiries]
+    );
+
+  const resolvedCount =
+    useMemo(
+      () =>
+        enquiries.filter(
+          (item) =>
+            normalizeStatus(
+              item.status
+            ) ===
+            "resolved"
+        ).length,
+      [enquiries]
+    );
+
+  const closedCount = useMemo(
+    () =>
+      enquiries.filter(
+        (item) =>
+          normalizeStatus(
+            item.status
+          ) === "closed"
+      ).length,
+    [enquiries]
+  );
+
+  /* ==========================================================
+     OPTIONS
+  ========================================================== */
+
+  const categories = useMemo(
+    () =>
+      Array.from(
+        new Set(
+          enquiries.map(
+            getCategoryLabel
+          )
+        )
+      ).sort(),
+    [enquiries]
+  );
+
+  const sources = useMemo(
+    () =>
+      Array.from(
+        new Set(
+          enquiries.map(
+            getSource
+          )
+        )
+      ).sort(),
+    [enquiries]
+  );
+
+  /* ==========================================================
+     FILTERED
+  ========================================================== */
+
+  const visible = useMemo(() => {
+    const query =
+      search
+        .trim()
+        .toLowerCase();
+
+    return enquiries
+      .filter((item) => {
+        if (!statusFilter) {
+          return true;
+        }
+
+        return (
+          normalizeStatus(
+            item.status
+          ) ===
+          statusFilter
+        );
+      })
+
+      .filter((item) => {
+        if (!categoryFilter) {
+          return true;
+        }
+
+        return (
+          getCategoryLabel(
+            item
+          ) ===
+          categoryFilter
+        );
+      })
+
+      .filter((item) => {
+        if (!sourceFilter) {
+          return true;
+        }
+
+        return (
+          getSource(item) ===
+          sourceFilter
+        );
+      })
+
+      .filter((item) => {
+        if (!query) {
+          return true;
+        }
+
+        return [
+          item._id,
+          item.reference,
+          item.name,
+          item.email,
+          item.phone,
+          item.message,
+          item.interest,
+          getSubject(item),
+          getCategoryLabel(item),
+          getSource(item),
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase()
+          .includes(query);
+      })
+
+      .sort((a, b) => {
+        const first =
+          parseDate(
+            a.createdAt
+          )?.getTime() ?? 0;
+
+        const second =
+          parseDate(
+            b.createdAt
+          )?.getTime() ?? 0;
+
+        return second - first;
+      });
+  }, [
+    enquiries,
+    search,
+    statusFilter,
+    categoryFilter,
+    sourceFilter,
+  ]);
+
+  /* ==========================================================
+     PAGINATION
+  ========================================================== */
+
+  const totalPages = Math.max(
+    1,
+    Math.ceil(
+      visible.length /
+      perPage
+    )
+  );
+
+  const safePage = Math.min(
+    page,
+    totalPages
+  );
+
+  const startIndex =
+    (safePage - 1) *
+    perPage;
+
+  const endIndex = Math.min(
+    startIndex + perPage,
+    visible.length
+  );
+
+  const pageRows =
+    visible.slice(
+      startIndex,
+      endIndex
+    );
+
+  /* ==========================================================
+     SOURCE STATS
+  ========================================================== */
+
+  const sourceStats = useMemo(
+    () =>
+      sources
+        .map((source) => {
+          const value =
+            enquiries.filter(
+              (item) =>
+                getSource(
+                  item
+                ) === source
+            ).length;
+
+          return {
+            label: source,
+            value,
+            percentage:
+              percentage(
+                value,
+                totalEnquiries
+              ),
+          };
+        })
+        .sort(
+          (a, b) =>
+            b.value - a.value
+        )
+        .slice(0, 5),
+    [
+      sources,
+      enquiries,
+      totalEnquiries,
+    ]
+  );
+
+  /* ==========================================================
+     CATEGORY STATS
+  ========================================================== */
+
+  const categoryStats =
+    useMemo(
+      () =>
+        categories
+          .map(
+            (category) => {
+              const value =
+                enquiries.filter(
+                  (item) =>
+                    getCategoryLabel(
+                      item
+                    ) ===
+                    category
+                ).length;
+
+              return {
+                label:
+                  category,
+                value,
+                percentage:
+                  percentage(
+                    value,
+                    totalEnquiries
+                  ),
+              };
+            }
+          )
+          .sort(
+            (a, b) =>
+              b.value -
+              a.value
+          )
+          .slice(0, 5),
+      [
+        categories,
+        enquiries,
+        totalEnquiries,
+      ]
+    );
+
+  /* ==========================================================
+     RESET
+  ========================================================== */
+
+  function resetFilters() {
+    setSearch("");
+    setStatusFilter("");
+    setCategoryFilter("");
+    setSourceFilter("");
+    setPage(1);
+  }
+
+  /* ==========================================================
+     UI
+  ========================================================== */
+
+  return (
+    <section
+      className="
+        w-full
+        min-w-0
+        overflow-hidden
+        bg-white
+        px-[16px]
+        pb-[15px]
+        pt-[11px]
+      "
+    >
+      {/* ======================================================
+          HEADER
+      ====================================================== */}
+
+      <div
+        className="
+          flex
+          min-w-0
+          items-start
+          justify-between
+          gap-[20px]
+        "
+      >
+        <div className="min-w-0">
+          <h1
+            className="
+              text-[20px]
+              font-[800]
+              leading-[25px]
+              tracking-[-0.35px]
+              text-[#005E2E]
+            "
+          >
+            General Enquiries
+          </h1>
+
+          <p
+            className="
+              mt-[2px]
+              text-[9px]
+              font-[500]
+              leading-[14px]
+              text-[#344574]
+            "
+          >
+            View, manage and respond
+            to all general enquiries
+            from visitors.
+          </p>
+        </div>
+
+        <div
+          className="
+            flex
+            shrink-0
+            items-center
+            gap-[12px]
+            pt-[2px]
+          "
+        >
+          <button
+            type="button"
+            className="
+              flex
+              h-[36px]
+              items-center
+              gap-[8px]
+              rounded-[5px]
+              border
+              border-[#E0E5EB]
+              bg-white
+              px-[15px]
+              text-[9px]
+              font-[700]
+              text-[#172762]
+            "
+          >
+            <Download size={14} />
+
+            Export
+          </button>
+
+          <button
+            type="button"
+            className="
+              flex
+              h-[36px]
+              items-center
+              gap-[8px]
+              rounded-[5px]
+              border
+              border-[#E0E5EB]
+              bg-white
+              px-[15px]
+              text-[9px]
+              font-[700]
+              text-[#172762]
+            "
+          >
+            <Filter size={14} />
+
+            Filters
+          </button>
+
+          <button
+            type="button"
+            className="
+              flex
+              h-[36px]
+              items-center
+              gap-[8px]
+              rounded-[5px]
+              bg-[#005F2E]
+              px-[17px]
+              text-[9px]
+              font-[700]
+              text-white
+              shadow-[0_2px_5px_rgba(0,95,46,0.14)]
+            "
+          >
+            <Plus size={15} />
+
+            Add New Enquiry
+          </button>
+        </div>
+      </div>
+
+      {/* ERROR */}
+
+      {error && (
+        <div
+          className="
+            mt-[10px]
+            rounded-[6px]
+            border
+            border-red-200
+            bg-red-50
+            px-[11px]
+            py-[8px]
+            text-[8px]
+            font-[600]
+            text-red-700
+          "
+        >
+          {error}
+        </div>
+      )}
+
+      {/* ======================================================
+          MAIN GRID
+          CRITICAL FIX:
+          left content can shrink properly
+      ====================================================== */}
+
+      <div
+        className="
+          mt-[22px]
+          grid
+          w-full
+          min-w-0
+          grid-cols-[minmax(0,1fr)_255px]
+          gap-[16px]
+          overflow-hidden
+        "
+      >
+        {/* ====================================================
+            LEFT
+        ==================================================== */}
+
+        <main
+          className="
+            w-full
+            min-w-0
+            overflow-hidden
+          "
+        >
+          {/* ==================================================
+              STAT CARDS
+          ================================================== */}
+
+          <div
+            className="
+              grid
+              w-full
+              min-w-0
+              grid-cols-5
+              gap-[9px]
+            "
+          >
+            <StatCard
+              label="Total Enquiries"
+              value={totalEnquiries}
+              change="Live"
+              icon={
+                MessageCircleMore
+              }
+              iconBg="#E4F5E8"
+              iconColor="#238B4C"
+              cardBg="#FBFEFC"
+            />
+
+            <StatCard
+              label="New Enquiries"
+              value={newCount}
+              change={`${percentage(
+                newCount,
+                totalEnquiries
+              ).toFixed(1)}%`}
+              icon={Mail}
+              iconBg="#E9F2FF"
+              iconColor="#3378D4"
+              cardBg="#FCFDFF"
+            />
+
+            <StatCard
+              label="In Progress"
+              value={progressCount}
+              change={`${percentage(
+                progressCount,
+                totalEnquiries
+              ).toFixed(1)}%`}
+              icon={Hourglass}
+              iconBg="#FFF3DC"
+              iconColor="#DE941B"
+              cardBg="#FFFCF6"
+            />
+
+            <StatCard
+              label="Resolved"
+              value={resolvedCount}
+              change={`${percentage(
+                resolvedCount,
+                totalEnquiries
+              ).toFixed(1)}%`}
+              icon={CheckCircle2}
+              iconBg="#F0E7FD"
+              iconColor="#8047D8"
+              cardBg="#FDFAFF"
+            />
+
+            <StatCard
+              label="Closed"
+              value={closedCount}
+              change={`${percentage(
+                closedCount,
+                totalEnquiries
+              ).toFixed(1)}%`}
+              negative
+              icon={CircleX}
+              iconBg="#FDE5E5"
+              iconColor="#EA3939"
+              cardBg="#FFF9F9"
+            />
+          </div>
+
+          {/* ==================================================
+              FILTERS
+              FIXED — WILL NOT CUT
+          ================================================== */}
+
+          <div
+            className="
+              mt-[19px]
+              grid
+              w-full
+              min-w-0
+              grid-cols-[minmax(0,2.15fr)_minmax(88px,0.95fr)_minmax(96px,1.05fr)_minmax(88px,0.95fr)_minmax(118px,1.15fr)_70px]
+              gap-[7px]
+              overflow-hidden
+            "
+          >
+            {/* SEARCH */}
+
+            <div
+              className="
+                flex
+                h-[40px]
+                w-full
+                min-w-0
+                items-center
+                overflow-hidden
+                rounded-[6px]
+                border
+                border-[#E0E5EB]
+                bg-white
+                px-[10px]
+              "
+            >
+              <Search
+                size={15}
+                className="
+                  mr-[7px]
+                  shrink-0
+                  text-[#263D7A]
+                "
+              />
+
+              <input
+                value={search}
+                onChange={(
+                  event
+                ) => {
+                  setSearch(
+                    event.target
+                      .value
+                  );
+
+                  setPage(1);
+                }}
+                placeholder="Search by name, email, subject or message..."
+                className="
+                  h-full
+                  w-0
+                  min-w-0
+                  flex-1
+                  bg-transparent
+                  text-[8px]
+                  font-[600]
+                  text-[#172762]
+                  outline-none
+                  placeholder:text-[#566483]
+                "
+              />
+            </div>
+
+            {/* STATUS */}
+
+            <FilterSelect
+              value={
+                statusFilter
+              }
+              onChange={(
+                value
+              ) => {
+                setStatusFilter(
+                  value as UiStatus
+                );
+
+                setPage(1);
+              }}
+            >
+              <option value="">
+                All Status
+              </option>
+
+              <option value="new">
+                New
+              </option>
+
+              <option value="progress">
+                In Progress
+              </option>
+
+              <option value="resolved">
+                Resolved
+              </option>
+
+              <option value="closed">
+                Closed
+              </option>
+            </FilterSelect>
+
+            {/* CATEGORY */}
+
+            <FilterSelect
+              value={
+                categoryFilter
+              }
+              onChange={(
+                value
+              ) => {
+                setCategoryFilter(
+                  value
+                );
+
+                setPage(1);
+              }}
+            >
+              <option value="">
+                All Categories
+              </option>
+
+              {categories.map(
+                (category) => (
+                  <option
+                    key={
+                      category
+                    }
+                    value={
+                      category
+                    }
+                  >
+                    {category}
+                  </option>
+                )
+              )}
+            </FilterSelect>
+
+            {/* SOURCE */}
+
+            <FilterSelect
+              value={
+                sourceFilter
+              }
+              onChange={(
+                value
+              ) => {
+                setSourceFilter(
+                  value
+                );
+
+                setPage(1);
+              }}
+            >
+              <option value="">
+                All Sources
+              </option>
+
+              {sources.map(
+                (source) => (
+                  <option
+                    key={source}
+                    value={
+                      source
+                    }
+                  >
+                    {source}
+                  </option>
+                )
+              )}
+            </FilterSelect>
+
+            {/* DATE */}
+
+            <button
+              type="button"
+              className="
+                flex
+                h-[40px]
+                w-full
+                min-w-0
+                items-center
+                gap-[6px]
+                overflow-hidden
+                rounded-[6px]
+                border
+                border-[#E0E5EB]
+                bg-white
+                px-[9px]
+                text-[7.4px]
+                font-[600]
+                text-[#586480]
+              "
+            >
+              <CalendarDays
+                size={13}
+                className="
+                  shrink-0
+                  text-[#314578]
+                "
+              />
+
+              <span
+                className="
+                  min-w-0
+                  truncate
+                  whitespace-nowrap
+                "
+              >
+                Select Date Range
+              </span>
+            </button>
+
+            {/* RESET */}
+
+            <button
+              type="button"
+              onClick={
+                resetFilters
+              }
+              className="
+                flex
+                h-[40px]
+                w-[70px]
+                shrink-0
+                items-center
+                justify-center
+                gap-[4px]
+                rounded-[6px]
+                border
+                border-[#E0E5EB]
+                bg-white
+                text-[7.2px]
+                font-[700]
+                text-[#1C306A]
+              "
+            >
+              <RefreshCcw
+                size={11}
+                className="shrink-0"
+              />
+
+              Reset
+            </button>
+          </div>
+
+          {/* ==================================================
+              TABLE
+          ================================================== */}
+
+          <div
+            className="
+              mt-[11px]
+              w-full
+              min-w-0
+              overflow-hidden
+              rounded-[6px]
+              border
+              border-[#E2E6EB]
+              bg-white
+            "
+          >
+            <table
+              className="
+                w-full
+                table-fixed
+                border-collapse
+              "
+            >
+              <colgroup>
+                <col
+                  style={{
+                    width: "10%",
+                  }}
+                />
+
+                <col
+                  style={{
+                    width: "15%",
+                  }}
+                />
+
+                <col
+                  style={{
+                    width: "16%",
+                  }}
+                />
+
+                <col
+                  style={{
+                    width: "12%",
+                  }}
+                />
+
+                <col
+                  style={{
+                    width: "14%",
+                  }}
+                />
+
+                <col
+                  style={{
+                    width: "12%",
+                  }}
+                />
+
+                <col
+                  style={{
+                    width: "13%",
+                  }}
+                />
+
+                <col
+                  style={{
+                    width: "8%",
+                  }}
+                />
+              </colgroup>
+
+              <thead>
+                <tr
+                  className="
+                    h-[36px]
+                    bg-[#F7F8FC]
+                    text-left
+                    text-[#172762]
+                  "
+                >
+                  <th className="px-[8px] text-[7px] font-[700]">
+                    ID
+                  </th>
+
+                  <th className="px-[8px] text-[7px] font-[700]">
+                    Name
+                  </th>
+
+                  <th className="px-[8px] text-[7px] font-[700]">
+                    Subject
+                  </th>
+
+                  <th className="px-[7px] text-[7px] font-[700]">
+                    Category
+                  </th>
+
+                  <th className="px-[7px] text-[7px] font-[700]">
+                    Source
+                  </th>
+
+                  <th className="px-[7px] text-[7px] font-[700]">
+                    Status
+                  </th>
+
+                  <th className="px-[7px] text-[7px] font-[700]">
+                    Date &amp; Time
+                  </th>
+
+                  <th className="px-[5px] text-[7px] font-[700]">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {/* LOADING */}
+
+                {loading &&
+                  Array.from({
+                    length: 8,
+                  }).map(
+                    (
+                      _,
+                      index
+                    ) => (
+                      <tr
+                        key={`loading-${index}`}
+                        className="
+                          h-[59px]
+                          border-t
+                          border-[#E9ECF0]
+                        "
+                      >
+                        <td
+                          colSpan={
+                            8
+                          }
+                          className="px-[10px]"
+                        >
+                          <div
+                            className="
+                              h-[10px]
+                              w-full
+                              animate-pulse
+                              rounded
+                              bg-[#F1F3F5]
+                            "
+                          />
+                        </td>
+                      </tr>
+                    )
+                  )}
+
+                {/* DATA */}
+
+                {!loading &&
+                  pageRows.map(
+                    (enquiry) => {
+                      const category =
+                        getCategoryLabel(
+                          enquiry
+                        );
+
+                      const categoryMeta =
+                        categoryStyle(
+                          category
+                        );
+
+                      const statusMeta =
+                        getStatusStyle(
+                          enquiry.status
+                        );
+
+                      const source =
+                        getSource(
+                          enquiry
+                        );
+
+                      const sourceMeta =
+                        sourceIcon(
+                          source
+                        );
+
+                      const SourceIcon =
+                        sourceMeta.icon;
+
+                      return (
+                        <tr
+                          key={
+                            enquiry._id
+                          }
+                          onClick={() =>
+                            setSelected(
+                              enquiry
+                            )
+                          }
+                          className="
+                            h-[59px]
+                            cursor-pointer
+                            border-t
+                            border-[#E9ECF0]
+                            bg-white
+                            hover:bg-[#FBFCFD]
+                          "
+                        >
+                          {/* ID */}
+
+                          <td
+                            className="
+                              min-w-0
+                              px-[8px]
+                              align-middle
+                            "
+                          >
+                            <span
+                              className="
+                                block
+                                truncate
+                                text-[6.4px]
+                                font-[700]
+                                text-[#14763F]
+                              "
+                            >
+                              {enquiry.reference ||
+                                enquiry._id}
+                            </span>
+                          </td>
+
+                          {/* NAME */}
+
+                          <td
+                            className="
+                              min-w-0
+                              px-[8px]
+                              align-middle
+                            "
+                          >
+                            <p
+                              className="
+                                truncate
+                                text-[7.2px]
+                                font-[700]
+                                leading-[10px]
+                                text-[#192B66]
+                              "
+                            >
+                              {enquiry.name ||
+                                "—"}
+                            </p>
+
+                            <p
+                              className="
+                                mt-[3px]
+                                truncate
+                                text-[5.8px]
+                                font-[500]
+                                leading-[9px]
+                                text-[#52617F]
+                              "
+                            >
+                              {enquiry.email ||
+                                enquiry.phone ||
+                                "—"}
+                            </p>
+                          </td>
+
+                          {/* SUBJECT */}
+
+                          <td
+                            className="
+                              min-w-0
+                              px-[8px]
+                              align-middle
+                            "
+                          >
+                            <p
+                              className="
+                                line-clamp-2
+                                text-[6.8px]
+                                font-[600]
+                                leading-[10px]
+                                text-[#314273]
+                              "
+                            >
+                              {getSubject(
+                                enquiry
+                              )}
+                            </p>
+                          </td>
+
+                          {/* CATEGORY */}
+
+                          <td
+                            className="
+                              min-w-0
+                              px-[6px]
+                              align-middle
+                            "
+                          >
+                            <span
+                              className="
+                                inline-flex
+                                max-w-full
+                                rounded-[4px]
+                                border
+                                px-[6px]
+                                py-[4px]
+                                text-[5.9px]
+                                font-[700]
+                                leading-none
+                              "
+                              style={{
+                                backgroundColor:
+                                  categoryMeta.background,
+
+                                color:
+                                  categoryMeta.color,
+
+                                borderColor:
+                                  categoryMeta.border,
+                              }}
+                            >
+                              <span className="truncate">
+                                {category}
+                              </span>
+                            </span>
+                          </td>
+
+                          {/* SOURCE */}
+
+                          <td
+                            className="
+                              min-w-0
+                              px-[7px]
+                              align-middle
+                            "
+                          >
+                            <div
+                              className="
+                                flex
+                                min-w-0
+                                items-center
+                                gap-[6px]
+                              "
+                            >
+                              <SourceIcon
+                                size={
+                                  12
+                                }
+                                strokeWidth={
+                                  2
+                                }
+                                style={{
+                                  color:
+                                    sourceMeta.color,
+                                }}
+                                className="shrink-0"
+                              />
+
+                              <span
+                                className="
+                                  min-w-0
+                                  truncate
+                                  text-[6.3px]
+                                  font-[600]
+                                  text-[#324374]
+                                "
+                              >
+                                {source}
+                              </span>
+                            </div>
+                          </td>
+
+                          {/* STATUS */}
+
+                          <td
+                            className="
+                              px-[6px]
+                              align-middle
+                            "
+                          >
+                            <span
+                              className="
+                                inline-flex
+                                max-w-full
+                                whitespace-nowrap
+                                rounded-[4px]
+                                border
+                                px-[6px]
+                                py-[4px]
+                                text-[5.9px]
+                                font-[700]
+                                leading-none
+                              "
+                              style={{
+                                backgroundColor:
+                                  statusMeta.background,
+
+                                color:
+                                  statusMeta.color,
+
+                                borderColor:
+                                  statusMeta.border,
+                              }}
+                            >
+                              {getStatusLabel(
+                                enquiry.status
+                              )}
+                            </span>
+                          </td>
+
+                          {/* DATE */}
+
+                          <td
+                            className="
+                              min-w-0
+                              px-[7px]
+                              align-middle
+                            "
+                          >
+                            <p
+                              className="
+                                text-[6.2px]
+                                font-[500]
+                                leading-[9px]
+                                text-[#334475]
+                              "
+                            >
+                              {formatDateTime(
+                                enquiry.createdAt
+                              )}
+                            </p>
+                          </td>
+
+                          {/* ACTIONS */}
+
+                          <td
+                            className="
+                              px-[4px]
+                              align-middle
+                            "
+                          >
+                            <div
+                              className="
+                                flex
+                                items-center
+                                gap-[4px]
+                              "
+                            >
+                              <button
+                                type="button"
+                                onClick={(
+                                  event
+                                ) => {
+                                  event.stopPropagation();
+
+                                  setSelected(
+                                    enquiry
+                                  );
+                                }}
+                                className="
+                                  flex
+                                  h-[26px]
+                                  w-[27px]
+                                  shrink-0
+                                  items-center
+                                  justify-center
+                                  rounded-[5px]
+                                  border
+                                  border-[#E2E6EB]
+                                  bg-white
+                                  text-[#273D78]
+                                  hover:bg-[#F7F9FB]
+                                "
+                              >
+                                <Eye
+                                  size={
+                                    10
+                                  }
+                                />
+                              </button>
+
+                              <button
+                                type="button"
+                                onClick={(
+                                  event
+                                ) => {
+                                  event.stopPropagation();
+                                }}
+                                className="
+                                  flex
+                                  h-[26px]
+                                  w-[27px]
+                                  shrink-0
+                                  items-center
+                                  justify-center
+                                  rounded-[5px]
+                                  border
+                                  border-[#E2E6EB]
+                                  bg-white
+                                  text-[#273D78]
+                                  hover:bg-[#F7F9FB]
+                                "
+                              >
+                                <ArrowLeft
+                                  size={
+                                    10
+                                  }
+                                />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    }
+                  )}
+
+                {/* EMPTY */}
+
+                {!loading &&
+                  pageRows.length ===
+                  0 && (
+                    <tr>
+                      <td
+                        colSpan={8}
+                        className="
+                          h-[150px]
+                          text-center
+                          text-[8px]
+                          font-[600]
+                          text-[#667085]
+                        "
+                      >
+                        No enquiries
+                        found.
+                      </td>
+                    </tr>
+                  )}
+              </tbody>
+            </table>
+
+            {/* =================================================
+                PAGINATION
+            ================================================= */}
+
+            <div
+              className="
+                flex
+                h-[49px]
+                min-w-0
+                items-center
+                justify-between
+                gap-[8px]
+                border-t
+                border-[#E6E9ED]
+                px-[14px]
+              "
+            >
+              <p
+                className="
+                  min-w-0
+                  truncate
+                  text-[6.4px]
+                  font-[600]
+                  text-[#475A83]
+                "
+              >
+                {visible.length >
+                  0
+                  ? `Showing ${startIndex +
+                  1
+                  } to ${endIndex} of ${visible.length
+                  } enquiries`
+                  : "Showing 0 enquiries"}
+              </p>
+
+              <div
+                className="
+                  flex
+                  shrink-0
+                  items-center
+                  gap-[4px]
+                "
+              >
+                <button
+                  type="button"
+                  disabled={
+                    safePage === 1
+                  }
+                  onClick={() =>
+                    setPage(
+                      Math.max(
+                        1,
+                        safePage -
+                        1
+                      )
+                    )
+                  }
+                  className="
+                    flex
+                    h-[27px]
+                    w-[27px]
+                    items-center
+                    justify-center
+                    rounded-[4px]
+                    border
+                    border-[#E3E7ED]
+                    bg-white
+                    text-[#536180]
+                    disabled:opacity-40
+                  "
+                >
+                  <ChevronLeft
+                    size={11}
+                  />
+                </button>
+
+                {Array.from({
+                  length:
+                    Math.min(
+                      4,
+                      totalPages
+                    ),
+                }).map(
+                  (
+                    _,
+                    index
+                  ) => {
+                    const number =
+                      index + 1;
+
+                    return (
+                      <button
+                        type="button"
+                        key={
+                          number
+                        }
+                        onClick={() =>
+                          setPage(
+                            number
+                          )
+                        }
+                        className={`
+                          flex
+                          h-[27px]
+                          w-[27px]
+                          items-center
+                          justify-center
+                          rounded-[4px]
+                          border
+                          text-[7.2px]
+                          font-[700]
+
+                          ${safePage ===
+                            number
+                            ? "border-[#006132] bg-[#006132] text-white"
+                            : "border-[#E3E7ED] bg-white text-[#334575]"
+                          }
+                        `}
+                      >
+                        {number}
+                      </button>
+                    );
+                  }
+                )}
+
+                <button
+                  type="button"
+                  disabled={
+                    safePage ===
+                    totalPages
+                  }
+                  onClick={() =>
+                    setPage(
+                      Math.min(
+                        totalPages,
+                        safePage +
+                        1
+                      )
+                    )
+                  }
+                  className="
+                    flex
+                    h-[27px]
+                    w-[27px]
+                    items-center
+                    justify-center
+                    rounded-[4px]
+                    border
+                    border-[#E3E7ED]
+                    bg-white
+                    text-[#334575]
+                    disabled:opacity-40
+                  "
+                >
+                  <ChevronRight
+                    size={11}
+                  />
+                </button>
+              </div>
+
+              <div
+                className="
+                  relative
+                  shrink-0
+                "
+              >
+                <select
+                  value={
+                    perPage
+                  }
+                  onChange={(
+                    event
+                  ) => {
+                    setPerPage(
+                      Number(
+                        event
+                          .target
+                          .value
+                      )
+                    );
+
+                    setPage(1);
+                  }}
+                  className="
+                    h-[28px]
+                    w-[92px]
+                    appearance-none
+                    rounded-[4px]
+                    border
+                    border-[#E3E7ED]
+                    bg-white
+                    px-[8px]
+                    pr-[24px]
+                    text-[6.4px]
+                    font-[700]
+                    text-[#536180]
+                    outline-none
+                  "
+                >
+                  <option
+                    value={10}
+                  >
+                    10 per page
+                  </option>
+
+                  <option
+                    value={20}
+                  >
+                    20 per page
+                  </option>
+
+                  <option
+                    value={50}
+                  >
+                    50 per page
+                  </option>
+                </select>
+
+                <ChevronDown
+                  size={9}
+                  className="
+                    pointer-events-none
+                    absolute
+                    right-[7px]
+                    top-1/2
+                    -translate-y-1/2
+                  "
+                />
+              </div>
+            </div>
+          </div>
+        </main>
+
+        {/* ====================================================
+            RIGHT SIDE
+        ==================================================== */}
+
+        <aside
+          className="
+            w-[255px]
+            min-w-0
+            shrink-0
+            overflow-hidden
+          "
+        >
+          {/* SUMMARY */}
+
+          <div
+            className="
+              rounded-[7px]
+              border
+              border-[#E2E6EB]
+              bg-white
+              px-[12px]
+              pb-[14px]
+              pt-[12px]
+            "
+          >
+            <h2
+              className="
+                text-[9px]
+                font-[800]
+                text-[#1D5E39]
+              "
+            >
+              Enquiry Summary
+            </h2>
+
+            <div
+              className="
+                mt-[15px]
+                flex
+                min-w-0
+                items-center
+                gap-[9px]
+              "
+            >
+              {/* DONUT */}
+
+              <div
+                className="
+                  flex
+                  h-[92px]
+                  w-[92px]
+                  shrink-0
+                  items-center
+                  justify-center
+                  rounded-full
+                "
+                style={{
+                  background:
+                    totalEnquiries >
+                      0
+                      ? `conic-gradient(
+                          #3379DE 0% ${percentage(
+                        newCount,
+                        totalEnquiries
+                      )}%,
+
+                          #F49B16 ${percentage(
+                        newCount,
+                        totalEnquiries
+                      )}% ${percentage(
+                        newCount +
+                        progressCount,
+                        totalEnquiries
+                      )}%,
+
+                          #2CA25F ${percentage(
+                        newCount +
+                        progressCount,
+                        totalEnquiries
+                      )}% ${percentage(
+                        newCount +
+                        progressCount +
+                        resolvedCount,
+                        totalEnquiries
+                      )}%,
+
+                          #E4463E ${percentage(
+                        newCount +
+                        progressCount +
+                        resolvedCount,
+                        totalEnquiries
+                      )}% 100%
+                        )`
+                      : "#EDF0F3",
+                }}
+              >
+                <div
+                  className="
+                    flex
+                    h-[58px]
+                    w-[58px]
+                    flex-col
+                    items-center
+                    justify-center
+                    rounded-full
+                    bg-white
+                  "
+                >
+                  <strong
+                    className="
+                      text-[18px]
+                      font-[800]
+                      leading-none
+                      text-[#141414]
+                    "
+                  >
+                    {
+                      totalEnquiries
+                    }
+                  </strong>
+
+                  <span
+                    className="
+                      mt-[4px]
+                      text-[6px]
+                      font-[600]
+                      text-[#44537B]
+                    "
+                  >
+                    Total
+                  </span>
+                </div>
+              </div>
+
+              {/* SUMMARY LIST */}
+
+              <div
+                className="
+                  min-w-0
+                  flex-1
+                  space-y-[9px]
+                "
+              >
+                {[
+                  {
+                    label: "New",
+                    value:
+                      newCount,
+                    color:
+                      "#3379DE",
+                  },
+                  {
+                    label:
+                      "In Progress",
+                    value:
+                      progressCount,
+                    color:
+                      "#F49B16",
+                  },
+                  {
+                    label:
+                      "Resolved",
+                    value:
+                      resolvedCount,
+                    color:
+                      "#2CA25F",
+                  },
+                  {
+                    label:
+                      "Closed",
+                    value:
+                      closedCount,
+                    color:
+                      "#E4463E",
+                  },
+                ].map(
+                  (item) => (
+                    <div
+                      key={
+                        item.label
+                      }
+                      className="
+                        flex
+                        min-w-0
+                        items-center
+                        justify-between
+                        gap-[4px]
+                      "
+                    >
+                      <div
+                        className="
+                          flex
+                          min-w-0
+                          items-center
+                          gap-[5px]
+                        "
+                      >
+                        <span
+                          className="
+                            h-[6px]
+                            w-[6px]
+                            shrink-0
+                            rounded-full
+                          "
+                          style={{
+                            backgroundColor:
+                              item.color,
+                          }}
+                        />
+
+                        <span
+                          className="
+                            min-w-0
+                            truncate
+                            text-[5.6px]
+                            font-[600]
+                            text-[#26386D]
+                          "
+                        >
+                          {
+                            item.label
+                          }
+                        </span>
+                      </div>
+
+                      <span
+                        className="
+                          shrink-0
+                          whitespace-nowrap
+                          text-[5.1px]
+                          font-[600]
+                          text-[#26386D]
+                        "
+                      >
+                        {item.value} (
+                        {percentage(
+                          item.value,
+                          totalEnquiries
+                        ).toFixed(
+                          1
+                        )}
+                        %)
+                      </span>
+                    </div>
+                  )
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* SOURCE */}
+
+          <div
+            className="
+              mt-[13px]
+              rounded-[7px]
+              border
+              border-[#E2E6EB]
+              bg-white
+              px-[12px]
+              pb-[14px]
+              pt-[12px]
+            "
+          >
+            <h2
+              className="
+                text-[8.8px]
+                font-[800]
+                text-[#20252F]
+              "
+            >
+              Enquiries by Source
+            </h2>
+
+            <div
+              className="
+                mt-[15px]
+                space-y-[11px]
+              "
+            >
+              {sourceStats.map(
+                (
+                  item,
+                  index
+                ) => {
+                  const meta =
+                    sourceIcon(
+                      item.label
+                    );
+
+                  const Icon =
+                    meta.icon;
+
+                  const colors =
+                    [
+                      "#327DDF",
+                      "#25A35F",
+                      "#F49D17",
+                      "#8750DB",
+                      "#D93A32",
+                    ];
+
+                  return (
+                    <SidebarBar
+                      key={
+                        item.label
+                      }
+                      label={
+                        item.label
+                      }
+                      value={
+                        item.value
+                      }
+                      percentageValue={
+                        item.percentage
+                      }
+                      color={
+                        colors[
+                        index %
+                        colors.length
+                        ]
+                      }
+                      icon={Icon}
+                      iconBg="#F3F6FA"
+                    />
+                  );
+                }
+              )}
+
+              {sourceStats.length ===
+                0 && (
+                  <p
+                    className="
+                    py-[15px]
+                    text-center
+                    text-[6.5px]
+                    text-[#667085]
+                  "
+                  >
+                    No source data
+                  </p>
+                )}
+            </div>
+          </div>
+
+          {/* CATEGORIES */}
+
+          <div
+            className="
+              mt-[13px]
+              rounded-[7px]
+              border
+              border-[#E2E6EB]
+              bg-white
+              px-[12px]
+              pb-[14px]
+              pt-[12px]
+            "
+          >
+            <h2
+              className="
+                text-[8.8px]
+                font-[800]
+                text-[#20252F]
+              "
+            >
+              Popular Categories
+            </h2>
+
+            <div
+              className="
+                mt-[15px]
+                space-y-[11px]
+              "
+            >
+              {categoryStats.map(
+                (
+                  item,
+                  index
+                ) => {
+                  const colors =
+                    [
+                      "#29A15D",
+                      "#2784E1",
+                      "#8851DA",
+                      "#F39B16",
+                      "#7C9DB7",
+                    ];
+
+                  return (
+                    <SidebarBar
+                      key={
+                        item.label
+                      }
+                      label={
+                        item.label
+                      }
+                      value={
+                        item.value
+                      }
+                      percentageValue={
+                        item.percentage
+                      }
+                      color={
+                        colors[
+                        index %
+                        colors.length
+                        ]
+                      }
+                    />
+                  );
+                }
+              )}
+
+              {categoryStats.length ===
+                0 && (
+                  <p
+                    className="
+                    py-[15px]
+                    text-center
+                    text-[6.5px]
+                    text-[#667085]
+                  "
+                  >
+                    No category data
+                  </p>
+                )}
+            </div>
+          </div>
+
+          {/* QUICK ACTIONS */}
+
+          <div
+            className="
+              mt-[13px]
+              overflow-hidden
+              rounded-[7px]
+              border
+              border-[#E2E6EB]
+              bg-[#FAFBFE]
+            "
+          >
+            <div
+              className="
+                px-[12px]
+                pb-[7px]
+                pt-[12px]
+              "
+            >
+              <h2
+                className="
+                  text-[9.5px]
+                  font-[800]
+                  text-[#1E3475]
+                "
+              >
+                Quick Actions
+              </h2>
+            </div>
+
+            {[
+              {
+                label:
+                  "View All Enquiries",
+                icon: Eye,
+              },
+              {
+                label:
+                  "Assign to Team Member",
+                icon: Users,
+              },
+              {
+                label:
+                  "Create Follow-up",
+                icon:
+                  CalendarDays,
+              },
+              {
+                label:
+                  "Download Report",
+                icon: Download,
+              },
+            ].map(
+              (action) => {
+                const Icon =
+                  action.icon;
+
+                return (
+                  <button
+                    type="button"
+                    key={
+                      action.label
+                    }
+                    className="
+                      flex
+                      h-[34px]
+                      w-full
+                      items-center
+                      justify-between
+                      border-b
+                      border-[#EDF0F4]
+                      px-[12px]
+                      text-[#1A2F6D]
+                      last:border-b-0
+                      hover:bg-white
+                    "
+                  >
+                    <span
+                      className="
+                        flex
+                        min-w-0
+                        items-center
+                        gap-[8px]
+                      "
+                    >
+                      <Icon
+                        size={
+                          12
+                        }
+                        className="shrink-0"
+                      />
+
+                      <span
+                        className="
+                          min-w-0
+                          truncate
+                          text-[6.8px]
+                          font-[700]
+                        "
+                      >
+                        {
+                          action.label
+                        }
+                      </span>
+                    </span>
+
+                    <ArrowRight
+                      size={10}
+                      className="shrink-0"
+                    />
+                  </button>
+                );
+              }
+            )}
+          </div>
+        </aside>
+      </div>
+
+      {/* ======================================================
+          DETAILS MODAL
+      ====================================================== */}
+
+      <Modal
+        isOpen={!!selected}
+        onClose={() =>
+          setSelected(null)
+        }
+        title={
+          selected?.name ??
+          "Enquiry"
+        }
+      >
+        {selected && (
+          <div
+            className="
+              space-y-4
+              text-sm
+            "
+          >
+            {/* STATUS */}
+
+            <div
+              className="
+                flex
+                flex-wrap
+                items-center
+                gap-2
+              "
+            >
+              <span
+                className="
+                  inline-flex
+                  rounded-md
+                  border
+                  px-2.5
+                  py-1
+                  text-xs
+                  font-semibold
+                "
+                style={{
+                  backgroundColor:
+                    getStatusStyle(
+                      selected.status
+                    ).background,
+
+                  color:
+                    getStatusStyle(
+                      selected.status
+                    ).color,
+
+                  borderColor:
+                    getStatusStyle(
+                      selected.status
+                    ).border,
+                }}
+              >
+                {getStatusLabel(
+                  selected.status
+                )}
+              </span>
+
+              <Badge tone="neutral">
+                {getCategoryLabel(
+                  selected
+                )}
+              </Badge>
+            </div>
+
+            {/* INFO */}
+
+            <div
+              className="
+                grid
+                grid-cols-2
+                gap-3
+                text-xs
+              "
+            >
+              <ModalField
+                label="Name"
+                value={
+                  selected.name
+                }
+              />
+
+              <ModalField
+                label="Phone"
+                value={
+                  selected.phone
+                }
+              />
+
+              <ModalField
+                label="Email"
+                value={
+                  selected.email
+                }
+              />
+
+              <ModalField
+                label="Source"
+                value={getSource(
+                  selected
+                )}
+              />
+
+              <ModalField
+                label="Category"
+                value={getCategoryLabel(
+                  selected
+                )}
+              />
+
+              <ModalField
+                label="Received"
+                value={formatDateTime(
+                  selected.createdAt
+                )}
+              />
+            </div>
+
+            {/* SUBJECT */}
+
+            <div>
+              <p
+                className="
+                  text-[11px]
+                  font-semibold
+                  uppercase
+                  tracking-wide
+                  text-text-muted
+                "
+              >
+                Subject
+              </p>
+
+              <p
+                className="
+                  mt-1
+                  text-text-primary
+                "
+              >
+                {getSubject(
+                  selected
+                )}
+              </p>
+            </div>
+
+            {/* MESSAGE */}
+
+            <div>
+              <p
+                className="
+                  text-[11px]
+                  font-semibold
+                  uppercase
+                  tracking-wide
+                  text-text-muted
+                "
+              >
+                Message
+              </p>
+
+              <p
+                className="
+                  mt-1
+                  whitespace-pre-wrap
+                  text-text-primary
+                "
+              >
+                {selected.message ||
+                  "—"}
+              </p>
+            </div>
+
+            {selected.organization && (
+              <ModalField
+                label="Organisation"
+                value={
+                  selected.organization
+                }
+              />
+            )}
+
+            {selected.city && (
+              <ModalField
+                label="City / Area"
+                value={
+                  selected.city
+                }
+              />
+            )}
+
+            {selected.documentUrl && (
+              <a
+                href={
+                  selected.documentUrl
+                }
+                target="_blank"
+                rel="noreferrer"
+                className="
+                  inline-flex
+                  text-xs
+                  font-semibold
+                  text-accent
+                  hover:underline
+                "
+              >
+                View supporting
+                document
+              </a>
+            )}
+          </div>
+        )}
+      </Modal>
+    </section>
+  );
+}
+
+/* ============================================================
+   MODAL FIELD
+============================================================ */
+
+function ModalField({
+  label,
+  value,
+}: {
+  label: string;
+  value?: string;
+}) {
+  if (!value) {
+    return null;
+  }
+
+  return (
+    <div>
+      <p
+        className="
+          text-[11px]
+          font-semibold
+          uppercase
+          tracking-wide
+          text-text-muted
+        "
+      >
+        {label}
+      </p>
+
+      <p
+        className="
+          mt-[2px]
+          break-words
+          text-text-primary
+        "
+      >
+        {value}
+      </p>
+    </div>
+  );
+}

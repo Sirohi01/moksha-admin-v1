@@ -8,6 +8,8 @@ import {
   type CSSProperties,
   type ReactNode,
 } from "react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 import {
   ArrowRight,
@@ -661,13 +663,22 @@ export default function EnquiriesPage() {
   const [loading, setLoading] =
     useState(true);
 
+  const searchParams = useSearchParams();
+  const categoryParam = searchParams.get("category") as Enquiry["category"] | null;
+
   const [tab, setTab] =
     useState<EnquiryStatus | "">("");
 
   const [source, setSource] =
-    useState<
-      Enquiry["category"] | ""
-    >("");
+    useState<Enquiry["category"] | "">(
+      categoryParam || ""
+    );
+
+  useEffect(() => {
+    if (categoryParam) {
+      setSource(categoryParam);
+    }
+  }, [categoryParam]);
 
   const [search, setSearch] =
     useState("");
@@ -1043,8 +1054,15 @@ export default function EnquiriesPage() {
               text-[#005E2E]
             "
           >
-            CSR &amp; Partners
-            Enquiries
+            {source === "contact"
+              ? "General Enquiries"
+              : source === "csr"
+              ? "CSR & Partners Enquiries"
+              : source === "partnership"
+              ? "Partnership Enquiries"
+              : source === "unclaimed_body"
+              ? "Unclaimed Body Sewa Enquiries"
+              : "All Enquiries"}
           </h1>
 
           <p
@@ -1056,10 +1074,15 @@ export default function EnquiriesPage() {
               text-[#344574]
             "
           >
-            Manage corporate CSR
-            queries and partnership
-            opportunities in one
-            place.
+            {source === "contact"
+              ? "Manage general queries, contact submissions and helpline requests."
+              : source === "csr"
+              ? "Manage corporate CSR queries and partnership opportunities in one place."
+              : source === "partnership"
+              ? "Manage institutional and NGO partnership proposals."
+              : source === "unclaimed_body"
+              ? "Manage emergency alerts and unclaimed body sewa requests."
+              : "Manage all general, contact, CSR and partnership enquiries in one place."}
           </p>
         </div>
 
@@ -1118,8 +1141,8 @@ export default function EnquiriesPage() {
             Filters
           </button>
 
-          <button
-            type="button"
+          <Link
+            href="/enquiries/new"
             className="
               flex
               h-[36px]
@@ -1132,12 +1155,14 @@ export default function EnquiriesPage() {
               font-[700]
               text-white
               shadow-[0_2px_5px_rgba(0,95,46,0.13)]
+              hover:bg-[#004d25]
+              transition
             "
           >
             <Plus size={15} />
 
             Add New Enquiry
-          </button>
+          </Link>
         </div>
       </div>
 
