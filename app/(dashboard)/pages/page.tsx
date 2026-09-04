@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import typography from "./PagesTypography.module.css";
+import SeoPagesTable from "@/components/seo/SeoPagesTable";
+import SeoPageDetail from "@/components/seo/SeoPageDetail";
 import {
   ArrowRight,
   CheckCircle2,
@@ -232,6 +234,8 @@ function FilterSelect({
 export default function PagesCmsPage() {
   const router = useRouter();
   const admin = useAppSelector((state) => state.auth.admin);
+  const [viewMode, setViewMode] = useState<"cms" | "audit">("audit");
+  const [selectedSeoPageId, setSelectedSeoPageId] = useState<string | null>(null);
   const [pages, setPages] = useState<CmsPage[]>([]);
   const [totalSections, setTotalSections] = useState(0);
   const [search, setSearch] = useState("");
@@ -561,6 +565,21 @@ export default function PagesCmsPage() {
           </div>
 
           <div className="flex items-center gap-[10px]">
+            <div className="flex overflow-hidden rounded-[6px] border border-[#dfe3ea]">
+              {(["cms", "audit"] as const).map((mode) => (
+                <button
+                  key={mode}
+                  type="button"
+                  onClick={() => setViewMode(mode)}
+                  className={`h-[30px] px-[12px] text-[8.5px] font-semibold transition ${
+                    viewMode === mode ? "bg-[#293681] text-white" : "bg-white text-[#4a5468] hover:bg-[#f4f6fa]"
+                  }`}
+                >
+                  {mode === "cms" ? "CMS Content" : "SEO Audit (live crawl)"}
+                </button>
+              ))}
+            </div>
+
             <button
               type="button"
               className="flex h-[30px] items-center justify-center gap-[5px] rounded-[6px] border border-red-200 bg-red-50 px-[12px] text-[8.5px] font-semibold text-red-700 shadow-[0_1px_4px_rgba(30,30,20,0.025)] transition hover:bg-red-100"
@@ -592,7 +611,23 @@ export default function PagesCmsPage() {
             MAIN CONTENT
         ================================================= */}
 
-        <div className="grid min-h-0 flex-1 grid-cols-[minmax(0,1fr)_360px] gap-[14px]">
+        {viewMode === "audit" && (
+          <div className="min-h-0 flex-1 overflow-y-auto pb-4">
+            <SeoPagesTable
+              onSelectPage={setSelectedSeoPageId}
+              selectedPageId={selectedSeoPageId}
+              onAuditStarted={() => setToastMessage({ title: "SEO audit started — results appear when it finishes", type: "success" })}
+            />
+          </div>
+        )}
+
+        {selectedSeoPageId && (
+          <SeoPageDetail pageId={selectedSeoPageId} onClose={() => setSelectedSeoPageId(null)} />
+        )}
+
+        <div
+          className={`${viewMode === "audit" ? "hidden" : "grid"} min-h-0 flex-1 grid-cols-[minmax(0,1fr)_360px] gap-[14px]`}
+        >
 
           {/* ===============================================
               LEFT

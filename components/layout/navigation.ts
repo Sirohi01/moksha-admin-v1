@@ -88,7 +88,8 @@ export const NAV_SECTIONS: NavSection[] = [
   {
     title: "SEO & Performance",
     items: [
-      { label: "SEO Center", href: "/reports", icon: SearchCheck, badge: "NEW" },
+      { label: "SEO Audit", href: "/seo", icon: SearchCheck, badge: "NEW" },
+      { label: "SEO Center", href: "/reports", icon: SearchCheck },
       { label: "Google Search Console", icon: BarChart3, disabled: true },
       { label: "Analytics Dashboard", icon: Gauge, disabled: true },
       { label: "Performance Center", icon: Activity, disabled: true },
