@@ -81,7 +81,7 @@ const COLUMNS: ColumnDefinition[] = [
   {
     key: "description",
     label: "Meta desc",
-    defaultVisible: true,
+    defaultVisible: false,
     render: (page) => (
       <StatusChip value={page.descriptionStatus} title={`${page.metaDescriptionLength} chars`} />
     ),
@@ -89,13 +89,13 @@ const COLUMNS: ColumnDefinition[] = [
   {
     key: "h1",
     label: "H1",
-    defaultVisible: true,
+    defaultVisible: false,
     render: (page) => <StatusChip value={page.h1Status} title={page.h1[0] ?? "No H1"} />,
   },
   {
     key: "canonical",
     label: "Canonical",
-    defaultVisible: true,
+    defaultVisible: false,
     render: (page) => <StatusChip value={page.canonicalStatus} title={page.canonical ?? "None"} />,
   },
   {
@@ -245,7 +245,7 @@ const CATEGORY_OPTIONS = [
 ];
 
 const selectClass =
-  "h-8 rounded-lg border border-surface-border bg-surface-card px-2 text-[12px] text-text-primary outline-none focus:border-accent";
+  "h-8 rounded-lg border border-surface-border bg-surface-card px-2.5 text-[11px] font-medium text-text-secondary outline-none transition focus:border-accent/50 focus:ring-2 focus:ring-accent/10";
 
 interface Props {
   onSelectPage: (pageId: string) => void;
@@ -335,15 +335,23 @@ export default function SeoPagesTable({ onSelectPage, onAuditStarted, selectedPa
     Boolean(filters.orphan);
 
   return (
-    <div className="flex flex-col gap-3">
-      <div className="flex flex-wrap items-center gap-2">
-        <div className="relative min-w-[200px] flex-1">
+    <div className="flex flex-col gap-2.5">
+      <div className="flex flex-wrap items-end justify-between gap-2 border-b border-surface-border px-1 pb-2.5">
+        <div>
+          <h2 className="text-[14px] font-bold text-text-primary">Page inventory</h2>
+          <p className="mt-0.5 text-[10px] text-text-muted">Click any row to open its complete audit evidence and history.</p>
+        </div>
+        <div className="rounded-full bg-accent-soft px-2.5 py-1 text-[10px] font-semibold text-accent">{meta.total} URLs</div>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-1.5 rounded-xl border border-surface-border bg-surface-sunken p-2">
+        <div className="relative min-w-[240px] flex-[1.5]">
           <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-text-muted" />
           <input
             value={searchInput}
             onChange={(event) => setSearchInput(event.target.value)}
             placeholder="Search URL or title"
-            className="h-8 w-full rounded-lg border border-surface-border bg-surface-card pl-8 pr-2 text-[12px] text-text-primary outline-none focus:border-accent"
+            className="h-8 w-full rounded-lg border border-surface-border bg-surface-card pl-8 pr-3 text-[11px] font-medium text-text-primary shadow-sm outline-none transition placeholder:text-text-muted focus:border-accent/50 focus:ring-2 focus:ring-accent/10"
           />
         </div>
 
@@ -399,7 +407,7 @@ export default function SeoPagesTable({ onSelectPage, onAuditStarted, selectedPa
         <button
           type="button"
           onClick={() => updateFilter({ hasBrokenLinks: filters.hasBrokenLinks ? undefined : true })}
-          className={`h-8 rounded-lg border px-2.5 text-[12px] font-medium transition-colors ${
+          className={`h-8 rounded-lg border px-2.5 text-[11px] font-semibold transition-colors ${
             filters.hasBrokenLinks
               ? "border-status-danger-text bg-status-danger-bg text-status-danger-text"
               : "border-surface-border bg-surface-card text-text-secondary hover:bg-surface-sunken"
@@ -411,7 +419,7 @@ export default function SeoPagesTable({ onSelectPage, onAuditStarted, selectedPa
         <button
           type="button"
           onClick={() => updateFilter({ orphan: filters.orphan ? undefined : true })}
-          className={`h-8 rounded-lg border px-2.5 text-[12px] font-medium transition-colors ${
+          className={`h-8 rounded-lg border px-2.5 text-[11px] font-semibold transition-colors ${
             filters.orphan
               ? "border-status-pending-text bg-status-pending-bg text-status-pending-text"
               : "border-surface-border bg-surface-card text-text-secondary hover:bg-surface-sunken"
@@ -482,11 +490,11 @@ export default function SeoPagesTable({ onSelectPage, onAuditStarted, selectedPa
         </div>
       )}
 
-      <div className="overflow-x-auto rounded-lg border border-surface-border bg-surface-card">
-        <table className="w-full min-w-[900px] border-collapse text-[12px]">
+      <div className="min-h-[360px] max-h-[calc(100vh-345px)] overflow-auto rounded-xl border border-surface-border bg-surface-card shadow-sm">
+        <table className="w-full min-w-[980px] border-collapse text-[11px]">
           <thead>
-            <tr className="border-b border-surface-border bg-surface-sunken">
-              <th className="sticky left-0 z-10 bg-surface-sunken px-3 py-2 text-left font-semibold text-text-secondary">
+            <tr className="sticky top-0 z-20 border-b border-surface-border bg-surface-sunken">
+              <th className="sticky left-0 z-30 bg-surface-sunken px-3 py-2 text-left text-[10px] font-bold uppercase tracking-[0.06em] text-text-secondary">
                 <button type="button" onClick={() => toggleSort("url")} className="hover:text-text-primary">
                   Page
                 </button>
@@ -494,7 +502,7 @@ export default function SeoPagesTable({ onSelectPage, onAuditStarted, selectedPa
               {activeColumns.map((column) => (
                 <th
                   key={column.key}
-                  className={`whitespace-nowrap px-2 py-2 font-semibold text-text-secondary ${
+                  className={`whitespace-nowrap px-2.5 py-2 text-[10px] font-bold uppercase tracking-[0.055em] text-text-secondary ${
                     column.align === "right" ? "text-right" : "text-left"
                   }`}
                 >
@@ -543,11 +551,11 @@ export default function SeoPagesTable({ onSelectPage, onAuditStarted, selectedPa
               <tr
                 key={row.id}
                 onClick={() => onSelectPage(row.id)}
-                className={`cursor-pointer border-b border-surface-border/60 transition-colors hover:bg-surface-sunken ${
-                  selectedPageId === row.id ? "bg-accent-soft" : ""
+                className={`group cursor-pointer border-b border-surface-border/60 transition-colors hover:bg-accent-soft/40 ${
+                  selectedPageId === row.id ? "bg-accent-soft" : "odd:bg-surface-card even:bg-surface-sunken/30"
                 }`}
               >
-                <td className="sticky left-0 z-10 max-w-[280px] bg-surface-card px-3 py-2">
+                <td className="sticky left-0 z-10 max-w-[300px] bg-inherit px-3 py-2 shadow-[1px_0_0_var(--surface-border)]">
                   <div className="flex items-center gap-1.5">
                     <span className="truncate font-medium text-text-primary" title={row.title ?? row.url}>
                       {row.title ?? row.path}
@@ -569,7 +577,7 @@ export default function SeoPagesTable({ onSelectPage, onAuditStarted, selectedPa
                 {activeColumns.map((column) => (
                   <td
                     key={column.key}
-                    className={`whitespace-nowrap px-2 py-2 ${column.align === "right" ? "text-right" : "text-left"}`}
+                    className={`whitespace-nowrap px-2.5 py-2 text-text-secondary ${column.align === "right" ? "text-right" : "text-left"}`}
                   >
                     {column.render(row)}
                   </td>
@@ -581,7 +589,7 @@ export default function SeoPagesTable({ onSelectPage, onAuditStarted, selectedPa
       </div>
 
       {meta.total > 0 && (
-        <div className="flex items-center justify-between text-[12px] text-text-secondary">
+        <div className="flex items-center justify-between rounded-xl border border-[#e7e9ef] bg-[#fafbfc] px-3 py-2 text-[11px] font-medium text-[#667085]">
           <span>
             {(meta.page - 1) * meta.limit + 1}–{Math.min(meta.page * meta.limit, meta.total)} of {meta.total} pages
           </span>

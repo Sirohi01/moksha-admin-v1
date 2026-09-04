@@ -40,18 +40,18 @@ type Section = (typeof SECTIONS)[number];
 
 function Row({ label, value, mono }: { label: string; value: React.ReactNode; mono?: boolean }) {
   return (
-    <div className="grid grid-cols-[130px_1fr] gap-3 border-b border-surface-border/60 py-1.5 text-[12px] last:border-0">
-      <span className="text-text-secondary">{label}</span>
-      <span className={`break-words text-text-primary ${mono ? "font-mono text-[11px]" : ""}`}>{value ?? "—"}</span>
+    <div className="grid grid-cols-[140px_minmax(0,1fr)] items-start gap-3 border-b border-[#edf0f4] py-2.5 text-[12px] last:border-0">
+      <span className="font-medium text-[#71798a]">{label}</span>
+      <span className={`min-w-0 break-words font-medium text-[#202b41] ${mono ? "font-mono text-[11px]" : ""}`}>{value ?? "—"}</span>
     </div>
   );
 }
 
 function SectionCard({ title, children, note }: { title: string; children: React.ReactNode; note?: string }) {
   return (
-    <div className="rounded-lg border border-surface-border bg-surface-card p-3">
-      <h4 className="mb-2 text-[13px] font-semibold text-text-primary">{title}</h4>
-      {note && <p className="mb-2 text-[11px] text-text-muted">{note}</p>}
+    <div className="rounded-xl border border-[#e1e5ec] bg-white p-4 shadow-[0_3px_14px_rgba(25,35,65,0.035)]">
+      <h4 className="mb-2 text-[13px] font-bold tracking-[-0.01em] text-[#1c273c]">{title}</h4>
+      {note && <p className="mb-3 text-[11px] leading-5 text-[#7d8698]">{note}</p>}
       {children}
     </div>
   );
@@ -83,6 +83,19 @@ export default function SeoPageDetail({ pageId, onClose }: { pageId: string; onC
     void load();
   }, [load]);
 
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [onClose]);
+
   const generateAi = async (force: boolean) => {
     setAiLoading(true);
     try {
@@ -101,46 +114,52 @@ export default function SeoPageDetail({ pageId, onClose }: { pageId: string; onC
   const page = detail?.page;
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-black/30" onClick={onClose}>
-      <div
-        className="flex h-full w-full max-w-[860px] flex-col bg-surface-page shadow-2xl"
+    <div className="fixed inset-0 z-[2147483647] flex justify-end bg-[#111827]/60 p-2 backdrop-blur-[2px] sm:p-3" onClick={onClose}>
+      <aside
+        role="dialog"
+        aria-modal="true"
+        aria-label="SEO page audit details"
+        className="flex h-full w-full max-w-[940px] flex-col overflow-hidden rounded-2xl border border-white/70 bg-[#f6f7fa] shadow-[0_28px_90px_rgba(10,18,38,0.35)]"
         onClick={(event) => event.stopPropagation()}
       >
-        <div className="flex items-start justify-between gap-3 border-b border-surface-border bg-surface-card px-4 py-3">
+        <div className="flex items-start justify-between gap-4 border-b border-[#e2e5eb] bg-white px-5 py-4">
           <div className="min-w-0">
-            <div className="flex items-center gap-2">
-              {page && <ScorePill score={page.score} />}
-              <h3 className="truncate text-[15px] font-semibold text-text-primary">
-                {page?.title ?? page?.path ?? "Page"}
-              </h3>
+            <div className="flex items-start gap-3">
+              {page && <ScorePill score={page.score} size="lg" />}
+              <div className="min-w-0 pt-0.5">
+                <p className="mb-0.5 text-[9px] font-bold uppercase tracking-[0.15em] text-[#8992a4]">Page audit report</p>
+                <h3 className="line-clamp-2 text-[16px] font-bold leading-5 tracking-[-0.015em] text-[#18233b]">
+                  {page?.title ?? page?.path ?? "Page"}
+                </h3>
+              </div>
             </div>
             {page && (
               <a
                 href={page.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-0.5 inline-flex items-center gap-1 truncate text-[11px] text-text-muted hover:text-accent"
+                className="mt-2 inline-flex max-w-full items-center gap-1.5 truncate text-[11px] font-medium text-[#a06422] hover:text-[#7f4e18]"
               >
                 {page.url}
                 <ExternalLink className="h-3 w-3" />
               </a>
             )}
           </div>
-          <Button variant="ghost" size="sm" onClick={onClose}>
+          <button type="button" aria-label="Close audit details" onClick={onClose} className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-[#e0e4eb] bg-[#f8f9fb] text-[#667085] transition hover:border-red-200 hover:bg-red-50 hover:text-red-600">
             <X className="h-4 w-4" />
-          </Button>
+          </button>
         </div>
 
-        <div className="flex gap-1 overflow-x-auto border-b border-surface-border bg-surface-card px-3">
+        <div className="flex gap-1.5 overflow-x-auto border-b border-[#e1e5ec] bg-white px-4 py-2.5 [scrollbar-width:thin]">
           {SECTIONS.map((item) => (
             <button
               key={item}
               type="button"
               onClick={() => setSection(item)}
-              className={`whitespace-nowrap border-b-2 px-2.5 py-2 text-[12px] font-medium transition-colors ${
+              className={`whitespace-nowrap rounded-lg px-3 py-2 text-[11px] font-semibold transition-all ${
                 section === item
-                  ? "border-accent text-accent"
-                  : "border-transparent text-text-secondary hover:text-text-primary"
+                  ? "bg-[#293681] text-white shadow-[0_4px_10px_rgba(41,54,129,0.18)]"
+                  : "bg-[#f5f6f8] text-[#616b7e] hover:bg-[#eceef4] hover:text-[#293681]"
               }`}
             >
               {item}
@@ -148,7 +167,7 @@ export default function SeoPageDetail({ pageId, onClose }: { pageId: string; onC
           ))}
         </div>
 
-        <div className="flex-1 overflow-y-auto p-4">
+        <div className="flex-1 overflow-y-auto bg-[#f6f7fa] p-4 sm:p-5">
           {loading && (
             <div className="flex justify-center py-16">
               <Spinner />
@@ -755,7 +774,7 @@ export default function SeoPageDetail({ pageId, onClose }: { pageId: string; onC
             </div>
           )}
         </div>
-      </div>
+      </aside>
     </div>
   );
 }

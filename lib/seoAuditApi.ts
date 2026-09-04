@@ -445,6 +445,32 @@ export interface SeoAlert {
   acknowledgedAt: string | null;
 }
 
+export interface SeoCompetitor {
+  id: string;
+  url: string;
+  label: string;
+  isActive: boolean;
+  lastCrawlAt: string | null;
+  lastScore: number | null;
+}
+
+export interface SeoCompetitorProfile {
+  siteId: string;
+  label: string;
+  url: string;
+  lastCrawlAt: string | null;
+  observed: Record<string, number | string[] | null>;
+  scores: Record<string, number | null> | null;
+  performance: { score: number | null; lcpMs: number | null; clsScore: number | null; fieldDataAvailable: boolean } | null;
+}
+
+export interface SeoCompetitorComparison {
+  dataSourceNotes: { observed: string; searchAndTraffic: string };
+  primary: SeoCompetitorProfile;
+  competitors: SeoCompetitorProfile[];
+  pendingCrawl: Array<{ siteId: string; label: string }>;
+}
+
 function toQuery(filters: Record<string, unknown>): string {
   const params = new URLSearchParams();
   for (const [key, value] of Object.entries(filters)) {
@@ -485,11 +511,16 @@ export const seoAuditApi = {
   recommendations: (scope?: string) =>
     api.get<SeoRecommendation[]>(`/seo/recommendations${scope ? `?scope=${scope}` : ""}`),
   generateSiteRecommendation: (force = false) =>
-    api.post<SeoRecommendationResponse>(`/seo/recommendations/site${force ? "?force=true" : ""}`, {}),
+    api.post<SeoRecommendationResponse>(`/seo/recommendations/site${force ? "?force=true" : ""}`, {}, { timeoutMs: 100_000 }),
   generatePageRecommendation: (id: string, force = false) =>
-    api.post<SeoRecommendationResponse>(`/seo/recommendations/pages/${id}${force ? "?force=true" : ""}`, {}),
+    api.post<SeoRecommendationResponse>(`/seo/recommendations/pages/${id}${force ? "?force=true" : ""}`, {}, { timeoutMs: 100_000 }),
   generateCannibalization: (force = false) =>
-    api.post<SeoRecommendationResponse>(`/seo/recommendations/cannibalization${force ? "?force=true" : ""}`, {}),
+    api.post<SeoRecommendationResponse>(`/seo/recommendations/cannibalization${force ? "?force=true" : ""}`, {}, { timeoutMs: 100_000 }),
   generateContentGap: (force = false) =>
-    api.post<SeoRecommendationResponse>(`/seo/recommendations/content-gap${force ? "?force=true" : ""}`, {}),
+    api.post<SeoRecommendationResponse>(`/seo/recommendations/content-gap${force ? "?force=true" : ""}`, {}, { timeoutMs: 100_000 }),
+  competitors: () => api.get<SeoCompetitor[]>("/seo/competitors"),
+  addCompetitor: (payload: { url: string; label: string }) => api.post<SeoCompetitor>("/seo/competitors", payload),
+  deleteCompetitor: (id: string) => api.delete<{ id: string }>(`/seo/competitors/${id}`),
+  auditCompetitor: (id: string) => api.post<{ crawlId: string | null; status: string }>(`/seo/competitors/${id}/audit`, {}),
+  competitorComparison: () => api.get<SeoCompetitorComparison>("/seo/competitors/comparison"),
 };

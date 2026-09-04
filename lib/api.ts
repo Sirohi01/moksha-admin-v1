@@ -18,6 +18,10 @@ interface ApiEnvelope<T> {
   message: string;
   data: T;
 }
+
+interface ApiRequestOptions extends RequestInit {
+  timeoutMs?: number;
+}
 let accessToken: string | null = null;
 let refreshToken: string | null = null;
 let onTokensRefreshed: ((tokens: { accessToken: string; refreshToken: string }) => void) | null = null;
@@ -50,13 +54,6 @@ export function setTokenRefreshHandlers(handlers: {
   onTokensRefreshed = handlers.onRefreshed;
   onRefreshFailed = handlers.onFailed;
 }
-
-// The backend rotates refresh tokens on every use and treats presenting an already-rotated token
-// as theft (revokes every session for that user). Several requests can 401 at once — e.g. the
-// dashboard's Promise.all of several calls — so without this guard each would fire its own
-// refresh with the same (about-to-be-stale) token: the first rotates it, the rest then present
-// the now-rotated token and get flagged as reuse, wiping out the session that first call just
-// issued. Collapsing concurrent callers onto one in-flight request is the fix.
 let refreshInFlight: Promise<boolean> | null = null;
 
 async function refreshAccessToken(): Promise<boolean> {
@@ -87,7 +84,7 @@ async function refreshAccessToken(): Promise<boolean> {
   return refreshInFlight;
 }
 
-async function request<T>(path: string, options?: RequestInit, isRetry = false): Promise<T> {
+async function request<T>(path: string, options?: ApiRequestOptions, isRetry = false): Promise<T> {
   syncTokensFromStorage();
   const isFormData = options?.body instanceof FormData;
   const headers: Record<string, string> = {
@@ -101,11 +98,12 @@ async function request<T>(path: string, options?: RequestInit, isRetry = false):
   }
 
   const timeoutController = new AbortController();
-  const timeoutId = setTimeout(() => timeoutController.abort(), REQUEST_TIMEOUT_MS);
+  const timeoutId = setTimeout(() => timeoutController.abort(), options?.timeoutMs ?? REQUEST_TIMEOUT_MS);
+  const { timeoutMs: _timeoutMs, ...fetchOptions } = options ?? {};
   let res: Response;
   try {
     res = await fetch(`${API_BASE_URL}${path}`, {
-      ...options,
+      ...fetchOptions,
       headers,
       signal: options?.signal ?? timeoutController.signal,
     });
@@ -180,8 +178,12 @@ export const api = {
     getInFlight.set(path, next);
     return next;
   },
-  post: <T>(path: string, payload?: unknown) =>
-    request<T>(path, { method: "POST", body: payload !== undefined ? JSON.stringify(payload) : undefined }),
+  post: <T>(path: string, payload?: unknown, options?: Pick<ApiRequestOptions, "timeoutMs">) =>
+    request<T>(path, {
+      method: "POST",
+      body: payload !== undefined ? JSON.stringify(payload) : undefined,
+      ...options,
+    }),
   put: <T>(path: string, payload?: unknown) =>
     request<T>(path, { method: "PUT", body: payload !== undefined ? JSON.stringify(payload) : undefined }),
   patch: <T>(path: string, payload?: unknown) =>
