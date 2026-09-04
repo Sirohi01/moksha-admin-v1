@@ -1086,21 +1086,21 @@ export default function CommunicationsFollowUps() {
             <table
               className="
                 w-full
-                min-w-[1250px]
+                min-w-[1100px]
                 table-fixed
                 border-collapse
               "
             >
               <colgroup>
-                <col style={{ width: "5%" }} />
-                <col style={{ width: "20%" }} />
-                <col style={{ width: "5%" }} />
-                <col style={{ width: "20%" }} />
+                <col style={{ width: "6%" }} />
+                <col style={{ width: "18%" }} />
+                <col style={{ width: "6%" }} />
+                <col style={{ width: "19%" }} />
                 <col style={{ width: "12%" }} />
                 <col style={{ width: "9%" }} />
-                <col style={{ width: "11%" }} />
-                <col style={{ width: "11%" }} />
-                <col style={{ width: "7%" }} />
+                <col style={{ width: "12%" }} />
+                <col style={{ width: "12%" }} />
+                <col style={{ width: "6%" }} />
               </colgroup>
 
               <thead>
@@ -1112,39 +1112,39 @@ export default function CommunicationsFollowUps() {
                     text-white
                   "
                 >
-                  <th className="px-[8px] text-[7.5px] font-[700] whitespace-nowrap">
+                  <th className="px-[6px] text-[7.5px] font-[700] whitespace-nowrap">
                     ID
                   </th>
 
-                  <th className="px-[8px] text-[7.5px] font-[700] whitespace-nowrap">
+                  <th className="px-[6px] text-[7.5px] font-[700] whitespace-nowrap">
                     Contact / Organization
                   </th>
 
-                  <th className="px-[6px] text-[7.5px] font-[700] whitespace-nowrap text-center">
+                  <th className="px-[4px] text-[7.5px] font-[700] whitespace-nowrap text-center">
                     Channel
                   </th>
 
-                  <th className="px-[8px] text-[7.5px] font-[700] whitespace-nowrap">
+                  <th className="px-[6px] text-[7.5px] font-[700] whitespace-nowrap">
                     Subject / Conversation
                   </th>
 
-                  <th className="px-[6px] text-[7.5px] font-[700] whitespace-nowrap">
+                  <th className="px-[5px] text-[7.5px] font-[700] whitespace-nowrap">
                     Enquiry Type
                   </th>
 
-                  <th className="px-[6px] text-[7.5px] font-[700] whitespace-nowrap">
+                  <th className="px-[5px] text-[7.5px] font-[700] whitespace-nowrap">
                     Status
                   </th>
 
-                  <th className="px-[10px] text-[7.5px] font-[700] whitespace-nowrap">
+                  <th className="px-[6px] text-[7.5px] font-[700] whitespace-nowrap">
                     Last Activity
                   </th>
 
-                  <th className="px-[10px] text-[7.5px] font-[700] whitespace-nowrap">
+                  <th className="px-[6px] text-[7.5px] font-[700] whitespace-nowrap">
                     Next Follow-up
                   </th>
 
-                  <th className="px-[8px] text-[7.5px] font-[700] whitespace-nowrap text-center">
+                  <th className="px-[6px] text-[7.5px] font-[700] whitespace-nowrap text-center">
                     Actions
                   </th>
                 </tr>
@@ -1185,7 +1185,7 @@ export default function CommunicationsFollowUps() {
                       >
                         {/* ID */}
 
-                        <td className="px-[8px] align-middle">
+                        <td className="px-[6px] align-middle">
                           <span
                             className="
                               whitespace-nowrap
@@ -1200,7 +1200,7 @@ export default function CommunicationsFollowUps() {
 
                         {/* CONTACT */}
 
-                        <td className="min-w-0 px-[8px] align-middle">
+                        <td className="min-w-0 px-[6px] align-middle">
                           <div className="min-w-0">
                             <p
                               className="
@@ -1276,7 +1276,7 @@ export default function CommunicationsFollowUps() {
 
                         {/* CHANNEL */}
 
-                        <td className="px-[6px] text-center align-middle">
+                        <td className="px-[4px] text-center align-middle">
                           <span
                             title={row.channel}
                             className="
@@ -1320,7 +1320,7 @@ export default function CommunicationsFollowUps() {
 
                         {/* SUBJECT */}
 
-                        <td className="min-w-0 px-[8px] align-middle">
+                        <td className="min-w-0 px-[6px] align-middle">
                           <p
                             className="
                               truncate
@@ -1349,7 +1349,7 @@ export default function CommunicationsFollowUps() {
 
                         {/* ENQUIRY */}
 
-                        <td className="px-[6px] align-middle">
+                        <td className="px-[5px] align-middle">
                           <Badge
                             text={row.enquiry}
                             style={enquiryStyle(
@@ -1360,7 +1360,7 @@ export default function CommunicationsFollowUps() {
 
                         {/* STATUS */}
 
-                        <td className="px-[6px] align-middle">
+                        <td className="px-[5px] align-middle">
                           <Badge
                             text={row.status}
                             style={statusStyle(
@@ -1371,7 +1371,7 @@ export default function CommunicationsFollowUps() {
 
                         {/* LAST ACTIVITY */}
 
-                        <td className="px-[10px] align-middle">
+                        <td className="px-[6px] align-middle">
                           <p
                             className="
                               whitespace-nowrap
@@ -1400,7 +1400,7 @@ export default function CommunicationsFollowUps() {
 
                         {/* NEXT FOLLOW-UP */}
 
-                        <td className="px-[10px] align-middle">
+                        <td className="px-[6px] align-middle">
                           <p
                             className="
                               whitespace-nowrap
