@@ -1,6 +1,9 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import ManageBlogCategoriesView from "@/components/blogs/ManageBlogCategoriesView";
 import {
   ArrowRight,
   CalendarDays,
@@ -135,8 +138,14 @@ function MetricCard({
 }
 
 export default function BlogAwarenessPage() {
+  const router = useRouter();
+  const [showCategories, setShowCategories] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const recentPosts = useMemo(() => POSTS.slice(0, 5), []);
+
+  if (showCategories) {
+    return <ManageBlogCategoriesView />;
+  }
 
   return (
     <main
@@ -161,10 +170,16 @@ export default function BlogAwarenessPage() {
           </div>
 
           <div className="flex items-center gap-[12px]">
-            <button type="button" className="inline-flex h-[42px] items-center gap-[9px] rounded-[7px] border border-[#dfe3e7] bg-white px-[20px] text-[10.5px] font-bold text-[#273655]">
+            <Link
+              href="/blogs/categories"
+              onClick={(e) => {
+                setShowCategories(true);
+              }}
+              className="inline-flex h-[42px] items-center gap-[9px] rounded-[7px] border border-[#dfe3e7] bg-white px-[20px] text-[10.5px] font-bold text-[#273655] hover:bg-slate-50 transition"
+            >
               <FolderClosed className="h-[15px] w-[15px]" />
               Manage Categories
-            </button>
+            </Link>
 
             <div className="relative">
               <button
@@ -370,7 +385,15 @@ export default function BlogAwarenessPage() {
                 const ActionIcon = Icon as typeof Pencil;
 
                 return (
-                  <button key={String(label)} className="min-w-0 text-center">
+                  <button
+                    key={String(label)}
+                    onClick={() => {
+                      if (label === "Manage Categories") {
+                        setShowCategories(true);
+                      }
+                    }}
+                    className="min-w-0 text-center hover:opacity-80 transition"
+                  >
                     <div className="mx-auto grid h-[64px] w-[64px] place-items-center rounded-[10px] bg-[linear-gradient(180deg,#eef7f1_0%,#f7faf8_100%)] text-[#14683d]">
                       <ActionIcon className="h-[28px] w-[28px]" strokeWidth={1.8} />
                     </div>
