@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRef, useState } from "react";
+import PreviewServiceView from "./PreviewServiceView";
 import {
   AlignCenter, AlignLeft, AlignRight, Bold, ChevronDown, ChevronRight, Eye, FileImage,
   Grid2X2, Image as ImageIcon, Italic, Link2, List, ListOrdered, Plus, Quote,
@@ -19,6 +20,7 @@ function Field({ label, required, hint, children }: { label: string; required?: 
 }
 
 export default function AddServiceView() {
+  const [showPreview, setShowPreview] = useState(false);
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
   const [shortDescription, setShortDescription] = useState("");
@@ -36,12 +38,16 @@ export default function AddServiceView() {
   const updateTitle = (value: string) => { setTitle(value.slice(0, 150)); setSlug(value.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")); };
   const addBenefit = () => { if (benefit.trim()) { setBenefits((old) => [...old, benefit.trim()]); setBenefit(""); } };
 
+  if (showPreview) {
+    return <PreviewServiceView />;
+  }
+
   return (
     <div style={{ fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }} className="min-h-screen bg-[#F8FAF9] px-4 pb-8 pt-3 text-slate-800 antialiased sm:px-5 [&_section_h2]:!text-[14px] [&_section_label>span]:!text-[11.5px] [&_section_input]:!text-[12.5px] [&_section_textarea]:!text-[12.5px] [&_section_select]:!text-[12px] [&_section_small]:!text-[10.5px] [&_section_button]:!text-[11px]">
       <div className="mx-auto max-w-[1440px]">
         <header className="flex flex-wrap items-start justify-between gap-3">
           <div><h1 className="text-[23px] font-semibold leading-none tracking-[-.03em] text-[#123E2D]">Add New Service</h1><div className="mt-2 flex items-center gap-1.5 text-[10px] font-medium text-slate-500"><span>Dashboard</span><ChevronRight size={10} /><Link href="/services">Services Management</Link><ChevronRight size={10} /><span className="text-slate-700">Add New Service</span></div></div>
-          <div className="flex gap-2"><Link href="/services" className="inline-flex h-9 items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 text-[10.5px] font-semibold text-slate-700">← Back to Services</Link><button className="inline-flex h-9 items-center gap-2 rounded-lg bg-[#075D3D] px-4 text-[10.5px] font-semibold text-white shadow-sm"><Save size={14} /> Save as Draft</button></div>
+          <div className="flex gap-2"><Link href="/services" className="inline-flex h-9 items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 text-[10.5px] font-semibold text-slate-700">← Back to Services</Link><button type="button" onClick={() => setShowPreview(true)} className="inline-flex h-9 items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 text-[10.5px] font-semibold text-slate-700 hover:bg-slate-50"><Eye size={14} /> Preview Service</button><button className="inline-flex h-9 items-center gap-2 rounded-lg bg-[#075D3D] px-4 text-[10.5px] font-semibold text-white shadow-sm"><Save size={14} /> Save as Draft</button></div>
         </header>
 
         <div className="mt-2 grid items-start gap-1.5 xl:grid-cols-[minmax(0,1.55fr)_minmax(350px,1fr)]">
@@ -71,7 +77,7 @@ export default function AddServiceView() {
         <Section number={5} title="SEO Settings (Optional)" note="Improve how this service appears in search results." className="mt-1.5"><div className="grid gap-3 md:grid-cols-3"><Field label="Meta Title"><div className="relative"><input placeholder="Enter meta title" className={`${fieldClass} pr-12`} /><span className="absolute right-3 top-3 text-[9px] text-slate-400">0/60</span></div></Field><Field label="Meta Description"><div className="relative"><input placeholder="Enter meta description" className={`${fieldClass} pr-12`} /><span className="absolute right-3 top-3 text-[9px] text-slate-400">0/160</span></div></Field><Field label="Focus Keyword"><input placeholder="Enter focus keyword" className={fieldClass} /></Field></div></Section>
       </div>
 
-      <footer className="mx-auto mt-1.5 max-w-[1440px] rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-[0_2px_10px_rgba(15,23,42,.035)]"><div className="flex items-center justify-between gap-3"><Link href="/services" className="inline-flex h-10 items-center gap-2 rounded-lg border border-slate-200 px-5 text-[10.5px] font-semibold"><X size={14} /> Cancel</Link><div className="flex gap-2"><button className="inline-flex h-10 items-center gap-2 rounded-lg border border-slate-200 bg-white px-5 text-[10.5px] font-semibold"><Eye size={14} /> Preview Service</button><button className="inline-flex h-10 items-center gap-2 rounded-lg bg-[#075D3D] px-5 text-[10.5px] font-semibold text-white"><Send size={14} /> Publish Service <ChevronDown size={13} /></button></div></div></footer>
+      <footer className="mx-auto mt-1.5 max-w-[1440px] rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-[0_2px_10px_rgba(15,23,42,.035)]"><div className="flex items-center justify-between gap-3"><Link href="/services" className="inline-flex h-10 items-center gap-2 rounded-lg border border-slate-200 px-5 text-[10.5px] font-semibold"><X size={14} /> Cancel</Link><div className="flex gap-2"><button type="button" onClick={() => setShowPreview(true)} className="inline-flex h-10 items-center gap-2 rounded-lg border border-slate-200 bg-white px-5 text-[10.5px] font-semibold hover:bg-slate-50 transition-colors"><Eye size={14} /> Preview Service</button><button className="inline-flex h-10 items-center gap-2 rounded-lg bg-[#075D3D] px-5 text-[10.5px] font-semibold text-white"><Send size={14} /> Publish Service <ChevronDown size={13} /></button></div></div></footer>
     </div>
   );
 }
