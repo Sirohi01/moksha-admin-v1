@@ -338,6 +338,9 @@ export default function AddNewEnquiryPage() {
   const [success, setSuccess] =
     useState("");
 
+  const [submitted, setSubmitted] =
+    useState(false);
+
   /* ==========================================================
      UPDATE FIELD
   ========================================================== */
@@ -583,10 +586,7 @@ export default function AddNewEnquiryPage() {
       setSuccess(
         "Enquiry created successfully."
       );
-
-      window.setTimeout(() => {
-        router.back();
-      }, 500);
+      setSubmitted(true);
     } catch (err) {
       setError(
         err instanceof Error
@@ -624,6 +624,46 @@ export default function AddNewEnquiryPage() {
   /* ==========================================================
      UI
   ========================================================== */
+
+  if (submitted) {
+    return (
+      <div className="mx-auto max-w-[800px] p-[30px]">
+        <div className="flex flex-col items-center justify-center rounded-[12px] border border-[#DCE3EA] bg-white p-[48px] text-center shadow-sm">
+          <div className="flex h-[64px] w-[64px] items-center justify-center rounded-full bg-[#EBF7F0] text-[#005F2E]">
+            <Check size={36} strokeWidth={3} />
+          </div>
+          <h2 className="mt-[20px] text-[22px] font-[800] text-[#17234A]">
+            Enquiry Recorded Successfully!
+          </h2>
+          <p className="mt-[8px] max-w-[450px] text-[12px] font-[600] text-[#52607D]">
+            The enquiry for <span className="font-[800] text-[#17234A]">{form.fullName}</span> ({form.category || "General"}) has been registered.
+          </p>
+          <div className="mt-[28px] flex items-center gap-[12px]">
+            <button
+              type="button"
+              onClick={() => {
+                setSubmitted(false);
+                setForm(DEFAULT_FORM);
+                setAttachment(null);
+                setSuccess("");
+              }}
+              className="inline-flex h-[38px] items-center gap-[8px] rounded-[6px] border border-[#DCE3EA] bg-white px-[18px] text-[11px] font-[700] text-[#24345E] hover:bg-slate-50 transition"
+            >
+              Add Another Enquiry
+            </button>
+
+            <button
+              type="button"
+              onClick={() => router.push("/general-enquiries")}
+              className="inline-flex h-[38px] items-center gap-[8px] rounded-[6px] bg-[#005F2E] px-[22px] text-[11px] font-[700] text-white shadow-sm hover:bg-[#004d25] transition"
+            >
+              Return to General Enquiries
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <form

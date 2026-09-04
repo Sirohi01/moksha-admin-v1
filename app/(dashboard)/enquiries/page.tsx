@@ -1057,12 +1057,12 @@ export default function EnquiriesPage() {
             {source === "contact"
               ? "General Enquiries"
               : source === "csr"
-              ? "CSR & Partners Enquiries"
-              : source === "partnership"
-              ? "Partnership Enquiries"
-              : source === "unclaimed_body"
-              ? "Unclaimed Body Sewa Enquiries"
-              : "All Enquiries"}
+                ? "CSR & Partners Enquiries"
+                : source === "partnership"
+                  ? "Partnership Enquiries"
+                  : source === "unclaimed_body"
+                    ? "Unclaimed Body Sewa Enquiries"
+                    : "All Enquiries"}
           </h1>
 
           <p
@@ -1077,12 +1077,12 @@ export default function EnquiriesPage() {
             {source === "contact"
               ? "Manage general queries, contact submissions and helpline requests."
               : source === "csr"
-              ? "Manage corporate CSR queries and partnership opportunities in one place."
-              : source === "partnership"
-              ? "Manage institutional and NGO partnership proposals."
-              : source === "unclaimed_body"
-              ? "Manage emergency alerts and unclaimed body sewa requests."
-              : "Manage all general, contact, CSR and partnership enquiries in one place."}
+                ? "Manage corporate CSR queries and partnership opportunities in one place."
+                : source === "partnership"
+                  ? "Manage institutional and NGO partnership proposals."
+                  : source === "unclaimed_body"
+                    ? "Manage emergency alerts and unclaimed body sewa requests."
+                    : "Manage all general, contact, CSR and partnership enquiries in one place."}
           </p>
         </div>
 
@@ -1142,7 +1142,7 @@ export default function EnquiriesPage() {
           </button>
 
           <Link
-            href="/enquiries/new"
+            href="/enquiries/new?category=csr"
             className="
               flex
               h-[36px]

@@ -72,13 +72,13 @@ export const NAV_SECTIONS: NavSection[] = [
   {
     title: "Engagement & Leads",
     items: [
-      { label: "Forms & Submissions", href: "/enquiries", icon: Mail, badge: "127" },
+      { label: "Forms & Submissions", href: "/forms-submissions", icon: Mail, badge: "127" },
       { label: "Sewa Help Requests", href: "/requests", icon: ClipboardList, badge: "58" },
       { label: "Cases", href: "/cases", icon: FileSearch },
       { label: "Volunteers", href: "/volunteers", icon: HandHeart, badge: "32" },
       { label: "Donations", href: "/donations", icon: Handshake },
       { label: "Campaigns", href: "/campaigns", icon: Megaphone },
-      { label: "Partners & CSR Enquiries", href: "/partners", icon: Handshake, badge: "21" },
+      { label: "Partners & CSR Enquiries", href: "/enquiries?category=csr", icon: Handshake, badge: "21" },
       { label: "Newsletter Subscribers", href: "/newsletter", icon: Mail, badge: "342" },
       { label: "Vehicles", href: "/vehicles", icon: Truck },
       { label: "Service Providers", href: "/service-providers", icon: Wrench },
