@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Bell,
   BookOpen,
@@ -150,6 +151,7 @@ function MetricCard({
 }
 
 export default function ManageCategoriesPage() {
+  const router = useRouter();
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All Status");
   const [sort, setSort] = useState("Sort By: Newest");
@@ -196,17 +198,28 @@ export default function ManageCategoriesPage() {
             </h1>
 
             <nav className="mt-[4px] flex items-center gap-[6px] text-[10px] font-semibold text-[#1d2b58]">
-              <span>Dashboard</span>
+              <span
+                onClick={() => router.push("/")}
+                className="cursor-pointer transition hover:text-[#075b33]"
+              >
+                Dashboard
+              </span>
               <span className="text-[#7b8597]">›</span>
-              <span>Blog &amp; Awareness</span>
+              <span
+                onClick={() => router.push("/blogs")}
+                className="cursor-pointer transition hover:text-[#075b33]"
+              >
+                Blog &amp; Awareness
+              </span>
               <span className="text-[#7b8597]">›</span>
-              <span>Manage Categories</span>
+              <span className="text-[#075b33]">Manage Categories</span>
             </nav>
           </div>
 
           <button
             type="button"
-            className="inline-flex h-[34px] items-center gap-[6px] rounded-[6px] bg-[linear-gradient(180deg,#076636_0%,#03542c_100%)] px-[16px] text-[10px] font-bold text-white shadow-[0_4px_10px_rgba(5,94,49,.12)]"
+            onClick={() => router.push("/blogs/categories/new")}
+            className="inline-flex h-[34px] items-center gap-[6px] rounded-[6px] bg-[linear-gradient(180deg,#076636_0%,#03542c_100%)] px-[16px] text-[10px] font-bold text-white shadow-[0_4px_10px_rgba(5,94,49,.12)] transition hover:opacity-95"
           >
             <Plus className="h-[14px] w-[14px]" />
             Add New Category
