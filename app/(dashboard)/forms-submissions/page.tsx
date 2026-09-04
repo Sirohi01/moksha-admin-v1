@@ -619,7 +619,7 @@ export default function FormsSubmissionsPage() {
               flex
               items-center
               gap-[7px]
-              text-[7.5px]
+              text-[9px]
               font-[600]
               text-[#334575]
             "
@@ -669,7 +669,7 @@ export default function FormsSubmissionsPage() {
               border-[#DFE4EA]
               bg-white
               px-[15px]
-              text-[8px]
+              text-[9px]
               font-[700]
               text-[#263A70]
             "
@@ -691,7 +691,7 @@ export default function FormsSubmissionsPage() {
               rounded-[5px]
               bg-[#005F2E]
               px-[17px]
-              text-[8px]
+              text-[9px]
               font-[700]
               text-white
             "
@@ -826,7 +826,7 @@ export default function FormsSubmissionsPage() {
               min-w-0
               flex-1
               bg-transparent
-              text-[7.5px]
+              text-[9px]
               font-[600]
               text-[#334574]
               outline-none
@@ -912,7 +912,7 @@ export default function FormsSubmissionsPage() {
             border-[#DFE4EA]
             bg-white
             px-[10px]
-            text-[7.5px]
+            text-[9px]
             font-[600]
             text-[#334574]
           "
@@ -955,7 +955,7 @@ export default function FormsSubmissionsPage() {
             border
             border-[#DFE4EA]
             bg-white
-            text-[7.5px]
+            text-[9px]
             font-[700]
             text-[#263A70]
           "
@@ -1057,7 +1057,7 @@ export default function FormsSubmissionsPage() {
                         flex-1
                         truncate
                         text-left
-                        text-[7.5px]
+                        text-[9px]
                         font-[700]
                         text-[#293B70]
                       "
@@ -1068,7 +1068,7 @@ export default function FormsSubmissionsPage() {
                     <span
                       className="
                         shrink-0
-                        text-[7.5px]
+                        text-[9px]
                         font-[700]
                         text-[#526080]
                       "
@@ -1089,7 +1089,7 @@ export default function FormsSubmissionsPage() {
                 items-center
                 justify-center
                 gap-[7px]
-                text-[7.5px]
+                text-[9px]
                 font-[700]
                 text-[#385084]
                 hover:text-[#182A65]
@@ -1175,7 +1175,7 @@ export default function FormsSubmissionsPage() {
                   <span
                     className="
                       mt-[4px]
-                      text-[7.5px]
+                      text-[9px]
                       font-[600]
                       text-[#5D6983]
                     "
@@ -1227,7 +1227,7 @@ export default function FormsSubmissionsPage() {
                 items-center
                 justify-center
                 gap-[7px]
-                text-[7.5px]
+                text-[9px]
                 font-[700]
                 text-[#385084]
                 hover:text-[#182A65]
@@ -1286,7 +1286,7 @@ export default function FormsSubmissionsPage() {
             >
               <span
                 className="
-                  text-[7.5px]
+                  text-[9px]
                   font-[600]
                   text-[#5D6985]
                 "
@@ -1314,7 +1314,7 @@ export default function FormsSubmissionsPage() {
                 <span
                   className="
                     px-[4px]
-                    text-[6px]
+                    text-[9px]
                     text-[#596681]
                   "
                 >
@@ -1565,7 +1565,7 @@ export default function FormsSubmissionsPage() {
                         <p
                           className="
                             whitespace-nowrap
-                            text-[7.5px]
+                            text-[9px]
                             font-[700]
                             leading-[11px]
                             text-[#26396D]
@@ -1578,7 +1578,7 @@ export default function FormsSubmissionsPage() {
                           className="
                             mt-[1px]
                             whitespace-nowrap
-                            text-[7px]
+                            text-[9px]
                             font-[500]
                             leading-[10px]
                             text-[#556488]
@@ -1607,7 +1607,7 @@ export default function FormsSubmissionsPage() {
                           className="
                             truncate
                             pr-[8px]
-                            text-[7.5px]
+                            text-[9px]
                             font-[600]
                             text-[#344574]
                           "
@@ -1686,7 +1686,7 @@ export default function FormsSubmissionsPage() {
                   bg-white
                   px-[8px]
                   pr-[24px]
-                  text-[7.5px]
+                  text-[9px]
                   font-[700]
                   text-[#344574]
                   outline-none
@@ -1780,7 +1780,7 @@ export default function FormsSubmissionsPage() {
                 <span
                   className="
                     px-[4px]
-                    text-[6px]
+                    text-[9px]
                     text-[#596783]
                   "
                 >
@@ -1936,7 +1936,7 @@ export default function FormsSubmissionsPage() {
                   2h 45m
                 </p>
 
-                <p className="mt-[5px] text-[7.5px] font-[700] text-[#299252]">
+                <p className="mt-[5px] text-[9px] font-[700] text-[#299252]">
                   ↓ 12.6%
                   <span className="ml-[4px] font-[500] text-[#66728A]">
                     vs last 7 days
@@ -2098,7 +2098,7 @@ function StatCard({
         "
       >
         {change === "Live" ? (
-          <span className="rounded-[4px] bg-[#E4F5E8] px-[5px] py-[1px] text-[8.5px] font-bold text-[#238B4C]">
+          <span className="rounded-[4px] bg-[#E4F5E8] px-[5px] py-[1px] text-[9px] font-bold text-[#238B4C]">
             Live
           </span>
         ) : (
@@ -2117,7 +2117,7 @@ function StatCard({
 
             <span
               className={`
-                text-[8.5px]
+                text-[9px]
                 font-[700]
 
                 ${negative
@@ -2131,7 +2131,7 @@ function StatCard({
           </>
         )}
 
-        <span className="text-[8.5px] font-[500] text-[#556384]">
+        <span className="text-[9px] font-[500] text-[#556384]">
           current data
         </span>
       </div>
@@ -2185,7 +2185,7 @@ function FilterSelect({
           bg-white
           px-[10px]
           pr-[26px]
-          text-[7.5px]
+          text-[9px]
           font-[700]
           text-[#182A65]
           outline-none
@@ -2221,7 +2221,7 @@ function TableHead({
   return (
     <th
       className="
-        text-[7.5px]
+        text-[9px]
         font-[700]
         uppercase
         tracking-wider
@@ -2260,7 +2260,7 @@ function MetaBadge({
         border
         px-[9px]
         py-[4px]
-        text-[7.5px]
+        text-[9px]
         font-[700]
         leading-none
       "
@@ -2321,7 +2321,7 @@ function LegendRow({
         <span
           className="
             truncate
-            text-[7.5px]
+            text-[9px]
             font-[600]
             text-[#324575]
           "
@@ -2334,7 +2334,7 @@ function LegendRow({
         className="
           shrink-0
           whitespace-nowrap
-          text-[7.5px]
+          text-[9px]
           font-[700]
           text-[#324575]
         "
@@ -2374,7 +2374,7 @@ function PageButton({
         rounded-[4px]
         border
         px-[5px]
-        text-[7.5px]
+        text-[9px]
         font-[700]
         disabled:opacity-40
 
@@ -2412,7 +2412,7 @@ function SmallPageButton({
         rounded-[3px]
         border
         px-[4px]
-        text-[7px]
+        text-[9px]
         font-[700]
 
         ${active
@@ -2481,7 +2481,7 @@ function RankRow({
     >
       <span
         className="
-          text-[7.5px]
+          text-[9px]
           font-[700]
           text-[#354979]
         "
@@ -2492,7 +2492,7 @@ function RankRow({
       <span
         className="
           truncate
-          text-[7.5px]
+          text-[9px]
           font-[600]
           text-[#354979]
         "
@@ -2503,7 +2503,7 @@ function RankRow({
       <span
         className="
           text-right
-          text-[7.5px]
+          text-[9px]
           font-[700]
           text-[#354979]
         "
@@ -2533,7 +2533,7 @@ function ReportLink({
         flex
         items-center
         gap-[6px]
-        text-[7.5px]
+        text-[9px]
         font-[700]
         text-[#42578B]
         hover:text-[#182A65]

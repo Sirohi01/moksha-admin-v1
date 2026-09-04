@@ -313,7 +313,7 @@ function StatCard({
         <div className="min-w-0 flex-1">
           <p
             className="
-              text-[7.5px]
+              text-[9px]
               font-[700]
               leading-[11px]
               text-[#172863]
@@ -359,7 +359,7 @@ function StatCard({
               <span
                 className="
                   shrink-0
-                  text-[7.5px]
+                  text-[9px]
                   font-[700]
                   text-[#169248]
                 "
@@ -371,7 +371,7 @@ function StatCard({
                 <span
                   className="
                     shrink-0
-                    text-[7px]
+                    text-[9px]
                     font-[600]
                     text-[#506083]
                   "
@@ -407,7 +407,7 @@ function FilterButton({
         border-[#E0E5EB]
         bg-white
         px-[11px]
-        text-[7.5px]
+        text-[9px]
         font-[700]
         text-[#172762]
       "
@@ -1024,7 +1024,7 @@ export default function NewsletterPage() {
                   min-w-0
                   flex-1
                   bg-transparent
-                  text-[7.5px]
+                  text-[9px]
                   font-[600]
                   text-[#172762]
                   outline-none
@@ -1054,7 +1054,7 @@ export default function NewsletterPage() {
                   bg-white
                   px-[11px]
                   pr-[30px]
-                  text-[7.5px]
+                  text-[9px]
                   font-[700]
                   text-[#172762]
                   outline-none
@@ -1115,7 +1115,7 @@ export default function NewsletterPage() {
                   bg-white
                   px-[11px]
                   pr-[30px]
-                  text-[7.5px]
+                  text-[9px]
                   font-[700]
                   text-[#172762]
                   outline-none
@@ -1167,7 +1167,7 @@ export default function NewsletterPage() {
                 border-[#E0E5EB]
                 bg-white
                 px-[11px]
-                text-[7.5px]
+                text-[9px]
                 font-[700]
                 text-[#536080]
               "
@@ -1199,7 +1199,7 @@ export default function NewsletterPage() {
                 border-[#E0E5EB]
                 bg-white
                 px-[7px]
-                text-[7.5px]
+                text-[9px]
                 font-[700]
                 text-[#172762]
               "
@@ -1267,7 +1267,7 @@ export default function NewsletterPage() {
                   <th
                     className="
                       px-[7px]
-                      text-[7.5px]
+                      text-[9px]
                       font-[700]
                       uppercase
                       tracking-wider
@@ -1279,7 +1279,7 @@ export default function NewsletterPage() {
                   <th
                     className="
                       px-[7px]
-                      text-[7.5px]
+                      text-[9px]
                       font-[700]
                       uppercase
                       tracking-wider
@@ -1291,7 +1291,7 @@ export default function NewsletterPage() {
                   <th
                     className="
                       px-[7px]
-                      text-[7.5px]
+                      text-[9px]
                       font-[700]
                       uppercase
                       tracking-wider
@@ -1303,7 +1303,7 @@ export default function NewsletterPage() {
                   <th
                     className="
                       px-[7px]
-                      text-[7.5px]
+                      text-[9px]
                       font-[700]
                       uppercase
                       tracking-wider
@@ -1315,7 +1315,7 @@ export default function NewsletterPage() {
                   <th
                     className="
                       px-[7px]
-                      text-[7.5px]
+                      text-[9px]
                       font-[700]
                       uppercase
                       tracking-wider
@@ -1327,7 +1327,7 @@ export default function NewsletterPage() {
                   <th
                     className="
                       px-[7px]
-                      text-[7.5px]
+                      text-[9px]
                       font-[700]
                       uppercase
                       tracking-wider
@@ -1339,7 +1339,7 @@ export default function NewsletterPage() {
                   <th
                     className="
                       px-[5px]
-                      text-[7.5px]
+                      text-[9px]
                       font-[700]
                       uppercase
                       tracking-wider
@@ -1489,7 +1489,7 @@ export default function NewsletterPage() {
                                 <p
                                   className="
                                     truncate
-                                    text-[7.5px]
+                                    text-[9px]
                                     font-[700]
                                     leading-[11px]
                                     text-[#192B66]
@@ -1504,7 +1504,7 @@ export default function NewsletterPage() {
                                   className="
                                     mt-[3px]
                                     whitespace-nowrap
-                                    text-[7px]
+                                    text-[9px]
                                     font-[500]
                                     leading-[10px]
                                     text-[#2F4074]
@@ -1529,7 +1529,7 @@ export default function NewsletterPage() {
                             <p
                               className="
                                 truncate
-                                text-[7.5px]
+                                text-[9px]
                                 font-[500]
                                 text-[#2A3D72]
                               "
@@ -1560,7 +1560,7 @@ export default function NewsletterPage() {
                                 border
                                 px-[8px]
                                 py-[4px]
-                                text-[7.5px]
+                                text-[9px]
                                 font-[700]
                                 leading-none
                               "
@@ -1605,7 +1605,7 @@ export default function NewsletterPage() {
                               <span
                                 className="
                                   truncate
-                                  text-[7.5px]
+                                  text-[9px]
                                   font-[500]
                                   text-[#354273]
                                 "
@@ -1627,7 +1627,7 @@ export default function NewsletterPage() {
                             <div>
                               <p
                                 className="
-                                  text-[7.5px]
+                                  text-[9px]
                                   font-[700]
                                   leading-[11px]
                                   text-[#192B66]
@@ -1639,7 +1639,7 @@ export default function NewsletterPage() {
                                 <p
                                   className="
                                     mt-[2px]
-                                    text-[7px]
+                                    text-[9px]
                                     font-[500]
                                     leading-[10px]
                                     text-[#556586]
@@ -1664,7 +1664,7 @@ export default function NewsletterPage() {
                               className="
                                 block
                                 truncate
-                                text-[7.5px]
+                                text-[9px]
                                 font-[500]
                                 text-[#304176]
                               "
@@ -1767,7 +1767,7 @@ export default function NewsletterPage() {
                           <p
                             className="
                               mt-[4px]
-                              text-[7px]
+                              text-[9px]
                               text-[#667085]
                             "
                           >
@@ -1802,7 +1802,7 @@ export default function NewsletterPage() {
                 className="
                   shrink-0
                   whitespace-nowrap
-                  text-[7.5px]
+                  text-[10px]
                   font-[600]
                   text-[#475A83]
                 "
@@ -1878,7 +1878,7 @@ export default function NewsletterPage() {
                         justify-center
                         rounded-[4px]
                         border
-                        text-[7.5px]
+                        text-[9px]
                         font-[700]
 
                         ${safePage ===
@@ -1905,7 +1905,7 @@ export default function NewsletterPage() {
                       border
                       border-[#E3E7ED]
                       bg-white
-                      text-[8px]
+                      text-[9px]
                       text-[#596584]
                     "
                   >
@@ -1930,7 +1930,7 @@ export default function NewsletterPage() {
                       rounded-[4px]
                       border
                       px-[5px]
-                      text-[7.5px]
+                      text-[9px]
                       font-[700]
 
                       ${safePage ===
@@ -2000,7 +2000,7 @@ export default function NewsletterPage() {
                     bg-white
                     px-[9px]
                     pr-[27px]
-                    text-[7.5px]
+                    text-[9px]
                     font-[700]
                     text-[#182A65]
                     outline-none
@@ -2071,7 +2071,7 @@ export default function NewsletterPage() {
               <h2
                 className="
                   whitespace-nowrap
-                  text-[8.5px]
+                  text-[11px]
                   font-[800]
                   text-[#182A65]
                 "
@@ -2086,7 +2086,7 @@ export default function NewsletterPage() {
                   shrink-0
                   items-center
                   gap-[3px]
-                  text-[7.5px]
+                  text-[9px]
                   font-[700]
                   text-[#167E48]
                 "
@@ -2188,7 +2188,7 @@ export default function NewsletterPage() {
                   <span
                     className="
                       mt-[4px]
-                      text-[7.5px]
+                      text-[9px]
                       font-[600]
                       text-[#44537B]
                     "
@@ -2269,7 +2269,7 @@ export default function NewsletterPage() {
                       <span
                         className="
                           whitespace-nowrap
-                          text-[7.5px]
+                          text-[9px]
                           font-[700]
                           text-[#182A65]
                         "
@@ -2282,7 +2282,7 @@ export default function NewsletterPage() {
                       className="
                         shrink-0
                         whitespace-nowrap
-                        text-[7px]
+                        text-[9px]
                         font-[600]
                         text-[#26386D]
                       "
@@ -2318,7 +2318,7 @@ export default function NewsletterPage() {
           >
             <h2
               className="
-                text-[8.5px]
+                text-[9px]
                 font-[800]
                 text-[#182A65]
               "
@@ -2356,7 +2356,7 @@ export default function NewsletterPage() {
                         <span
                           className="
                             truncate
-                            text-[7.5px]
+                            text-[9px]
                             font-[700]
                             text-[#182A65]
                           "
@@ -2401,7 +2401,7 @@ export default function NewsletterPage() {
                           className="
                             whitespace-nowrap
                             text-right
-                            text-[7px]
+                            text-[9px]
                             font-[600]
                             text-[#344477]
                           "
@@ -2422,7 +2422,7 @@ export default function NewsletterPage() {
                 className="
                   py-[30px]
                   text-center
-                  text-[7.5px]
+                  text-[9px]
                   text-[#667085]
                 "
               >
@@ -2454,7 +2454,7 @@ export default function NewsletterPage() {
             >
               <h2
                 className="
-                  text-[8.5px]
+                  text-[9px]
                   font-[800]
                   text-[#182A65]
                 "
@@ -2527,7 +2527,7 @@ export default function NewsletterPage() {
                     <span
                       className="
                         whitespace-nowrap
-                        text-[7.5px]
+                        text-[9px]
                         font-[700]
                       "
                     >
@@ -2591,7 +2591,7 @@ export default function NewsletterPage() {
                 <p
                   className="
                     mt-[7px]
-                    text-[7.5px]
+                    text-[9px]
                     font-[500]
                     text-[#44537C]
                   "
@@ -2622,7 +2622,7 @@ export default function NewsletterPage() {
               <span
                 className="
                   whitespace-nowrap
-                  text-[8.5px]
+                  text-[9px]
                   font-[800]
                   text-[#21713A]
                 "
@@ -2652,7 +2652,7 @@ export default function NewsletterPage() {
               <span
                 className="
                   whitespace-nowrap
-                  text-[7.5px]
+                  text-[9px]
                   font-[700]
                   text-[#283C74]
                 "

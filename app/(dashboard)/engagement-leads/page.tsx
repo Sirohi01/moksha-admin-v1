@@ -269,7 +269,7 @@ export default function EngagementLeadsOverviewPage() {
               border-[#DFE4EA]
               bg-white
               px-[12px]
-              text-[8px]
+              text-[9px]
               font-[700]
               text-[#26396F]
               hover:bg-[#F8FAFC]
@@ -291,7 +291,7 @@ export default function EngagementLeadsOverviewPage() {
               border-[#DFE4EA]
               bg-white
               px-[12px]
-              text-[8px]
+              text-[9px]
               font-[700]
               text-[#26396F]
               hover:bg-[#F8FAFC]
@@ -467,7 +467,7 @@ export default function EngagementLeadsOverviewPage() {
                   <span
                     className="
                       mt-[5px]
-                      text-[8px]
+                      text-[9px]
                       font-[600]
                       text-[#5F6981]
                     "
@@ -520,7 +520,7 @@ export default function EngagementLeadsOverviewPage() {
                       <span
                         className="
                           truncate
-                          text-[7.5px]
+                          text-[9px]
                           font-[600]
                           text-[#42517B]
                         "
@@ -533,7 +533,7 @@ export default function EngagementLeadsOverviewPage() {
                       className="
                         shrink-0
                         whitespace-nowrap
-                        text-[7.5px]
+                        text-[9px]
                         font-[700]
                         text-[#354572]
                       "
@@ -617,7 +617,7 @@ export default function EngagementLeadsOverviewPage() {
             >
               <h2 className={sectionHeading}>
                 Engagement Trend
-                <span className="ml-[4px] text-[8px] font-[600] text-[#6B748B]">
+                <span className="ml-[4px] text-[9px] font-[600] text-[#6B748B]">
                   (Last 7 Days)
                 </span>
               </h2>
@@ -635,7 +635,7 @@ export default function EngagementLeadsOverviewPage() {
                   border-[#DFE4EA]
                   bg-white
                   px-[10px]
-                  text-[7.5px]
+                  text-[9px]
                   font-[700]
                   text-[#344574]
                   hover:bg-[#F8FAFC]
@@ -746,7 +746,7 @@ export default function EngagementLeadsOverviewPage() {
                             justify-center
                             rounded-full
                             bg-[#EEF0F5]
-                            text-[7.5px]
+                            text-[9px]
                             font-[700]
                             text-[#516285]
                           "
@@ -758,7 +758,7 @@ export default function EngagementLeadsOverviewPage() {
                           <p
                             className="
                               truncate
-                              text-[7.5px]
+                              text-[9px]
                               font-[700]
                               leading-[11px]
                               text-[#27386E]
@@ -771,7 +771,7 @@ export default function EngagementLeadsOverviewPage() {
                             className="
                               mt-[1px]
                               truncate
-                              text-[7px]
+                              text-[9px]
                               font-[500]
                               leading-[10px]
                               text-[#69758D]
@@ -791,7 +791,7 @@ export default function EngagementLeadsOverviewPage() {
                       className="
                         truncate
                         pr-[5px]
-                        text-[7.5px]
+                        text-[9px]
                         font-[600]
                         align-middle
                         text-[#405078]
@@ -804,7 +804,7 @@ export default function EngagementLeadsOverviewPage() {
                       <p
                         className="
                           whitespace-nowrap
-                          text-[7.5px]
+                          text-[9px]
                           font-[700]
                           leading-[11px]
                           text-[#26396D]
@@ -817,7 +817,7 @@ export default function EngagementLeadsOverviewPage() {
                         className="
                           mt-[1px]
                           whitespace-nowrap
-                          text-[7px]
+                          text-[9px]
                           font-[500]
                           leading-[10px]
                           text-[#65718A]
@@ -905,7 +905,7 @@ export default function EngagementLeadsOverviewPage() {
                         <p
                           className="
                             truncate
-                            text-[7.5px]
+                            text-[9px]
                             font-[700]
                             leading-[11px]
                             text-[#27386E]
@@ -918,7 +918,7 @@ export default function EngagementLeadsOverviewPage() {
                           className="
                             mt-[1px]
                             truncate
-                            text-[7px]
+                            text-[9px]
                             font-[500]
                             leading-[10px]
                             text-[#69758D]
@@ -930,7 +930,7 @@ export default function EngagementLeadsOverviewPage() {
                     </div>
 
                     <div className="min-w-0">
-                      <p className="text-[7px] font-[500] text-[#7A8397]">
+                      <p className="text-[9px] font-[500] text-[#7A8397]">
                         Assigned to
                       </p>
 
@@ -938,7 +938,7 @@ export default function EngagementLeadsOverviewPage() {
                         className="
                           mt-[1px]
                           truncate
-                          text-[7.5px]
+                          text-[9px]
                           font-[700]
                           leading-[11px]
                           text-[#3C4A73]
@@ -949,14 +949,14 @@ export default function EngagementLeadsOverviewPage() {
                     </div>
 
                     <div>
-                      <p className="text-[7px] font-[500] text-[#7A8397]">
+                      <p className="text-[9px] font-[500] text-[#7A8397]">
                         Due Date
                       </p>
 
                       <p
                         className="
                           mt-[1px]
-                          text-[7.5px]
+                          text-[9px]
                           font-[700]
                           leading-[11px]
                           text-[#3C4A73]
@@ -1211,7 +1211,7 @@ function StatCard({
 
         <span
           className={`
-            text-[8.5px]
+            text-[9px]
             font-[700]
 
             ${negative ? "text-[#E44747]" : "text-[#15944B]"}
@@ -1220,7 +1220,7 @@ function StatCard({
           {change}
         </span>
 
-        <span className="text-[8.5px] font-[500] text-[#596685]">
+        <span className="text-[9px] font-[500] text-[#596685]">
           vs last 7 days
         </span>
       </div>
@@ -1288,7 +1288,7 @@ function BottomLink({
         items-center
         gap-[7px]
         whitespace-nowrap
-        text-[7.5px]
+        text-[9px]
         font-[700]
         text-[#465986]
         hover:text-[#182A65]
@@ -1335,7 +1335,7 @@ function FunnelRow({
             h-full
             items-center
             justify-center
-            text-[7.5px]
+            text-[9px]
             font-[700]
             text-white
           "
@@ -1349,11 +1349,11 @@ function FunnelRow({
         </div>
       </div>
 
-      <span className="text-right text-[8px] font-[800] text-[#26376B]">
+      <span className="text-right text-[9px] font-[800] text-[#26376B]">
         {value}
       </span>
 
-      <span className="text-right text-[7px] font-[600] text-[#5C6883]">
+      <span className="text-right text-[9px] font-[600] text-[#5C6883]">
         {extra ?? ""}
       </span>
     </div>
@@ -1409,7 +1409,7 @@ function TrendChart() {
               strokeWidth="1"
             />
 
-            <text x="0" y={y + 3} fontSize="8" fill="#667085">
+            <text x="0" y={y + 3} fontSize="9" fill="#667085">
               {value}
             </text>
           </g>
@@ -1444,7 +1444,7 @@ function TrendChart() {
             x={point.x}
             y={point.y - 8}
             textAnchor="middle"
-            fontSize="8"
+            fontSize="9"
             fontWeight="700"
             fill="#2B344A"
           >
@@ -1455,7 +1455,7 @@ function TrendChart() {
             x={point.x}
             y={top + chartHeight + 18}
             textAnchor="middle"
-            fontSize="8"
+            fontSize="9"
             fill="#626D84"
           >
             {point.day}
@@ -1472,7 +1472,7 @@ function TrendChart() {
 
 function TableHead({ children }: { children: ReactNode }) {
   return (
-    <th className="px-[8px] text-[7.5px] font-[700] text-[#182A65]">
+    <th className="px-[8px] text-[9px] font-[700] text-[#182A65]">
       {children}
     </th>
   );
@@ -1522,7 +1522,7 @@ function TypeBadge({
         border
         px-[7px]
         py-[3px]
-        text-[7px]
+        text-[9px]
         font-[700]
         leading-none
       "
@@ -1563,7 +1563,7 @@ function StatusBadge({ status }: { status: RecentStatus }) {
         border
         px-[7px]
         py-[3px]
-        text-[7px]
+        text-[9px]
         font-[700]
         leading-none
       "
@@ -1611,7 +1611,7 @@ function PriorityBadge({ priority }: { priority: Priority }) {
         border
         px-[7px]
         py-[3px]
-        text-[7px]
+        text-[9px]
         font-[700]
         leading-none
       "
@@ -1693,7 +1693,7 @@ function QuickAction({
       <span
         className="
           min-w-0
-          text-[7.5px]
+          text-[9px]
           font-[700]
           leading-[10px]
           text-[#2E4074]
@@ -1716,7 +1716,7 @@ function QuickAction({
             rounded-full
             bg-[#F18714]
             px-[4px]
-            text-[7.5px]
+            text-[9px]
             font-[800]
             text-[#FFFFFF]
           "

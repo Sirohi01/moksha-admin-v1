@@ -510,7 +510,7 @@ function StatCard({
         <span
           className={`
             shrink-0
-            text-[8.5px]
+            text-[9px]
             font-[700]
             ${item.direction === "up"
               ? "text-[#169248]"
@@ -525,7 +525,7 @@ function StatCard({
           className="
             shrink-0
             whitespace-nowrap
-            text-[8.5px]
+            text-[9px]
             font-[600]
             text-[#506083]
           "
@@ -563,7 +563,7 @@ function Badge({
         border
         px-[9px]
         py-[4px]
-        text-[7.5px]
+        text-[9px]
         font-[700]
         leading-none
       "
@@ -620,7 +620,7 @@ function SelectFilter({
           appearance-none
           bg-transparent
           pr-[18px]
-          text-[8.5px]
+          text-[10px]
           font-[700]
           text-[#172762]
           outline-none
@@ -915,7 +915,7 @@ export default function CommunicationsFollowUps() {
                   min-w-0
                   flex-1
                   bg-transparent
-                  text-[8.5px]
+                  text-[10px]
                   font-[600]
                   text-[#172762]
                   outline-none
@@ -1012,7 +1012,7 @@ export default function CommunicationsFollowUps() {
                   appearance-none
                   bg-transparent
                   pr-[18px]
-                  text-[8.5px]
+                  text-[10px]
                   font-[600]
                   text-[#536080]
                   outline-none
@@ -1055,7 +1055,7 @@ export default function CommunicationsFollowUps() {
                 border-[#E0E5EB]
                 bg-white
                 px-[7px]
-                text-[8.5px]
+                text-[9px]
                 font-[700]
                 text-[#172762]
                 hover:bg-[#F8FAFC]
@@ -1112,39 +1112,39 @@ export default function CommunicationsFollowUps() {
                     text-white
                   "
                 >
-                  <th className="px-[6px] text-[7.5px] font-[700] whitespace-nowrap">
+                  <th className="px-[6px] text-[9px] font-[700] whitespace-nowrap">
                     ID
                   </th>
 
-                  <th className="px-[6px] text-[7.5px] font-[700] whitespace-nowrap">
+                  <th className="px-[6px] text-[9px] font-[700] whitespace-nowrap">
                     Contact / Organization
                   </th>
 
-                  <th className="px-[4px] text-[7.5px] font-[700] whitespace-nowrap text-center">
+                  <th className="px-[4px] text-[9px] font-[700] whitespace-nowrap text-center">
                     Channel
                   </th>
 
-                  <th className="px-[6px] text-[7.5px] font-[700] whitespace-nowrap">
+                  <th className="px-[6px] text-[9px] font-[700] whitespace-nowrap">
                     Subject / Conversation
                   </th>
 
-                  <th className="px-[5px] text-[7.5px] font-[700] whitespace-nowrap">
+                  <th className="px-[5px] text-[9px] font-[700] whitespace-nowrap">
                     Enquiry Type
                   </th>
 
-                  <th className="px-[5px] text-[7.5px] font-[700] whitespace-nowrap">
+                  <th className="px-[5px] text-[9px] font-[700] whitespace-nowrap">
                     Status
                   </th>
 
-                  <th className="px-[6px] text-[7.5px] font-[700] whitespace-nowrap">
+                  <th className="px-[6px] text-[9px] font-[700] whitespace-nowrap">
                     Last Activity
                   </th>
 
-                  <th className="px-[6px] text-[7.5px] font-[700] whitespace-nowrap">
+                  <th className="px-[6px] text-[9px] font-[700] whitespace-nowrap">
                     Next Follow-up
                   </th>
 
-                  <th className="px-[6px] text-[7.5px] font-[700] whitespace-nowrap text-center">
+                  <th className="px-[6px] text-[9px] font-[700] whitespace-nowrap text-center">
                     Actions
                   </th>
                 </tr>
@@ -1189,7 +1189,7 @@ export default function CommunicationsFollowUps() {
                           <span
                             className="
                               whitespace-nowrap
-                              text-[7.5px]
+                              text-[9px]
                               font-[700]
                               text-[#13763E]
                             "
@@ -1205,7 +1205,7 @@ export default function CommunicationsFollowUps() {
                             <p
                               className="
                                 truncate
-                                text-[7.5px]
+                                text-[9px]
                                 font-[700]
                                 leading-[11px]
                                 text-[#192B66]
@@ -1263,7 +1263,7 @@ export default function CommunicationsFollowUps() {
                               <span
                                 className="
                                   whitespace-nowrap
-                                  text-[7px]
+                                  text-[9px]
                                   font-[600]
                                   text-[#293B70]
                                 "
@@ -1311,7 +1311,7 @@ export default function CommunicationsFollowUps() {
                             {row.channel !== "Email" &&
                               row.channel !== "WhatsApp" &&
                               row.channel !== "Call" && (
-                                <span className="text-[7px] font-[700]">
+                                <span className="text-[9px] font-[700]">
                                   {row.channel.slice(0, 2)}
                                 </span>
                               )}
@@ -1324,7 +1324,7 @@ export default function CommunicationsFollowUps() {
                           <p
                             className="
                               truncate
-                              text-[7.5px]
+                              text-[9px]
                               font-[700]
                               leading-[11px]
                               text-[#192B66]
@@ -1337,7 +1337,7 @@ export default function CommunicationsFollowUps() {
                             className="
                               mt-[2px]
                               truncate
-                              text-[7px]
+                              text-[9px]
                               font-[500]
                               leading-[10px]
                               text-[#304276]
@@ -1375,7 +1375,7 @@ export default function CommunicationsFollowUps() {
                           <p
                             className="
                               whitespace-nowrap
-                              text-[7.5px]
+                              text-[9px]
                               font-[700]
                               leading-[11px]
                               text-[#26396D]
@@ -1388,7 +1388,7 @@ export default function CommunicationsFollowUps() {
                             className="
                               mt-[1px]
                               whitespace-nowrap
-                              text-[7px]
+                              text-[9px]
                               font-[500]
                               leading-[10px]
                               text-[#556488]
@@ -1404,7 +1404,7 @@ export default function CommunicationsFollowUps() {
                           <p
                             className="
                               whitespace-nowrap
-                              text-[7.5px]
+                              text-[9px]
                               font-[700]
                               leading-[11px]
                               text-[#26396D]
@@ -1418,7 +1418,7 @@ export default function CommunicationsFollowUps() {
                               className="
                                 mt-[1px]
                                 whitespace-nowrap
-                                text-[7px]
+                                text-[9px]
                                 font-[500]
                                 leading-[10px]
                                 text-[#556488]
@@ -1501,7 +1501,7 @@ export default function CommunicationsFollowUps() {
                 className="
                   shrink-0
                   whitespace-nowrap
-                  text-[8.5px]
+                  text-[10px]
                   font-[600]
                   text-[#475A83]
                 "
@@ -1549,7 +1549,7 @@ export default function CommunicationsFollowUps() {
                         justify-center
                         rounded-[4px]
                         border
-                        text-[8.5px]
+                        text-[10px]
                         font-[700]
                         ${safePage === number
                           ? "border-[#006132] bg-[#006132] text-white"
@@ -1617,7 +1617,7 @@ export default function CommunicationsFollowUps() {
                     appearance-none
                     bg-transparent
                     pr-[16px]
-                    text-[8.5px]
+                    text-[10px]
                     font-[700]
                     text-[#536180]
                     outline-none
@@ -1670,7 +1670,7 @@ export default function CommunicationsFollowUps() {
               <h2
                 className="
                   whitespace-nowrap
-                  text-[8.7px]
+                  text-[11px]
                   font-[700]
                   text-[#1F2430]
                 "
@@ -1684,7 +1684,7 @@ export default function CommunicationsFollowUps() {
                   shrink-0
                   items-center
                   gap-[3px]
-                  text-[6.7px]
+                  text-[9px]
                   font-[700]
                   text-[#167E48]
                 "
@@ -1740,7 +1740,7 @@ export default function CommunicationsFollowUps() {
                   <span
                     className="
                       mt-[4px]
-                      text-[6.4px]
+                      text-[9px]
                       font-[600]
                       text-[#44537B]
                     "
@@ -1810,7 +1810,7 @@ export default function CommunicationsFollowUps() {
                       <span
                         className="
                           whitespace-nowrap
-                          text-[7px]
+                          text-[9px]
                           font-semibold
                           text-[#26386D]
                         "
@@ -1823,7 +1823,7 @@ export default function CommunicationsFollowUps() {
                       className="
                         shrink-0
                         whitespace-nowrap
-                        text-[7px]
+                        text-[9px]
                         font-semibold
                         text-[#26386D]
                       "
@@ -1904,7 +1904,7 @@ export default function CommunicationsFollowUps() {
                       <span
                         className="
                           whitespace-nowrap
-                          text-[7px]
+                          text-[9px]
                           font-semibold
                           text-[#26376D]
                         "
@@ -1936,7 +1936,7 @@ export default function CommunicationsFollowUps() {
                       className="
                         whitespace-nowrap
                         text-right
-                        text-[7px]
+                        text-[9px]
                         font-semibold
                         text-[#26376D]
                       "
@@ -2004,7 +2004,7 @@ export default function CommunicationsFollowUps() {
                     <span
                       className="
                         whitespace-nowrap
-                        text-[7px]
+                        text-[9px]
                         font-semibold
                       "
                     >
@@ -2050,7 +2050,7 @@ export default function CommunicationsFollowUps() {
             <p
               className="
                 mt-[7px]
-                text-[7px]
+                text-[9px]
                 font-[500]
                 text-[#44537C]
               "
@@ -2067,7 +2067,7 @@ export default function CommunicationsFollowUps() {
               <span
                 className="
                   whitespace-nowrap
-                  text-[8.5px]
+                  text-[9px]
                   font-[800]
                   text-[#21713A]
                 "
@@ -2093,7 +2093,7 @@ export default function CommunicationsFollowUps() {
               <span
                 className="
                   whitespace-nowrap
-                  text-[7.3px]
+                  text-[10px]
                   font-[700]
                   text-[#283C74]
                 "

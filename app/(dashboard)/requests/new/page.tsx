@@ -676,7 +676,7 @@ export default function AddNewRequestPage() {
             flex
             items-center
             gap-[7px]
-            text-[7.5px]
+            text-[9px]
             font-[600]
             text-[#314474]
           "
@@ -722,7 +722,7 @@ export default function AddNewRequestPage() {
             border
             px-[11px]
             py-[8px]
-            text-[7px]
+            text-[9px]
             font-[600]
 
             ${error
@@ -793,7 +793,7 @@ export default function AddNewRequestPage() {
                     border-[#EBEEF1]
                     bg-[#F4F5F6]
                     px-[10px]
-                    text-[7px]
+                    text-[9px]
                     font-[500]
                     text-[#9BA3B0]
                     outline-none
@@ -1128,7 +1128,7 @@ export default function AddNewRequestPage() {
                     bg-white
                     px-[10px]
                     py-[8px]
-                    text-[7px]
+                    text-[9px]
                     font-[500]
                     text-[#26396F]
                     outline-none
@@ -1447,7 +1447,7 @@ export default function AddNewRequestPage() {
               <p
                 className="
                   mb-[6px]
-                  text-[7px]
+                  text-[9px]
                   font-[700]
                   text-[#192A65]
                 "
@@ -1488,7 +1488,7 @@ export default function AddNewRequestPage() {
                         className={`
                           relative
                           flex
-                          h-[43px]
+                          h-[48px]
                           min-w-0
                           items-center
                           gap-[7px]
@@ -1532,9 +1532,9 @@ export default function AddNewRequestPage() {
                           className="
                             min-w-0
                             flex-1
-                            text-[5.8px]
+                            text-[9px]
                             font-[700]
-                            leading-[8px]
+                            leading-[11px]
                             text-[#28396E]
                           "
                         >
@@ -1601,7 +1601,7 @@ export default function AddNewRequestPage() {
                       px-[9px]
                       py-[7px]
                       pr-[45px]
-                      text-[6.7px]
+                      text-[9px]
                       font-[500]
                       text-[#334575]
                       outline-none
@@ -1614,7 +1614,7 @@ export default function AddNewRequestPage() {
                       absolute
                       bottom-[6px]
                       right-[7px]
-                      text-[5.5px]
+                      text-[9px]
                       font-[600]
                       text-[#6A7690]
                     "
@@ -1710,7 +1710,7 @@ export default function AddNewRequestPage() {
                 className="
                   mt-[8px]
                   max-w-[210px]
-                  text-[6.4px]
+                  text-[9px]
                   font-[500]
                   leading-[10px]
                   text-[#57637E]
@@ -1843,7 +1843,7 @@ export default function AddNewRequestPage() {
                       px-[9px]
                       py-[7px]
                       pr-[42px]
-                      text-[6.8px]
+                      text-[9px]
                       text-[#334575]
                       outline-none
                       placeholder:text-[#6B7690]
@@ -1855,7 +1855,7 @@ export default function AddNewRequestPage() {
                       absolute
                       bottom-[6px]
                       right-[7px]
-                      text-[5.5px]
+                      text-[9px]
                       font-[600]
                       text-[#6A7690]
                     "
@@ -1947,7 +1947,7 @@ export default function AddNewRequestPage() {
               <p
                 className="
                   mt-[9px]
-                  text-[7.5px]
+                  text-[9px]
                   font-[800]
                   text-[#22613E]
                 "
@@ -1960,7 +1960,7 @@ export default function AddNewRequestPage() {
               <p
                 className="
                   mt-[3px]
-                  text-[6.5px]
+                  text-[9px]
                   font-[600]
                   text-[#3E4E75]
                 "
@@ -1971,7 +1971,7 @@ export default function AddNewRequestPage() {
               <p
                 className="
                   mt-[9px]
-                  text-[5.6px]
+                  text-[9px]
                   font-[500]
                   text-[#788196]
                 "
@@ -1990,7 +1990,7 @@ export default function AddNewRequestPage() {
                   bg-white
                   px-[13px]
                   py-[6px]
-                  text-[6px]
+                  text-[9px]
                   font-[700]
                   text-[#267247]
                 "
@@ -2030,7 +2030,7 @@ export default function AddNewRequestPage() {
             border-[#DDE3E9]
             bg-white
             px-[17px]
-            text-[8px]
+            text-[9px]
             font-[700]
             text-[#20336C]
           "
@@ -2060,7 +2060,7 @@ export default function AddNewRequestPage() {
               border-[#DDE3E9]
               bg-white
               px-[18px]
-              text-[8px]
+              text-[9px]
               font-[700]
               text-[#20336C]
             "
@@ -2083,7 +2083,7 @@ export default function AddNewRequestPage() {
               rounded-[5px]
               bg-[#005F2E]
               px-[20px]
-              text-[8px]
+              text-[9px]
               font-[700]
               text-white
               shadow-[0_2px_5px_rgba(0,95,46,0.14)]
@@ -2160,7 +2160,7 @@ function SectionTitle({
           justify-center
           rounded-full
           bg-[#075B35]
-          text-[7px]
+          text-[9px]
           font-[800]
           text-white
         "
@@ -2204,7 +2204,7 @@ function FormField({
       <p
         className="
           mb-[6px]
-          text-[6.8px]
+          text-[9px]
           font-[700]
           text-[#192A65]
         "
@@ -2251,7 +2251,7 @@ const inputClass = `
   border-[#DFE4EA]
   bg-white
   px-[10px]
-  text-[7px]
+  text-[9px]
   font-[500]
   text-[#26396F]
   outline-none
@@ -2304,7 +2304,7 @@ function SelectBox({
           bg-white
           px-[10px]
           pr-[28px]
-          text-[7px]
+          text-[9px]
           font-[600]
           text-[#26396F]
           outline-none
@@ -2453,7 +2453,7 @@ function RadioRow({
               cursor-pointer
               items-center
               gap-[6px]
-              text-[6.7px]
+              text-[9px]
               font-[600]
               text-[#344574]
             "

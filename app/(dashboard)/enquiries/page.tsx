@@ -558,7 +558,7 @@ function StatCard({
         "
       >
         {change === "Live" || !change ? (
-          <span className="rounded-[4px] bg-[#E4F5E8] px-[5px] py-[1px] text-[8.5px] font-bold text-[#238B4C]">
+          <span className="rounded-[4px] bg-[#E4F5E8] px-[5px] py-[1px] text-[9px] font-bold text-[#238B4C]">
             Live
           </span>
         ) : (
@@ -569,13 +569,13 @@ function StatCard({
               className="shrink-0 text-[#179249]"
             />
 
-            <span className="text-[8.5px] font-[700] text-[#179249]">
+            <span className="text-[9px] font-[700] text-[#179249]">
               {change}
             </span>
           </>
         )}
 
-        <span className="text-[8.5px] font-[500] text-[#536181]">
+        <span className="text-[9px] font-[500] text-[#536181]">
           current data
         </span>
       </div>
@@ -620,7 +620,7 @@ function FilterSelect({
           bg-white
           px-[11px]
           pr-[29px]
-          text-[8.2px]
+          text-[10px]
           font-[700]
           text-[#172762]
           outline-none
@@ -1170,7 +1170,7 @@ export default function EnquiriesPage() {
             bg-red-50
             px-[11px]
             py-[8px]
-            text-[8px]
+            text-[9px]
             font-[600]
             text-red-700
           "
@@ -1347,7 +1347,7 @@ export default function EnquiriesPage() {
                   min-w-0
                   flex-1
                   bg-transparent
-                  text-[8.2px]
+                  text-[10px]
                   font-[600]
                   text-[#172762]
                   outline-none
@@ -1432,7 +1432,7 @@ export default function EnquiriesPage() {
                 border-[#E0E5EB]
                 bg-white
                 px-[11px]
-                text-[8.1px]
+                text-[9px]
                 font-[600]
                 text-[#56617F]
               "
@@ -1466,7 +1466,7 @@ export default function EnquiriesPage() {
                 border-[#E0E5EB]
                 bg-white
                 px-[7px]
-                text-[7.8px]
+                text-[9px]
                 font-[700]
                 text-[#172762]
               "
@@ -1561,35 +1561,35 @@ export default function EnquiriesPage() {
                     text-white
                   "
                 >
-                  <th className="px-[8px] text-[7.5px] font-[700] uppercase tracking-wider">
+                  <th className="px-[8px] text-[9px] font-[700] uppercase tracking-wider">
                     ID
                   </th>
 
-                  <th className="px-[8px] text-[7.5px] font-[700] uppercase tracking-wider">
+                  <th className="px-[8px] text-[9px] font-[700] uppercase tracking-wider">
                     Organization / Contact
                   </th>
 
-                  <th className="px-[7px] text-[7.5px] font-[700] uppercase tracking-wider">
+                  <th className="px-[7px] text-[9px] font-[700] uppercase tracking-wider">
                     Enquiry Type
                   </th>
 
-                  <th className="px-[8px] text-[7.5px] font-[700] uppercase tracking-wider">
+                  <th className="px-[8px] text-[9px] font-[700] uppercase tracking-wider">
                     Purpose / Interest
                   </th>
 
-                  <th className="px-[7px] text-[7.5px] font-[700] uppercase tracking-wider">
+                  <th className="px-[7px] text-[9px] font-[700] uppercase tracking-wider">
                     Status
                   </th>
 
-                  <th className="px-[7px] text-[7.5px] font-[700] uppercase tracking-wider">
+                  <th className="px-[7px] text-[9px] font-[700] uppercase tracking-wider">
                     Priority
                   </th>
 
-                  <th className="px-[7px] text-[7.5px] font-[700] uppercase tracking-wider">
+                  <th className="px-[7px] text-[9px] font-[700] uppercase tracking-wider">
                     Received On
                   </th>
 
-                  <th className="px-[7px] text-[7.5px] font-[700] uppercase tracking-wider">
+                  <th className="px-[7px] text-[9px] font-[700] uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
@@ -1679,7 +1679,7 @@ export default function EnquiriesPage() {
                               className="
                                 block
                                 truncate
-                                text-[7.5px]
+                                text-[9px]
                                 font-[700]
                                 text-[#13763E]
                               "
@@ -1704,7 +1704,7 @@ export default function EnquiriesPage() {
                             <p
                               className="
                                 truncate
-                                text-[7.5px]
+                                text-[9px]
                                 font-[700]
                                 leading-[14px]
                                 text-[#192B66]
@@ -1722,7 +1722,7 @@ export default function EnquiriesPage() {
                                   className="
                                   mt-[3px]
                                   truncate
-                                  text-[7px]
+                                  text-[9px]
                                   font-[500]
                                   leading-[12px]
                                   text-[#344576]
@@ -1738,7 +1738,7 @@ export default function EnquiriesPage() {
                               className="
                                 mt-[2px]
                                 truncate
-                                text-[7px]
+                                text-[9px]
                                 font-[500]
                                 leading-[12px]
                                 text-[#344576]
@@ -1768,7 +1768,7 @@ export default function EnquiriesPage() {
                                 border
                                 px-[8px]
                                 py-[4px]
-                                text-[7.5px]
+                                text-[9px]
                                 font-[700]
                                 leading-none
                               "
@@ -1801,7 +1801,7 @@ export default function EnquiriesPage() {
                             <p
                               className="
                                 line-clamp-2
-                                text-[7.3px]
+                                text-[9px]
                                 font-[600]
                                 leading-[11px]
                                 text-[#26396F]
@@ -1829,7 +1829,7 @@ export default function EnquiriesPage() {
                                 border
                                 px-[8px]
                                 py-[4px]
-                                text-[7.5px]
+                                text-[9px]
                                 font-[700]
                                 leading-none
                               "
@@ -1886,7 +1886,7 @@ export default function EnquiriesPage() {
                               <span
                                 className="
                                   whitespace-nowrap
-                                  text-[7.5px]
+                                  text-[9px]
                                   font-[600]
                                   text-[#344576]
                                 "
@@ -1904,10 +1904,10 @@ export default function EnquiriesPage() {
                               align-middle
                             "
                           >
-                            <p className="whitespace-nowrap text-[7.5px] font-[700] text-[#182A65]">
+                            <p className="whitespace-nowrap text-[9px] font-[700] text-[#182A65]">
                               {formatDateTime(enquiry.createdAt).split(",")[0]}
                             </p>
-                            <p className="mt-[1px] whitespace-nowrap text-[7px] font-[500] text-[#556488]">
+                            <p className="mt-[1px] whitespace-nowrap text-[9px] font-[500] text-[#556488]">
                               {formatDateTime(enquiry.createdAt).split(",")[1] || ""}
                             </p>
                           </td>
@@ -2002,7 +2002,7 @@ export default function EnquiriesPage() {
                         className="
                           h-[150px]
                           text-center
-                          text-[8px]
+                          text-[9px]
                           font-[600]
                           text-[#667085]
                         "
@@ -2034,7 +2034,7 @@ export default function EnquiriesPage() {
               <p
                 className="
                   whitespace-nowrap
-                  text-[7.5px]
+                  text-[9px]
                   font-[600]
                   text-[#475A83]
                 "
@@ -2114,7 +2114,7 @@ export default function EnquiriesPage() {
                           justify-center
                           rounded-[4px]
                           border
-                          text-[7.5px]
+                          text-[9px]
                           font-[700]
 
                           ${safePage ===
@@ -2147,7 +2147,7 @@ export default function EnquiriesPage() {
                       rounded-[4px]
                       border
                       px-[6px]
-                      text-[7.5px]
+                      text-[9px]
                       font-[700]
 
                       ${safePage ===
@@ -2220,7 +2220,7 @@ export default function EnquiriesPage() {
                     bg-white
                     px-[9px]
                     pr-[27px]
-                    text-[7.5px]
+                    text-[9px]
                     font-[700]
                     text-[#536180]
                     outline-none
@@ -2290,7 +2290,7 @@ export default function EnquiriesPage() {
               <h2
                 className="
                   whitespace-nowrap
-                  text-[8.8px]
+                  text-[11px]
                   font-[700]
                   text-[#1E2430]
                 "
@@ -2305,7 +2305,7 @@ export default function EnquiriesPage() {
                   items-center
                   gap-[3px]
                   whitespace-nowrap
-                  text-[7.5px]
+                  text-[10px]
                   font-[700]
                   text-[#16804B]
                 "
@@ -2389,7 +2389,7 @@ export default function EnquiriesPage() {
                   <span
                     className="
                       mt-[4px]
-                      text-[7px]
+                      text-[9px]
                       font-[600]
                       text-[#44537B]
                     "
@@ -2444,7 +2444,7 @@ export default function EnquiriesPage() {
                         <span
                           className="
                             whitespace-nowrap
-                            text-[7.5px]
+                            text-[9px]
                             font-[700]
                             text-[#26386D]
                           "
@@ -2456,7 +2456,7 @@ export default function EnquiriesPage() {
                       <span
                         className="
                           whitespace-nowrap
-                          text-[7px]
+                          text-[9px]
                           font-[600]
                           text-[#26386D]
                         "
@@ -2495,7 +2495,7 @@ export default function EnquiriesPage() {
           >
             <h2
               className="
-                text-[8.8px]
+                text-[9px]
                 font-[700]
                 text-[#1E2430]
               "
@@ -2530,7 +2530,7 @@ export default function EnquiriesPage() {
                       <span
                         className="
                           truncate
-                          text-[7.5px]
+                          text-[9px]
                           font-[700]
                           text-[#334375]
                         "
@@ -2575,7 +2575,7 @@ export default function EnquiriesPage() {
                         className="
                           whitespace-nowrap
                           text-right
-                          text-[7px]
+                          text-[9px]
                           font-[600]
                           text-[#334375]
                         "
@@ -2595,7 +2595,7 @@ export default function EnquiriesPage() {
                 className="
                   py-[25px]
                   text-center
-                  text-[7px]
+                  text-[9px]
                   text-[#667085]
                 "
               >
@@ -2701,7 +2701,7 @@ export default function EnquiriesPage() {
                     <span
                       className="
                         whitespace-nowrap
-                        text-[7.5px]
+                        text-[9px]
                         font-[700]
                       "
                     >
@@ -2763,7 +2763,7 @@ export default function EnquiriesPage() {
             <p
               className="
                 mt-[8px]
-                text-[7.5px]
+                text-[9px]
                 font-[500]
                 text-[#42537B]
               "
@@ -2791,7 +2791,7 @@ export default function EnquiriesPage() {
               <span
                 className="
                   whitespace-nowrap
-                  text-[8.5px]
+                  text-[9px]
                   font-[800]
                   text-[#21713A]
                 "
@@ -2819,7 +2819,7 @@ export default function EnquiriesPage() {
               <span
                 className="
                   whitespace-nowrap
-                  text-[7.5px]
+                  text-[9px]
                   font-[700]
                   text-[#283C74]
                 "

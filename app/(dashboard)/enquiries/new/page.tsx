@@ -724,7 +724,7 @@ function AddNewEnquiryContent() {
             flex
             items-center
             gap-[6px]
-            text-[8px]
+            text-[9px]
             font-[600]
             text-[#46567D]
           "
@@ -780,7 +780,7 @@ function AddNewEnquiryContent() {
             border
             px-[12px]
             py-[8px]
-            text-[8px]
+            text-[9px]
             font-[600]
 
             ${error
@@ -1075,7 +1075,7 @@ function AddNewEnquiryContent() {
                       px-[10px]
                       py-[8px]
                       pr-[52px]
-                      text-[7.4px]
+                      text-[9px]
                       font-[500]
                       text-[#26396F]
                       outline-none
@@ -1089,7 +1089,7 @@ function AddNewEnquiryContent() {
                       absolute
                       bottom-[8px]
                       right-[9px]
-                      text-[6px]
+                      text-[9px]
                       font-[600]
                       text-[#6A7690]
                     "
@@ -1606,7 +1606,7 @@ function AddNewEnquiryContent() {
                     <p
                       className="
                         truncate
-                        text-[7.4px]
+                        text-[9px]
                         font-[700]
                         text-[#33416D]
                       "
@@ -1619,7 +1619,7 @@ function AddNewEnquiryContent() {
                     <p
                       className="
                         mt-[3px]
-                        text-[7px]
+                        text-[9px]
                         font-[500]
                         text-[#728099]
                       "
@@ -1679,7 +1679,7 @@ function AddNewEnquiryContent() {
             <p
               className="
                 mt-[11px]
-                text-[7.5px]
+                text-[9px]
                 font-[500]
                 text-[#4C5978]
               "
@@ -1838,7 +1838,7 @@ function AddNewEnquiryContent() {
                         <p
                           className="
                             truncate
-                            text-[7.3px]
+                            text-[9px]
                             font-[700]
                             text-[#273970]
                           "
@@ -1850,7 +1850,7 @@ function AddNewEnquiryContent() {
                           className="
                             mt-[2px]
                             truncate
-                            text-[7px]
+                            text-[9px]
                             font-[500]
                             text-[#68758F]
                           "
@@ -1913,7 +1913,7 @@ function AddNewEnquiryContent() {
                 <p
                   className="
                     mt-[7px]
-                    text-[7.5px]
+                    text-[9px]
                     font-[500]
                     leading-[10px]
                     text-[#46567D]
@@ -1953,7 +1953,7 @@ function AddNewEnquiryContent() {
                 <p
                   className="
                     mt-[12px]
-                    text-[7px]
+                    text-[9px]
                     font-[600]
                     text-[#61708B]
                   "
@@ -1996,7 +1996,7 @@ function AddNewEnquiryContent() {
             border-[#DDE3E9]
             bg-white
             px-[17px]
-            text-[8px]
+            text-[9px]
             font-[700]
             text-[#20336C]
           "
@@ -2026,7 +2026,7 @@ function AddNewEnquiryContent() {
               border-[#DDE3E9]
               bg-white
               px-[18px]
-              text-[8px]
+              text-[9px]
               font-[700]
               text-[#20336C]
             "
@@ -2049,7 +2049,7 @@ function AddNewEnquiryContent() {
               rounded-[5px]
               bg-[#005F2E]
               px-[20px]
-              text-[8px]
+              text-[9px]
               font-[700]
               text-white
               shadow-[0_2px_5px_rgba(0,95,46,0.15)]
@@ -2071,7 +2071,7 @@ function AddNewEnquiryContent() {
 
 export default function AddNewEnquiryPage() {
   return (
-    <Suspense fallback={<div className="p-4 text-[7.5px] font-[700] text-[#182A65]">Loading form...</div>}>
+    <Suspense fallback={<div className="p-4 text-[9px] font-[700] text-[#182A65]">Loading form...</div>}>
       <AddNewEnquiryContent />
     </Suspense>
   );
@@ -2186,7 +2186,7 @@ function FormField({
       <p
         className="
           mb-[6px]
-          text-[7.4px]
+          text-[9px]
           font-[700]
           text-[#192A65]
         "
@@ -2223,7 +2223,7 @@ const inputClass = `
   border-[#DFE4EA]
   bg-white
   px-[10px]
-  text-[7.5px]
+  text-[9px]
   font-[500]
   text-[#253970]
   outline-none
@@ -2276,7 +2276,7 @@ function SelectBox({
           bg-white
           px-[10px]
           pr-[28px]
-          text-[7.5px]
+          text-[9px]
           font-[700]
           text-[#182A65]
           outline-none
@@ -2380,7 +2380,7 @@ function PrioritySelect({
           bg-white
           pl-[28px]
           pr-[28px]
-          text-[7.5px]
+          text-[9px]
           font-[700]
           text-[#182A65]
           outline-none
@@ -2471,7 +2471,7 @@ function PhoneField({
             bg-white
             px-[8px]
             pr-[20px]
-            text-[7.5px]
+            text-[9px]
             font-[700]
             text-[#182A65]
             outline-none
@@ -2606,7 +2606,7 @@ function ContactMethodSelector({
                 gap-[5px]
                 border-r
                 border-[#DFE4EA]
-                text-[7.5px]
+                text-[9px]
                 font-[700]
                 last:border-r-0
 
@@ -2666,7 +2666,7 @@ function RadioGroup({
               items-center
               gap-[6px]
               whitespace-nowrap
-              text-[7.5px]
+              text-[9px]
               font-[600]
               text-[#354573]
             "
@@ -2764,7 +2764,7 @@ function InfoPoint({
 
         <p
           className="
-            text-[7.5px]
+            text-[9px]
             font-[500]
             leading-[11px]
             text-[#46557A]

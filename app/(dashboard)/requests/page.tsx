@@ -674,7 +674,7 @@ export default function RequestsPage() {
           <p
             className="
               mt-[3px]
-              text-[8.5px]
+              text-[9px]
               font-[600]
               leading-[13px]
               text-[#263A70]
@@ -694,7 +694,7 @@ export default function RequestsPage() {
               flex
               items-center
               gap-[7px]
-              text-[7.5px]
+              text-[9px]
               font-[600]
               text-[#334575]
             "
@@ -756,7 +756,7 @@ export default function RequestsPage() {
               rounded-[5px]
               bg-[#005F2E]
               px-[17px]
-              text-[8.5px]
+              text-[9px]
               font-[700]
               text-white
               shadow-[0_2px_5px_rgba(0,95,46,0.15)]
@@ -786,7 +786,7 @@ export default function RequestsPage() {
             bg-red-50
             px-[10px]
             py-[8px]
-            text-[7px]
+            text-[9px]
             font-[600]
             text-red-700
           "
@@ -1066,7 +1066,7 @@ export default function RequestsPage() {
                 min-w-0
                 flex-1
                 bg-transparent
-                text-[7.5px]
+                text-[9px]
                 font-[600]
                 text-[#263A70]
                 outline-none
@@ -1101,7 +1101,7 @@ export default function RequestsPage() {
               border-[#DFE4EA]
               bg-white
               px-[14px]
-              text-[7.7px]
+              text-[9px]
               font-[700]
               text-[#263A70]
             "
@@ -1133,7 +1133,7 @@ export default function RequestsPage() {
                 className="
                   px-[6px]
                   pb-[5px]
-                  text-[6px]
+                  text-[9px]
                   font-[700]
                   uppercase
                   tracking-wide
@@ -1187,7 +1187,7 @@ export default function RequestsPage() {
                       rounded-[4px]
                       px-[7px]
                       text-left
-                      text-[7px]
+                      text-[9px]
                       font-[600]
 
                       ${typeFilter ===
@@ -1320,31 +1320,31 @@ export default function RequestsPage() {
                   />
                 </th>
 
-                <th className="text-[7.5px] font-[700]">
+                <th className="text-[9px] font-[700]">
                   ID
                 </th>
 
-                <th className="text-[7.5px] font-[700]">
+                <th className="text-[9px] font-[700]">
                   RECEIVED
                 </th>
 
-                <th className="text-[7.5px] font-[700]">
+                <th className="text-[9px] font-[700]">
                   REQUESTER
                 </th>
 
-                <th className="text-[7.5px] font-[700]">
+                <th className="text-[9px] font-[700]">
                   LOCATION
                 </th>
 
-                <th className="text-[7.5px] font-[700]">
+                <th className="text-[9px] font-[700]">
                   REQUEST TYPE
                 </th>
 
-                <th className="text-[7.5px] font-[700]">
+                <th className="text-[9px] font-[700]">
                   STATUS
                 </th>
 
-                <th className="text-[7.5px] font-[700]">
+                <th className="text-[9px] font-[700]">
                   ALERT
                 </th>
 
@@ -1458,7 +1458,7 @@ export default function RequestsPage() {
                             className="
                               block
                               truncate
-                              text-[7.5px]
+                              text-[9px]
                               font-[700]
                               text-[#176D45]
                             "
@@ -1472,10 +1472,10 @@ export default function RequestsPage() {
                         {/* DATE */}
 
                         <td className="px-[10px] align-middle">
-                          <p className="whitespace-nowrap text-[7.5px] font-[700] text-[#182A65]">
+                          <p className="whitespace-nowrap text-[9px] font-[700] text-[#182A65]">
                             {formatDateTime(request.createdAt).split(",")[0]}
                           </p>
-                          <p className="mt-[1px] whitespace-nowrap text-[7px] font-[500] text-[#556488]">
+                          <p className="mt-[1px] whitespace-nowrap text-[9px] font-[500] text-[#556488]">
                             {formatDateTime(request.createdAt).split(",")[1] || ""}
                           </p>
                         </td>
@@ -1512,7 +1512,7 @@ export default function RequestsPage() {
                               <p
                                 className="
                                   truncate
-                                  text-[7.5px]
+                                  text-[9px]
                                   font-[700]
                                   text-[#20316A]
                                 "
@@ -1527,7 +1527,7 @@ export default function RequestsPage() {
                                 className="
                                   mt-[2px]
                                   truncate
-                                  text-[7px]
+                                  text-[9px]
                                   font-[500]
                                   text-[#45547A]
                                 "
@@ -1547,7 +1547,7 @@ export default function RequestsPage() {
                             className="
                               line-clamp-2
                               pr-[6px]
-                              text-[7.5px]
+                              text-[9px]
                               font-[600]
                               leading-[11px]
                               text-[#314172]
@@ -1652,7 +1652,7 @@ export default function RequestsPage() {
                           ) : (
                             <span
                               className="
-                                text-[6px]
+                                text-[9px]
                                 text-[#9AA3B4]
                               "
                             >
@@ -1689,7 +1689,7 @@ export default function RequestsPage() {
                       className="
                         h-[150px]
                         text-center
-                        text-[8px]
+                        text-[9px]
                         font-[600]
                         text-[#69748D]
                       "
@@ -1721,7 +1721,7 @@ export default function RequestsPage() {
               className="
                 min-w-0
                 truncate
-                text-[6.5px]
+                text-[9px]
                 font-[600]
                 text-[#44537C]
               "
@@ -1846,7 +1846,7 @@ export default function RequestsPage() {
                     bg-white
                     px-[8px]
                     pr-[24px]
-                    text-[7.5px]
+                    text-[9px]
                     font-[700]
                     text-[#334574]
                     outline-none
@@ -1998,7 +1998,7 @@ export default function RequestsPage() {
 
                     <p
                       className="
-                        text-[6.2px]
+                        text-[9px]
                         font-[600]
                         leading-[10px]
                         text-[#73591E]
@@ -2032,7 +2032,7 @@ export default function RequestsPage() {
 
                     <p
                       className="
-                        text-[7.5px]
+                        text-[9px]
                         font-[600]
                         leading-[11px]
                         text-[#324575]
@@ -2243,7 +2243,7 @@ export default function RequestsPage() {
 
                         <span
                           className="
-                            text-[7.5px]
+                            text-[9px]
                             font-[700]
                             text-[#273A70]
                           "
@@ -2265,7 +2265,7 @@ export default function RequestsPage() {
                       >
                         <p
                           className="
-                            text-[7.5px]
+                            text-[9px]
                             font-[500]
                             leading-[11px]
                             text-[#415178]
@@ -2294,7 +2294,7 @@ export default function RequestsPage() {
                           className="
                           mb-[5px]
                           block
-                          text-[6.5px]
+                          text-[9px]
                           font-[700]
                           text-[#273A70]
                         "
@@ -2329,7 +2329,7 @@ export default function RequestsPage() {
                               bg-white
                               px-[10px]
                               pr-[28px]
-                              text-[7.5px]
+                              text-[9px]
                               font-[700]
                               text-[#182A65]
                               outline-none
@@ -2384,7 +2384,7 @@ export default function RequestsPage() {
                         gap-[7px]
                         rounded-[4px]
                         bg-[#005F2E]
-                        text-[7.5px]
+                        text-[9px]
                         font-[700]
                         text-white
                         disabled:opacity-60
@@ -2425,7 +2425,7 @@ export default function RequestsPage() {
                           border
                           border-[#F1D2D2]
                           bg-white
-                          text-[7.5px]
+                          text-[9px]
                           font-[700]
                           text-[#CB4040]
                           disabled:opacity-60
@@ -2450,7 +2450,7 @@ export default function RequestsPage() {
                           border
                           border-[#DDE3E9]
                           bg-white
-                          text-[7.5px]
+                          text-[9px]
                           font-[700]
                           text-[#182A65]
                         "
@@ -2481,7 +2481,7 @@ export default function RequestsPage() {
                       border
                       border-[#DDE3E9]
                       bg-white
-                      text-[7.5px]
+                      text-[9px]
                       font-[700]
                       text-[#182A65]
                     "
@@ -2504,7 +2504,7 @@ export default function RequestsPage() {
                 justify-center
                 px-[20px]
                 text-center
-                text-[7px]
+                text-[9px]
                 font-[600]
                 text-[#69758D]
               "
@@ -2535,7 +2535,7 @@ export default function RequestsPage() {
       >
         <h2
           className="
-            text-[8px]
+            text-[9px]
             font-[800]
             text-[#17613B]
           "
@@ -2767,7 +2767,7 @@ function StatCard({
           gap-[4px]
           whitespace-nowrap
           text-left
-          text-[8.5px]
+          text-[9px]
           font-[600]
           text-[#65708A]
         "
@@ -2805,7 +2805,7 @@ function HeaderButton({
         border-[#DFE4EA]
         bg-white
         px-[15px]
-        text-[8px]
+        text-[9px]
         font-[700]
         text-[#263A70]
       "
@@ -2840,7 +2840,7 @@ function TabButton({
         relative
         h-[35px]
         whitespace-nowrap
-        text-[7.1px]
+        text-[9px]
         font-[700]
 
         ${active
@@ -2895,7 +2895,7 @@ function MetaBadge({
         border
         px-[9px]
         py-[4px]
-        text-[7.5px]
+        text-[9px]
         font-[700]
         leading-none
       "
@@ -2945,7 +2945,7 @@ function PageButton({
         rounded-[4px]
         border
         px-[6px]
-        text-[7px]
+        text-[9px]
         font-[700]
         disabled:opacity-40
 
@@ -2978,7 +2978,7 @@ function PanelTab({
       className={`
         relative
         h-[36px]
-        text-[7.5px]
+        text-[9px]
         font-[700]
 
         ${active
@@ -3022,7 +3022,7 @@ function DetailSection({
       <h3
         className="
           mb-[8px]
-          text-[8.5px]
+          text-[9px]
           font-[800]
           text-[#182A65]
         "
@@ -3076,7 +3076,7 @@ function DetailRow({
         className="
           min-w-0
           break-words
-          text-[7.5px]
+          text-[9px]
           font-[500]
           leading-[11px]
           text-[#20316A]
@@ -3164,7 +3164,7 @@ function QuickAction({
       <span
         className="
           min-w-0
-          text-[7.5px]
+          text-[9px]
           font-[700]
           leading-[11px]
           text-[#182A65]
@@ -3188,7 +3188,7 @@ function QuickAction({
             rounded-full
             bg-[#F18C13]
             px-[4px]
-            text-[7px]
+            text-[9px]
             font-[800]
             text-white
           "

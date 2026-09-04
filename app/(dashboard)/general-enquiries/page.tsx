@@ -572,7 +572,7 @@ function StatCard({
         "
       >
         {change === "Live" ? (
-          <span className="rounded-[4px] bg-[#E4F5E8] px-[5px] py-[1px] text-[8.5px] font-bold text-[#238B4C]">
+          <span className="rounded-[4px] bg-[#E4F5E8] px-[5px] py-[1px] text-[9px] font-bold text-[#238B4C]">
             Live
           </span>
         ) : (
@@ -593,7 +593,7 @@ function StatCard({
 
             <span
               className={`
-                text-[8.5px]
+                text-[9px]
                 font-[700]
 
                 ${negative
@@ -609,7 +609,7 @@ function StatCard({
 
         <span
           className="
-            text-[8.5px]
+            text-[9px]
             font-[500]
             text-[#596685]
           "
@@ -2017,11 +2017,11 @@ export default function GeneralEnquiriesPage() {
 
                               return (
                                 <>
-                                  <p className="whitespace-nowrap text-[7.5px] font-[700] leading-[11px] text-[#26396D]">
+                                  <p className="whitespace-nowrap text-[9px] font-[700] leading-[11px] text-[#26396D]">
                                     {parts[0]}
                                   </p>
                                   {parts[1] && (
-                                    <p className="mt-[1px] whitespace-nowrap text-[7px] font-[500] leading-[10px] text-[#556488]">
+                                    <p className="mt-[1px] whitespace-nowrap text-[9px] font-[500] leading-[10px] text-[#556488]">
                                       {parts[1]}
                                     </p>
                                   )}
@@ -2528,7 +2528,7 @@ export default function GeneralEnquiriesPage() {
                       <span
                         className="
                           whitespace-nowrap
-                          text-[7px]
+                          text-[9px]
                           font-semibold
                           text-[#26386D]
                         "
@@ -2541,7 +2541,7 @@ export default function GeneralEnquiriesPage() {
                       className="
                         whitespace-nowrap
                         text-left
-                        text-[7px]
+                        text-[9px]
                         font-semibold
                         text-[#26386D]
                       "

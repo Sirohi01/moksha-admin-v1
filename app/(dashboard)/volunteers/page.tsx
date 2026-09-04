@@ -294,7 +294,7 @@ function StatCard({
 
       <div className="flex w-full items-center justify-start gap-[4px] whitespace-nowrap text-left">
         {change === "Live" || !change ? (
-          <span className="rounded-[4px] bg-[#E4F5E8] px-[5px] py-[1px] text-[8.5px] font-bold text-[#238B4C]">
+          <span className="rounded-[4px] bg-[#E4F5E8] px-[5px] py-[1px] text-[9px] font-bold text-[#238B4C]">
             Live
           </span>
         ) : (
@@ -305,13 +305,13 @@ function StatCard({
               className="shrink-0 text-[#168F49]"
             />
 
-            <span className="text-[8.5px] font-[700] text-[#168F49]">
+            <span className="text-[9px] font-[700] text-[#168F49]">
               {change}
             </span>
           </>
         )}
 
-        <span className="text-[8.5px] font-[500] text-[#526080]">
+        <span className="text-[9px] font-[500] text-[#526080]">
           {compare}
         </span>
       </div>
@@ -337,7 +337,7 @@ function FilterSelect({
       <select
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="h-[40px] w-full appearance-none rounded-[6px] border border-[#E0E5EB] bg-white px-[11px] pr-[29px] text-[8.2px] font-[700] text-[#172762] outline-none"
+        className="h-[40px] w-full appearance-none rounded-[6px] border border-[#E0E5EB] bg-white px-[11px] pr-[29px] text-[10px] font-[700] text-[#172762] outline-none"
       >
         {children}
       </select>
@@ -1120,7 +1120,7 @@ export default function VolunteersPage() {
 
           {/* FILTERS */}
 
-          <div className="mt-[20px] grid min-w-0 grid-cols-[minmax(210px,1.8fr)_120px_125px_125px_135px_72px_72px] gap-[8px]">
+          <div className="mt-[20px] grid min-w-0 max-w-[calc(100%-18px)] grid-cols-[minmax(190px,1.8fr)_116px_122px_122px_132px_70px_70px] gap-[8px]">
             <div className="flex h-[40px] min-w-0 items-center rounded-[6px] border border-[#E0E5EB] bg-white px-[11px]">
               <Search
                 size={15}
@@ -1604,13 +1604,13 @@ export default function VolunteersPage() {
 
           <div className="rounded-[7px] border border-[#E2E6EB] bg-white px-[12px] pb-[14px] pt-[12px]">
             <div className="flex items-center justify-between gap-[7px]">
-              <h2 className="whitespace-nowrap text-[8.8px] font-[700] text-[#1E2430]">
+              <h2 className="whitespace-nowrap text-[11px] font-[700] text-[#1E2430]">
                 Volunteer Overview
               </h2>
 
               <button
                 type="button"
-                className="flex items-center gap-[3px] whitespace-nowrap text-[6.7px] font-[700] text-[#16804B]"
+                className="flex items-center gap-[3px] whitespace-nowrap text-[9px] font-[700] text-[#16804B]"
               >
                 View Report
                 <ArrowRight size={9} />
@@ -1641,7 +1641,7 @@ export default function VolunteersPage() {
                     {totalVolunteers}
                   </strong>
 
-                  <span className="mt-[4px] text-[6.3px] font-[600] text-[#44537B]">
+                  <span className="mt-[4px] text-[9px] font-[600] text-[#44537B]">
                     Total
                   </span>
                 </div>
@@ -1651,12 +1651,12 @@ export default function VolunteersPage() {
                 <div className="flex items-center justify-between gap-[6px] text-left">
                   <div className="flex items-center gap-[6px]">
                     <span className="h-[6px] w-[6px] rounded-full bg-[#2BA15D]" />
-                    <span className="text-[7px] font-semibold text-[#26386D]">
+                    <span className="text-[9px] font-semibold text-[#26386D]">
                       Active
                     </span>
                   </div>
 
-                  <span className="whitespace-nowrap text-left text-[7px] font-semibold text-[#26386D]">
+                  <span className="whitespace-nowrap text-left text-[9px] font-semibold text-[#26386D]">
                     {activeVolunteers} (
                     {percentage(
                       activeVolunteers,
@@ -1669,12 +1669,12 @@ export default function VolunteersPage() {
                 <div className="flex items-center justify-between gap-[6px] text-left">
                   <div className="flex items-center gap-[6px]">
                     <span className="h-[6px] w-[6px] rounded-full bg-[#EB332D]" />
-                    <span className="whitespace-nowrap text-[7px] font-semibold text-[#26386D]">
+                    <span className="whitespace-nowrap text-[9px] font-semibold text-[#26386D]">
                       Inactive
                     </span>
                   </div>
 
-                  <span className="whitespace-nowrap text-left text-[7px] font-semibold text-[#26386D]">
+                  <span className="whitespace-nowrap text-left text-[9px] font-semibold text-[#26386D]">
                     {inactiveVolunteers} (
                     {percentage(
                       inactiveVolunteers,
