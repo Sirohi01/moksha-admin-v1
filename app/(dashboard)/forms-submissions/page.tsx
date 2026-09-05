@@ -2438,16 +2438,16 @@ function BottomCard({
   return (
     <div
       className="
-        relative
-        min-h-[125px]
+        flex
+        min-h-[145px]
         min-w-0
-        overflow-hidden
+        flex-col
         rounded-[7px]
         border
         border-[#E2E7EB]
         bg-white
         px-[14px]
-        pb-[13px]
+        pb-[12px]
         pt-[11px]
       "
     >
@@ -2477,6 +2477,7 @@ function RankRow({
         grid-cols-[20px_minmax(0,1fr)_42px]
         items-center
         gap-[4px]
+        leading-[14px]
       "
     >
       <span
@@ -2527,12 +2528,14 @@ function ReportLink({
     <button
       type="button"
       className="
-        absolute
-        bottom-[11px]
-        right-[14px]
+        mt-auto
+        w-full
         flex
         items-center
+        justify-end
         gap-[6px]
+        pt-[12px]
+        whitespace-nowrap
         text-[9px]
         font-[700]
         text-[#42578B]

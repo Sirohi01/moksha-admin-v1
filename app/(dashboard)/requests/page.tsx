@@ -1240,7 +1240,7 @@ export default function RequestsPage() {
           <table
             className="
               w-full
-              min-w-[1100px]
+              min-w-[1180px]
               table-fixed
               border-collapse
             "
@@ -1248,55 +1248,55 @@ export default function RequestsPage() {
             <colgroup>
               <col
                 style={{
-                  width: "5%",
+                  width: "46px",
                 }}
               />
 
               <col
                 style={{
-                  width: "13%",
+                  width: "135px",
                 }}
               />
 
               <col
                 style={{
-                  width: "15%",
+                  width: "155px",
                 }}
               />
 
               <col
                 style={{
-                  width: "19%",
+                  width: "225px",
                 }}
               />
 
               <col
                 style={{
-                  width: "14%",
+                  width: "175px",
                 }}
               />
 
               <col
                 style={{
-                  width: "15%",
+                  width: "135px",
                 }}
               />
 
               <col
                 style={{
-                  width: "12%",
+                  width: "145px",
                 }}
               />
 
               <col
                 style={{
-                  width: "5%",
+                  width: "68px",
                 }}
               />
 
               <col
                 style={{
-                  width: "2%",
+                  width: "70px",
                 }}
               />
             </colgroup>
@@ -1344,11 +1344,13 @@ export default function RequestsPage() {
                   STATUS
                 </th>
 
-                <th className="text-[9px] font-[700]">
+                <th className="text-center text-[9px] font-[700]">
                   ALERT
                 </th>
 
-                <th />
+                <th className="text-center text-[9px] font-[700]">
+                  ACTIONS
+                </th>
               </tr>
             </thead>
 
@@ -1605,7 +1607,7 @@ export default function RequestsPage() {
 
                         {/* ALERT */}
 
-                        <td className="align-middle">
+                        <td className="text-center align-middle">
                           {request.duplicateOfRequestId ? (
                             <span
                               title={
@@ -1661,14 +1663,14 @@ export default function RequestsPage() {
                           )}
                         </td>
 
-                        <td className="align-middle">
+                        <td className="text-center align-middle">
                           <button
                             type="button"
                             onClick={(e) => {
                               e.stopPropagation();
                               selectRequest(request);
                             }}
-                            className="flex h-[28px] w-[28px] items-center justify-center rounded-[5px] border border-[#E3E7EC] bg-white text-[#263C76] hover:bg-[#F8FAFC]"
+                            className="mx-auto flex h-[28px] w-[28px] items-center justify-center rounded-[5px] border border-[#E3E7EC] bg-white text-[#263C76] hover:bg-[#F8FAFC]"
                           >
                             <Eye size={14} />
                           </button>
@@ -1707,14 +1709,15 @@ export default function RequestsPage() {
           <div
             className="
               flex
-              h-[48px]
-              min-w-0
+              min-h-[56px]
+              min-w-[1180px]
               items-center
               justify-between
               gap-[10px]
               border-t
               border-[#E7EAEE]
               px-[14px]
+              py-[10px]
             "
           >
             <p
@@ -1741,84 +1744,86 @@ export default function RequestsPage() {
                 flex
                 shrink-0
                 items-center
-                gap-[5px]
+                gap-[14px]
               "
             >
-              <PageButton
-                disabled={
-                  safePage === 1
-                }
-                onClick={() =>
-                  setPage(
-                    Math.max(
-                      1,
-                      safePage -
-                      1
+              <div className="flex items-center gap-[5px]">
+                <PageButton
+                  disabled={
+                    safePage === 1
+                  }
+                  onClick={() =>
+                    setPage(
+                      Math.max(
+                        1,
+                        safePage -
+                        1
+                      )
                     )
-                  )
-                }
-              >
-                <ChevronLeft
-                  size={11}
-                />
-              </PageButton>
+                  }
+                >
+                  <ChevronLeft
+                    size={11}
+                  />
+                </PageButton>
 
-              {Array.from({
-                length:
-                  Math.min(
-                    5,
-                    totalPages
-                  ),
-              }).map(
-                (
-                  _,
-                  index
-                ) => {
-                  const number =
-                    index + 1;
-
-                  return (
-                    <PageButton
-                      key={
-                        number
-                      }
-                      active={
-                        safePage ===
-                        number
-                      }
-                      onClick={() =>
-                        setPage(
-                          number
-                        )
-                      }
-                    >
-                      {number}
-                    </PageButton>
-                  );
-                }
-              )}
-
-              <PageButton
-                disabled={
-                  safePage ===
-                  totalPages
-                }
-                onClick={() =>
-                  setPage(
+                {Array.from({
+                  length:
                     Math.min(
-                      totalPages,
-                      safePage +
-                      1
-                    )
-                  )
-                }
-              >
-                <ChevronRight
-                  size={11}
-                />
-              </PageButton>
+                      5,
+                      totalPages
+                    ),
+                }).map(
+                  (
+                    _,
+                    index
+                  ) => {
+                    const number =
+                      index + 1;
 
-              <div className="relative ml-[10px]">
+                    return (
+                      <PageButton
+                        key={
+                          number
+                        }
+                        active={
+                          safePage ===
+                          number
+                        }
+                        onClick={() =>
+                          setPage(
+                            number
+                          )
+                        }
+                      >
+                        {number}
+                      </PageButton>
+                    );
+                  }
+                )}
+
+                <PageButton
+                  disabled={
+                    safePage ===
+                    totalPages
+                  }
+                  onClick={() =>
+                    setPage(
+                      Math.min(
+                        totalPages,
+                        safePage +
+                        1
+                      )
+                    )
+                  }
+                >
+                  <ChevronRight
+                    size={11}
+                  />
+                </PageButton>
+              </div>
+
+              <div className="relative">
                 <select
                   value={
                     perPage
@@ -2546,10 +2551,8 @@ export default function RequestsPage() {
         <div className="mt-[7px] w-full min-w-0 overflow-x-auto pb-[4px]">
           <div
             className="
-              grid
-              w-full
-              min-w-[1100px]
-              grid-cols-6
+              flex
+              min-w-max
               gap-[10px]
             "
           >
@@ -3123,16 +3126,17 @@ function QuickAction({
       className="
         relative
         flex
-        h-[60px]
-        min-w-0
+        h-[74px]
+        w-[172px]
+        min-w-[172px]
         items-center
-        gap-[9px]
-        overflow-hidden
+        gap-[10px]
         rounded-[6px]
         border
         border-[#E4E8EC]
         bg-white
-        px-[11px]
+        px-[12px]
+        pr-[22px]
         text-left
         hover:bg-[#FBFCFD]
       "
@@ -3166,7 +3170,7 @@ function QuickAction({
           min-w-0
           text-[9px]
           font-[700]
-          leading-[11px]
+          leading-[14px]
           text-[#182A65]
         "
       >

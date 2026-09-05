@@ -584,7 +584,7 @@ export default function EngagementLeadsOverviewPage() {
               <FunnelRow
                 width="55%"
                 bg="#9E61CE"
-                label="Sewa Cases Started"
+                label="Sewa Cases"
                 value="38"
                 extra="65.5%"
               />
@@ -1000,10 +1000,8 @@ export default function EngagementLeadsOverviewPage() {
         <div className="mt-[8px] w-full min-w-0 overflow-x-auto pb-[4px]">
           <div
             className="
-              grid
-              w-full
-              min-w-[1100px]
-              grid-cols-8
+              flex
+              min-w-max
               gap-[8px]
             "
           >
@@ -1314,7 +1312,7 @@ function FunnelRow({
 }: {
   width: string;
   bg: string;
-  label: string;
+  label: ReactNode;
   value: string;
   extra?: string;
 }) {
@@ -1335,9 +1333,10 @@ function FunnelRow({
             h-full
             items-center
             justify-center
-            text-[9px]
+            text-[7px]
             font-[700]
             text-white
+            whitespace-nowrap
           "
           style={{
             width,
@@ -1545,15 +1544,15 @@ function StatusBadge({ status }: { status: RecentStatus }) {
   const meta =
     status === "New"
       ? {
-          bg: "#E8F2FE",
-          color: "#3576D0",
-          border: "#D4E5F9",
-        }
+        bg: "#E8F2FE",
+        color: "#3576D0",
+        border: "#D4E5F9",
+      }
       : {
-          bg: "#FFF3DB",
-          color: "#D78916",
-          border: "#F3DFB6",
-        };
+        bg: "#FFF3DB",
+        color: "#D78916",
+        border: "#F3DFB6",
+      };
 
   return (
     <span
@@ -1586,17 +1585,17 @@ function PriorityBadge({ priority }: { priority: Priority }) {
   const meta =
     priority === "High"
       ? {
-          bg: "#FDE9E9",
-          color: "#D94343",
-          border: "#F2D0D0",
-        }
+        bg: "#FDE9E9",
+        color: "#D94343",
+        border: "#F2D0D0",
+      }
       : priority === "Medium"
-      ? {
+        ? {
           bg: "#FFF2DC",
           color: "#D98A16",
           border: "#F1DCB5",
         }
-      : {
+        : {
           bg: "#E5F4E9",
           color: "#2D8250",
           border: "#D0E8D6",
@@ -1654,16 +1653,17 @@ function QuickAction({
       className="
         relative
         flex
-        h-[60px]
-        min-w-0
+        h-[74px]
+        w-[172px]
+        min-w-[172px]
         items-center
-        gap-[9px]
-        overflow-hidden
+        gap-[10px]
         rounded-[6px]
         border
         border-[#E3E7EB]
         bg-white
-        px-[11px]
+        px-[12px]
+        pr-[22px]
         text-left
         hover:bg-[#FBFCFD]
       "
@@ -1695,7 +1695,7 @@ function QuickAction({
           min-w-0
           text-[9px]
           font-[700]
-          leading-[10px]
+          leading-[14px]
           text-[#2E4074]
         "
       >
@@ -1706,8 +1706,8 @@ function QuickAction({
         <span
           className="
             absolute
-            right-[5px]
-            top-[-5px]
+            right-[8px]
+            top-[6px]
             flex
             h-[17px]
             min-w-[17px]

@@ -1229,20 +1229,20 @@ export default function NewsletterPage() {
             <table
               className="
                 w-full
-                min-w-[1100px]
+                min-w-[1320px]
                 table-fixed
                 border-collapse
               "
             >
               <colgroup>
-                <col style={{ width: "4%" }} />
-                <col style={{ width: "20%" }} />
-                <col style={{ width: "19%" }} />
-                <col style={{ width: "10%" }} />
-                <col style={{ width: "15%" }} />
-                <col style={{ width: "14%" }} />
-                <col style={{ width: "13%" }} />
-                <col style={{ width: "5%" }} />
+                <col style={{ width: "48px" }} />
+                <col style={{ width: "265px" }} />
+                <col style={{ width: "330px" }} />
+                <col style={{ width: "130px" }} />
+                <col style={{ width: "250px" }} />
+                <col style={{ width: "210px" }} />
+                <col style={{ width: "165px" }} />
+                <col style={{ width: "92px" }} />
               </colgroup>
 
               <thead>
@@ -1339,6 +1339,7 @@ export default function NewsletterPage() {
                   <th
                     className="
                       px-[5px]
+                      text-center
                       text-[9px]
                       font-[700]
                       uppercase
@@ -1679,12 +1680,14 @@ export default function NewsletterPage() {
                           <td
                             className="
                               px-[4px]
+                              text-center
                               align-middle
                             "
                           >
                             <button
                               type="button"
                               className="
+                                mx-auto
                                 flex
                                 h-[28px]
                                 w-[28px]
@@ -1789,13 +1792,15 @@ export default function NewsletterPage() {
             <div
               className="
                 flex
-                h-[48px]
+                min-w-[1320px]
+                min-h-[56px]
                 items-center
                 justify-between
                 gap-[10px]
                 border-t
                 border-[#E6E9ED]
                 px-[16px]
+                py-[10px]
               "
             >
               <p
@@ -1815,86 +1820,25 @@ export default function NewsletterPage() {
                   : "Showing 0 subscribers"}
               </p>
 
-              <div
-                className="
-                  flex
-                  items-center
-                  gap-[5px]
-                "
-              >
-                <button
-                  type="button"
-                  disabled={safePage === 1}
-                  onClick={() =>
-                    setPage((current) =>
-                      Math.max(
-                        1,
-                        current - 1
-                      )
-                    )
-                  }
+              <div className="flex shrink-0 items-center gap-[14px]">
+                <div
                   className="
                     flex
-                    h-[28px]
-                    w-[28px]
                     items-center
-                    justify-center
-                    rounded-[4px]
-                    border
-                    border-[#E3E7ED]
-                    bg-white
-                    text-[#536180]
-                    disabled:opacity-40
+                    gap-[5px]
                   "
                 >
-                  <ChevronLeft
-                    size={12}
-                  />
-                </button>
-
-                {Array.from({
-                  length: Math.min(
-                    3,
-                    totalPages
-                  ),
-                }).map((_, index) => {
-                  const number =
-                    index + 1;
-
-                  return (
-                    <button
-                      key={number}
-                      type="button"
-                      onClick={() =>
-                        setPage(
-                          number
+                  <button
+                    type="button"
+                    disabled={safePage === 1}
+                    onClick={() =>
+                      setPage((current) =>
+                        Math.max(
+                          1,
+                          current - 1
                         )
-                      }
-                      className={`
-                        flex
-                        h-[28px]
-                        w-[28px]
-                        items-center
-                        justify-center
-                        rounded-[4px]
-                        border
-                        text-[9px]
-                        font-[700]
-
-                        ${safePage ===
-                          number
-                          ? "border-[#006132] bg-[#006132] text-white"
-                          : "border-[#E3E7ED] bg-white text-[#334575]"
-                        }
-                      `}
-                    >
-                      {number}
-                    </button>
-                  );
-                })}
-
-                {totalPages > 4 && (
-                  <span
+                      )
+                    }
                     className="
                       flex
                       h-[28px]
@@ -1905,80 +1849,142 @@ export default function NewsletterPage() {
                       border
                       border-[#E3E7ED]
                       bg-white
-                      text-[9px]
-                      text-[#596584]
+                      text-[#536180]
+                      disabled:opacity-40
                     "
                   >
-                    ...
-                  </span>
-                )}
+                    <ChevronLeft
+                      size={12}
+                    />
+                  </button>
 
-                {totalPages > 3 && (
+                  {Array.from({
+                    length: Math.min(
+                      3,
+                      totalPages
+                    ),
+                  }).map((_, index) => {
+                    const number =
+                      index + 1;
+
+                    return (
+                      <button
+                        key={number}
+                        type="button"
+                        onClick={() =>
+                          setPage(
+                            number
+                          )
+                        }
+                        className={`
+                          flex
+                          h-[28px]
+                          w-[28px]
+                          items-center
+                          justify-center
+                          rounded-[4px]
+                          border
+                          text-[9px]
+                          font-[700]
+
+                          ${safePage ===
+                            number
+                            ? "border-[#006132] bg-[#006132] text-white"
+                            : "border-[#E3E7ED] bg-white text-[#334575]"
+                          }
+                        `}
+                      >
+                        {number}
+                      </button>
+                    );
+                  })}
+
+                  {totalPages > 4 && (
+                    <span
+                      className="
+                        flex
+                        h-[28px]
+                        w-[28px]
+                        items-center
+                        justify-center
+                        rounded-[4px]
+                        border
+                        border-[#E3E7ED]
+                        bg-white
+                        text-[9px]
+                        text-[#596584]
+                      "
+                    >
+                      ...
+                    </span>
+                  )}
+
+                  {totalPages > 3 && (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setPage(
+                          totalPages
+                        )
+                      }
+                      className={`
+                        flex
+                        h-[28px]
+                        min-w-[28px]
+                        items-center
+                        justify-center
+                        rounded-[4px]
+                        border
+                        px-[5px]
+                        text-[9px]
+                        font-[700]
+
+                        ${safePage ===
+                          totalPages
+                          ? "border-[#006132] bg-[#006132] text-white"
+                          : "border-[#E3E7ED] bg-white text-[#334575]"
+                        }
+                      `}
+                    >
+                      {totalPages}
+                    </button>
+                  )}
+
                   <button
                     type="button"
+                    disabled={
+                      safePage ===
+                      totalPages
+                    }
                     onClick={() =>
-                      setPage(
-                        totalPages
+                      setPage((current) =>
+                        Math.min(
+                          totalPages,
+                          current + 1
+                        )
                       )
                     }
-                    className={`
+                    className="
                       flex
                       h-[28px]
-                      min-w-[28px]
+                      w-[28px]
                       items-center
                       justify-center
                       rounded-[4px]
                       border
-                      px-[5px]
-                      text-[9px]
-                      font-[700]
-
-                      ${safePage ===
-                        totalPages
-                        ? "border-[#006132] bg-[#006132] text-white"
-                        : "border-[#E3E7ED] bg-white text-[#334575]"
-                      }
-                    `}
+                      border-[#E3E7ED]
+                      bg-white
+                      text-[#334575]
+                      disabled:opacity-40
+                    "
                   >
-                    {totalPages}
+                    <ChevronRight
+                      size={12}
+                    />
                   </button>
-                )}
+                </div>
 
-                <button
-                  type="button"
-                  disabled={
-                    safePage ===
-                    totalPages
-                  }
-                  onClick={() =>
-                    setPage((current) =>
-                      Math.min(
-                        totalPages,
-                        current + 1
-                      )
-                    )
-                  }
-                  className="
-                    flex
-                    h-[28px]
-                    w-[28px]
-                    items-center
-                    justify-center
-                    rounded-[4px]
-                    border
-                    border-[#E3E7ED]
-                    bg-white
-                    text-[#334575]
-                    disabled:opacity-40
-                  "
-                >
-                  <ChevronRight
-                    size={12}
-                  />
-                </button>
-              </div>
-
-              <div className="relative">
+                <div className="relative">
                 <select
                   value={perPage}
                   onChange={(event) => {
@@ -2030,6 +2036,7 @@ export default function NewsletterPage() {
                     text-[#182A65]
                   "
                 />
+                </div>
               </div>
             </div>
           </div>
