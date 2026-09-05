@@ -217,12 +217,12 @@ function MetricCard({
       </div>
 
       <div className="min-w-0 flex-1 overflow-hidden">
-        <p className="break-words text-[9px] font-normal leading-[11px] text-[#34435e]">{label}</p>
+        <p className="break-words text-[9px] font-semibold leading-[11px] text-[#34435e]">{label}</p>
         <div className="mt-[2px] flex items-baseline gap-[6px]">
-          <span className="text-[17px] font-normal leading-none tracking-[-0.03em] text-[#10204a]">
+          <span className="text-[17px] font-semibold leading-none tracking-[-0.03em] text-[#10204a]">
             {value}
           </span>
-          <span className={`truncate text-[8.5px] font-normal ${noteTone}`}>
+          <span className={`truncate text-[8.5px] font-semibold ${noteTone}`}>
             {note}
           </span>
         </div>
@@ -282,11 +282,11 @@ export default function FAQsManagementPage() {
         {/* HEADER */}
         <header className="flex items-start justify-between gap-[16px]">
           <div>
-            <h1 className="text-[24px] font-normal leading-none tracking-[-0.02em] text-[#075b33]">
+            <h1 className="text-[24px] font-semibold leading-none tracking-[-0.02em] text-[#075b33]">
               FAQs Management
             </h1>
 
-            <nav className="mt-[9px] flex items-center gap-[8px] text-[10.5px] font-normal text-[#1d2b58]">
+            <nav className="mt-[9px] flex items-center gap-[8px] text-[10.5px] font-semibold text-[#1d2b58]">
               <span>Dashboard</span>
               <span className="text-[#7b8597]">›</span>
               <span>FAQs Management</span>
@@ -297,7 +297,7 @@ export default function FAQsManagementPage() {
             <button
               type="button"
               onClick={() => router.push("/faqs/new")}
-              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] bg-[linear-gradient(180deg,#076636_0%,#03542c_100%)] px-[20px] text-[10.5px] font-normal text-white shadow-[0_7px_16px_rgba(5,94,49,.12)] transition hover:opacity-95"
+              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] bg-[linear-gradient(180deg,#076636_0%,#03542c_100%)] px-[20px] text-[10.5px] font-semibold text-white shadow-[0_7px_16px_rgba(5,94,49,.12)] transition hover:opacity-95"
             >
               <Plus className="h-[15px] w-[15px]" />
               Add New FAQ
@@ -306,7 +306,7 @@ export default function FAQsManagementPage() {
             <button
               type="button"
               onClick={() => router.push("/faqs/settings")}
-              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] border border-[#dfe3e7] bg-white px-[18px] text-[10.5px] font-normal text-[#273655] transition hover:bg-slate-50"
+              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] border border-[#dfe3e7] bg-white px-[18px] text-[10.5px] font-semibold text-[#273655] transition hover:bg-slate-50"
             >
               <Settings className="h-[15px] w-[15px]" />
               FAQ Settings
@@ -372,14 +372,14 @@ export default function FAQsManagementPage() {
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
                   placeholder="Search FAQs by question or keyword..."
-                  className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[14px] pr-[40px] text-[10.5px] font-normal text-[#273655] outline-none placeholder:text-[#8b95a7]"
+                  className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[14px] pr-[40px] text-[10.5px] font-semibold text-[#273655] outline-none placeholder:text-[#8b95a7]"
                 />
               </label>
 
               <select
                 value={category}
                 onChange={(event) => setCategory(event.target.value)}
-                className="h-[40px] min-w-[125px] rounded-[6px] border border-[#dfe4e8] bg-white px-[10px] text-[10px] font-normal text-[#2a3855] outline-none"
+                className="h-[40px] min-w-[125px] rounded-[6px] border border-[#dfe4e8] bg-white px-[10px] text-[10px] font-semibold text-[#2a3855] outline-none"
               >
                 <option>All Categories</option>
                 <option>General</option>
@@ -392,7 +392,7 @@ export default function FAQsManagementPage() {
               <select
                 value={status}
                 onChange={(event) => setStatus(event.target.value)}
-                className="h-[40px] min-w-[110px] rounded-[6px] border border-[#dfe4e8] bg-white px-[10px] text-[10px] font-normal text-[#2a3855] outline-none"
+                className="h-[40px] min-w-[110px] rounded-[6px] border border-[#dfe4e8] bg-white px-[10px] text-[10px] font-semibold text-[#2a3855] outline-none"
               >
                 <option>All Status</option>
                 <option>Published</option>
@@ -402,7 +402,7 @@ export default function FAQsManagementPage() {
               <select
                 value={visibility}
                 onChange={(event) => setVisibility(event.target.value)}
-                className="h-[40px] min-w-[115px] rounded-[6px] border border-[#dfe4e8] bg-white px-[10px] text-[10px] font-normal text-[#2a3855] outline-none"
+                className="h-[40px] min-w-[115px] rounded-[6px] border border-[#dfe4e8] bg-white px-[10px] text-[10px] font-semibold text-[#2a3855] outline-none"
               >
                 <option>All Visibility</option>
                 <option>Public</option>
@@ -412,7 +412,7 @@ export default function FAQsManagementPage() {
 
               <button
                 type="button"
-                className="inline-flex h-[40px] items-center justify-center gap-[6px] rounded-[6px] border border-[#cfe4d7] bg-white px-[12px] text-[10px] font-normal text-[#146a3f] shrink-0"
+                className="inline-flex h-[40px] items-center justify-center gap-[6px] rounded-[6px] border border-[#cfe4d7] bg-white px-[12px] text-[10px] font-semibold text-[#146a3f] shrink-0"
               >
                 <Filter className="h-[14px] w-[14px]" />
                 More Filters
@@ -421,7 +421,7 @@ export default function FAQsManagementPage() {
               <button
                 type="button"
                 onClick={clearFilters}
-                className="inline-flex h-[40px] items-center justify-center gap-[6px] rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10px] font-normal text-[#35445f] shrink-0"
+                className="inline-flex h-[40px] items-center justify-center gap-[6px] rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10px] font-semibold text-[#35445f] shrink-0"
               >
                 <RefreshCw className="h-[14px] w-[14px]" />
                 Clear
@@ -433,7 +433,7 @@ export default function FAQsManagementPage() {
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[930px] border-collapse text-left">
                   <thead>
-                    <tr className="h-[42px] border-b border-[#e7e9ec] bg-[#fafbfc] text-[8.5px] font-normal uppercase tracking-[0.04em] text-[#44516a]">
+                    <tr className="h-[42px] border-b border-[#e7e9ec] bg-[#fafbfc] text-[8.5px] font-semibold uppercase tracking-[0.04em] text-[#44516a]">
                       <th className="w-[42px] px-[12px] text-center">
                         <input type="checkbox" />
                       </th>
@@ -467,10 +467,10 @@ export default function FAQsManagementPage() {
 
                             <td className="px-[8px]">
                               <div className="min-w-[300px]">
-                                <p className="text-[10.5px] font-normal leading-tight text-[#19274a]">
+                                <p className="text-[10.5px] font-semibold leading-tight text-[#19274a]">
                                   {item.question}
                                 </p>
-                                <p className="mt-[4px] max-w-[330px] text-[8.8px] font-normal leading-[1.35] text-[#53627c]">
+                                <p className="mt-[4px] max-w-[330px] text-[8.8px] font-semibold leading-[1.35] text-[#53627c]">
                                   {item.summary}
                                 </p>
                               </div>
@@ -478,21 +478,21 @@ export default function FAQsManagementPage() {
 
                             <td className="px-[8px]">
                               <span
-                                className={`inline-flex whitespace-nowrap rounded-[5px] px-[8px] py-[4px] text-[8px] font-normal ${categoryTone[item.category]}`}
+                                className={`inline-flex whitespace-nowrap rounded-[5px] px-[8px] py-[4px] text-[8px] font-semibold ${categoryTone[item.category]}`}
                               >
                                 {item.category}
                               </span>
                             </td>
 
                             <td className="px-[8px]">
-                              <span className="inline-flex items-center gap-[5px] rounded-[5px] bg-emerald-50 px-[8px] py-[4px] text-[8px] font-normal text-emerald-700">
+                              <span className="inline-flex items-center gap-[5px] rounded-[5px] bg-emerald-50 px-[8px] py-[4px] text-[8px] font-semibold text-emerald-700">
                                 <span className="h-[5px] w-[5px] rounded-full bg-emerald-500" />
                                 {item.status}
                               </span>
                             </td>
 
                             <td className="px-[8px] text-center">
-                              <span className="text-[9.5px] font-normal tabular-nums text-[#2f3d58]">
+                              <span className="text-[9.5px] font-semibold tabular-nums text-[#2f3d58]">
                                 {item.views.toLocaleString()}
                               </span>
                             </td>
@@ -500,17 +500,17 @@ export default function FAQsManagementPage() {
                             <td className="px-[8px]">
                               <div className="flex items-center justify-center gap-[6px] text-emerald-700">
                                 <ThumbsUp className="h-[12px] w-[12px]" />
-                                <span className="text-[9.5px] font-normal tabular-nums">
+                                <span className="text-[9.5px] font-semibold tabular-nums">
                                   {item.votes}
                                 </span>
                               </div>
                             </td>
 
                             <td className="px-[8px]">
-                              <p className="whitespace-nowrap text-[9px] font-normal text-[#2c3a58]">
+                              <p className="whitespace-nowrap text-[9px] font-semibold text-[#2c3a58]">
                                 {item.updatedOn}
                               </p>
-                              <p className="mt-[4px] whitespace-nowrap text-[8px] font-normal text-[#68758d]">
+                              <p className="mt-[4px] whitespace-nowrap text-[8px] font-semibold text-[#68758d]">
                                 By {item.updatedBy}
                               </p>
                             </td>
@@ -551,25 +551,25 @@ export default function FAQsManagementPage() {
                                 <div className="rounded-[7px] border border-[#d6e6dc] bg-white p-[14px] shadow-[0_2px_6px_rgba(7,91,51,0.04)]">
                                   <div className="flex items-center justify-between gap-[12px]">
                                     <div className="flex items-center gap-[8px]">
-                                      <span className="grid h-[22px] w-[22px] place-items-center rounded-full bg-[#eaf4ee] text-[10px] font-normal text-[#075b33]">
+                                      <span className="grid h-[22px] w-[22px] place-items-center rounded-full bg-[#eaf4ee] text-[10px] font-semibold text-[#075b33]">
                                         Q
                                       </span>
-                                      <h4 className="text-[12px] font-normal text-[#172648]">
+                                      <h4 className="text-[12px] font-semibold text-[#172648]">
                                         {item.question}
                                       </h4>
                                     </div>
-                                    <span className="rounded-[4px] border border-[#d0e4d7] bg-[#f2f8f4] px-[8px] py-[2px] text-[8.5px] font-normal text-[#075b33]">
+                                    <span className="rounded-[4px] border border-[#d0e4d7] bg-[#f2f8f4] px-[8px] py-[2px] text-[8.5px] font-semibold text-[#075b33]">
                                       Visibility: {item.visibility}
                                     </span>
                                   </div>
 
                                   <div className="mt-[10px] pl-[30px]">
-                                    <p className="text-[10px] font-normal leading-[1.6] text-[#34435e]">
+                                    <p className="text-[10px] font-semibold leading-[1.6] text-[#34435e]">
                                       {item.summary} Moksha Sewa provides dignified, scripture-guided humanitarian final journey services, cremation assistance, ambulance support, and Vedic rituals with utmost reverence and zero cost for families in need.
                                     </p>
 
                                     <div className="mt-[12px] flex items-center justify-between border-t border-[#f0f4f2] pt-[10px]">
-                                      <div className="flex items-center gap-[14px] text-[9px] font-normal text-[#5c6a83]">
+                                      <div className="flex items-center gap-[14px] text-[9px] font-semibold text-[#5c6a83]">
                                         <span>Category: <span className="text-[#075b33]">{item.category}</span></span>
                                         <span>Total Views: <span className="text-[#19274a]">{item.views.toLocaleString()}</span></span>
                                         <span>Helpful Votes: <span className="text-emerald-700">{item.votes} 👍</span></span>
@@ -579,7 +579,7 @@ export default function FAQsManagementPage() {
                                         <button
                                           type="button"
                                           onClick={() => router.push("/faqs/new")}
-                                          className="inline-flex h-[28px] items-center gap-[6px] rounded-[5px] border border-[#d6ded9] bg-white px-[10px] text-[8.5px] font-normal text-[#075b33] hover:bg-emerald-50"
+                                          className="inline-flex h-[28px] items-center gap-[6px] rounded-[5px] border border-[#d6ded9] bg-white px-[10px] text-[8.5px] font-semibold text-[#075b33] hover:bg-emerald-50"
                                         >
                                           <Pencil className="h-[10px] w-[10px]" />
                                           Edit FAQ
@@ -600,7 +600,7 @@ export default function FAQsManagementPage() {
 
               {/* PAGINATION */}
               <div className="flex min-h-[58px] items-center justify-between gap-[12px] border-t border-[#e7e9ec] px-[12px]">
-                <p className="text-[9px] font-normal text-[#47546c]">
+                <p className="text-[9px] font-semibold text-[#47546c]">
                   Showing 1 to {rows.length} of 68 FAQs
                 </p>
 
@@ -613,7 +613,7 @@ export default function FAQsManagementPage() {
                     <button
                       type="button"
                       key={page}
-                      className={`grid h-[32px] min-w-[32px] place-items-center rounded-[5px] px-[6px] text-[9px] font-normal ${page === 1
+                      className={`grid h-[32px] min-w-[32px] place-items-center rounded-[5px] px-[6px] text-[9px] font-semibold ${page === 1
                         ? "bg-[#075b33] text-white"
                         : "border border-[#dfe3e7] bg-white text-[#35445f]"
                         }`}
@@ -622,9 +622,9 @@ export default function FAQsManagementPage() {
                     </button>
                   ))}
 
-                  <span className="px-[2px] text-[10px] font-normal text-[#64748b]">…</span>
+                  <span className="px-[2px] text-[10px] font-semibold text-[#64748b]">…</span>
 
-                  <button type="button" className="grid h-[32px] min-w-[32px] place-items-center rounded-[5px] border border-[#dfe3e7] bg-white px-[6px] text-[9px] font-normal text-[#35445f]">
+                  <button type="button" className="grid h-[32px] min-w-[32px] place-items-center rounded-[5px] border border-[#dfe3e7] bg-white px-[6px] text-[9px] font-semibold text-[#35445f]">
                     7
                   </button>
 
@@ -633,7 +633,7 @@ export default function FAQsManagementPage() {
                   </button>
                 </div>
 
-                <select className="h-[32px] rounded-[5px] border border-[#dfe3e7] bg-white px-[10px] text-[9px] font-normal text-[#35445f]">
+                <select className="h-[32px] rounded-[5px] border border-[#dfe3e7] bg-white px-[10px] text-[9px] font-semibold text-[#35445f]">
                   <option>10 / page</option>
                 </select>
               </div>
@@ -644,7 +644,7 @@ export default function FAQsManagementPage() {
           <aside className="space-y-[12px]">
             {/* CATEGORY DONUT */}
             <section className="rounded-[8px] border border-[#e7e9ec] bg-white px-[14px] py-[13px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-              <h2 className="text-[12px] font-normal text-[#19274a]">
+              <h2 className="text-[12px] font-semibold text-[#19274a]">
                 FAQ Categories
               </h2>
 
@@ -658,8 +658,8 @@ export default function FAQsManagementPage() {
                 >
                   <div className="grid h-[76px] w-[76px] place-items-center rounded-full bg-white text-center">
                     <div>
-                      <p className="text-[18px] font-normal leading-none text-[#10204a]">8</p>
-                      <p className="mt-[4px] text-[8px] font-normal text-[#61708c]">
+                      <p className="text-[18px] font-semibold leading-none text-[#10204a]">8</p>
+                      <p className="mt-[4px] text-[8px] font-semibold text-[#61708c]">
                         Categories
                       </p>
                     </div>
@@ -676,10 +676,10 @@ export default function FAQsManagementPage() {
                         className="h-[8px] w-[8px] rounded-full"
                         style={{ backgroundColor: item.color }}
                       />
-                      <span className="truncate text-[8.5px] font-normal text-[#34425e]">
+                      <span className="truncate text-[8.5px] font-semibold text-[#34425e]">
                         {item.label}
                       </span>
-                      <span className="whitespace-nowrap text-[8.3px] font-normal text-[#34425e]">
+                      <span className="whitespace-nowrap text-[8.3px] font-semibold text-[#34425e]">
                         ({item.value})
                       </span>
                     </div>
@@ -690,7 +690,7 @@ export default function FAQsManagementPage() {
 
             {/* QUICK ACTIONS */}
             <section className="rounded-[8px] border border-[#e7e9ec] bg-white px-[14px] py-[13px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-              <h2 className="text-[12px] font-normal text-[#19274a]">
+              <h2 className="text-[12px] font-semibold text-[#19274a]">
                 Quick Actions
               </h2>
 
@@ -698,7 +698,7 @@ export default function FAQsManagementPage() {
                 <button
                   type="button"
                   onClick={() => router.push("/faqs/new")}
-                  className="flex h-[36px] w-full items-center gap-[9px] rounded-[5px] border border-[#e2e6ea] bg-white px-[10px] text-[9px] font-normal text-[#293854] transition hover:bg-slate-50"
+                  className="flex h-[36px] w-full items-center gap-[9px] rounded-[5px] border border-[#e2e6ea] bg-white px-[10px] text-[9px] font-semibold text-[#293854] transition hover:bg-slate-50"
                 >
                   <Plus className="h-[13px] w-[13px]" />
                   Add New FAQ
@@ -706,7 +706,7 @@ export default function FAQsManagementPage() {
 
                 <button
                   type="button"
-                  className="flex h-[36px] w-full items-center gap-[9px] rounded-[5px] border border-[#e2e6ea] bg-white px-[10px] text-[9px] font-normal text-[#293854] transition hover:bg-slate-50"
+                  className="flex h-[36px] w-full items-center gap-[9px] rounded-[5px] border border-[#e2e6ea] bg-white px-[10px] text-[9px] font-semibold text-[#293854] transition hover:bg-slate-50"
                 >
                   <SlidersHorizontal className="h-[13px] w-[13px]" />
                   Manage Categories
@@ -714,7 +714,7 @@ export default function FAQsManagementPage() {
 
                 <button
                   type="button"
-                  className="flex h-[36px] w-full items-center gap-[9px] rounded-[5px] border border-[#e2e6ea] bg-white px-[10px] text-[9px] font-normal text-[#293854] transition hover:bg-slate-50"
+                  className="flex h-[36px] w-full items-center gap-[9px] rounded-[5px] border border-[#e2e6ea] bg-white px-[10px] text-[9px] font-semibold text-[#293854] transition hover:bg-slate-50"
                 >
                   <GripVertical className="h-[13px] w-[13px]" />
                   Reorder FAQs
@@ -723,7 +723,7 @@ export default function FAQsManagementPage() {
                 <button
                   type="button"
                   onClick={() => router.push("/faqs/settings")}
-                  className="flex h-[36px] w-full items-center gap-[9px] rounded-[5px] border border-[#e2e6ea] bg-white px-[10px] text-[9px] font-normal text-[#293854] transition hover:bg-slate-50"
+                  className="flex h-[36px] w-full items-center gap-[9px] rounded-[5px] border border-[#e2e6ea] bg-white px-[10px] text-[9px] font-semibold text-[#293854] transition hover:bg-slate-50"
                 >
                   <Settings className="h-[13px] w-[13px]" />
                   FAQ Settings
@@ -734,13 +734,13 @@ export default function FAQsManagementPage() {
             {/* TOP VIEWED */}
             <section className="rounded-[8px] border border-[#e7e9ec] bg-white px-[14px] py-[13px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
               <div className="flex items-center justify-between gap-[10px]">
-                <h2 className="text-[12px] font-normal text-[#19274a]">
+                <h2 className="text-[12px] font-semibold text-[#19274a]">
                   Top Viewed FAQs
                 </h2>
 
                 <button
                   type="button"
-                  className="rounded-[5px] border border-[#d9eadf] bg-white px-[8px] py-[4px] text-[8px] font-normal text-[#14683d]"
+                  className="rounded-[5px] border border-[#d9eadf] bg-white px-[8px] py-[4px] text-[8px] font-semibold text-[#14683d]"
                 >
                   View All
                 </button>
@@ -752,15 +752,15 @@ export default function FAQsManagementPage() {
                     key={label}
                     className="grid grid-cols-[20px_1fr_auto] items-center gap-[8px]"
                   >
-                    <span className="text-[13px] font-normal text-[#17234a]">
+                    <span className="text-[13px] font-semibold text-[#17234a]">
                       {index + 1}
                     </span>
 
-                    <span className="truncate text-[8.5px] font-normal text-[#34425e]">
+                    <span className="truncate text-[8.5px] font-semibold text-[#34425e]">
                       {label}
                     </span>
 
-                    <span className="flex items-center gap-[5px] whitespace-nowrap text-[8.5px] font-normal text-[#4b5870]">
+                    <span className="flex items-center gap-[5px] whitespace-nowrap text-[8.5px] font-semibold text-[#4b5870]">
                       <Eye className="h-[10px] w-[10px] text-[#7c8799]" />
                       {count}
                     </span>
@@ -772,7 +772,7 @@ export default function FAQsManagementPage() {
             {/* GREEN CTA */}
             <section className="relative overflow-hidden rounded-[8px] bg-[linear-gradient(135deg,#08643a_0%,#07542f_100%)] px-[18px] py-[18px] text-white shadow-[0_7px_18px_rgba(5,94,49,.12)]">
               <div className="relative z-10 max-w-[210px]">
-                <p className="text-[12px] font-normal leading-[1.5]">
+                <p className="text-[12px] font-semibold leading-[1.5]">
                   Keep your answers up-to-date
                   <br />
                   and help more people.
@@ -781,7 +781,7 @@ export default function FAQsManagementPage() {
                 <button
                   type="button"
                   onClick={() => router.push("/faqs/new")}
-                  className="mt-[16px] inline-flex h-[36px] items-center gap-[8px] rounded-[5px] bg-white px-[14px] text-[9px] font-normal text-[#075b33] transition hover:bg-slate-100"
+                  className="mt-[16px] inline-flex h-[36px] items-center gap-[8px] rounded-[5px] bg-white px-[14px] text-[9px] font-semibold text-[#075b33] transition hover:bg-slate-100"
                 >
                   Add New FAQ
                   <ChevronRight className="h-[12px] w-[12px]" />

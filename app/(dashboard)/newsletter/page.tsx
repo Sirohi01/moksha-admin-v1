@@ -379,7 +379,7 @@ function StatCard({
             className="
               break-words
               text-[9px]
-              font-normal
+              font-semibold
               uppercase
               tracking-wider
               leading-[11px]
@@ -394,7 +394,7 @@ function StatCard({
               mt-[2px]
               whitespace-nowrap
               text-2xl
-              font-normal
+              font-semibold
               leading-none
             "
             style={{
@@ -418,7 +418,7 @@ function StatCard({
         "
       >
         {change === "Live" || !change ? (
-          <span className="rounded-[4px] bg-[#E4F5E8] px-[5px] py-[1px] text-[9px] font-normal text-[#238B4C]">
+          <span className="rounded-[4px] bg-[#E4F5E8] px-[5px] py-[1px] text-[9px] font-semibold text-[#238B4C]">
             Live
           </span>
         ) : (
@@ -435,7 +435,7 @@ function StatCard({
             <span
               className="
                 text-[9px]
-                font-normal
+                font-semibold
                 text-[#169248]
               "
             >
@@ -444,7 +444,7 @@ function StatCard({
           </>
         )}
 
-        <span className="text-[9px] font-normal text-[#536181]">
+        <span className="text-[9px] font-semibold text-[#536181]">
           {compare ?? "current data"}
         </span>
       </div>
@@ -473,7 +473,7 @@ function FilterButton({
         bg-white
         px-[11px]
         text-[9px]
-        font-normal
+        font-semibold
         text-[#172762]
       "
     >
@@ -849,7 +849,7 @@ export default function NewsletterPage() {
           <h1
             className="
               text-[20px]
-              font-normal
+              font-semibold
               leading-[25px]
               tracking-[-0.4px]
               text-[#005E2E]
@@ -862,7 +862,7 @@ export default function NewsletterPage() {
             className="
               mt-[2px]
               text-[9.5px]
-              font-normal
+              font-semibold
               leading-[14px]
               text-[#344574]
             "
@@ -894,7 +894,7 @@ export default function NewsletterPage() {
               bg-white
               px-[15px]
               text-[9px]
-              font-normal
+              font-semibold
               text-[#172762]
             "
           >
@@ -915,7 +915,7 @@ export default function NewsletterPage() {
               bg-white
               px-[15px]
               text-[9px]
-              font-normal
+              font-semibold
               text-[#172762]
             "
           >
@@ -937,7 +937,7 @@ export default function NewsletterPage() {
               bg-[#005F2E]
               px-[17px]
               text-[9px]
-              font-normal
+              font-semibold
               text-white
               shadow-[0_2px_5px_rgba(0,95,46,0.12)]
               hover:bg-[#004d25]
@@ -1103,7 +1103,7 @@ export default function NewsletterPage() {
                   flex-1
                   bg-transparent
                   text-[9px]
-                  font-normal
+                  font-semibold
                   text-[#172762]
                   outline-none
                   placeholder:text-[#536184]
@@ -1133,7 +1133,7 @@ export default function NewsletterPage() {
                   px-[11px]
                   pr-[30px]
                   text-[9px]
-                  font-normal
+                  font-semibold
                   text-[#172762]
                   outline-none
                 "
@@ -1194,7 +1194,7 @@ export default function NewsletterPage() {
                   px-[11px]
                   pr-[30px]
                   text-[9px]
-                  font-normal
+                  font-semibold
                   text-[#172762]
                   outline-none
                 "
@@ -1246,7 +1246,7 @@ export default function NewsletterPage() {
                 bg-white
                 px-[11px]
                 text-[9px]
-                font-normal
+                font-semibold
                 text-[#536080]
               "
             >
@@ -1276,7 +1276,7 @@ export default function NewsletterPage() {
                   bg-transparent
                   pr-[22px]
                   text-[9px]
-                  font-normal
+                  font-semibold
                   text-[#536080]
                   outline-none
                 "
@@ -1330,7 +1330,7 @@ export default function NewsletterPage() {
                 bg-white
                 px-[7px]
                 text-[9px]
-                font-normal
+                font-semibold
                 text-[#172762]
               "
             >
@@ -1398,7 +1398,7 @@ export default function NewsletterPage() {
                     className="
                       px-[7px]
                       text-[9px]
-                      font-normal
+                      font-semibold
                       uppercase
                       tracking-wider
                     "
@@ -1410,7 +1410,7 @@ export default function NewsletterPage() {
                     className="
                       px-[7px]
                       text-[9px]
-                      font-normal
+                      font-semibold
                       uppercase
                       tracking-wider
                     "
@@ -1422,7 +1422,7 @@ export default function NewsletterPage() {
                     className="
                       px-[7px]
                       text-[9px]
-                      font-normal
+                      font-semibold
                       uppercase
                       tracking-wider
                     "
@@ -1434,7 +1434,7 @@ export default function NewsletterPage() {
                     className="
                       px-[7px]
                       text-[9px]
-                      font-normal
+                      font-semibold
                       uppercase
                       tracking-wider
                     "
@@ -1446,7 +1446,7 @@ export default function NewsletterPage() {
                     className="
                       px-[7px]
                       text-[9px]
-                      font-normal
+                      font-semibold
                       uppercase
                       tracking-wider
                     "
@@ -1458,7 +1458,7 @@ export default function NewsletterPage() {
                     className="
                       px-[7px]
                       text-[9px]
-                      font-normal
+                      font-semibold
                       uppercase
                       tracking-wider
                     "
@@ -1471,7 +1471,7 @@ export default function NewsletterPage() {
                       px-[5px]
                       text-center
                       text-[9px]
-                      font-normal
+                      font-semibold
                       uppercase
                       tracking-wider
                     "
@@ -1605,7 +1605,7 @@ export default function NewsletterPage() {
                                   justify-center
                                   rounded-full
                                   text-[9px]
-                                  font-normal
+                                  font-semibold
                                 "
                                 style={
                                   avatar
@@ -1621,7 +1621,7 @@ export default function NewsletterPage() {
                                   className="
                                     truncate
                                     text-[9px]
-                                    font-normal
+                                    font-semibold
                                     leading-[11px]
                                     text-[#192B66]
                                   "
@@ -1636,7 +1636,7 @@ export default function NewsletterPage() {
                                     mt-[3px]
                                     whitespace-nowrap
                                     text-[9px]
-                                    font-normal
+                                    font-semibold
                                     leading-[10px]
                                     text-[#2F4074]
                                   "
@@ -1661,7 +1661,7 @@ export default function NewsletterPage() {
                               className="
                                 truncate
                                 text-[9px]
-                                font-normal
+                                font-semibold
                                 text-[#2A3D72]
                               "
                               title={
@@ -1692,7 +1692,7 @@ export default function NewsletterPage() {
                                 px-[8px]
                                 py-[4px]
                                 text-[9px]
-                                font-normal
+                                font-semibold
                                 leading-none
                               "
                               style={{
@@ -1737,7 +1737,7 @@ export default function NewsletterPage() {
                                 className="
                                   truncate
                                   text-[9px]
-                                  font-normal
+                                  font-semibold
                                   text-[#354273]
                                 "
                               >
@@ -1759,7 +1759,7 @@ export default function NewsletterPage() {
                               <p
                                 className="
                                   text-[9px]
-                                  font-normal
+                                  font-semibold
                                   leading-[11px]
                                   text-[#192B66]
                                 "
@@ -1771,7 +1771,7 @@ export default function NewsletterPage() {
                                   className="
                                     mt-[2px]
                                     text-[9px]
-                                    font-normal
+                                    font-semibold
                                     leading-[10px]
                                     text-[#556586]
                                   "
@@ -1796,7 +1796,7 @@ export default function NewsletterPage() {
                                 block
                                 truncate
                                 text-[9px]
-                                font-normal
+                                font-semibold
                                 text-[#304176]
                               "
                             >
@@ -1889,7 +1889,7 @@ export default function NewsletterPage() {
                             className="
                               mt-[10px]
                               text-[9px]
-                              font-normal
+                              font-semibold
                               text-[#172762]
                             "
                           >
@@ -1938,7 +1938,7 @@ export default function NewsletterPage() {
                   shrink-0
                   whitespace-nowrap
                   text-[10px]
-                  font-normal
+                  font-semibold
                   text-[#475A83]
                 "
               >
@@ -2015,7 +2015,7 @@ export default function NewsletterPage() {
                           rounded-[4px]
                           border
                           text-[9px]
-                          font-normal
+                          font-semibold
 
                           ${safePage ===
                             number
@@ -2067,7 +2067,7 @@ export default function NewsletterPage() {
                         border
                         px-[5px]
                         text-[9px]
-                        font-normal
+                        font-semibold
 
                         ${safePage ===
                           totalPages
@@ -2137,7 +2137,7 @@ export default function NewsletterPage() {
                     px-[9px]
                     pr-[27px]
                     text-[9px]
-                    font-normal
+                    font-semibold
                     text-[#182A65]
                     outline-none
                   "
@@ -2209,7 +2209,7 @@ export default function NewsletterPage() {
                 className="
                   whitespace-nowrap
                   text-[11px]
-                  font-normal
+                  font-semibold
                   text-[#182A65]
                 "
               >
@@ -2224,7 +2224,7 @@ export default function NewsletterPage() {
                   items-center
                   gap-[3px]
                   text-[9px]
-                  font-normal
+                  font-semibold
                   text-[#167E48]
                 "
               >
@@ -2314,7 +2314,7 @@ export default function NewsletterPage() {
                   <span
                     className="
                       text-[18px]
-                      font-normal
+                      font-semibold
                       leading-none
                       text-[#111111]
                     "
@@ -2326,7 +2326,7 @@ export default function NewsletterPage() {
                     className="
                       mt-[4px]
                       text-[9px]
-                      font-normal
+                      font-semibold
                       text-[#44537B]
                     "
                   >
@@ -2407,7 +2407,7 @@ export default function NewsletterPage() {
                         className="
                           whitespace-nowrap
                           text-[9px]
-                          font-normal
+                          font-semibold
                           text-[#182A65]
                         "
                       >
@@ -2420,7 +2420,7 @@ export default function NewsletterPage() {
                         shrink-0
                         whitespace-nowrap
                         text-[9px]
-                        font-normal
+                        font-semibold
                         text-[#26386D]
                       "
                     >
@@ -2456,7 +2456,7 @@ export default function NewsletterPage() {
             <h2
               className="
                 text-[9px]
-                font-normal
+                font-semibold
                 text-[#182A65]
               "
             >
@@ -2494,7 +2494,7 @@ export default function NewsletterPage() {
                           className="
                             truncate
                             text-[9px]
-                            font-normal
+                            font-semibold
                             text-[#182A65]
                           "
                           title={
@@ -2539,7 +2539,7 @@ export default function NewsletterPage() {
                             whitespace-nowrap
                             text-right
                             text-[9px]
-                            font-normal
+                            font-semibold
                             text-[#344477]
                           "
                         >
@@ -2592,7 +2592,7 @@ export default function NewsletterPage() {
               <h2
                 className="
                   text-[9px]
-                  font-normal
+                  font-semibold
                   text-[#182A65]
                 "
               >
@@ -2665,7 +2665,7 @@ export default function NewsletterPage() {
                       className="
                         whitespace-nowrap
                         text-[9px]
-                        font-normal
+                        font-semibold
                       "
                     >
                       {action.label}
@@ -2718,7 +2718,7 @@ export default function NewsletterPage() {
                 <h2
                   className="
                     text-[9.5px]
-                    font-normal
+                    font-semibold
                     text-[#08602E]
                   "
                 >
@@ -2729,7 +2729,7 @@ export default function NewsletterPage() {
                   className="
                     mt-[7px]
                     text-[9px]
-                    font-normal
+                    font-semibold
                     text-[#44537C]
                   "
                 >
@@ -2760,7 +2760,7 @@ export default function NewsletterPage() {
                 className="
                   whitespace-nowrap
                   text-[9px]
-                  font-normal
+                  font-semibold
                   text-[#21713A]
                 "
               >
@@ -2790,7 +2790,7 @@ export default function NewsletterPage() {
                 className="
                   whitespace-nowrap
                   text-[9px]
-                  font-normal
+                  font-semibold
                   text-[#283C74]
                 "
               >

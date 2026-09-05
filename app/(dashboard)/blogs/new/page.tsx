@@ -56,7 +56,7 @@ function FieldLabel({
   required?: boolean;
 }) {
   return (
-    <label className="mb-[6px] block text-[11px] font-normal text-[#24345e]">
+    <label className="mb-[6px] block text-[11px] font-semibold text-[#24345e]">
       {children}
       {required ? <span className="ml-[2px] text-[#dc3c3c]">*</span> : null}
     </label>
@@ -72,7 +72,7 @@ function Panel({
 }) {
   return (
     <section className="rounded-[9px] border border-[#e7e9ec] bg-white px-[16px] py-[14px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-      <h2 className="text-[14px] font-normal text-[#17234a]">{title}</h2>
+      <h2 className="text-[14px] font-semibold text-[#17234a]">{title}</h2>
       <div className="mt-[12px]">{children}</div>
     </section>
   );
@@ -128,10 +128,10 @@ export default function AddNewPostPage() {
       <div className="min-h-full w-full">
         <header className="flex items-start justify-between gap-[16px]">
           <div>
-            <h1 className="text-[28px] font-normal leading-none tracking-[-0.03em] text-[#075b33]">
+            <h1 className="text-[28px] font-semibold leading-none tracking-[-0.03em] text-[#075b33]">
               Add New Post
             </h1>
-            <nav className="mt-[10px] flex items-center gap-[8px] text-[11px] font-normal text-[#1d2b58]">
+            <nav className="mt-[10px] flex items-center gap-[8px] text-[11px] font-semibold text-[#1d2b58]">
               <span
                 onClick={() => router.push("/")}
                 className="cursor-pointer transition hover:text-[#075b33]"
@@ -154,7 +154,7 @@ export default function AddNewPostPage() {
             <button
               type="button"
               onClick={() => router.push("/blogs")}
-              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] border border-[#dfe3e7] bg-white px-[18px] text-[10.5px] font-normal text-[#273655] transition hover:bg-slate-50"
+              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] border border-[#dfe3e7] bg-white px-[18px] text-[10.5px] font-semibold text-[#273655] transition hover:bg-slate-50"
             >
               <ArrowLeft className="h-[15px] w-[15px]" />
               Back to Blog &amp; Awareness
@@ -163,7 +163,7 @@ export default function AddNewPostPage() {
             <button
               type="button"
               onClick={() => router.push("/blogs")}
-              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] bg-[linear-gradient(180deg,#076636_0%,#03542c_100%)] px-[20px] text-[10.5px] font-normal text-white shadow-[0_7px_16px_rgba(5,94,49,.12)] transition hover:opacity-95"
+              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] bg-[linear-gradient(180deg,#076636_0%,#03542c_100%)] px-[20px] text-[10.5px] font-semibold text-white shadow-[0_7px_16px_rgba(5,94,49,.12)] transition hover:opacity-95"
             >
               <Save className="h-[15px] w-[15px]" />
               Save Draft
@@ -182,9 +182,9 @@ export default function AddNewPostPage() {
                       value={title}
                       onChange={(event) => setTitle(event.target.value.slice(0, 150))}
                       placeholder="Enter an engaging title"
-                      className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[13px] pr-[54px] text-[10.5px] font-normal text-[#2d3b58] outline-none placeholder:text-[#8d97aa]"
+                      className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[13px] pr-[54px] text-[10.5px] font-semibold text-[#2d3b58] outline-none placeholder:text-[#8d97aa]"
                     />
-                    <span className="absolute right-[10px] top-1/2 -translate-y-1/2 text-[8.5px] font-normal text-[#6d7890]">
+                    <span className="absolute right-[10px] top-1/2 -translate-y-1/2 text-[8.5px] font-semibold text-[#6d7890]">
                       {title.length}/150
                     </span>
                   </div>
@@ -196,7 +196,7 @@ export default function AddNewPostPage() {
                     <select
                       value={category}
                       onChange={(event) => setCategory(event.target.value)}
-                      className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10.5px] font-normal text-[#2f3d58] outline-none"
+                      className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10.5px] font-semibold text-[#2f3d58] outline-none"
                     >
                       <option value="">Select Category</option>
                       <option>Moksha Sewa</option>
@@ -212,9 +212,9 @@ export default function AddNewPostPage() {
                       value={tags}
                       onChange={(event) => setTags(event.target.value)}
                       placeholder="Add tags and press Enter"
-                      className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[13px] text-[10.5px] font-normal text-[#2d3b58] outline-none placeholder:text-[#8d97aa]"
+                      className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[13px] text-[10.5px] font-semibold text-[#2d3b58] outline-none placeholder:text-[#8d97aa]"
                     />
-                    <p className="mt-[5px] text-[8.8px] font-normal text-[#728096]">
+                    <p className="mt-[5px] text-[8.8px] font-semibold text-[#728096]">
                       E.g. moksha-sewa, awareness, dignity, support
                     </p>
                   </div>
@@ -226,10 +226,10 @@ export default function AddNewPostPage() {
                     value={excerpt}
                     onChange={(event) => setExcerpt(event.target.value.slice(0, 250))}
                     placeholder="Write a short summary of the post..."
-                    className="h-[72px] w-full resize-none rounded-[6px] border border-[#dfe4e8] bg-white px-[13px] py-[10px] text-[10.5px] font-normal text-[#2d3b58] outline-none placeholder:text-[#8d97aa]"
+                    className="h-[72px] w-full resize-none rounded-[6px] border border-[#dfe4e8] bg-white px-[13px] py-[10px] text-[10.5px] font-semibold text-[#2d3b58] outline-none placeholder:text-[#8d97aa]"
                   />
                   <div className="mt-[5px] flex justify-end">
-                    <span className="text-[8.5px] font-normal text-[#6d7890]">
+                    <span className="text-[8.5px] font-semibold text-[#6d7890]">
                       {excerpt.length}/250
                     </span>
                   </div>
@@ -254,13 +254,13 @@ export default function AddNewPostPage() {
                         className="h-[180px] w-full rounded-[5px] object-cover"
                       />
                       <div className="mt-[8px] flex items-center justify-between">
-                        <span className="text-[9px] font-normal text-[#075b33]">
+                        <span className="text-[9px] font-semibold text-[#075b33]">
                           ✓ Image Uploaded Successfully
                         </span>
                         <button
                           type="button"
                           onClick={() => fileInputRef.current?.click()}
-                          className="rounded-[4px] border border-[#dfe4e8] bg-white px-[10px] py-[4px] text-[8.5px] font-normal text-[#35445f] hover:bg-slate-50"
+                          className="rounded-[4px] border border-[#dfe4e8] bg-white px-[10px] py-[4px] text-[8.5px] font-semibold text-[#35445f] hover:bg-slate-50"
                         >
                           Change Image
                         </button>
@@ -272,17 +272,17 @@ export default function AddNewPostPage() {
                       className="flex min-h-[150px] w-full cursor-pointer flex-col items-center justify-center rounded-[7px] border border-dashed border-[#d6dde2] bg-[#fffefc] transition hover:bg-slate-50"
                     >
                       <ImageIcon className="h-[34px] w-[34px] text-[#176f45]" strokeWidth={1.7} />
-                      <p className="mt-[9px] text-[10.5px] font-normal text-[#49566e]">
+                      <p className="mt-[9px] text-[10.5px] font-semibold text-[#49566e]">
                         Drag &amp; drop image here or
                       </p>
-                      <span className="mt-[8px] inline-flex h-[32px] items-center gap-[7px] rounded-[5px] border border-[#cfe0d4] bg-white px-[12px] text-[8.8px] font-normal text-[#14683d]">
+                      <span className="mt-[8px] inline-flex h-[32px] items-center gap-[7px] rounded-[5px] border border-[#cfe0d4] bg-white px-[12px] text-[8.8px] font-semibold text-[#14683d]">
                         <Upload className="h-[12px] w-[12px]" />
                         Browse Files
                       </span>
-                      <p className="mt-[10px] text-[8.5px] font-normal text-[#718096]">
+                      <p className="mt-[10px] text-[8.5px] font-semibold text-[#718096]">
                         Recommended size: 1200 × 675 px (JPG, PNG, WebP)
                       </p>
-                      <p className="mt-[3px] text-[8.5px] font-normal text-[#718096]">
+                      <p className="mt-[3px] text-[8.5px] font-semibold text-[#718096]">
                         Max file size: 2 MB
                       </p>
                     </div>
@@ -293,7 +293,7 @@ export default function AddNewPostPage() {
                   <FieldLabel required>Content</FieldLabel>
                   <div className="overflow-hidden rounded-[6px] border border-[#dfe4e8] bg-white">
                     <div className="flex min-h-[40px] flex-wrap items-center gap-[11px] border-b border-[#e7e9ec] px-[12px] text-[#2f3c56]">
-                      <button type="button" className="inline-flex items-center gap-[8px] text-[9.5px] font-normal">
+                      <button type="button" className="inline-flex items-center gap-[8px] text-[9.5px] font-semibold">
                         Paragraph
                         <ChevronDown className="h-[12px] w-[12px]" />
                       </button>
@@ -327,11 +327,11 @@ export default function AddNewPostPage() {
                       value={content}
                       onChange={(event) => setContent(event.target.value)}
                       placeholder="Write your content here..."
-                      className="h-[122px] w-full resize-none bg-white px-[14px] py-[12px] text-[10.5px] font-normal text-[#2d3b58] outline-none placeholder:text-[#8d97aa]"
+                      className="h-[122px] w-full resize-none bg-white px-[14px] py-[12px] text-[10.5px] font-semibold text-[#2d3b58] outline-none placeholder:text-[#8d97aa]"
                     />
 
                     <div className="flex h-[28px] items-center border-t border-[#e7e9ec] px-[12px]">
-                      <span className="text-[8.5px] font-normal text-[#66738b]">
+                      <span className="text-[8.5px] font-semibold text-[#66738b]">
                         Word count: {wordCount}
                       </span>
                     </div>
@@ -347,18 +347,18 @@ export default function AddNewPostPage() {
                     <Globe2 className="h-[15px] w-[15px]" />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-[9px] font-normal text-[#35445f]">mokshasewa.org</p>
-                    <p className="mt-[2px] text-[8.5px] font-normal text-[#5f6c82]">
+                    <p className="text-[9px] font-semibold text-[#35445f]">mokshasewa.org</p>
+                    <p className="mt-[2px] text-[8.5px] font-semibold text-[#5f6c82]">
                       https://www.mokshasewa.org/{slug.trim() || "your-post-url"}
                     </p>
                   </div>
                 </div>
 
-                <p className="mt-[10px] text-[14px] font-normal text-[#233b8c]">
+                <p className="mt-[10px] text-[14px] font-semibold text-[#233b8c]">
                   {metaTitle.trim() || title.trim() || "Your Post Title Will Appear Here"}
                 </p>
 
-                <p className="mt-[5px] text-[9px] font-normal leading-[1.45] text-[#4f5d72]">
+                <p className="mt-[5px] text-[9px] font-semibold leading-[1.45] text-[#4f5d72]">
                   {metaDescription.trim() ||
                     excerpt.trim() ||
                     "This is how your post may appear in search engine results. Make it compelling to get more clicks."}
@@ -377,7 +377,7 @@ export default function AddNewPostPage() {
                     <select
                       value={status}
                       onChange={(event) => setStatus(event.target.value)}
-                      className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white pl-[34px] pr-[12px] text-[10.5px] font-normal text-[#2f3d58] outline-none"
+                      className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white pl-[34px] pr-[12px] text-[10.5px] font-semibold text-[#2f3d58] outline-none"
                     >
                       <option>Draft</option>
                       <option>Published</option>
@@ -393,7 +393,7 @@ export default function AddNewPostPage() {
                     <select
                       value={visibility}
                       onChange={(event) => setVisibility(event.target.value)}
-                      className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white pl-[36px] pr-[12px] text-[10.5px] font-normal text-[#2f3d58] outline-none"
+                      className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white pl-[36px] pr-[12px] text-[10.5px] font-semibold text-[#2f3d58] outline-none"
                     >
                       <option>Public</option>
                       <option>Members Only</option>
@@ -415,8 +415,8 @@ export default function AddNewPostPage() {
                         }`}
                     />
                     <div>
-                      <p className="text-[10.5px] font-normal text-[#24345e]">Publish Immediately</p>
-                      <p className="mt-[3px] text-[9px] font-normal text-[#6d7890]">
+                      <p className="text-[10.5px] font-semibold text-[#24345e]">Publish Immediately</p>
+                      <p className="mt-[3px] text-[9px] font-semibold text-[#6d7890]">
                         Post will be published right away
                       </p>
                     </div>
@@ -434,8 +434,8 @@ export default function AddNewPostPage() {
                         }`}
                     />
                     <div>
-                      <p className="text-[10.5px] font-normal text-[#24345e]">Schedule for Later</p>
-                      <p className="mt-[3px] text-[9px] font-normal text-[#6d7890]">
+                      <p className="text-[10.5px] font-semibold text-[#24345e]">Schedule for Later</p>
+                      <p className="mt-[3px] text-[9px] font-semibold text-[#6d7890]">
                         Choose a future date &amp; time
                       </p>
                     </div>
@@ -448,7 +448,7 @@ export default function AddNewPostPage() {
                       value={publishDate}
                       onChange={(event) => setPublishDate(event.target.value)}
                       disabled={publishMode !== "later"}
-                      className="h-[36px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[11px] pr-[34px] text-[9.5px] font-normal text-[#35445f] outline-none disabled:bg-[#fafafa] disabled:text-[#77839a]"
+                      className="h-[36px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[11px] pr-[34px] text-[9.5px] font-semibold text-[#35445f] outline-none disabled:bg-[#fafafa] disabled:text-[#77839a]"
                     />
                     <CalendarDays className="absolute right-[10px] top-1/2 h-[14px] w-[14px] -translate-y-1/2 text-[#59657a]" />
                   </div>
@@ -458,7 +458,7 @@ export default function AddNewPostPage() {
                       value={publishTime}
                       onChange={(event) => setPublishTime(event.target.value)}
                       disabled={publishMode !== "later"}
-                      className="h-[36px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[11px] pr-[34px] text-[9.5px] font-normal text-[#35445f] outline-none disabled:bg-[#fafafa] disabled:text-[#77839a]"
+                      className="h-[36px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[11px] pr-[34px] text-[9.5px] font-semibold text-[#35445f] outline-none disabled:bg-[#fafafa] disabled:text-[#77839a]"
                     />
                     <Clock3 className="absolute right-[10px] top-1/2 h-[14px] w-[14px] -translate-y-1/2 text-[#59657a]" />
                   </div>
@@ -466,7 +466,7 @@ export default function AddNewPostPage() {
 
                 <div className="flex min-h-[38px] items-center gap-[9px] rounded-[6px] border border-[#d9e7f5] bg-[linear-gradient(90deg,#f2f8ff,#f7fbff)] px-[12px]">
                   <Info className="h-[14px] w-[14px] shrink-0 text-[#4a93d7]" />
-                  <p className="text-[8.8px] font-normal text-[#52627b]">
+                  <p className="text-[8.8px] font-semibold text-[#52627b]">
                     <span className="text-[#32435f]">Tip:</span> Publish at the right time to reach more people.
                   </p>
                 </div>
@@ -477,8 +477,8 @@ export default function AddNewPostPage() {
               <div className="space-y-[12px]">
                 <div className="flex items-center justify-between gap-[14px]">
                   <div>
-                    <p className="text-[10.5px] font-normal text-[#24345e]">Allow Comments</p>
-                    <p className="mt-[3px] text-[9px] font-normal text-[#6d7890]">
+                    <p className="text-[10.5px] font-semibold text-[#24345e]">Allow Comments</p>
+                    <p className="mt-[3px] text-[9px] font-semibold text-[#6d7890]">
                       Allow users to comment on this post
                     </p>
                   </div>
@@ -487,8 +487,8 @@ export default function AddNewPostPage() {
 
                 <div className="flex items-center justify-between gap-[14px]">
                   <div>
-                    <p className="text-[10.5px] font-normal text-[#24345e]">Show in Homepage</p>
-                    <p className="mt-[3px] text-[9px] font-normal text-[#6d7890]">
+                    <p className="text-[10.5px] font-semibold text-[#24345e]">Show in Homepage</p>
+                    <p className="mt-[3px] text-[9px] font-semibold text-[#6d7890]">
                       Display this post in homepage/featured section
                     </p>
                   </div>
@@ -497,10 +497,10 @@ export default function AddNewPostPage() {
 
                 <div className="flex items-center justify-between gap-[14px]">
                   <div>
-                    <p className="text-[10.5px] font-normal text-[#24345e]">
+                    <p className="text-[10.5px] font-semibold text-[#24345e]">
                       Mark as Awareness Campaign
                     </p>
-                    <p className="mt-[3px] text-[9px] font-normal text-[#6d7890]">
+                    <p className="mt-[3px] text-[9px] font-semibold text-[#6d7890]">
                       Highlight this post as part of awareness initiatives
                     </p>
                   </div>
@@ -518,9 +518,9 @@ export default function AddNewPostPage() {
                       value={metaTitle}
                       onChange={(event) => setMetaTitle(event.target.value.slice(0, 60))}
                       placeholder="Enter meta title"
-                      className="h-[38px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] pr-[48px] text-[10px] font-normal text-[#2f3d58] outline-none placeholder:text-[#8d97aa]"
+                      className="h-[38px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] pr-[48px] text-[10px] font-semibold text-[#2f3d58] outline-none placeholder:text-[#8d97aa]"
                     />
-                    <span className="absolute right-[9px] top-1/2 -translate-y-1/2 text-[8px] font-normal text-[#6d7890]">
+                    <span className="absolute right-[9px] top-1/2 -translate-y-1/2 text-[8px] font-semibold text-[#6d7890]">
                       {metaTitle.length}/60
                     </span>
                   </div>
@@ -533,9 +533,9 @@ export default function AddNewPostPage() {
                       value={metaDescription}
                       onChange={(event) => setMetaDescription(event.target.value.slice(0, 160))}
                       placeholder="Enter meta description"
-                      className="h-[72px] w-full resize-none rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] py-[10px] pb-[22px] text-[10px] font-normal text-[#2f3d58] outline-none placeholder:text-[#8d97aa]"
+                      className="h-[72px] w-full resize-none rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] py-[10px] pb-[22px] text-[10px] font-semibold text-[#2f3d58] outline-none placeholder:text-[#8d97aa]"
                     />
-                    <span className="absolute bottom-[7px] right-[9px] text-[8px] font-normal text-[#6d7890]">
+                    <span className="absolute bottom-[7px] right-[9px] text-[8px] font-semibold text-[#6d7890]">
                       {metaDescription.length}/160
                     </span>
                   </div>
@@ -547,9 +547,9 @@ export default function AddNewPostPage() {
                     value={slug}
                     onChange={(event) => setSlug(event.target.value)}
                     placeholder="Enter URL slug"
-                    className="h-[38px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10px] font-normal text-[#2f3d58] outline-none placeholder:text-[#8d97aa]"
+                    className="h-[38px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10px] font-semibold text-[#2f3d58] outline-none placeholder:text-[#8d97aa]"
                   />
-                  <p className="mt-[5px] text-[8.5px] font-normal text-[#728096]">
+                  <p className="mt-[5px] text-[8.5px] font-semibold text-[#728096]">
                     E.g. dignity-in-every-final-journey
                   </p>
                 </div>
@@ -562,7 +562,7 @@ export default function AddNewPostPage() {
           <button
             type="button"
             onClick={() => router.push("/blogs")}
-            className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] border border-[#dfe3e7] bg-white px-[20px] text-[10px] font-normal text-[#273655] transition hover:bg-slate-50"
+            className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] border border-[#dfe3e7] bg-white px-[20px] text-[10px] font-semibold text-[#273655] transition hover:bg-slate-50"
           >
             <Eye className="h-[14px] w-[14px]" />
             Preview Post
@@ -571,7 +571,7 @@ export default function AddNewPostPage() {
           <button
             type="button"
             onClick={() => router.push("/blogs")}
-            className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] bg-[linear-gradient(180deg,#076636_0%,#03542c_100%)] px-[20px] text-[10.5px] font-normal text-white shadow-[0_7px_16px_rgba(5,94,49,.12)] transition hover:opacity-95"
+            className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] bg-[linear-gradient(180deg,#076636_0%,#03542c_100%)] px-[20px] text-[10.5px] font-semibold text-white shadow-[0_7px_16px_rgba(5,94,49,.12)] transition hover:opacity-95"
           >
             <Send className="h-[14px] w-[14px]" />
             Publish Post

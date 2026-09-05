@@ -57,12 +57,12 @@ function Panel({
     <section
       className={`rounded-[9px] border border-[#e7e9ec] bg-white px-[18px] py-[16px] shadow-[0_1px_3px_rgba(15,23,42,0.025)] ${className}`}
     >
-      <h2 className="text-[14px] font-normal leading-tight tracking-[-0.01em] text-[#17234a]">
+      <h2 className="text-[14px] font-semibold leading-tight tracking-[-0.01em] text-[#17234a]">
         {title}
       </h2>
 
       {subtitle ? (
-        <p className="mt-[4px] text-[10.5px] font-normal text-[#66738b]">
+        <p className="mt-[4px] text-[10.5px] font-semibold text-[#66738b]">
           {subtitle}
         </p>
       ) : null}
@@ -84,10 +84,10 @@ function SettingRow({
   return (
     <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-[16px] py-[7px]">
       <div className="min-w-0">
-        <p className="text-[10.5px] font-normal leading-[1.3] text-[#213050]">
+        <p className="text-[10.5px] font-semibold leading-[1.3] text-[#213050]">
           {title}
         </p>
-        <p className="mt-[3px] text-[9.5px] font-normal leading-[1.4] text-[#6d7890]">
+        <p className="mt-[3px] text-[9.5px] font-semibold leading-[1.4] text-[#6d7890]">
           {description}
         </p>
       </div>
@@ -109,7 +109,7 @@ function SelectBox({
   return (
     <select
       defaultValue={value}
-      className="h-[40px] rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10px] font-normal text-[#394760] outline-none"
+      className="h-[40px] rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10px] font-semibold text-[#394760] outline-none"
       style={{ width }}
     >
       {options.map((option) => (
@@ -157,11 +157,11 @@ export default function TestimonialsSettingsPage() {
         {/* HEADER */}
         <header className="flex items-start justify-between gap-[16px]">
           <div>
-            <h1 className="text-[24px] font-normal leading-none tracking-[-0.02em] text-[#075b33]">
+            <h1 className="text-[24px] font-semibold leading-none tracking-[-0.02em] text-[#075b33]">
               Testimonials Settings
             </h1>
 
-            <nav className="mt-[9px] flex items-center gap-[8px] text-[10.5px] font-normal text-[#1d2b58]">
+            <nav className="mt-[9px] flex items-center gap-[8px] text-[10.5px] font-semibold text-[#1d2b58]">
               <span>Dashboard</span>
               <span className="text-[#7b8597]">›</span>
               <span>Testimonials</span>
@@ -173,7 +173,7 @@ export default function TestimonialsSettingsPage() {
           <div className="flex items-center gap-[12px]">
             <button
               type="button"
-              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] bg-[linear-gradient(180deg,#076636_0%,#03542c_100%)] px-[20px] text-[10.5px] font-normal text-white shadow-[0_7px_16px_rgba(5,94,49,.12)]"
+              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] bg-[linear-gradient(180deg,#076636_0%,#03542c_100%)] px-[20px] text-[10.5px] font-semibold text-white shadow-[0_7px_16px_rgba(5,94,49,.12)]"
             >
               <Save className="h-[15px] w-[15px]" />
               Save Changes
@@ -181,7 +181,7 @@ export default function TestimonialsSettingsPage() {
 
             <button
               type="button"
-              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] border border-[#dfe3e7] bg-white px-[18px] text-[10.5px] font-normal text-[#273655]"
+              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] border border-[#dfe3e7] bg-white px-[18px] text-[10.5px] font-semibold text-[#273655]"
             >
               <RotateCcw className="h-[15px] w-[15px]" />
               Reset to Default
@@ -196,7 +196,7 @@ export default function TestimonialsSettingsPage() {
               type="button"
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`relative h-[40px] shrink-0 px-[14px] text-[10px] font-normal transition ${activeTab === tab ? "text-[#0d6037]" : "text-[#29365d]"
+              className={`relative h-[40px] shrink-0 px-[14px] text-[10px] font-semibold transition ${activeTab === tab ? "text-[#0d6037]" : "text-[#29365d]"
                 }`}
             >
               {tab}
@@ -234,10 +234,10 @@ export default function TestimonialsSettingsPage() {
 
               <div className="grid grid-cols-[minmax(0,1fr)_178px] gap-[18px] py-[7px]">
                 <div>
-                  <p className="text-[10.5px] font-normal text-[#213050]">
+                  <p className="text-[10.5px] font-semibold text-[#213050]">
                     Allow Testimonials
                   </p>
-                  <p className="mt-[3px] text-[9.5px] font-normal text-[#6d7890]">
+                  <p className="mt-[3px] text-[9.5px] font-semibold text-[#6d7890]">
                     Choose who can submit testimonials.
                   </p>
                 </div>
@@ -260,7 +260,7 @@ export default function TestimonialsSettingsPage() {
                           : "border-[#cfd6df] bg-white"
                           }`}
                       />
-                      <span className="text-[9.5px] font-normal text-[#43506c]">
+                      <span className="text-[9.5px] font-semibold text-[#43506c]">
                         {String(label)}
                       </span>
                     </button>
@@ -316,7 +316,7 @@ export default function TestimonialsSettingsPage() {
 
               <div className="mt-[12px] flex min-h-[48px] items-center gap-[10px] rounded-[7px] bg-[linear-gradient(90deg,#eef7f1,#f4faf6)] px-[14px]">
                 <Info className="h-[20px] w-[20px] shrink-0 text-[#0d6b3e]" strokeWidth={2} />
-                <p className="text-[9.5px] font-normal leading-[1.4] text-[#37654a]">
+                <p className="text-[9.5px] font-semibold leading-[1.4] text-[#37654a]">
                   These settings control the basic behavior and structure of your testimonials.
                 </p>
               </div>
@@ -337,15 +337,15 @@ export default function TestimonialsSettingsPage() {
                 />
 
                 <div className="py-[7px]">
-                  <p className="text-[10.5px] font-normal text-[#213050]">
+                  <p className="text-[10.5px] font-semibold text-[#213050]">
                     Number of Featured Testimonials
                   </p>
-                  <p className="mt-[3px] text-[9.5px] font-normal text-[#6d7890]">
+                  <p className="mt-[3px] text-[9.5px] font-semibold text-[#6d7890]">
                     How many featured testimonials to display.
                   </p>
                   <input
                     defaultValue="3"
-                    className="mt-[8px] h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10px] font-normal text-[#394760] outline-none"
+                    className="mt-[8px] h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10px] font-semibold text-[#394760] outline-none"
                   />
                 </div>
 
@@ -356,15 +356,15 @@ export default function TestimonialsSettingsPage() {
                 />
 
                 <div className="py-[7px]">
-                  <p className="text-[10.5px] font-normal text-[#213050]">
+                  <p className="text-[10.5px] font-semibold text-[#213050]">
                     Rotation Interval
                   </p>
-                  <p className="mt-[3px] text-[9.5px] font-normal text-[#6d7890]">
+                  <p className="mt-[3px] text-[9.5px] font-semibold text-[#6d7890]">
                     Time interval for auto rotation (in seconds).
                   </p>
                   <input
                     defaultValue="5"
-                    className="mt-[8px] h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10px] font-normal text-[#394760] outline-none"
+                    className="mt-[8px] h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10px] font-semibold text-[#394760] outline-none"
                   />
                 </div>
               </div>
@@ -376,15 +376,15 @@ export default function TestimonialsSettingsPage() {
             >
               <div className="space-y-[5px]">
                 <div className="py-[7px]">
-                  <p className="text-[10.5px] font-normal text-[#213050]">
+                  <p className="text-[10.5px] font-semibold text-[#213050]">
                     Excerpt Length (Characters)
                   </p>
-                  <p className="mt-[3px] text-[9.5px] font-normal text-[#6d7890]">
+                  <p className="mt-[3px] text-[9.5px] font-semibold text-[#6d7890]">
                     Number of characters to show in testimonial excerpts.
                   </p>
                   <input
                     defaultValue="150"
-                    className="mt-[8px] h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10px] font-normal text-[#394760] outline-none"
+                    className="mt-[8px] h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10px] font-semibold text-[#394760] outline-none"
                   />
                 </div>
 
@@ -418,7 +418,7 @@ export default function TestimonialsSettingsPage() {
               <div className="rounded-[8px] border border-[#e4e7ea] bg-white px-[22px] py-[20px] text-center">
                 <Quote className="mx-auto h-[32px] w-[32px] fill-[#0b6a3b] text-[#0b6a3b]" />
 
-                <p className="mx-auto mt-[10px] max-w-[280px] text-[11px] font-normal leading-[1.85] text-[#252d39]">
+                <p className="mx-auto mt-[10px] max-w-[280px] text-[11px] font-semibold leading-[1.85] text-[#252d39]">
                   Moksha Sewa stands as a beacon of compassion and dignity. Their support during our difficult time was truly commendable. Thank you for bringing humanity back to life.
                 </p>
 
@@ -430,13 +430,13 @@ export default function TestimonialsSettingsPage() {
                   </div>
 
                   <div className="text-left">
-                    <p className="text-[11.5px] font-normal text-[#1a2646]">
+                    <p className="text-[11.5px] font-semibold text-[#1a2646]">
                       Ramesh Kumar
                     </p>
-                    <p className="mt-[4px] text-[9.5px] font-normal text-[#178248]">
+                    <p className="mt-[4px] text-[9.5px] font-semibold text-[#178248]">
                       Volunteer
                     </p>
-                    <p className="mt-[4px] text-[9.5px] font-normal text-[#6a768c]">
+                    <p className="mt-[4px] text-[9.5px] font-semibold text-[#6a768c]">
                       Delhi, India
                     </p>
 
@@ -474,7 +474,7 @@ export default function TestimonialsSettingsPage() {
                     <button
                       type="button"
                       key={String(label)}
-                      className="flex h-[38px] w-full items-center justify-between rounded-[6px] border border-[#e2e6ea] bg-white px-[12px] text-[9.5px] font-normal text-[#293854]"
+                      className="flex h-[38px] w-full items-center justify-between rounded-[6px] border border-[#e2e6ea] bg-white px-[12px] text-[9.5px] font-semibold text-[#293854]"
                     >
                       <span className="flex items-center gap-[9px]">
                         <ActionIcon className="h-[14px] w-[14px]" />
@@ -489,8 +489,8 @@ export default function TestimonialsSettingsPage() {
 
             <div className="flex min-h-[66px] items-start gap-[10px] rounded-[8px] border border-[#f1e3bb] bg-[linear-gradient(90deg,#fff9e9,#fffdf4)] px-[14px] py-[12px]">
               <Lightbulb className="mt-[1px] h-[20px] w-[20px] shrink-0 text-[#f0aa1c]" />
-              <p className="text-[9.5px] font-normal leading-[1.5] text-[#6b5738]">
-                <span className="font-normal text-[#236342]">Tip:</span>{" "}
+              <p className="text-[9.5px] font-semibold leading-[1.5] text-[#6b5738]">
+                <span className="font-semibold text-[#236342]">Tip:</span>{" "}
                 Don&apos;t forget to click “Save Changes” after updating the settings.
               </p>
             </div>
@@ -500,7 +500,7 @@ export default function TestimonialsSettingsPage() {
         {/* FOOT NOTE */}
         <section className="mt-[12px] flex min-h-[48px] items-center rounded-[8px] border border-[#dbe7f4] bg-[linear-gradient(90deg,#f1f7ff,#f8fbff)] px-[18px]">
           <ShieldCheck className="mr-[10px] h-[20px] w-[20px] shrink-0 text-[#4c95df]" />
-          <p className="text-[9.5px] font-normal text-[#4d5f79]">
+          <p className="text-[9.5px] font-semibold text-[#4d5f79]">
             <span className="text-[#24345e]">Note:</span>{" "}
             These settings only affect the display and management of testimonials. Existing testimonials will not be deleted.
           </p>

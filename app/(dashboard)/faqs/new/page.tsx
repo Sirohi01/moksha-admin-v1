@@ -33,11 +33,11 @@ function FieldLabel({
   optional?: boolean;
 }) {
   return (
-    <label className="mb-[6px] block text-[11px] font-normal text-[#24345e]">
+    <label className="mb-[6px] block text-[11px] font-semibold text-[#24345e]">
       {children}
       {required ? <span className="ml-[2px] text-[#df3e3e]">*</span> : null}
       {optional ? (
-        <span className="font-normal text-[#66738b]"> (Optional)</span>
+        <span className="font-semibold text-[#66738b]"> (Optional)</span>
       ) : null}
     </label>
   );
@@ -104,11 +104,11 @@ export default function AddNewFAQPage() {
         {/* HEADER */}
         <header className="flex items-start justify-between gap-[16px]">
           <div>
-            <h1 className="text-[24px] font-normal leading-none tracking-[-0.02em] text-[#075b33]">
+            <h1 className="text-[24px] font-semibold leading-none tracking-[-0.02em] text-[#075b33]">
               Add New FAQ
             </h1>
 
-            <nav className="mt-[9px] flex items-center gap-[8px] text-[10.5px] font-normal text-[#1d2b58]">
+            <nav className="mt-[9px] flex items-center gap-[8px] text-[10.5px] font-semibold text-[#1d2b58]">
               <span>Dashboard</span>
               <span className="text-[#7b8597]">›</span>
               <span>FAQs</span>
@@ -120,7 +120,7 @@ export default function AddNewFAQPage() {
           <div className="flex items-center gap-[12px]">
             <button
               type="button"
-              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] border border-[#dfe3e7] bg-white px-[18px] text-[10.5px] font-normal text-[#273655]"
+              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] border border-[#dfe3e7] bg-white px-[18px] text-[10.5px] font-semibold text-[#273655]"
             >
               <ArrowLeft className="h-[15px] w-[15px]" />
               Back to FAQs
@@ -128,7 +128,7 @@ export default function AddNewFAQPage() {
 
             <button
               type="button"
-              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] bg-[linear-gradient(180deg,#076636_0%,#03542c_100%)] px-[20px] text-[10.5px] font-normal text-white shadow-[0_7px_16px_rgba(5,94,49,.12)]"
+              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] bg-[linear-gradient(180deg,#076636_0%,#03542c_100%)] px-[20px] text-[10.5px] font-semibold text-white shadow-[0_7px_16px_rgba(5,94,49,.12)]"
             >
               <Save className="h-[15px] w-[15px]" />
               Save FAQ
@@ -142,10 +142,10 @@ export default function AddNewFAQPage() {
           <div className="space-y-[12px]">
             {/* FAQ INFORMATION */}
             <section className="rounded-[9px] border border-[#e7e9ec] bg-white px-[18px] py-[16px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-              <h2 className="text-[14px] font-normal text-[#17234a]">
+              <h2 className="text-[14px] font-semibold text-[#17234a]">
                 FAQ Information
               </h2>
-              <p className="mt-[4px] text-[10.5px] font-normal text-[#66738b]">
+              <p className="mt-[4px] text-[10.5px] font-semibold text-[#66738b]">
                 Add question and answer details.
               </p>
 
@@ -160,11 +160,11 @@ export default function AddNewFAQPage() {
                       setQuestion(event.target.value.slice(0, 200))
                     }
                     placeholder="Enter the frequently asked question"
-                    className="h-[42px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[13px] text-[11px] font-normal text-[#2d3b58] outline-none placeholder:text-[#8d97aa]"
+                    className="h-[42px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[13px] text-[11px] font-semibold text-[#2d3b58] outline-none placeholder:text-[#8d97aa]"
                   />
 
                   <div className="mt-[7px] flex justify-end">
-                    <span className="text-[9px] font-normal text-[#6d7890]">
+                    <span className="text-[9px] font-semibold text-[#6d7890]">
                       {questionCount}/200
                     </span>
                   </div>
@@ -178,7 +178,7 @@ export default function AddNewFAQPage() {
                     <div className="flex min-h-[42px] flex-wrap items-center gap-[12px] border-b border-[#e7e9ec] px-[12px] text-[#2f3c56]">
                       <button
                         type="button"
-                        className="inline-flex items-center gap-[10px] text-[10.5px] font-normal"
+                        className="inline-flex items-center gap-[10px] text-[10.5px] font-semibold"
                       >
                         Paragraph
                         <ChevronDown className="h-[13px] w-[13px]" />
@@ -214,12 +214,12 @@ export default function AddNewFAQPage() {
                         setAnswer(event.target.value.slice(0, 2000))
                       }
                       placeholder="Provide a clear and helpful answer..."
-                      className="h-[175px] w-full resize-none bg-white px-[14px] py-[12px] text-[11px] font-normal text-[#2d3b58] outline-none placeholder:text-[#8d97aa]"
+                      className="h-[175px] w-full resize-none bg-white px-[14px] py-[12px] text-[11px] font-semibold text-[#2d3b58] outline-none placeholder:text-[#8d97aa]"
                     />
                   </div>
 
                   <div className="mt-[7px] flex justify-end">
-                    <span className="text-[9px] font-normal text-[#6d7890]">
+                    <span className="text-[9px] font-semibold text-[#6d7890]">
                       {answerCount}/2000
                     </span>
                   </div>
@@ -229,7 +229,7 @@ export default function AddNewFAQPage() {
                 <div>
                   <FieldLabel optional>Short Answer</FieldLabel>
 
-                  <p className="mb-[7px] text-[9px] font-normal text-[#6d7890]">
+                  <p className="mb-[7px] text-[9px] font-semibold text-[#6d7890]">
                     A brief answer summary to display in FAQ listing (max 160
                     characters).
                   </p>
@@ -240,11 +240,11 @@ export default function AddNewFAQPage() {
                       setShortAnswer(event.target.value.slice(0, 160))
                     }
                     placeholder="Enter short summary..."
-                    className="h-[42px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[13px] text-[11px] font-normal text-[#2d3b58] outline-none placeholder:text-[#8d97aa]"
+                    className="h-[42px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[13px] text-[11px] font-semibold text-[#2d3b58] outline-none placeholder:text-[#8d97aa]"
                   />
 
                   <div className="mt-[7px] flex justify-end">
-                    <span className="text-[9px] font-normal text-[#6d7890]">
+                    <span className="text-[9px] font-semibold text-[#6d7890]">
                       {shortCount}/160
                     </span>
                   </div>
@@ -255,10 +255,10 @@ export default function AddNewFAQPage() {
                   <Toggle checked={active} onChange={() => setActive((v) => !v)} />
 
                   <div>
-                    <p className="text-[10.5px] font-normal text-[#213050]">
+                    <p className="text-[10.5px] font-semibold text-[#213050]">
                       Active
                     </p>
-                    <p className="mt-[2px] text-[9.5px] font-normal text-[#6d7890]">
+                    <p className="mt-[2px] text-[9.5px] font-semibold text-[#6d7890]">
                       Make this FAQ visible on the website.
                     </p>
                   </div>
@@ -268,10 +268,10 @@ export default function AddNewFAQPage() {
 
             {/* ADDITIONAL OPTIONS */}
             <section className="rounded-[9px] border border-[#e7e9ec] bg-white px-[18px] py-[16px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-              <h2 className="text-[14px] font-normal text-[#17234a]">
+              <h2 className="text-[14px] font-semibold text-[#17234a]">
                 Additional Options
               </h2>
-              <p className="mt-[4px] text-[10.5px] font-normal text-[#66738b]">
+              <p className="mt-[4px] text-[10.5px] font-semibold text-[#66738b]">
                 Configure extra settings for this FAQ.
               </p>
 
@@ -282,10 +282,10 @@ export default function AddNewFAQPage() {
                   <input
                     value={displayOrder}
                     onChange={(event) => setDisplayOrder(event.target.value)}
-                    className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10.5px] font-normal text-[#2d3b58] outline-none"
+                    className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10.5px] font-semibold text-[#2d3b58] outline-none"
                   />
 
-                  <p className="mt-[6px] text-[9px] font-normal text-[#738097]">
+                  <p className="mt-[6px] text-[9px] font-semibold text-[#738097]">
                     Set display order (0 will be last)
                   </p>
                 </div>
@@ -299,7 +299,7 @@ export default function AddNewFAQPage() {
                       onChange={() => setFeatured((v) => !v)}
                     />
 
-                    <span className="text-[9.5px] font-normal text-[#66738b]">
+                    <span className="text-[9.5px] font-semibold text-[#66738b]">
                       Mark as featured to highlight this FAQ.
                     </span>
                   </div>
@@ -312,10 +312,10 @@ export default function AddNewFAQPage() {
           <div className="space-y-[12px]">
             {/* CATEGORY */}
             <section className="rounded-[9px] border border-[#e7e9ec] bg-white px-[18px] py-[16px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-              <h2 className="text-[14px] font-normal text-[#17234a]">
+              <h2 className="text-[14px] font-semibold text-[#17234a]">
                 Category &amp; Visibility
               </h2>
-              <p className="mt-[4px] text-[10.5px] font-normal text-[#66738b]">
+              <p className="mt-[4px] text-[10.5px] font-semibold text-[#66738b]">
                 Choose where this FAQ will appear.
               </p>
 
@@ -326,7 +326,7 @@ export default function AddNewFAQPage() {
                   <select
                     value={category}
                     onChange={(event) => setCategory(event.target.value)}
-                    className="h-[42px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10.5px] font-normal text-[#2f3d58] outline-none"
+                    className="h-[42px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10.5px] font-semibold text-[#2f3d58] outline-none"
                   >
                     <option value="">Select Category</option>
                     <option>General</option>
@@ -343,7 +343,7 @@ export default function AddNewFAQPage() {
                   <select
                     value={subCategory}
                     onChange={(event) => setSubCategory(event.target.value)}
-                    className="h-[42px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10.5px] font-normal text-[#2f3d58] outline-none"
+                    className="h-[42px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10.5px] font-semibold text-[#2f3d58] outline-none"
                   >
                     <option value="">Select Sub Category</option>
                     <option>Getting Started</option>
@@ -388,10 +388,10 @@ export default function AddNewFAQPage() {
                           />
 
                           <div>
-                            <p className="text-[10.5px] font-normal text-[#213050]">
+                            <p className="text-[10.5px] font-semibold text-[#213050]">
                               {item.title}
                             </p>
-                            <p className="mt-[3px] text-[9.5px] font-normal text-[#6d7890]">
+                            <p className="mt-[3px] text-[9.5px] font-semibold text-[#6d7890]">
                               {item.subtitle}
                             </p>
                           </div>
@@ -405,10 +405,10 @@ export default function AddNewFAQPage() {
 
             {/* SEO */}
             <section className="rounded-[9px] border border-[#e7e9ec] bg-white px-[18px] py-[16px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-              <h2 className="text-[14px] font-normal text-[#17234a]">
+              <h2 className="text-[14px] font-semibold text-[#17234a]">
                 SEO &amp; Display Settings
               </h2>
-              <p className="mt-[4px] text-[10.5px] font-normal text-[#66738b]">
+              <p className="mt-[4px] text-[10.5px] font-semibold text-[#66738b]">
                 Optimize how this FAQ appears in search and listings.
               </p>
 
@@ -420,10 +420,10 @@ export default function AddNewFAQPage() {
                     value={slug}
                     onChange={(event) => setSlug(event.target.value)}
                     placeholder="Enter URL slug (e.g., what-is-moksha-sewa)"
-                    className="h-[42px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10.5px] font-normal text-[#2f3d58] outline-none placeholder:text-[#8d97aa]"
+                    className="h-[42px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10.5px] font-semibold text-[#2f3d58] outline-none placeholder:text-[#8d97aa]"
                   />
 
-                  <p className="mt-[6px] text-[9px] font-normal text-[#738097]">
+                  <p className="mt-[6px] text-[9px] font-semibold text-[#738097]">
                     Use lowercase letters, numbers and hyphens only.
                   </p>
                 </div>
@@ -437,11 +437,11 @@ export default function AddNewFAQPage() {
                       setMetaTitle(event.target.value.slice(0, 60))
                     }
                     placeholder="Enter meta title for this FAQ"
-                    className="h-[42px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10.5px] font-normal text-[#2f3d58] outline-none placeholder:text-[#8d97aa]"
+                    className="h-[42px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10.5px] font-semibold text-[#2f3d58] outline-none placeholder:text-[#8d97aa]"
                   />
 
                   <div className="mt-[7px] flex justify-end">
-                    <span className="text-[9px] font-normal text-[#6d7890]">
+                    <span className="text-[9px] font-semibold text-[#6d7890]">
                       {metaTitleCount}/60
                     </span>
                   </div>
@@ -456,11 +456,11 @@ export default function AddNewFAQPage() {
                       setMetaDescription(event.target.value.slice(0, 160))
                     }
                     placeholder="Enter meta description for this FAQ"
-                    className="h-[72px] w-full resize-none rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] py-[10px] text-[10.5px] font-normal text-[#2f3d58] outline-none placeholder:text-[#8d97aa]"
+                    className="h-[72px] w-full resize-none rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] py-[10px] text-[10.5px] font-semibold text-[#2f3d58] outline-none placeholder:text-[#8d97aa]"
                   />
 
                   <div className="mt-[7px] flex justify-end">
-                    <span className="text-[9px] font-normal text-[#6d7890]">
+                    <span className="text-[9px] font-semibold text-[#6d7890]">
                       {metaDescriptionCount}/160
                     </span>
                   </div>
@@ -477,8 +477,8 @@ export default function AddNewFAQPage() {
               <Info className="h-[15px] w-[15px]" />
             </div>
 
-            <p className="text-[9.5px] font-normal text-[#38654b]">
-              <span className="font-normal">Tip:</span>{" "}
+            <p className="text-[9.5px] font-semibold text-[#38654b]">
+              <span className="font-semibold">Tip:</span>{" "}
               After saving, you can add more FAQs or go back to manage existing FAQs.
             </p>
           </div>
@@ -486,7 +486,7 @@ export default function AddNewFAQPage() {
           <div className="flex shrink-0 items-center gap-[10px]">
             <button
               type="button"
-              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] border border-[#dfe3e7] bg-white px-[18px] text-[10px] font-normal text-[#273655]"
+              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] border border-[#dfe3e7] bg-white px-[18px] text-[10px] font-semibold text-[#273655]"
             >
               <X className="h-[14px] w-[14px]" />
               Cancel
@@ -494,7 +494,7 @@ export default function AddNewFAQPage() {
 
             <button
               type="button"
-              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] border border-[#dfe3e7] bg-white px-[18px] text-[10px] font-normal text-[#273655]"
+              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] border border-[#dfe3e7] bg-white px-[18px] text-[10px] font-semibold text-[#273655]"
             >
               <Bookmark className="h-[14px] w-[14px]" />
               Save as Draft
@@ -502,7 +502,7 @@ export default function AddNewFAQPage() {
 
             <button
               type="button"
-              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] bg-[linear-gradient(180deg,#076636_0%,#03542c_100%)] px-[20px] text-[10px] font-normal text-white shadow-[0_7px_16px_rgba(5,94,49,.12)]"
+              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] bg-[linear-gradient(180deg,#076636_0%,#03542c_100%)] px-[20px] text-[10px] font-semibold text-white shadow-[0_7px_16px_rgba(5,94,49,.12)]"
             >
               <Save className="h-[14px] w-[14px]" />
               Save FAQ

@@ -126,12 +126,12 @@ function SectionHeader({
         </div>
 
         <div className="min-w-0">
-          <h2 className="text-[13.5px] font-normal leading-[16px] text-[#326448]">
+          <h2 className="text-[13.5px] font-semibold leading-[16px] text-[#326448]">
             {number}. {title}
           </h2>
 
           {description && (
-            <p className="mt-[2px] text-[10px] font-normal leading-[12px] text-[#818996]">
+            <p className="mt-[2px] text-[10px] font-semibold leading-[12px] text-[#818996]">
               {description}
             </p>
           )}
@@ -155,7 +155,7 @@ function FieldLabel({
   required?: boolean;
 }) {
   return (
-    <label className="mb-[4px] block text-[10.5px] font-normal leading-[13px] text-[#465168]">
+    <label className="mb-[4px] block text-[10.5px] font-semibold leading-[13px] text-[#465168]">
       {children}
 
       {required && (
@@ -194,11 +194,11 @@ function TextInput({
           onChange(event.target.value)
         }
         placeholder={placeholder}
-        className="h-[32px] w-full rounded-[5px] border border-[#dedfdb] bg-white px-[10px] text-[10.5px] font-normal text-[#414b5e] outline-none placeholder:text-[10.5px] placeholder:font-normal placeholder:text-[#969da8] focus:border-[#91a98f]"
+        className="h-[32px] w-full rounded-[5px] border border-[#dedfdb] bg-white px-[10px] text-[10.5px] font-semibold text-[#414b5e] outline-none placeholder:text-[10.5px] placeholder:font-semibold placeholder:text-[#969da8] focus:border-[#91a98f]"
       />
 
       {rightCount && maxLength && (
-        <p className="mt-[2px] text-right text-[9px] font-normal leading-[10px] text-[#8c929c]">
+        <p className="mt-[2px] text-right text-[9px] font-semibold leading-[10px] text-[#8c929c]">
           {value.length} / {maxLength}
         </p>
       )}
@@ -226,7 +226,7 @@ function SelectField({
         onChange={(event) =>
           onChange(event.target.value)
         }
-        className="h-[32px] w-full cursor-pointer appearance-none rounded-[5px] border border-[#dedfdb] bg-white pl-[10px] pr-[28px] text-[10.5px] font-normal text-[#414b5e] outline-none focus:border-[#91a98f]"
+        className="h-[32px] w-full cursor-pointer appearance-none rounded-[5px] border border-[#dedfdb] bg-white pl-[10px] pr-[28px] text-[10.5px] font-semibold text-[#414b5e] outline-none focus:border-[#91a98f]"
       >
         {options.map((option) => (
           <option key={option} value={option}>
@@ -301,11 +301,11 @@ function CheckOption({
       </button>
 
       <div className="min-w-0">
-        <p className="text-[10.5px] font-normal leading-[12px] text-[#455064]">
+        <p className="text-[10.5px] font-semibold leading-[12px] text-[#455064]">
           {title}
         </p>
 
-        <p className="mt-[2px] text-[9.5px] font-normal leading-[11px] text-[#858c98]">
+        <p className="mt-[2px] text-[9.5px] font-semibold leading-[11px] text-[#858c98]">
           {description}
         </p>
       </div>
@@ -458,11 +458,11 @@ export default function AddNewPage() {
 
         <div className="flex h-[52px] shrink-0 items-start justify-between">
           <div>
-            <h1 className="text-[22px] font-normal leading-[23px] tracking-[-0.02em] text-[#1c5033]">
+            <h1 className="text-[22px] font-semibold leading-[23px] tracking-[-0.02em] text-[#1c5033]">
               Add New Page
             </h1>
 
-            <div className="mt-[4px] flex items-center gap-[6px] text-[10px] font-normal text-[#6f7888]">
+            <div className="mt-[4px] flex items-center gap-[6px] text-[10px] font-semibold text-[#6f7888]">
               <Link href="/pages" className="hover:text-[#326646] hover:underline">
                 Pages &amp; CMS
               </Link>
@@ -481,7 +481,7 @@ export default function AddNewPage() {
               onClick={() =>
                 router.back()
               }
-              className="flex h-[35px] items-center gap-[6px] rounded-[6px] border border-[#dedfdb] bg-white px-[15px] text-[10.5px] font-normal text-[#596274] transition hover:bg-[#f8f8f5]"
+              className="flex h-[35px] items-center gap-[6px] rounded-[6px] border border-[#dedfdb] bg-white px-[15px] text-[10.5px] font-semibold text-[#596274] transition hover:bg-[#f8f8f5]"
             >
               <ArrowLeft className="h-[12px] w-[12px]" />
 
@@ -491,7 +491,7 @@ export default function AddNewPage() {
             <button
               type="button"
               onClick={saveDraft}
-              className="flex h-[35px] items-center gap-[6px] rounded-[6px] border border-[#cdb879] bg-[#fffefa] px-[16px] text-[10.5px] font-normal text-[#326646]"
+              className="flex h-[35px] items-center gap-[6px] rounded-[6px] border border-[#cdb879] bg-[#fffefa] px-[16px] text-[10.5px] font-semibold text-[#326646]"
             >
               <Save className="h-[12px] w-[12px]" />
 
@@ -502,7 +502,7 @@ export default function AddNewPage() {
               <button
                 type="button"
                 onClick={publishPage}
-                className="flex items-center gap-[6px] px-[17px] text-[10.5px] font-normal"
+                className="flex items-center gap-[6px] px-[17px] text-[10.5px] font-semibold"
               >
                 <Plus className="h-[12px] w-[12px]" />
 
@@ -564,7 +564,7 @@ export default function AddNewPage() {
                   </FieldLabel>
 
                   <div className="flex h-[32px] overflow-hidden rounded-[5px] border border-[#dedfdb] bg-white">
-                    <div className="flex shrink-0 items-center border-r border-[#e5e6e2] bg-[#fafaf8] px-[8px] text-[9.5px] font-normal text-[#647082]">
+                    <div className="flex shrink-0 items-center border-r border-[#e5e6e2] bg-[#fafaf8] px-[8px] text-[9.5px] font-semibold text-[#647082]">
                       {PUBLIC_SITE_URL}/
                     </div>
 
@@ -578,7 +578,7 @@ export default function AddNewPage() {
                         )
                       }
                       placeholder="enter-page-slug"
-                      className="min-w-0 flex-1 px-[8px] text-[10px] font-normal text-[#414b5e] outline-none placeholder:text-[10px] placeholder:font-normal placeholder:text-[#969da8]"
+                      className="min-w-0 flex-1 px-[8px] text-[10px] font-semibold text-[#414b5e] outline-none placeholder:text-[10px] placeholder:font-semibold placeholder:text-[#969da8]"
                     />
                   </div>
 
@@ -677,7 +677,7 @@ export default function AddNewPage() {
                 action={
                   <button
                     type="button"
-                    className="flex h-[27px] shrink-0 items-center gap-[5px] rounded-[5px] border border-[#85ae94] bg-white px-[10px] text-[9.5px] font-normal text-[#34714c]"
+                    className="flex h-[27px] shrink-0 items-center gap-[5px] rounded-[5px] border border-[#85ae94] bg-white px-[10px] text-[9.5px] font-semibold text-[#34714c]"
                   >
                     <Bot className="h-[11px] w-[11px]" />
 
@@ -695,7 +695,7 @@ export default function AddNewPage() {
 
                   <div className="flex h-[31px] shrink-0 items-center overflow-hidden border-b border-[#e3e4e0] px-[6px]">
                     <div className="relative mr-[5px] shrink-0">
-                      <select className="h-[25px] w-[88px] appearance-none rounded-[4px] border border-[#e0e1dd] bg-white pl-[8px] pr-[21px] text-[9.5px] font-normal text-[#4e5868] outline-none">
+                      <select className="h-[25px] w-[88px] appearance-none rounded-[4px] border border-[#e0e1dd] bg-white pl-[8px] pr-[21px] text-[9.5px] font-semibold text-[#4e5868] outline-none">
                         <option>Paragraph</option>
                         <option>Heading 1</option>
                         <option>Heading 2</option>
@@ -784,10 +784,10 @@ export default function AddNewPage() {
                       )
                     }
                     placeholder="Start writing or add content..."
-                    className="min-h-[65px] flex-1 resize-none px-[10px] py-[8px] text-[10.5px] font-normal leading-[1.45] text-[#424d60] outline-none placeholder:text-[10.5px] placeholder:font-normal placeholder:text-[#969da8]"
+                    className="min-h-[65px] flex-1 resize-none px-[10px] py-[8px] text-[10.5px] font-semibold leading-[1.45] text-[#424d60] outline-none placeholder:text-[10.5px] placeholder:font-semibold placeholder:text-[#969da8]"
                   />
 
-                  <div className="flex h-[18px] shrink-0 items-center justify-end border-t border-[#eeeeea] px-[7px] text-[9px] font-normal text-[#8b929c]">
+                  <div className="flex h-[18px] shrink-0 items-center justify-end border-t border-[#eeeeea] px-[7px] text-[9px] font-semibold text-[#8b929c]">
                     Words: {wordCount}
                   </div>
                 </div>
@@ -795,7 +795,7 @@ export default function AddNewPage() {
                 <div className="mt-[5px] flex h-[27px] shrink-0 items-center gap-[8px]">
                   <button
                     type="button"
-                    className="flex h-[27px] items-center gap-[6px] rounded-[5px] border border-[#dedfdb] bg-white px-[11px] text-[9.5px] font-normal text-[#477055]"
+                    className="flex h-[27px] items-center gap-[6px] rounded-[5px] border border-[#dedfdb] bg-white px-[11px] text-[9.5px] font-semibold text-[#477055]"
                   >
                     <ImageIcon className="h-[11px] w-[11px]" />
                     Add Media
@@ -803,7 +803,7 @@ export default function AddNewPage() {
 
                   <button
                     type="button"
-                    className="flex h-[27px] items-center gap-[6px] rounded-[5px] border border-[#dedfdb] bg-white px-[11px] text-[9.5px] font-normal text-[#477055]"
+                    className="flex h-[27px] items-center gap-[6px] rounded-[5px] border border-[#dedfdb] bg-white px-[11px] text-[9.5px] font-semibold text-[#477055]"
                   >
                     <FormInput className="h-[11px] w-[11px]" />
                     Add Form
@@ -811,7 +811,7 @@ export default function AddNewPage() {
 
                   <button
                     type="button"
-                    className="flex h-[27px] items-center gap-[6px] rounded-[5px] border border-[#dedfdb] bg-white px-[11px] text-[9.5px] font-normal text-[#477055]"
+                    className="flex h-[27px] items-center gap-[6px] rounded-[5px] border border-[#dedfdb] bg-white px-[11px] text-[9.5px] font-semibold text-[#477055]"
                   >
                     <Code2 className="h-[11px] w-[11px]" />
                     Add Shortcode
@@ -903,11 +903,11 @@ export default function AddNewPage() {
                       <>
                         <UploadCloud className="h-[20px] w-[20px]" />
 
-                        <span className="mt-[4px] text-[9.5px] font-normal">
+                        <span className="mt-[4px] text-[9.5px] font-semibold">
                           Upload featured image
                         </span>
 
-                        <span className="mt-[2px] text-[8.5px] font-normal text-[#8a919a]">
+                        <span className="mt-[2px] text-[8.5px] font-semibold text-[#8a919a]">
                           Recommended size:
                           1200x630px
                         </span>
@@ -934,7 +934,7 @@ export default function AddNewPage() {
                       }
                     />
 
-                    <span className="max-w-[145px] text-[9px] font-normal leading-[11px] text-[#858c98]">
+                    <span className="max-w-[145px] text-[9px] font-semibold leading-[11px] text-[#858c98]">
                       Show this page in main
                       navigation menu
                     </span>
@@ -964,7 +964,7 @@ export default function AddNewPage() {
               </div>
             </section>
 
-            <div className="flex items-center gap-[8px] rounded-[5px] bg-[#eef6ec] px-[13px] py-[8px] text-[11.5px] font-normal text-[#39744f]">
+            <div className="flex items-center gap-[8px] rounded-[5px] bg-[#eef6ec] px-[13px] py-[8px] text-[11.5px] font-semibold text-[#39744f]">
               <Info className="h-[14px] w-[14px] shrink-0" />
 
               You can save this page as draft and
@@ -991,7 +991,7 @@ export default function AddNewPage() {
                 action={
                   <button
                     type="button"
-                    className="h-[27px] shrink-0 rounded-[5px] border border-[#d9ded9] bg-[#fbfdfb] px-[10px] text-[9px] font-normal text-[#467656]"
+                    className="h-[27px] shrink-0 rounded-[5px] border border-[#d9ded9] bg-[#fbfdfb] px-[10px] text-[9px] font-semibold text-[#467656]"
                   >
                     Preview Snippet
                   </button>
@@ -1033,7 +1033,7 @@ export default function AddNewPage() {
                       )
                     }
                     placeholder="Enter meta description (recommended 150-160 characters)"
-                    className="h-[45px] w-full resize-none rounded-[5px] border border-[#dedfdb] px-[10px] py-[7px] text-[10px] font-normal leading-[1.35] text-[#414b5e] outline-none placeholder:text-[10px] placeholder:font-normal placeholder:text-[#969da8] focus:border-[#91a98f]"
+                    className="h-[45px] w-full resize-none rounded-[5px] border border-[#dedfdb] px-[10px] py-[7px] text-[10px] font-semibold leading-[1.35] text-[#414b5e] outline-none placeholder:text-[10px] placeholder:font-semibold placeholder:text-[#969da8] focus:border-[#91a98f]"
                   />
 
                   <p className="mt-[2px] text-right text-[9px] leading-[10px] text-[#8c929c]">

@@ -222,15 +222,15 @@ function MetricCard({
       </div>
 
       <div className="min-w-0 flex-1 overflow-hidden">
-        <p className="break-words text-[9px] font-normal leading-[11px] text-[#34435e]">{label}</p>
+        <p className="break-words text-[9px] font-semibold leading-[11px] text-[#34435e]">{label}</p>
         <div className="mt-[2px] flex items-baseline gap-[6px]">
-          <span className="text-[17px] font-normal leading-none tracking-[-0.03em] text-[#10204a]">
+          <span className="text-[17px] font-semibold leading-none tracking-[-0.03em] text-[#10204a]">
             {value}
           </span>
           {stars ? (
             <RatingStars value={5} size={11} />
           ) : (
-            <span className="truncate text-[8.5px] font-normal text-[#66738b]">
+            <span className="truncate text-[8.5px] font-semibold text-[#66738b]">
               {note}
             </span>
           )}
@@ -286,11 +286,11 @@ export default function TestimonialsManagementPage() {
         {/* HEADER */}
         <header className="flex items-start justify-between gap-[16px]">
           <div>
-            <h1 className="text-[24px] font-normal leading-none tracking-[-0.02em] text-[#075b33]">
+            <h1 className="text-[24px] font-semibold leading-none tracking-[-0.02em] text-[#075b33]">
               Testimonials Management
             </h1>
 
-            <nav className="mt-[9px] flex items-center gap-[8px] text-[10.5px] font-normal text-[#1d2b58]">
+            <nav className="mt-[9px] flex items-center gap-[8px] text-[10.5px] font-semibold text-[#1d2b58]">
               <span>Dashboard</span>
               <span className="text-[#7b8597]">›</span>
               <span>Testimonials Management</span>
@@ -301,7 +301,7 @@ export default function TestimonialsManagementPage() {
             <button
               type="button"
               onClick={() => router.push("/testimonials/new")}
-              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] bg-[linear-gradient(180deg,#076636_0%,#03542c_100%)] px-[20px] text-[10.5px] font-normal text-white shadow-[0_7px_16px_rgba(5,94,49,.12)] transition hover:opacity-95"
+              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] bg-[linear-gradient(180deg,#076636_0%,#03542c_100%)] px-[20px] text-[10.5px] font-semibold text-white shadow-[0_7px_16px_rgba(5,94,49,.12)] transition hover:opacity-95"
             >
               <Plus className="h-[15px] w-[15px]" />
               Add New Testimonial
@@ -310,7 +310,7 @@ export default function TestimonialsManagementPage() {
             <button
               type="button"
               onClick={() => router.push("/testimonials/settings")}
-              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] border border-[#dfe3e7] bg-white px-[18px] text-[10.5px] font-normal text-[#273655] transition hover:bg-slate-50"
+              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] border border-[#dfe3e7] bg-white px-[18px] text-[10.5px] font-semibold text-[#273655] transition hover:bg-slate-50"
             >
               <Settings className="h-[15px] w-[15px]" />
               Testimonial Settings
@@ -374,14 +374,14 @@ export default function TestimonialsManagementPage() {
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
                   placeholder="Search testimonials by name, role or keyword..."
-                  className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[14px] pr-[40px] text-[10.5px] font-normal text-[#273655] outline-none placeholder:text-[#8b95a7]"
+                  className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[14px] pr-[40px] text-[10.5px] font-semibold text-[#273655] outline-none placeholder:text-[#8b95a7]"
                 />
               </label>
 
               <select
                 value={status}
                 onChange={(event) => setStatus(event.target.value)}
-                className="h-[40px] min-w-[115px] rounded-[6px] border border-[#dfe4e8] bg-white px-[10px] text-[10px] font-normal text-[#2a3855] outline-none"
+                className="h-[40px] min-w-[115px] rounded-[6px] border border-[#dfe4e8] bg-white px-[10px] text-[10px] font-semibold text-[#2a3855] outline-none"
               >
                 <option>All Status</option>
                 <option>Published</option>
@@ -392,7 +392,7 @@ export default function TestimonialsManagementPage() {
               <select
                 value={category}
                 onChange={(event) => setCategory(event.target.value)}
-                className="h-[40px] min-w-[125px] rounded-[6px] border border-[#dfe4e8] bg-white px-[10px] text-[10px] font-normal text-[#2a3855] outline-none"
+                className="h-[40px] min-w-[125px] rounded-[6px] border border-[#dfe4e8] bg-white px-[10px] text-[10px] font-semibold text-[#2a3855] outline-none"
               >
                 <option>All Categories</option>
                 <option>Family Member</option>
@@ -405,7 +405,7 @@ export default function TestimonialsManagementPage() {
               <select
                 value={rating}
                 onChange={(event) => setRating(event.target.value)}
-                className="h-[40px] min-w-[110px] rounded-[6px] border border-[#dfe4e8] bg-white px-[10px] text-[10px] font-normal text-[#2a3855] outline-none"
+                className="h-[40px] min-w-[110px] rounded-[6px] border border-[#dfe4e8] bg-white px-[10px] text-[10px] font-semibold text-[#2a3855] outline-none"
               >
                 <option>All Ratings</option>
                 <option>5 Stars</option>
@@ -417,7 +417,7 @@ export default function TestimonialsManagementPage() {
 
               <button
                 type="button"
-                className="inline-flex h-[40px] items-center justify-center gap-[6px] rounded-[6px] border border-[#cfe4d7] bg-white px-[12px] text-[10px] font-normal text-[#146a3f] shrink-0"
+                className="inline-flex h-[40px] items-center justify-center gap-[6px] rounded-[6px] border border-[#cfe4d7] bg-white px-[12px] text-[10px] font-semibold text-[#146a3f] shrink-0"
               >
                 <Filter className="h-[14px] w-[14px]" />
                 More Filters
@@ -426,7 +426,7 @@ export default function TestimonialsManagementPage() {
               <button
                 type="button"
                 onClick={clearFilters}
-                className="inline-flex h-[40px] items-center justify-center gap-[6px] rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10px] font-normal text-[#35445f] shrink-0"
+                className="inline-flex h-[40px] items-center justify-center gap-[6px] rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10px] font-semibold text-[#35445f] shrink-0"
               >
                 <RefreshCw className="h-[14px] w-[14px]" />
                 Clear
@@ -438,7 +438,7 @@ export default function TestimonialsManagementPage() {
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[980px] border-collapse text-left">
                   <thead>
-                    <tr className="h-[42px] border-b border-[#e7e9ec] bg-[#fafbfc] text-[8.5px] font-normal uppercase tracking-[0.04em] text-[#44516a]">
+                    <tr className="h-[42px] border-b border-[#e7e9ec] bg-[#fafbfc] text-[8.5px] font-semibold uppercase tracking-[0.04em] text-[#44516a]">
                       <th className="w-[42px] px-[12px] text-center">
                         <input type="checkbox" />
                       </th>
@@ -470,10 +470,10 @@ export default function TestimonialsManagementPage() {
                             />
 
                             <div className="min-w-0 overflow-hidden">
-                              <p className="text-[10.5px] font-normal text-[#19274a]">
+                              <p className="text-[10.5px] font-semibold text-[#19274a]">
                                 {item.name}
                               </p>
-                              <p className="mt-[4px] max-w-[335px] text-[8.8px] font-normal leading-[1.4] text-[#53627c]">
+                              <p className="mt-[4px] max-w-[335px] text-[8.8px] font-semibold leading-[1.4] text-[#53627c]">
                                 {item.message}
                               </p>
                             </div>
@@ -482,7 +482,7 @@ export default function TestimonialsManagementPage() {
 
                         <td className="px-[8px]">
                           <span
-                            className={`inline-flex whitespace-nowrap rounded-[5px] px-[8px] py-[4px] text-[8px] font-normal ${categoryStyle[item.category]}`}
+                            className={`inline-flex whitespace-nowrap rounded-[5px] px-[8px] py-[4px] text-[8px] font-semibold ${categoryStyle[item.category]}`}
                           >
                             {item.category}
                           </span>
@@ -491,7 +491,7 @@ export default function TestimonialsManagementPage() {
                         <td className="px-[8px]">
                           <div className="flex items-center gap-[8px] whitespace-nowrap">
                             <RatingStars value={item.rating} />
-                            <span className="text-[9px] font-normal text-[#33425c]">
+                            <span className="text-[9px] font-semibold text-[#33425c]">
                               {item.rating.toFixed(1)}
                             </span>
                           </div>
@@ -499,7 +499,7 @@ export default function TestimonialsManagementPage() {
 
                         <td className="px-[8px]">
                           <span
-                            className={`inline-flex items-center gap-[5px] whitespace-nowrap rounded-[5px] px-[8px] py-[4px] text-[8px] font-normal ${statusStyle[item.status]}`}
+                            className={`inline-flex items-center gap-[5px] whitespace-nowrap rounded-[5px] px-[8px] py-[4px] text-[8px] font-semibold ${statusStyle[item.status]}`}
                           >
                             <span
                               className={`h-[5px] w-[5px] rounded-full ${item.status === "Published"
@@ -514,10 +514,10 @@ export default function TestimonialsManagementPage() {
                         </td>
 
                         <td className="px-[8px]">
-                          <p className="whitespace-nowrap text-[9px] font-normal text-[#2c3a58]">
+                          <p className="whitespace-nowrap text-[9px] font-semibold text-[#2c3a58]">
                             {item.date}
                           </p>
-                          <p className="mt-[4px] whitespace-nowrap text-[8px] font-normal text-[#68758d]">
+                          <p className="mt-[4px] whitespace-nowrap text-[8px] font-semibold text-[#68758d]">
                             By {item.author}
                           </p>
                         </td>
@@ -554,7 +554,7 @@ export default function TestimonialsManagementPage() {
 
               {/* PAGINATION */}
               <div className="flex min-h-[58px] items-center justify-between gap-[12px] border-t border-[#e7e9ec] px-[12px]">
-                <p className="text-[9px] font-normal text-[#47546c]">
+                <p className="text-[9px] font-semibold text-[#47546c]">
                   Showing 1 to {rows.length} of 56 testimonials
                 </p>
 
@@ -567,7 +567,7 @@ export default function TestimonialsManagementPage() {
                     <button
                       type="button"
                       key={page}
-                      className={`grid h-[32px] min-w-[32px] place-items-center rounded-[5px] px-[6px] text-[9px] font-normal ${page === 1
+                      className={`grid h-[32px] min-w-[32px] place-items-center rounded-[5px] px-[6px] text-[9px] font-semibold ${page === 1
                         ? "bg-[#075b33] text-white"
                         : "border border-[#dfe3e7] bg-white text-[#35445f]"
                         }`}
@@ -581,7 +581,7 @@ export default function TestimonialsManagementPage() {
                   </button>
                 </div>
 
-                <select className="h-[32px] rounded-[5px] border border-[#dfe3e7] bg-white px-[10px] text-[9px] font-normal text-[#35445f]">
+                <select className="h-[32px] rounded-[5px] border border-[#dfe3e7] bg-white px-[10px] text-[9px] font-semibold text-[#35445f]">
                   <option>10 / page</option>
                 </select>
               </div>
@@ -592,7 +592,7 @@ export default function TestimonialsManagementPage() {
           <aside className="space-y-[12px]">
             {/* CATEGORY */}
             <section className="rounded-[8px] border border-[#e7e9ec] bg-white px-[14px] py-[13px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-              <h2 className="text-[12px] font-normal text-[#19274a]">
+              <h2 className="text-[12px] font-semibold text-[#19274a]">
                 Testimonials by Category
               </h2>
 
@@ -606,8 +606,8 @@ export default function TestimonialsManagementPage() {
                 >
                   <div className="grid h-[70px] w-[70px] place-items-center rounded-full bg-white text-center">
                     <div>
-                      <p className="text-[18px] font-normal leading-none text-[#10204a]">56</p>
-                      <p className="mt-[4px] text-[8px] font-normal text-[#61708c]">Total</p>
+                      <p className="text-[18px] font-semibold leading-none text-[#10204a]">56</p>
+                      <p className="mt-[4px] text-[8px] font-semibold text-[#61708c]">Total</p>
                     </div>
                   </div>
                 </div>
@@ -622,10 +622,10 @@ export default function TestimonialsManagementPage() {
                         className="h-[8px] w-[8px] rounded-full"
                         style={{ backgroundColor: item.color }}
                       />
-                      <span className="truncate text-[8.5px] font-normal text-[#34425e]">
+                      <span className="truncate text-[8.5px] font-semibold text-[#34425e]">
                         {item.label}
                       </span>
-                      <span className="whitespace-nowrap text-[8.3px] font-normal text-[#34425e]">
+                      <span className="whitespace-nowrap text-[8.3px] font-semibold text-[#34425e]">
                         {item.value} ({item.percent})
                       </span>
                     </div>
@@ -636,7 +636,7 @@ export default function TestimonialsManagementPage() {
 
             {/* RATING */}
             <section className="rounded-[8px] border border-[#e7e9ec] bg-white px-[14px] py-[13px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-              <h2 className="text-[12px] font-normal text-[#19274a]">
+              <h2 className="text-[12px] font-semibold text-[#19274a]">
                 Rating Distribution
               </h2>
 
@@ -646,7 +646,7 @@ export default function TestimonialsManagementPage() {
                     key={item.label}
                     className="grid grid-cols-[40px_70px_1fr_58px] items-center gap-[6px]"
                   >
-                    <span className="text-[8.5px] font-normal text-[#47546b]">
+                    <span className="text-[8.5px] font-semibold text-[#47546b]">
                       {item.label}
                     </span>
 
@@ -659,7 +659,7 @@ export default function TestimonialsManagementPage() {
                       />
                     </div>
 
-                    <span className="text-right text-[8.3px] font-normal text-[#4b5870]">
+                    <span className="text-right text-[8.3px] font-semibold text-[#4b5870]">
                       {item.count} ({item.percent})
                     </span>
                   </div>
@@ -669,7 +669,7 @@ export default function TestimonialsManagementPage() {
 
             {/* QUICK ACTIONS */}
             <section className="rounded-[8px] border border-[#e7e9ec] bg-white px-[14px] py-[13px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-              <h2 className="text-[12px] font-normal text-[#19274a]">
+              <h2 className="text-[12px] font-semibold text-[#19274a]">
                 Quick Actions
               </h2>
 
@@ -677,7 +677,7 @@ export default function TestimonialsManagementPage() {
                 <button
                   type="button"
                   onClick={() => router.push("/testimonials/new")}
-                  className="flex h-[36px] w-full items-center gap-[9px] rounded-[5px] border border-[#e2e6ea] bg-white px-[10px] text-[9px] font-normal text-[#293854] transition hover:bg-slate-50"
+                  className="flex h-[36px] w-full items-center gap-[9px] rounded-[5px] border border-[#e2e6ea] bg-white px-[10px] text-[9px] font-semibold text-[#293854] transition hover:bg-slate-50"
                 >
                   <Plus className="h-[13px] w-[13px]" />
                   Add New Testimonial
@@ -685,7 +685,7 @@ export default function TestimonialsManagementPage() {
 
                 <button
                   type="button"
-                  className="flex h-[36px] w-full items-center gap-[9px] rounded-[5px] border border-[#e2e6ea] bg-white px-[10px] text-[9px] font-normal text-[#293854] transition hover:bg-slate-50"
+                  className="flex h-[36px] w-full items-center gap-[9px] rounded-[5px] border border-[#e2e6ea] bg-white px-[10px] text-[9px] font-semibold text-[#293854] transition hover:bg-slate-50"
                 >
                   <Clock3 className="h-[13px] w-[13px]" />
                   Review Pending (5)
@@ -693,7 +693,7 @@ export default function TestimonialsManagementPage() {
 
                 <button
                   type="button"
-                  className="flex h-[36px] w-full items-center gap-[9px] rounded-[5px] border border-[#e2e6ea] bg-white px-[10px] text-[9px] font-normal text-[#293854] transition hover:bg-slate-50"
+                  className="flex h-[36px] w-full items-center gap-[9px] rounded-[5px] border border-[#e2e6ea] bg-white px-[10px] text-[9px] font-semibold text-[#293854] transition hover:bg-slate-50"
                 >
                   <Tag className="h-[13px] w-[13px]" />
                   Manage Categories
@@ -702,7 +702,7 @@ export default function TestimonialsManagementPage() {
                 <button
                   type="button"
                   onClick={() => router.push("/testimonials/settings")}
-                  className="flex h-[36px] w-full items-center gap-[9px] rounded-[5px] border border-[#e2e6ea] bg-white px-[10px] text-[9px] font-normal text-[#293854] transition hover:bg-slate-50"
+                  className="flex h-[36px] w-full items-center gap-[9px] rounded-[5px] border border-[#e2e6ea] bg-white px-[10px] text-[9px] font-semibold text-[#293854] transition hover:bg-slate-50"
                 >
                   <Settings className="h-[13px] w-[13px]" />
                   Testimonial Settings
@@ -713,17 +713,17 @@ export default function TestimonialsManagementPage() {
             {/* CTA */}
             <section className="relative overflow-hidden rounded-[8px] bg-[linear-gradient(135deg,#08643a_0%,#07542f_100%)] px-[18px] py-[18px] text-white shadow-[0_7px_18px_rgba(5,94,49,.12)]">
               <div className="relative z-10 max-w-[205px]">
-                <p className="text-[12px] font-normal leading-[1.4]">
+                <p className="text-[12px] font-semibold leading-[1.4]">
                   Real stories. Real impact.
                 </p>
-                <p className="mt-[9px] text-[10px] font-normal leading-[1.55] text-white/90">
+                <p className="mt-[9px] text-[10px] font-semibold leading-[1.55] text-white/90">
                   Share the voices that inspire trust and compassion.
                 </p>
 
                 <button
                   type="button"
                   onClick={() => router.push("/testimonials/new")}
-                  className="mt-[16px] inline-flex h-[36px] items-center gap-[8px] rounded-[5px] bg-white px-[14px] text-[9px] font-normal text-[#075b33] transition hover:bg-slate-100"
+                  className="mt-[16px] inline-flex h-[36px] items-center gap-[8px] rounded-[5px] bg-white px-[14px] text-[9px] font-semibold text-[#075b33] transition hover:bg-slate-100"
                 >
                   Add New Testimonial
                   <ChevronRight className="h-[12px] w-[12px]" />

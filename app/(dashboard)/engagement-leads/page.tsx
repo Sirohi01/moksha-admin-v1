@@ -228,7 +228,7 @@ export default function EngagementLeadsOverviewPage() {
           <h1
             className="
               text-[20px]
-              font-normal
+              font-semibold
               leading-[24px]
               tracking-[-0.3px]
               text-[#005E2E]
@@ -241,7 +241,7 @@ export default function EngagementLeadsOverviewPage() {
             className="
               mt-[2px]
               text-[9px]
-              font-normal
+              font-semibold
               text-[#354675]
             "
           >
@@ -270,7 +270,7 @@ export default function EngagementLeadsOverviewPage() {
               bg-white
               px-[12px]
               text-[9px]
-              font-normal
+              font-semibold
               text-[#26396F]
               hover:bg-[#F8FAFC]
             "
@@ -292,7 +292,7 @@ export default function EngagementLeadsOverviewPage() {
               bg-white
               px-[12px]
               text-[9px]
-              font-normal
+              font-semibold
               text-[#26396F]
               hover:bg-[#F8FAFC]
             "
@@ -456,7 +456,7 @@ export default function EngagementLeadsOverviewPage() {
                   <span
                     className="
                       text-[18px]
-                      font-normal
+                      font-semibold
                       leading-none
                       text-[#161D32]
                     "
@@ -468,7 +468,7 @@ export default function EngagementLeadsOverviewPage() {
                     className="
                       mt-[5px]
                       text-[9px]
-                      font-normal
+                      font-semibold
                       text-[#5F6981]
                     "
                   >
@@ -521,7 +521,7 @@ export default function EngagementLeadsOverviewPage() {
                         className="
                           truncate
                           text-[9px]
-                          font-normal
+                          font-semibold
                           text-[#42517B]
                         "
                       >
@@ -534,7 +534,7 @@ export default function EngagementLeadsOverviewPage() {
                         shrink-0
                         whitespace-nowrap
                         text-[9px]
-                        font-normal
+                        font-semibold
                         text-[#354572]
                       "
                     >
@@ -617,7 +617,7 @@ export default function EngagementLeadsOverviewPage() {
             >
               <h2 className={sectionHeading}>
                 Engagement Trend
-                <span className="ml-[4px] text-[9px] font-normal text-[#6B748B]">
+                <span className="ml-[4px] text-[9px] font-semibold text-[#6B748B]">
                   (Last 7 Days)
                 </span>
               </h2>
@@ -636,7 +636,7 @@ export default function EngagementLeadsOverviewPage() {
                   bg-white
                   px-[10px]
                   text-[9px]
-                  font-normal
+                  font-semibold
                   text-[#344574]
                   hover:bg-[#F8FAFC]
                 "
@@ -747,7 +747,7 @@ export default function EngagementLeadsOverviewPage() {
                             rounded-full
                             bg-[#EEF0F5]
                             text-[9px]
-                            font-normal
+                            font-semibold
                             text-[#516285]
                           "
                         >
@@ -759,7 +759,7 @@ export default function EngagementLeadsOverviewPage() {
                             className="
                               truncate
                               text-[9px]
-                              font-normal
+                              font-semibold
                               leading-[11px]
                               text-[#27386E]
                             "
@@ -772,7 +772,7 @@ export default function EngagementLeadsOverviewPage() {
                               mt-[1px]
                               truncate
                               text-[9px]
-                              font-normal
+                              font-semibold
                               leading-[10px]
                               text-[#69758D]
                             "
@@ -792,7 +792,7 @@ export default function EngagementLeadsOverviewPage() {
                         truncate
                         pr-[5px]
                         text-[9px]
-                        font-normal
+                        font-semibold
                         align-middle
                         text-[#405078]
                       "
@@ -805,7 +805,7 @@ export default function EngagementLeadsOverviewPage() {
                         className="
                           whitespace-nowrap
                           text-[9px]
-                          font-normal
+                          font-semibold
                           leading-[11px]
                           text-[#26396D]
                         "
@@ -818,7 +818,7 @@ export default function EngagementLeadsOverviewPage() {
                           mt-[1px]
                           whitespace-nowrap
                           text-[9px]
-                          font-normal
+                          font-semibold
                           leading-[10px]
                           text-[#65718A]
                         "
@@ -906,7 +906,7 @@ export default function EngagementLeadsOverviewPage() {
                           className="
                             truncate
                             text-[9px]
-                            font-normal
+                            font-semibold
                             leading-[11px]
                             text-[#27386E]
                           "
@@ -919,7 +919,7 @@ export default function EngagementLeadsOverviewPage() {
                             mt-[1px]
                             truncate
                             text-[9px]
-                            font-normal
+                            font-semibold
                             leading-[10px]
                             text-[#69758D]
                           "
@@ -930,7 +930,7 @@ export default function EngagementLeadsOverviewPage() {
                     </div>
 
                     <div className="min-w-0 overflow-hidden">
-                      <p className="text-[9px] font-normal text-[#7A8397]">
+                      <p className="text-[9px] font-semibold text-[#7A8397]">
                         Assigned to
                       </p>
 
@@ -939,7 +939,7 @@ export default function EngagementLeadsOverviewPage() {
                           mt-[1px]
                           truncate
                           text-[9px]
-                          font-normal
+                          font-semibold
                           leading-[11px]
                           text-[#3C4A73]
                         "
@@ -949,7 +949,7 @@ export default function EngagementLeadsOverviewPage() {
                     </div>
 
                     <div>
-                      <p className="text-[9px] font-normal text-[#7A8397]">
+                      <p className="text-[9px] font-semibold text-[#7A8397]">
                         Due Date
                       </p>
 
@@ -957,7 +957,7 @@ export default function EngagementLeadsOverviewPage() {
                         className="
                           mt-[1px]
                           text-[9px]
-                          font-normal
+                          font-semibold
                           leading-[11px]
                           text-[#3C4A73]
                         "
@@ -993,7 +993,7 @@ export default function EngagementLeadsOverviewPage() {
           pt-[9px]
         "
       >
-        <h2 className="text-[10px] font-normal text-[#17613B]">
+        <h2 className="text-[10px] font-semibold text-[#17613B]">
           Quick Actions
         </h2>
 
@@ -1169,7 +1169,7 @@ function StatCard({
             className="
               break-words
               text-[9px]
-              font-normal
+              font-semibold
               uppercase
               tracking-wider
               leading-[11px]
@@ -1184,7 +1184,7 @@ function StatCard({
               mt-[2px]
               whitespace-nowrap
               text-2xl
-              font-normal
+              font-semibold
               leading-none
               text-[#152965]
             "
@@ -1212,7 +1212,7 @@ function StatCard({
         <span
           className={`
             text-[9px]
-            font-normal
+            font-semibold
 
             ${negative ? "text-[#E44747]" : "text-[#15944B]"}
           `}
@@ -1220,7 +1220,7 @@ function StatCard({
           {change}
         </span>
 
-        <span className="text-[9px] font-normal text-[#596685]">
+        <span className="text-[9px] font-semibold text-[#596685]">
           vs last 7 days
         </span>
       </div>
@@ -1263,7 +1263,7 @@ function DashboardCard({
 
 const sectionHeading = `
   text-[11px]
-  font-normal
+  font-semibold
   text-[#182A65]
 `;
 
@@ -1291,7 +1291,7 @@ function BottomLink({
         gap-[7px]
         whitespace-nowrap
         text-[9px]
-        font-normal
+        font-semibold
         text-[#465986]
         hover:text-[#182A65]
         ${className}
@@ -1339,7 +1339,7 @@ function FunnelRow({
             items-center
             justify-center
             text-[7px]
-            font-normal
+            font-semibold
             text-white
             whitespace-nowrap
           "
@@ -1353,11 +1353,11 @@ function FunnelRow({
         </div>
       </div>
 
-      <span className="text-right text-[9px] font-normal text-[#26376B]">
+      <span className="text-right text-[9px] font-semibold text-[#26376B]">
         {value}
       </span>
 
-      <span className="text-right text-[9px] font-normal text-[#5C6883]">
+      <span className="text-right text-[9px] font-semibold text-[#5C6883]">
         {extra ?? ""}
       </span>
     </div>
@@ -1476,7 +1476,7 @@ function TrendChart() {
 
 function TableHead({ children }: { children: ReactNode }) {
   return (
-    <th className="px-[8px] text-[9px] font-normal text-[#182A65]">
+    <th className="px-[8px] text-[9px] font-semibold text-[#182A65]">
       {children}
     </th>
   );
@@ -1527,7 +1527,7 @@ function TypeBadge({
         px-[7px]
         py-[3px]
         text-[9px]
-        font-normal
+        font-semibold
         leading-none
       "
       style={{
@@ -1568,7 +1568,7 @@ function StatusBadge({ status }: { status: RecentStatus }) {
         px-[7px]
         py-[3px]
         text-[9px]
-        font-normal
+        font-semibold
         leading-none
       "
       style={{
@@ -1616,7 +1616,7 @@ function PriorityBadge({ priority }: { priority: Priority }) {
         px-[7px]
         py-[3px]
         text-[9px]
-        font-normal
+        font-semibold
         leading-none
       "
       style={{
@@ -1699,7 +1699,7 @@ function QuickAction({
         className="
           min-w-0
           text-[9px]
-          font-normal
+          font-semibold
           leading-[14px]
           text-[#2E4074]
         "
@@ -1722,7 +1722,7 @@ function QuickAction({
             bg-[#F18714]
             px-[4px]
             text-[9px]
-            font-normal
+            font-semibold
             text-[#FFFFFF]
           "
         >
