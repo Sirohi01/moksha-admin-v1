@@ -2287,25 +2287,6 @@ export default function DashboardPage() {
                 <PanelTitle
                   right={
                     <div className="flex items-center gap-2">
-                      <RangeDropdown
-                        dropdownKey="search-console-range"
-                        openDropdown={
-                          openDropdown
-                        }
-                        setOpenDropdown={
-                          setOpenDropdown
-                        }
-                        value={
-                          searchConsoleRange
-                        }
-                        setValue={
-                          setSearchConsoleRange
-                        }
-                        options={
-                          searchConsoleRanges
-                        }
-                      />
-
                       <button
                         type="button"
                         onClick={() => window.open("/seo", "_blank")}
@@ -2805,25 +2786,6 @@ export default function DashboardPage() {
                   <PanelTitle
                     right={
                       <div className="flex items-center gap-2">
-                        <RangeDropdown
-                          dropdownKey="analytics-range"
-                          openDropdown={
-                            openDropdown
-                          }
-                          setOpenDropdown={
-                            setOpenDropdown
-                          }
-                          value={
-                            analyticsRange
-                          }
-                          setValue={
-                            setAnalyticsRange
-                          }
-                          options={
-                            analyticsRanges
-                          }
-                        />
-
                         <button
                           type="button"
                           className="flex items-center gap-1 text-[10px] font-bold text-blue-600 hover:text-blue-700"
@@ -3184,25 +3146,6 @@ export default function DashboardPage() {
                 <PanelTitle
                   right={
                     <div className="flex items-center gap-2">
-                      <RangeDropdown
-                        dropdownKey="web-vitals-range"
-                        openDropdown={
-                          openDropdown
-                        }
-                        setOpenDropdown={
-                          setOpenDropdown
-                        }
-                        value={
-                          webVitalsRange
-                        }
-                        setValue={
-                          setWebVitalsRange
-                        }
-                        options={
-                          webVitalsRanges
-                        }
-                      />
-
                       <button
                         type="button"
                         onClick={() => window.open("/analytics", "_blank")}

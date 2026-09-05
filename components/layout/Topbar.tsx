@@ -191,15 +191,15 @@ function ServiceClock({
       type="button"
       onClick={onClick}
       title={`${name} — renews ${new Date(expiryDate).toLocaleDateString()}`}
-      className={`group flex h-[46px] min-w-[210px] items-center gap-2 rounded-xl border px-2.5 text-left shadow-[0_4px_14px_rgba(15,23,42,0.06)] transition-all hover:-translate-y-px hover:shadow-[0_7px_20px_rgba(15,23,42,0.10)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent ${palette.card}`}
+      className={`group flex h-[46px] min-w-[210px] items-center gap-2 rounded-none border px-2.5 text-left shadow-[0_4px_14px_rgba(15,23,42,0.06)] transition-all hover:-translate-y-px hover:shadow-[0_7px_20px_rgba(15,23,42,0.10)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent ${palette.card}`}
     >
-      <span className={`grid h-8 w-8 shrink-0 place-items-center rounded-full border shadow-inner ${palette.icon}`}>
+      <span className={`grid h-8 w-8 shrink-0 place-items-center rounded-none border shadow-inner ${palette.icon}`}>
         <Icon className="h-4 w-4" />
       </span>
       <span className="min-w-0 flex-1">
         <span className="mb-0.5 flex items-center justify-between gap-2">
-          <span className={`truncate text-[10px] font-extrabold ${palette.label}`}>{label} Renews In</span>
-          <span className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[8px] font-bold ${palette.live}`}>
+          <span className={`truncate text-[10px] font-semibold ${palette.label}`}>{label} Renews In</span>
+          <span className={`inline-flex shrink-0 items-center gap-1 rounded-none px-2 py-0.5 text-[8px] font-semibold ${palette.live}`}>
             <span className={`h-1.5 w-1.5 rounded-full ${palette.dot}`} />
             {countdown.isExpired ? "Expired" : "Live"}
           </span>
@@ -207,8 +207,8 @@ function ServiceClock({
         <span className="grid grid-cols-4 divide-x divide-current/15">
           {parts.map((part) => (
             <span key={part.unit} className={`flex flex-col items-center justify-center px-1 ${palette.digit}`}>
-              <span className="font-mono text-[12px] font-extrabold leading-none tabular-nums">{String(part.value).padStart(2, "0")}</span>
-              <small className={`mt-0.5 text-[5.5px] font-extrabold uppercase leading-none tracking-wide ${palette.unit}`}>{part.unit}</small>
+              <span className="font-mono text-[12px] font-semibold leading-none tabular-nums">{String(part.value).padStart(2, "0")}</span>
+              <small className={`mt-0.5 text-[5.5px] font-semibold uppercase leading-none tracking-wide ${palette.unit}`}>{part.unit}</small>
             </span>
           ))}
         </span>
@@ -479,15 +479,11 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
 
           {isDashboard ? (
             <div className="min-w-[238px]">
-              <div className="rounded-xl border border-emerald-100 bg-gradient-to-r from-emerald-50/80 via-white to-white px-3 py-1.5 shadow-[0_4px_14px_rgba(15,23,42,0.06)]">
-                <p className="flex items-center gap-1.5 text-[8.5px] font-bold uppercase leading-none tracking-[0.11em] text-slate-400">
-                  <span className="text-emerald-700">Dashboard</span>
-                  <span className="h-1 w-1 rounded-full bg-emerald-400" />
-                </p>
-                <h1 className="mt-1 truncate text-[14px] font-extrabold leading-none tracking-tight text-slate-900">
-                  Welcome back, <span className="text-emerald-700">{firstName}</span>
+              <div className="rounded-none border border-blue-100 bg-gradient-to-r from-blue-50/90 via-sky-50/50 to-white px-3 py-1.5 shadow-[0_4px_14px_rgba(15,23,42,0.06)]">
+                <h1 className="truncate text-[14px] font-semibold leading-none tracking-tight text-slate-900">
+                  Welcome back, <span className="text-[#118AB2]">{firstName}</span>
                 </h1>
-                <p className="mt-1 hidden truncate text-[9.5px] font-medium leading-none text-slate-500 sm:block">
+                <p className="mt-1 hidden truncate text-[9.5px] font-semibold leading-none text-[#133458] sm:block">
                   Everything is ready for you
                 </p>
               </div>

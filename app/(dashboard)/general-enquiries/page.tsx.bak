@@ -9,7 +9,6 @@ import {
   type ReactNode,
 } from "react";
 import Link from "next/link";
-import typography from "../pages/PagesTypography.module.css";
 
 import {
   ArrowDown,
@@ -532,7 +531,6 @@ function StatCard({
   icon: ComponentType<{
     size?: number;
     strokeWidth?: number;
-    className?: string;
     style?: CSSProperties;
   }>;
 
@@ -540,77 +538,144 @@ function StatCard({
   iconColor: string;
   cardBg?: string;
 }) {
-  const meta: Record<string, { gradient: string; toneClass: string; numColor: string; noteColor: string }> = {
-    "Total Enquiries": {
-      gradient: "linear-gradient(135deg, #ffffff 0%, #ffffff 55%, #f8f5ff 100%)",
-      toneClass: "bg-violet-50 text-violet-700 ring-violet-100",
-      numColor: "#6d28d9",
-      noteColor: "text-violet-700",
-    },
-    "New Enquiries": {
-      gradient: "linear-gradient(135deg, #ffffff 0%, #ffffff 55%, #f0f7ff 100%)",
-      toneClass: "bg-blue-50 text-blue-700 ring-blue-100",
-      numColor: "#1d4ed8",
-      noteColor: "text-blue-600",
-    },
-    "In Progress": {
-      gradient: "linear-gradient(135deg, #ffffff 0%, #ffffff 55%, #fffdf0 100%)",
-      toneClass: "bg-amber-50 text-amber-700 ring-amber-100",
-      numColor: "#b45309",
-      noteColor: "text-amber-600",
-    },
-    "Resolved": {
-      gradient: "linear-gradient(135deg, #ffffff 0%, #ffffff 55%, #f0fdf4 100%)",
-      toneClass: "bg-emerald-50 text-emerald-700 ring-emerald-100",
-      numColor: "#047857",
-      noteColor: "text-emerald-700",
-    },
-    "Closed": {
-      gradient: "linear-gradient(135deg, #ffffff 0%, #ffffff 55%, #fff1f2 100%)",
-      toneClass: "bg-rose-50 text-rose-700 ring-rose-100",
-      numColor: "#be123c",
-      noteColor: "text-rose-600",
-    },
-  };
-
-  const current = meta[label] || {
-    gradient: "linear-gradient(135deg, #ffffff 0%, #ffffff 55%, #f8f5ff 100%)",
-    toneClass: "bg-slate-50 text-slate-700 ring-slate-100",
-    numColor: "#0f172a",
-    noteColor: "text-slate-600",
-  };
-
   return (
     <div
-      className="relative flex flex-col justify-center overflow-hidden rounded-[7px] p-2"
+      className="
+        flex
+        flex-col
+        justify-between
+        h-[102px]
+        min-w-0
+        rounded-[7px]
+        border
+        border-[#E3E7EC]
+        px-[11px]
+        py-[9px]
+      "
       style={{
-        background: current.gradient,
-        boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px",
+        backgroundColor:
+          cardBg ?? "#FFFFFF",
       }}
     >
-      <div className="flex items-start gap-1.5">
-        <div className={`grid h-[30px] w-[30px] shrink-0 place-items-center rounded-full ring-1 ${current.toneClass}`}>
-          <Icon size={16} strokeWidth={1.8} />
+      {/* TOP: ICON + METRICS */}
+      <div
+        className="
+          flex
+          min-w-0
+          items-center
+          gap-[9px]
+        "
+      >
+        <div
+          className="
+            flex
+            h-[40px]
+            w-[40px]
+            shrink-0
+            items-center
+            justify-center
+            rounded-full
+          "
+          style={{
+            backgroundColor: iconBg,
+          }}
+        >
+          <Icon
+            size={20}
+            strokeWidth={2}
+            style={{
+              color: iconColor,
+            }}
+          />
         </div>
 
-        <div className="min-w-0 flex-1">
-          <p className="truncate text-[8px] !font-semibold tracking-[0.01em] text-slate-900" style={{ fontWeight: 600, color: "#0f172a" }}>
-            {label.toUpperCase()}
+        <div className="min-w-0 overflow-hidden">
+          <p
+            className="
+              break-words
+              text-[9px]
+              font-semibold
+              uppercase
+              tracking-wider
+              leading-[11px]
+              text-[#182A65]
+            "
+          >
+            {label}
           </p>
 
-          <div className="mt-1.5 flex items-end gap-1">
+          <p
+            className="
+              mt-[2px]
+              whitespace-nowrap
+              text-2xl
+              font-semibold
+              leading-none
+              text-[#152965]
+            "
+          >
+            {value}
+          </p>
+        </div>
+      </div>
+
+      {/* BOTTOM: LEFT ALIGNED SUBTEXT */}
+      <div
+        className="
+          flex
+          w-full
+          items-center
+          justify-start
+          gap-[4px]
+          whitespace-nowrap
+          text-left
+        "
+      >
+        {change === "Live" ? (
+          <span className="rounded-[4px] bg-[#E4F5E8] px-[5px] py-[1px] text-[9px] font-semibold text-[#238B4C]">
+            Live
+          </span>
+        ) : (
+          <>
+            {negative ? (
+              <ArrowDown
+                size={10}
+                strokeWidth={3}
+                className="text-[#E44747]"
+              />
+            ) : (
+              <ArrowUp
+                size={10}
+                strokeWidth={3}
+                className="text-[#15944B]"
+              />
+            )}
+
             <span
-              className="!font-semibold tracking-[-0.04em] text-[17px] leading-none"
-              style={{ color: current.numColor, fontWeight: 600 }}
-            >
-              {value}
-            </span>
-          </div>
+              className={`
+                text-[9px]
+                font-semibold
 
-          <p className={`mt-0.5 text-[7.5px] font-bold ${current.noteColor}`}>
-            {change} current data
-          </p>
-        </div>
+                ${negative
+                  ? "text-[#E44747]"
+                  : "text-[#15944B]"
+                }
+              `}
+            >
+              {change}
+            </span>
+          </>
+        )}
+
+        <span
+          className="
+            text-[9px]
+            font-semibold
+            text-[#596685]
+          "
+        >
+          current data
+        </span>
       </div>
     </div>
   );
@@ -632,7 +697,7 @@ function FilterSelect({
   children: ReactNode;
 }) {
   return (
-    <div className="relative shrink-0">
+    <div className="relative min-w-[110px] max-w-[140px] flex-1">
       <select
         value={value}
         onChange={(event) =>
@@ -641,30 +706,34 @@ function FilterSelect({
           )
         }
         className="
-          h-[30px]
+          h-[40px]
           w-full
-          cursor-pointer
           appearance-none
           rounded-[6px]
           border
-          border-[#e3e4e0]
+          border-[#E0E5EB]
           bg-white
-          pl-[10px]
-          pr-[26px]
-          text-[8.5px]
+          px-[11px]
+          pr-[30px]
+          text-[10px]
           font-semibold
-          text-[#374156]
+          text-[#182A65]
           outline-none
-          transition-colors
-          hover:border-[#d2c9b3]
-          focus:border-[#c39a43]
         "
       >
         {children}
       </select>
 
       <ChevronDown
-        className="pointer-events-none absolute right-[8px] top-1/2 h-[11px] w-[11px] -translate-y-1/2 text-[#737b87]"
+        size={11}
+        className="
+          pointer-events-none
+          absolute
+          right-[9px]
+          top-1/2
+          -translate-y-1/2
+          text-[#243A75]
+        "
       />
     </div>
   );
@@ -1171,7 +1240,16 @@ export default function GeneralEnquiriesPage() {
   ========================================================== */
 
   return (
-    <div className={`${typography.pages} w-full min-w-0 bg-[#fffefb] text-[#182238] px-[18px] pb-[15px] pt-[14px]`}>
+    <section
+      className="
+        w-full
+        min-w-0
+        bg-white
+        px-[16px]
+        pb-[15px]
+        pt-[11px]
+      "
+    >
       {/* ======================================================
           HEADER
       ====================================================== */}
@@ -1191,7 +1269,7 @@ export default function GeneralEnquiriesPage() {
               font-semibold
               leading-[25px]
               tracking-[-0.35px]
-              text-[#293681]
+              text-[#005E2E]
             "
           >
             General Enquiries
@@ -1203,7 +1281,7 @@ export default function GeneralEnquiriesPage() {
               text-[10px]
               font-semibold
               leading-[16px]
-              text-slate-500
+              text-[#344574]
             "
           >
             View, manage and respond
@@ -1271,7 +1349,7 @@ export default function GeneralEnquiriesPage() {
               items-center
               gap-[8px]
               rounded-[5px]
-              bg-[#293681]
+              bg-[#005F2E]
               px-[17px]
               text-[10px]
               font-semibold
@@ -1406,7 +1484,16 @@ export default function GeneralEnquiriesPage() {
             <div
               className="
                 flex
-                h-[30px] min-w-0 flex-1 items-center gap-[8px] rounded-[6px] border border-[#e3e4e0] bg-white px-[11px]
+                h-[40px]
+                min-w-0
+                flex-1
+                items-center
+                gap-[8px]
+                rounded-[6px]
+                border
+                border-[#E0E5EB]
+                bg-white
+                px-[11px]
               "
             >
               <Search
@@ -1433,7 +1520,11 @@ export default function GeneralEnquiriesPage() {
                   min-w-0
                   flex-1
                   bg-transparent
-                  text-[8.5px] font-normal text-[#424c5f] outline-none placeholder:text-[#9298a3] focus:border-[#c8ad70]
+                  text-[10px]
+                  font-semibold
+                  text-[#172762]
+                  outline-none
+                  placeholder:text-[#566483]
                 "
               />
             </div>
@@ -1658,9 +1749,6 @@ export default function GeneralEnquiriesPage() {
               border-[#E2E6EB]
               bg-white
             "
-            style={{
-              boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px",
-            }}
           >
             <table
               className="
@@ -1723,38 +1811,41 @@ export default function GeneralEnquiriesPage() {
               <thead>
                 <tr
                   className="
-                    h-[32px] border-b border-[#e8e5df] bg-[#233D4D] text-left text-white
+                    h-[36px]
+                    bg-[#F7F8FC]
+                    text-left
+                    text-[#172762]
                   "
                 >
-                  <th className="px-[9px] text-[8.5px] font-bold uppercase tracking-wider text-white">
+                  <th className="px-[9px] text-[10px] font-semibold uppercase tracking-wider">
                     ID
                   </th>
 
-                  <th className="px-[8px] text-[8.5px] font-bold uppercase tracking-wider text-white">
+                  <th className="px-[8px] text-[10px] font-semibold uppercase tracking-wider">
                     Name
                   </th>
 
-                  <th className="px-[8px] text-[8.5px] font-bold uppercase tracking-wider text-white">
+                  <th className="px-[8px] text-[10px] font-semibold uppercase tracking-wider">
                     Subject
                   </th>
 
-                  <th className="px-[7px] text-[8.5px] font-bold uppercase tracking-wider text-white">
+                  <th className="px-[7px] text-[10px] font-semibold uppercase tracking-wider">
                     Category
                   </th>
 
-                  <th className="px-[7px] text-[8.5px] font-bold uppercase tracking-wider text-white">
+                  <th className="px-[7px] text-[10px] font-semibold uppercase tracking-wider">
                     Source
                   </th>
 
-                  <th className="px-[7px] text-[8.5px] font-bold uppercase tracking-wider text-white">
+                  <th className="px-[7px] text-[10px] font-semibold uppercase tracking-wider">
                     Status
                   </th>
 
-                  <th className="px-[7px] text-[8.5px] font-bold uppercase tracking-wider text-white">
+                  <th className="px-[7px] text-[10px] font-semibold uppercase tracking-wider">
                     Date &amp; Time
                   </th>
 
-                  <th className="px-[6px] text-[8.5px] font-bold uppercase tracking-wider text-white">
+                  <th className="px-[6px] text-[10px] font-semibold uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
@@ -1813,7 +1904,6 @@ export default function GeneralEnquiriesPage() {
                         getStatusStyle(
                           enquiry.status
                         );
-                      const normStatus = (enquiry.status || "").toLowerCase().replace(/[\s-]/g, "_");
 
                       const source =
                         getSource(
@@ -1839,7 +1929,12 @@ export default function GeneralEnquiriesPage() {
                             )
                           }
                           className="
-                            min-h-[44px] cursor-pointer border-b border-[#f0f0ec] bg-white hover:bg-slate-50 transition
+                            h-[59px]
+                            cursor-pointer
+                            border-t
+                            border-[#E9ECF0]
+                            bg-white
+                            hover:bg-[#FBFCFD]
                           "
                         >
                           {/* ID */}
@@ -1849,7 +1944,9 @@ export default function GeneralEnquiriesPage() {
                               className="
                                 block
                                 truncate
-                                font-mono text-[7.5px] font-semibold text-[#14763F]
+                                text-[10px]
+                                font-semibold
+                                text-[#14763F]
                               "
                             >
                               {enquiry.reference ||
@@ -1869,7 +1966,10 @@ export default function GeneralEnquiriesPage() {
                             <p
                               className="
                                 truncate
-                                text-[8px] font-semibold text-[#293681]
+                                text-[10px]
+                                font-semibold
+                                leading-[14px]
+                                text-[#192B66]
                               "
                             >
                               {enquiry.name ||
@@ -1880,7 +1980,10 @@ export default function GeneralEnquiriesPage() {
                               className="
                                 mt-[3px]
                                 truncate
-                                text-[7.5px] font-medium text-[#4B1426]
+                                text-[10px]
+                                font-semibold
+                                leading-[12px]
+                                text-[#52617F]
                               "
                             >
                               {enquiry.email ||
@@ -1901,7 +2004,10 @@ export default function GeneralEnquiriesPage() {
                             <p
                               className="
                                 line-clamp-2
-                                line-clamp-2 text-[8px] font-medium text-slate-700
+                                text-[10px]
+                                font-semibold
+                                leading-[14px]
+                                text-[#314273]
                               "
                             >
                               {getSubject(
@@ -1924,7 +2030,9 @@ export default function GeneralEnquiriesPage() {
                                 max-w-full
                                 rounded-[4px]
                                 border
-                                px-[6px] py-[2px] text-[7px]
+                                px-[8px]
+                                py-[4px]
+                                text-[10px]
                                 font-semibold
                                 leading-none
                               "
@@ -1996,27 +2104,28 @@ export default function GeneralEnquiriesPage() {
                             "
                           >
                             <span
-                              className={`inline-flex items-center gap-[4px] rounded-full px-[7px] py-[3px] text-[7px] font-bold ${
-                                normStatus === "closed"
-                                  ? "bg-rose-50 text-rose-700 ring-1 ring-rose-100"
-                                  : normStatus === "resolved"
-                                    ? "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-100"
-                                    : normStatus === "in_progress" || normStatus === "progress"
-                                      ? "bg-amber-50 text-amber-700 ring-1 ring-amber-100"
-                                      : "bg-blue-50 text-blue-700 ring-1 ring-blue-100"
-                              }`}
+                              className="
+                                inline-flex
+                                whitespace-nowrap
+                                rounded-[4px]
+                                border
+                                px-[7px]
+                                py-[4px]
+                                text-[10px]
+                                font-semibold
+                                leading-none
+                              "
+                              style={{
+                                backgroundColor:
+                                  statusMeta.background,
+
+                                color:
+                                  statusMeta.color,
+
+                                borderColor:
+                                  statusMeta.border,
+                              }}
                             >
-                              <span
-                                className={`h-[5px] w-[5px] rounded-full ${
-                                  normStatus === "closed"
-                                    ? "bg-rose-500"
-                                    : normStatus === "resolved"
-                                      ? "bg-emerald-500"
-                                      : normStatus === "in_progress" || normStatus === "progress"
-                                        ? "bg-amber-500"
-                                        : "bg-blue-500"
-                                }`}
-                              />
                               {getStatusLabel(
                                 enquiry.status
                               )}
@@ -2034,7 +2143,7 @@ export default function GeneralEnquiriesPage() {
 
                               return (
                                 <>
-                                  <p className="whitespace-nowrap text-[7.5px] font-semibold text-slate-700">
+                                  <p className="whitespace-nowrap text-[9px] font-semibold leading-[11px] text-[#26396D]">
                                     {parts[0]}
                                   </p>
                                   {parts[1] && (
@@ -2357,20 +2466,28 @@ export default function GeneralEnquiriesPage() {
 
           <div
             className="
-              overflow-hidden
               rounded-[7px]
               border
-              border-[#e1e5ec]
+              border-[#E2E6EB]
               bg-white
+              px-[12px]
+              pb-[14px]
+              pt-[12px]
             "
-            style={{ boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px" }}
           >
-            <div className="flex h-[32px] shrink-0 items-center justify-between border-b border-slate-200/80 bg-[#f0f3f6] px-3 backdrop-blur-sm">
-              <h2 className="text-[11.5px] font-semibold tracking-[-0.01em] text-[#0f172a]">
-                Enquiry Summary
-              </h2>
-            </div>
-            <div className="px-[12px] pb-[14px] pt-[12px]">
+            <h2
+              className="
+                break-words
+                text-[9px]
+                font-semibold
+                uppercase
+                tracking-wider
+                leading-[11px]
+                text-[#1D5E39]
+              "
+            >
+              Enquiry Summary
+            </h2>
 
             <div
               className="
@@ -2569,28 +2686,34 @@ export default function GeneralEnquiriesPage() {
               </div>
             </div>
           </div>
-          </div>
 
           {/* SOURCE */}
 
           <div
             className="
               mt-[13px]
-              overflow-hidden
               rounded-[7px]
               border
-              border-[#e1e5ec]
+              border-[#E2E6EB]
               bg-white
+              px-[12px]
+              pb-[14px]
+              pt-[12px]
             "
-            style={{ boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px" }}
           >
-            <div className="flex h-[32px] shrink-0 items-center justify-between border-b border-slate-200/80 bg-[#f0f3f6] px-3 backdrop-blur-sm">
-              <h2 className="text-[11.5px] font-semibold tracking-[-0.01em] text-[#0f172a]">
-                Enquiries by Source
-              </h2>
-            </div>
-
-            <div className="px-[12px] pb-[14px] pt-[12px]">
+            <h2
+              className="
+                break-words
+                text-[9px]
+                font-semibold
+                uppercase
+                tracking-wider
+                leading-[11px]
+                text-[#1D5E39]
+              "
+            >
+              Enquiries by Source
+            </h2>
 
             <div
               className="
@@ -2659,28 +2782,34 @@ export default function GeneralEnquiriesPage() {
                 )}
             </div>
           </div>
-          </div>
 
           {/* CATEGORIES */}
 
           <div
             className="
               mt-[13px]
-              overflow-hidden
               rounded-[7px]
               border
-              border-[#e1e5ec]
+              border-[#E2E6EB]
               bg-white
+              px-[12px]
+              pb-[14px]
+              pt-[12px]
             "
-            style={{ boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px" }}
           >
-            <div className="flex h-[32px] shrink-0 items-center justify-between border-b border-slate-200/80 bg-[#f0f3f6] px-3 backdrop-blur-sm">
-              <h2 className="text-[11.5px] font-semibold tracking-[-0.01em] text-[#0f172a]">
-                Popular Categories
-              </h2>
-            </div>
-
-            <div className="px-[12px] pb-[14px] pt-[12px]">
+            <h2
+              className="
+                break-words
+                text-[9px]
+                font-semibold
+                uppercase
+                tracking-wider
+                leading-[11px]
+                text-[#1D5E39]
+              "
+            >
+              Popular Categories
+            </h2>
 
             <div
               className="
@@ -2739,7 +2868,6 @@ export default function GeneralEnquiriesPage() {
                 )}
             </div>
           </div>
-          </div>
 
           {/* QUICK ACTIONS */}
 
@@ -2749,18 +2877,31 @@ export default function GeneralEnquiriesPage() {
               overflow-hidden
               rounded-[7px]
               border
-              border-[#e1e5ec]
-              bg-white
+              border-[#E2E6EB]
+              bg-[#FAFBFE]
             "
-            style={{ boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px" }}
           >
-            <div className="flex h-[32px] shrink-0 items-center justify-between border-b border-slate-200/80 bg-[#f0f3f6] px-3 backdrop-blur-sm">
-              <h2 className="text-[11.5px] font-semibold tracking-[-0.01em] text-[#0f172a]">
+            <div
+              className="
+                px-[12px]
+                pb-[7px]
+                pt-[12px]
+              "
+            >
+              <h2
+                className="
+                  break-words
+                  text-[9px]
+                  font-semibold
+                  uppercase
+                  tracking-wider
+                  leading-[11px]
+                  text-[#1D5E39]
+                "
+              >
                 Quick Actions
               </h2>
             </div>
-
-            <div className="p-2 space-y-1">
 
             {[
               {
@@ -2851,7 +2992,6 @@ export default function GeneralEnquiriesPage() {
                 </button>
               );
             })}
-          </div>
           </div>
         </aside>
       </div>
@@ -3072,7 +3212,7 @@ export default function GeneralEnquiriesPage() {
           </div>
         )}
       </Modal>
-    </div>
+    </section>
   );
 }
 
