@@ -143,7 +143,7 @@ function MetricCard({
           <span className="text-[17px] font-extrabold leading-none tracking-[-0.03em] text-[#10204a]">
             {value}
           </span>
-          <span className="truncate text-[8.5px] font-semibold text-[#66738b]">{note}</span>
+          <span className="truncate text-[9px] font-semibold text-[#66738b]">{note}</span>
         </div>
       </div>
     </article>
@@ -352,7 +352,7 @@ export default function ManageCategoriesPage() {
                         </td>
 
                         <td className="px-[12px]">
-                          <p className="max-w-[390px] text-[9.7px] font-semibold leading-[1.55] text-[#55627a]">
+                          <p className="max-w-[390px] text-[10.5px] font-semibold leading-[1.55] text-[#55627a]">
                             {item.description}
                           </p>
                         </td>
@@ -365,7 +365,7 @@ export default function ManageCategoriesPage() {
 
                         <td className="px-[12px] text-center">
                           <span
-                            className={`inline-flex rounded-[5px] border px-[10px] py-[5px] text-[8.5px] font-bold ${item.status === "Published"
+                            className={`inline-flex rounded-[5px] border px-[10px] py-[5px] text-[9px] font-bold ${item.status === "Published"
                                 ? "border-emerald-200 bg-emerald-50 text-emerald-700"
                                 : "border-amber-200 bg-amber-50 text-amber-700"
                               }`}
