@@ -598,7 +598,7 @@ export default function EngagementLeadsOverviewPage() {
               />
             </div>
 
-            <BottomLink>View conversion report</BottomLink>
+            <BottomLink className="bottom-[6px] translate-y-[4px]">View conversion report</BottomLink>
           </DashboardCard>
 
           {/* ====================================================
@@ -1271,13 +1271,15 @@ const sectionHeading = `
 
 function BottomLink({
   children,
+  className = "",
 }: {
   children: ReactNode;
+  className?: string;
 }) {
   return (
     <button
       type="button"
-      className="
+      className={`
         absolute
         bottom-[10px]
         left-1/2
@@ -1290,7 +1292,8 @@ function BottomLink({
         font-[700]
         text-[#465986]
         hover:text-[#182A65]
-      "
+        ${className}
+      `}
     >
       {children}
 
