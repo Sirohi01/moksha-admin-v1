@@ -266,29 +266,32 @@ function StatCard({
   return (
     <div
       className="
+        flex
+        h-[116px]
         min-w-0
+        flex-col
+        justify-between
         rounded-[7px]
         border
-        border-[#E1E6EC]
+        border-[#E2E6EB]
         bg-white
         px-[10px]
-        py-[10px]
+        py-[9px]
       "
     >
       <div
         className="
           flex
-          h-[116px]
           min-w-0
           items-center
-          gap-[9px]
+          gap-[8px]
         "
       >
         <div
           className="
             flex
-            h-[44px]
-            w-[44px]
+            h-[40px]
+            w-[40px]
             shrink-0
             items-center
             justify-center
@@ -299,9 +302,8 @@ function StatCard({
           }}
         >
           <Icon
-            size={24}
+            size={20}
             strokeWidth={2}
-            className="shrink-0"
             style={
               {
                 color: iconColor,
@@ -313,10 +315,11 @@ function StatCard({
         <div className="min-w-0 flex-1">
           <p
             className="
-              text-[9px]
+              text-[10px]
               font-[700]
-              leading-[11px]
-              text-[#172863]
+              uppercase
+              tracking-wider
+              text-[#172762]
             "
           >
             {label}
@@ -324,11 +327,11 @@ function StatCard({
 
           <p
             className="
-              mt-[4px]
+              mt-[2px]
               whitespace-nowrap
-              text-[22px]
+              text-2xl
               font-[800]
-              leading-[25px]
+              leading-none
             "
             style={{
               color: valueColor,
@@ -336,52 +339,50 @@ function StatCard({
           >
             {value}
           </p>
+        </div>
+      </div>
 
-          {change && (
-            <div
+      <div
+        className="
+          flex
+          w-full
+          items-center
+          justify-start
+          gap-[4px]
+          whitespace-nowrap
+          text-left
+        "
+      >
+        {change === "Live" || !change ? (
+          <span className="rounded-[4px] bg-[#E4F5E8] px-[5px] py-[1px] text-[9px] font-bold text-[#238B4C]">
+            Live
+          </span>
+        ) : (
+          <>
+            <ArrowUp
+              size={10}
+              strokeWidth={3}
               className="
-                mt-[7px]
-                flex
-                items-center
-                gap-[3px]
-                whitespace-nowrap
+                shrink-0
+                text-[#169248]
+              "
+            />
+
+            <span
+              className="
+                text-[9px]
+                font-[700]
+                text-[#169248]
               "
             >
-              <ArrowUp
-                size={8}
-                strokeWidth={3}
-                className="
-                  shrink-0
-                  text-[#169248]
-                "
-              />
+              {change}
+            </span>
+          </>
+        )}
 
-              <span
-                className="
-                  shrink-0
-                  text-[9px]
-                  font-[700]
-                  text-[#169248]
-                "
-              >
-                {change}
-              </span>
-
-              {compare && (
-                <span
-                  className="
-                    shrink-0
-                    text-[9px]
-                    font-[600]
-                    text-[#506083]
-                  "
-                >
-                  {compare}
-                </span>
-              )}
-            </div>
-          )}
-        </div>
+        <span className="text-[9px] font-[500] text-[#536181]">
+          {compare ?? "current data"}
+        </span>
       </div>
     </div>
   );

@@ -1695,15 +1695,15 @@ export default function CommunicationsFollowUps() {
               </button>
             </div>
 
-            <div className="mt-[17px] flex items-center gap-[10px]">
+            <div className="mt-[17px] flex items-center gap-[8px]">
               {/* DONUT */}
 
               <div
                 className="
                   relative
                   flex
-                  h-[94px]
-                  w-[94px]
+                  h-[82px]
+                  w-[82px]
                   shrink-0
                   items-center
                   justify-center
@@ -1717,8 +1717,8 @@ export default function CommunicationsFollowUps() {
                 <div
                   className="
                     flex
-                    h-[60px]
-                    w-[60px]
+                    h-[52px]
+                    w-[52px]
                     flex-col
                     items-center
                     justify-center
@@ -1728,7 +1728,7 @@ export default function CommunicationsFollowUps() {
                 >
                   <strong
                     className="
-                      text-[18px]
+                      text-[16px]
                       font-[800]
                       leading-none
                       text-[#111]
@@ -1740,7 +1740,7 @@ export default function CommunicationsFollowUps() {
                   <span
                     className="
                       mt-[4px]
-                      text-[9px]
+                      text-[8px]
                       font-[600]
                       text-[#44537B]
                     "
@@ -1778,11 +1778,11 @@ export default function CommunicationsFollowUps() {
                   <div
                     key={item.label}
                     className="
-                      flex
+                      grid
                       min-w-0
+                      grid-cols-[minmax(0,62px)_minmax(0,1fr)]
                       items-center
-                      justify-between
-                      gap-[4px]
+                      gap-[6px]
                       text-left
                     "
                   >
@@ -1809,8 +1809,10 @@ export default function CommunicationsFollowUps() {
 
                       <span
                         className="
+                          min-w-0
+                          truncate
                           whitespace-nowrap
-                          text-[9px]
+                          text-[8px]
                           font-semibold
                           text-[#26386D]
                         "
@@ -1821,9 +1823,11 @@ export default function CommunicationsFollowUps() {
 
                     <span
                       className="
-                        shrink-0
+                        min-w-0
+                        text-right
+                        tabular-nums
                         whitespace-nowrap
-                        text-[9px]
+                        text-[8px]
                         font-semibold
                         text-[#26386D]
                       "
