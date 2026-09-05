@@ -683,11 +683,11 @@ export default function FormsSubmissionsPage() {
           gap-[20px]
         "
       >
-        <div className="min-w-0">
+        <div className="min-w-0 overflow-hidden">
           <h1
             className="
               text-[20px]
-              font-[800]
+              font-normal
               leading-[25px]
               tracking-[-0.35px]
               text-[#005E2E]
@@ -703,7 +703,7 @@ export default function FormsSubmissionsPage() {
               items-center
               gap-[7px]
               text-[9px]
-              font-[600]
+              font-normal
               text-[#334575]
             "
           >
@@ -753,7 +753,7 @@ export default function FormsSubmissionsPage() {
               bg-white
               px-[15px]
               text-[9px]
-              font-[700]
+              font-normal
               text-[#263A70]
             "
           >
@@ -775,7 +775,7 @@ export default function FormsSubmissionsPage() {
               bg-[#005F2E]
               px-[17px]
               text-[9px]
-              font-[700]
+              font-normal
               text-white
             "
           >
@@ -910,7 +910,7 @@ export default function FormsSubmissionsPage() {
               flex-1
               bg-transparent
               text-[9px]
-              font-[600]
+              font-normal
               text-[#334574]
               outline-none
               placeholder:text-[#69758E]
@@ -996,7 +996,7 @@ export default function FormsSubmissionsPage() {
             bg-white
             px-[10px]
             text-[9px]
-            font-[600]
+            font-normal
             text-[#334574]
           "
         >
@@ -1023,7 +1023,7 @@ export default function FormsSubmissionsPage() {
               bg-transparent
               pr-[22px]
               text-[9px]
-              font-[600]
+              font-normal
               text-[#334574]
               outline-none
             "
@@ -1076,7 +1076,7 @@ export default function FormsSubmissionsPage() {
             border-[#DFE4EA]
             bg-white
             text-[9px]
-            font-[700]
+            font-normal
             text-[#263A70]
           "
         >
@@ -1125,7 +1125,7 @@ export default function FormsSubmissionsPage() {
               pt-[11px]
             "
           >
-            <h2 className="text-[10px] font-[800] text-[#182A65]">
+            <h2 className="text-[10px] font-normal text-[#182A65]">
               Form Types
             </h2>
 
@@ -1178,7 +1178,7 @@ export default function FormsSubmissionsPage() {
                         truncate
                         text-left
                         text-[9px]
-                        font-[700]
+                        font-normal
                         text-[#293B70]
                       "
                     >
@@ -1189,7 +1189,7 @@ export default function FormsSubmissionsPage() {
                       className="
                         shrink-0
                         text-[9px]
-                        font-[700]
+                        font-normal
                         text-[#526080]
                       "
                     >
@@ -1210,7 +1210,7 @@ export default function FormsSubmissionsPage() {
                 justify-center
                 gap-[7px]
                 text-[9px]
-                font-[700]
+                font-normal
                 text-[#385084]
                 hover:text-[#182A65]
               "
@@ -1234,7 +1234,7 @@ export default function FormsSubmissionsPage() {
               pt-[11px]
             "
           >
-            <h2 className="text-[10px] font-[800] text-[#182A65]">
+            <h2 className="text-[10px] font-normal text-[#182A65]">
               Submission Status
             </h2>
 
@@ -1281,22 +1281,22 @@ export default function FormsSubmissionsPage() {
                     bg-white
                   "
                 >
-                  <strong
+                  <span
                     className="
                       text-[16px]
-                      font-[800]
+                      font-normal
                       leading-none
                       text-[#182A65]
                     "
                   >
                     1,248
-                  </strong>
+                  </span>
 
                   <span
                     className="
                       mt-[4px]
                       text-[9px]
-                      font-[600]
+                      font-normal
                       text-[#5D6983]
                     "
                   >
@@ -1348,7 +1348,7 @@ export default function FormsSubmissionsPage() {
                 justify-center
                 gap-[7px]
                 text-[9px]
-                font-[700]
+                font-normal
                 text-[#385084]
                 hover:text-[#182A65]
               "
@@ -1389,7 +1389,7 @@ export default function FormsSubmissionsPage() {
             <h2
               className="
                 text-[10px]
-                font-[800]
+                font-normal
                 text-[#203470]
               "
             >
@@ -1407,7 +1407,7 @@ export default function FormsSubmissionsPage() {
               <span
                 className="
                   text-[9px]
-                  font-[600]
+                  font-normal
                   text-[#5D6985]
                 "
               >
@@ -1599,7 +1599,7 @@ export default function FormsSubmissionsPage() {
                             truncate
                             pr-[7px]
                             text-sm
-                            font-[700]
+                            font-normal
                             text-[#26396E]
                           "
                         >
@@ -1612,7 +1612,7 @@ export default function FormsSubmissionsPage() {
                             truncate
                             pr-[7px]
                             text-xs
-                            font-[500]
+                            font-normal
                             text-[#5F6C86]
                           "
                         >
@@ -1670,7 +1670,7 @@ export default function FormsSubmissionsPage() {
                             className="
                               truncate
                               text-xs
-                              font-[600]
+                              font-normal
                               text-[#415079]
                             "
                           >
@@ -1686,7 +1686,7 @@ export default function FormsSubmissionsPage() {
                           className="
                             whitespace-nowrap
                             text-[9px]
-                            font-[700]
+                            font-normal
                             leading-[11px]
                             text-[#26396D]
                           "
@@ -1699,7 +1699,7 @@ export default function FormsSubmissionsPage() {
                             mt-[1px]
                             whitespace-nowrap
                             text-[9px]
-                            font-[500]
+                            font-normal
                             leading-[10px]
                             text-[#556488]
                           "
@@ -1728,7 +1728,7 @@ export default function FormsSubmissionsPage() {
                             truncate
                             pr-[8px]
                             text-[9px]
-                            font-[600]
+                            font-normal
                             text-[#344574]
                           "
                         >
@@ -1807,7 +1807,7 @@ export default function FormsSubmissionsPage() {
                   px-[8px]
                   pr-[24px]
                   text-[9px]
-                  font-[700]
+                  font-normal
                   text-[#344574]
                   outline-none
                 "
@@ -1963,7 +1963,7 @@ export default function FormsSubmissionsPage() {
             <div className="flex items-center gap-[7px]">
               <FileSpreadsheet size={13} className="text-[#42578B]" />
 
-              <h3 className="text-[10px] font-[800] text-[#182A65]">
+              <h3 className="text-[10px] font-normal text-[#182A65]">
                 Top Performing Forms
               </h3>
             </div>
@@ -1997,7 +1997,7 @@ export default function FormsSubmissionsPage() {
             <div className="flex items-center gap-[7px]">
               <Users size={13} className="text-[#42578B]" />
 
-              <h3 className="text-[10px] font-[800] text-[#182A65]">
+              <h3 className="text-[10px] font-normal text-[#182A65]">
                 Top Sources
               </h3>
             </div>
@@ -2031,7 +2031,7 @@ export default function FormsSubmissionsPage() {
             <div className="flex items-center gap-[7px]">
               <Clock3 size={13} className="text-[#42578B]" />
 
-              <h3 className="text-[10px] font-[800] text-[#182A65]">
+              <h3 className="text-[10px] font-normal text-[#182A65]">
                 Response Time (Avg.)
               </h3>
             </div>
@@ -2052,13 +2052,13 @@ export default function FormsSubmissionsPage() {
               </div>
 
               <div>
-                <p className="text-[18px] font-[800] leading-none text-[#182A65]">
+                <p className="text-[18px] font-normal leading-none text-[#182A65]">
                   2h 45m
                 </p>
 
-                <p className="mt-[5px] text-[9px] font-[700] text-[#299252]">
+                <p className="mt-[5px] text-[9px] font-normal text-[#299252]">
                   ↓ 12.6%
-                  <span className="ml-[4px] font-[500] text-[#66728A]">
+                  <span className="ml-[4px] font-normal text-[#66728A]">
                     vs last 7 days
                   </span>
                 </p>
@@ -2071,7 +2071,7 @@ export default function FormsSubmissionsPage() {
           {/* UNREAD */}
 
           <BottomCard>
-            <h3 className="text-[10px] font-[800] text-[#182A65]">
+            <h3 className="text-[10px] font-normal text-[#182A65]">
               Unread Submissions
             </h3>
 
@@ -2090,9 +2090,9 @@ export default function FormsSubmissionsPage() {
                 <Mail size={15} className="text-[#425A90]" />
               </div>
 
-              <strong className="text-[18px] font-[800] text-[#182A65]">
+              <span className="text-[18px] font-normal text-[#182A65]">
                 186
-              </strong>
+              </span>
             </div>
 
             <ReportLink>View Unread</ReportLink>
@@ -2178,14 +2178,15 @@ function StatCard({
           />
         </div>
 
-        <div className="min-w-0 flex-1">
+        <div className="min-w-0 flex-1 overflow-hidden">
           <p
             className="
-              truncate
-              text-[10px]
-              font-[700]
+              break-words
+              text-[9px]
+              font-normal
               uppercase
               tracking-wider
+              leading-[11px]
               text-[#26386F]
             "
           >
@@ -2196,7 +2197,7 @@ function StatCard({
             className="
               mt-[2px]
               text-2xl
-              font-[800]
+              font-normal
               leading-none
               text-[#172B68]
             "
@@ -2218,7 +2219,7 @@ function StatCard({
         "
       >
         {change === "Live" ? (
-          <span className="rounded-[4px] bg-[#E4F5E8] px-[5px] py-[1px] text-[9px] font-bold text-[#238B4C]">
+          <span className="rounded-[4px] bg-[#E4F5E8] px-[5px] py-[1px] text-[9px] font-normal text-[#238B4C]">
             Live
           </span>
         ) : (
@@ -2238,7 +2239,7 @@ function StatCard({
             <span
               className={`
                 text-[9px]
-                font-[700]
+                font-normal
 
                 ${negative
                   ? "text-[#E34848]"
@@ -2251,7 +2252,7 @@ function StatCard({
           </>
         )}
 
-        <span className="text-[9px] font-[500] text-[#556384]">
+        <span className="text-[9px] font-normal text-[#556384]">
           current data
         </span>
       </div>
@@ -2306,7 +2307,7 @@ function FilterSelect({
           px-[10px]
           pr-[26px]
           text-[9px]
-          font-[700]
+          font-normal
           text-[#182A65]
           outline-none
         "
@@ -2342,7 +2343,7 @@ function TableHead({
     <th
       className="
         text-[9px]
-        font-[700]
+        font-normal
         uppercase
         tracking-wider
         text-[#182A65]
@@ -2381,7 +2382,7 @@ function MetaBadge({
         px-[9px]
         py-[4px]
         text-[9px]
-        font-[700]
+        font-normal
         leading-none
       "
       style={{
@@ -2442,7 +2443,7 @@ function LegendRow({
           className="
             truncate
             text-[9px]
-            font-[600]
+            font-normal
             text-[#324575]
           "
         >
@@ -2455,7 +2456,7 @@ function LegendRow({
           shrink-0
           whitespace-nowrap
           text-[9px]
-          font-[700]
+          font-normal
           text-[#324575]
         "
       >
@@ -2495,7 +2496,7 @@ function PageButton({
         border
         px-[5px]
         text-[9px]
-        font-[700]
+        font-normal
         disabled:opacity-40
 
         ${active
@@ -2533,7 +2534,7 @@ function SmallPageButton({
         border
         px-[4px]
         text-[9px]
-        font-[700]
+        font-normal
 
         ${active
           ? "border-[#E0E4E9] bg-white text-[#334574]"
@@ -2603,7 +2604,7 @@ function RankRow({
       <span
         className="
           text-[9px]
-          font-[700]
+          font-normal
           text-[#354979]
         "
       >
@@ -2614,7 +2615,7 @@ function RankRow({
         className="
           truncate
           text-[9px]
-          font-[600]
+          font-normal
           text-[#354979]
         "
       >
@@ -2625,7 +2626,7 @@ function RankRow({
         className="
           text-right
           text-[9px]
-          font-[700]
+          font-normal
           text-[#354979]
         "
       >
@@ -2657,7 +2658,7 @@ function ReportLink({
         pt-[12px]
         whitespace-nowrap
         text-[9px]
-        font-[700]
+        font-normal
         text-[#42578B]
         hover:text-[#182A65]
       "

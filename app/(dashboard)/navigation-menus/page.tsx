@@ -182,13 +182,13 @@ function MetricCard({
         {icon}
       </div>
 
-      <div className="min-w-0">
-        <p className="text-[9.5px] font-extrabold text-[#34435e]">{label}</p>
+      <div className="min-w-0 overflow-hidden">
+        <p className="text-[9.5px] font-normal text-[#34435e]">{label}</p>
         <div className="mt-[2px] flex items-baseline gap-[6px]">
-          <span className="text-[17px] font-extrabold leading-none tracking-[-0.03em] text-[#10204a]">
+          <span className="text-[17px] font-normal leading-none tracking-[-0.03em] text-[#10204a]">
             {value}
           </span>
-          <span className="truncate text-[8.5px] font-semibold text-[#66738b]">{note}</span>
+          <span className="truncate text-[8.5px] font-normal text-[#66738b]">{note}</span>
         </div>
       </div>
     </article>
@@ -209,11 +209,11 @@ function StructureRow({
       <div className="flex min-h-[34px] items-center gap-[8px] rounded-[5px] border border-[#e4e8eb] bg-white px-[10px]">
         <Icon className="h-[13px] w-[13px] shrink-0 text-[#4d8b69]" strokeWidth={1.8} />
 
-        <span className="min-w-0 flex-1 truncate text-[9px] font-bold text-[#32405d]">
+        <span className="min-w-0 flex-1 truncate text-[9px] font-normal text-[#32405d]">
           {item.label}
         </span>
 
-        <span className="shrink-0 text-[8px] font-semibold text-[#68758d]">
+        <span className="shrink-0 text-[8px] font-normal text-[#68758d]">
           {item.type}
         </span>
 
@@ -268,11 +268,11 @@ export default function NavigationMenusPage() {
         {/* HEADER */}
         <header className="flex items-center justify-between gap-[12px]">
           <div>
-            <h1 className="text-[22px] font-extrabold leading-none tracking-[-0.03em] text-[#075b33]">
+            <h1 className="text-[22px] font-normal leading-none tracking-[-0.03em] text-[#075b33]">
               Navigation Menus
             </h1>
 
-            <nav className="mt-[4px] flex items-center gap-[6px] text-[10px] font-semibold text-[#1d2b58]">
+            <nav className="mt-[4px] flex items-center gap-[6px] text-[10px] font-normal text-[#1d2b58]">
               <span
                 onClick={() => router.push("/")}
                 className="cursor-pointer transition hover:text-[#075b33]"
@@ -288,7 +288,7 @@ export default function NavigationMenusPage() {
             <button
               type="button"
               onClick={() => router.push("/website")}
-              className="inline-flex h-[34px] items-center gap-[6px] rounded-[6px] border border-[#cfe4d7] bg-[#f0f9f4] px-[14px] text-[10px] font-bold text-[#075b33] transition hover:bg-[#e4f3eb]"
+              className="inline-flex h-[34px] items-center gap-[6px] rounded-[6px] border border-[#cfe4d7] bg-[#f0f9f4] px-[14px] text-[10px] font-normal text-[#075b33] transition hover:bg-[#e4f3eb]"
             >
               <FileText className="h-[14px] w-[14px]" />
               Manage Pages & CMS
@@ -297,7 +297,7 @@ export default function NavigationMenusPage() {
             <button
               type="button"
               onClick={() => router.push("/navigation-menus/new")}
-              className="inline-flex h-[34px] items-center gap-[6px] rounded-[6px] bg-[linear-gradient(180deg,#076636_0%,#03542c_100%)] px-[16px] text-[10px] font-bold text-white shadow-[0_4px_10px_rgba(5,94,49,.12)] transition hover:opacity-95"
+              className="inline-flex h-[34px] items-center gap-[6px] rounded-[6px] bg-[linear-gradient(180deg,#076636_0%,#03542c_100%)] px-[16px] text-[10px] font-normal text-white shadow-[0_4px_10px_rgba(5,94,49,.12)] transition hover:opacity-95"
             >
               <Plus className="h-[14px] w-[14px]" />
               Add New Menu
@@ -352,14 +352,14 @@ export default function NavigationMenusPage() {
                     value={query}
                     onChange={(event) => setQuery(event.target.value)}
                     placeholder="Search menus..."
-                    className="h-[34px] w-full rounded-[5px] border border-[#dfe4e8] bg-white pl-[32px] pr-[10px] text-[10px] font-semibold text-[#273655] outline-none placeholder:text-[#8b95a7]"
+                    className="h-[34px] w-full rounded-[5px] border border-[#dfe4e8] bg-white pl-[32px] pr-[10px] text-[10px] font-normal text-[#273655] outline-none placeholder:text-[#8b95a7]"
                   />
                 </label>
 
                 <select
                   value={status}
                   onChange={(event) => setStatus(event.target.value)}
-                  className="h-[34px] rounded-[5px] border border-[#dfe4e8] bg-white px-[10px] text-[9.5px] font-bold text-[#2a3855] outline-none"
+                  className="h-[34px] rounded-[5px] border border-[#dfe4e8] bg-white px-[10px] text-[9.5px] font-normal text-[#2a3855] outline-none"
                 >
                   <option>All Status</option>
                   <option>Active</option>
@@ -378,7 +378,7 @@ export default function NavigationMenusPage() {
                 <div className="overflow-x-auto">
                 <table className="w-full min-w-[660px] border-collapse text-left">
                   <thead>
-                    <tr className="h-[34px] border-b border-[#edf0f2] bg-[#fafbfc] text-[8px] font-extrabold uppercase tracking-[0.04em] text-[#44516a]">
+                    <tr className="h-[34px] border-b border-[#edf0f2] bg-[#fafbfc] text-[8px] font-normal uppercase tracking-[0.04em] text-[#44516a]">
                       <th className="w-[32px] px-[8px]"></th>
                       <th className="px-[8px]">Menu Name</th>
                       <th className="px-[8px]">Location</th>
@@ -407,24 +407,24 @@ export default function NavigationMenusPage() {
 
                         <td className="px-[8px]">
                           <div className="min-w-[160px]">
-                            <p className="text-[10px] font-extrabold text-[#19274a]">
+                            <p className="text-[10px] font-normal text-[#19274a]">
                               {item.name}
                             </p>
-                            <p className="mt-[2px] text-[8.5px] font-semibold text-[#68758d]">
+                            <p className="mt-[2px] text-[8.5px] font-normal text-[#68758d]">
                               {item.description}
                             </p>
                           </div>
                         </td>
 
                         <td className="px-[8px]">
-                          <span className="inline-flex rounded-[4px] border border-[#dce1e6] bg-white px-[7px] py-[2.5px] text-[8px] font-bold text-[#4f5c73]">
+                          <span className="inline-flex rounded-[4px] border border-[#dce1e6] bg-white px-[7px] py-[2.5px] text-[8px] font-normal text-[#4f5c73]">
                             {item.location}
                           </span>
                         </td>
 
                         <td className="px-[8px]">
                           <span
-                            className={`inline-flex rounded-[4px] border px-[8px] py-[2.5px] text-[8px] font-bold ${
+                            className={`inline-flex rounded-[4px] border px-[8px] py-[2.5px] text-[8px] font-normal ${
                               item.status === "Active"
                                 ? "border-emerald-200 bg-emerald-50 text-emerald-700"
                                 : "border-rose-200 bg-rose-50 text-rose-600"
@@ -435,16 +435,16 @@ export default function NavigationMenusPage() {
                         </td>
 
                         <td className="px-[8px] text-center">
-                          <span className="text-[9.5px] font-extrabold text-[#17234a]">
+                          <span className="text-[9.5px] font-normal text-[#17234a]">
                             {item.items}
                           </span>
                         </td>
 
                         <td className="px-[8px]">
-                          <p className="text-[8.5px] font-bold text-[#34425e]">
+                          <p className="text-[8.5px] font-normal text-[#34425e]">
                             {item.updatedDate}
                           </p>
-                          <p className="mt-[2px] text-[8px] font-semibold text-[#68758d]">
+                          <p className="mt-[2px] text-[8px] font-normal text-[#68758d]">
                             {item.updatedTime}
                           </p>
                         </td>
@@ -471,7 +471,7 @@ export default function NavigationMenusPage() {
             </div>
 
             <div className="flex min-h-[38px] items-center border-t border-[#edf0f2] px-[10px]">
-              <p className="text-[9px] font-semibold text-[#47546c]">
+              <p className="text-[9px] font-normal text-[#47546c]">
                 Showing 1 to {rows.length} of {MENUS.length} menus
               </p>
             </div>
@@ -480,14 +480,14 @@ export default function NavigationMenusPage() {
           {/* RIGHT PREVIEW */}
           <section className="flex flex-col justify-between rounded-[8px] border border-[#e7e9ec] bg-white p-[10px] shadow-[0_1px_2px_rgba(15,23,42,0.02)]">
             <div className="flex items-center justify-between gap-[12px]">
-              <h2 className="text-[12px] font-extrabold text-[#19274a]">
+              <h2 className="text-[12px] font-normal text-[#19274a]">
                 Menu Preview
               </h2>
 
               <select
                 value={selectedPreview}
                 onChange={(event) => setSelectedPreview(event.target.value)}
-                className="h-[32px] min-w-[160px] rounded-[5px] border border-[#dfe4e8] bg-white px-[10px] text-[9px] font-bold text-[#35445f] outline-none"
+                className="h-[32px] min-w-[160px] rounded-[5px] border border-[#dfe4e8] bg-white px-[10px] text-[9px] font-normal text-[#35445f] outline-none"
               >
                 {MENUS.map((item) => (
                   <option key={item.id}>{item.name}</option>
@@ -508,7 +508,7 @@ export default function NavigationMenusPage() {
                 ].map((item, index) => (
                   <span
                     key={item}
-                    className="flex shrink-0 items-center gap-[3px] text-[8px] font-bold"
+                    className="flex shrink-0 items-center gap-[3px] text-[8px] font-normal"
                   >
                     {item}
                     {[1, 2, 5].includes(index) ? (
@@ -525,7 +525,7 @@ export default function NavigationMenusPage() {
                   key={tab}
                   type="button"
                   onClick={() => setActiveTab(tab)}
-                  className={`relative h-[30px] px-[10px] text-[9px] font-bold ${
+                  className={`relative h-[30px] px-[10px] text-[9px] font-normal ${
                     activeTab === tab ? "text-[#075b33]" : "text-[#5e6b83]"
                   }`}
                 >
@@ -539,7 +539,7 @@ export default function NavigationMenusPage() {
 
             {activeTab === "Menu Structure" ? (
               <div className="mt-[8px]">
-                <div className="flex items-center gap-[6px] text-[8.5px] font-semibold text-[#66738b]">
+                <div className="flex items-center gap-[6px] text-[8.5px] font-normal text-[#66738b]">
                   <HelpCircle className="h-[12px] w-[12px] text-[#4d8b69]" />
                   Drag and drop items to reorder. Click on an item to edit.
                 </div>
@@ -553,25 +553,25 @@ export default function NavigationMenusPage() {
             ) : (
               <div className="mt-[10px] space-y-[8px]">
                 <div className="rounded-[6px] border border-[#e3e7ea] bg-[#fafcfa] p-[10px]">
-                  <p className="text-[9px] font-extrabold text-[#293854]">
+                  <p className="text-[9px] font-normal text-[#293854]">
                     Selected Menu
                   </p>
-                  <p className="mt-[3px] text-[8.5px] font-semibold text-[#68758d]">
+                  <p className="mt-[3px] text-[8.5px] font-normal text-[#68758d]">
                     {selectedMenu.name} · {selectedMenu.location}
                   </p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-[8px]">
                   <div className="rounded-[6px] border border-[#e3e7ea] bg-white p-[10px]">
-                    <p className="text-[8.5px] font-bold text-[#33415e]">Status</p>
-                    <p className="mt-[3px] text-[9.5px] font-extrabold text-emerald-700">
+                    <p className="text-[8.5px] font-normal text-[#33415e]">Status</p>
+                    <p className="mt-[3px] text-[9.5px] font-normal text-emerald-700">
                       {selectedMenu.status}
                     </p>
                   </div>
 
                   <div className="rounded-[6px] border border-[#e3e7ea] bg-white p-[10px]">
-                    <p className="text-[8.5px] font-bold text-[#33415e]">Menu Items</p>
-                    <p className="mt-[3px] text-[9.5px] font-extrabold text-[#17234a]">
+                    <p className="text-[8.5px] font-normal text-[#33415e]">Menu Items</p>
+                    <p className="mt-[3px] text-[9.5px] font-normal text-[#17234a]">
                       {selectedMenu.items}
                     </p>
                   </div>
@@ -587,7 +587,7 @@ export default function NavigationMenusPage() {
             <Lightbulb className="mt-[2px] h-[20px] w-[20px] shrink-0 text-[#246b47]" />
 
             <div>
-              <h3 className="text-[11.5px] font-extrabold text-[#285039]">
+              <h3 className="text-[11.5px] font-normal text-[#285039]">
                 Quick Tips
               </h3>
 
@@ -599,7 +599,7 @@ export default function NavigationMenusPage() {
                 ].map((tip) => (
                   <div key={tip} className="flex items-center gap-[6px]">
                     <CheckCircle2 className="h-[11px] w-[11px] shrink-0 text-[#2b8154]" />
-                    <span className="text-[8.5px] font-semibold text-[#53627a]">
+                    <span className="text-[8.5px] font-normal text-[#53627a]">
                       {tip}
                     </span>
                   </div>
@@ -613,13 +613,13 @@ export default function NavigationMenusPage() {
               <HelpCircle className="h-[18px] w-[18px]" />
             </div>
 
-            <div className="min-w-0">
-              <p className="text-[10px] font-extrabold text-[#1f2d52]">Need Help?</p>
-              <p className="mt-[2px] text-[8.5px] font-semibold text-[#68758d]">
+            <div className="min-w-0 overflow-hidden">
+              <p className="text-[10px] font-normal text-[#1f2d52]">Need Help?</p>
+              <p className="mt-[2px] text-[8.5px] font-normal text-[#68758d]">
                 Learn how to create and manage menus.
               </p>
 
-              <button className="mt-[6px] inline-flex h-[26px] items-center gap-[5px] rounded-[4px] border border-[#dfe4e8] bg-white px-[8px] text-[8px] font-bold text-[#35445f]">
+              <button className="mt-[6px] inline-flex h-[26px] items-center gap-[5px] rounded-[4px] border border-[#dfe4e8] bg-white px-[8px] text-[8px] font-normal text-[#35445f]">
                 View Documentation
                 <ExternalLink className="h-[9px] w-[9px]" />
               </button>
@@ -631,13 +631,13 @@ export default function NavigationMenusPage() {
               <Video className="h-[18px] w-[18px]" />
             </div>
 
-            <div className="min-w-0">
-              <p className="text-[10px] font-extrabold text-[#1f2d52]">Video Tutorial</p>
-              <p className="mt-[2px] text-[8.5px] font-semibold text-[#68758d]">
+            <div className="min-w-0 overflow-hidden">
+              <p className="text-[10px] font-normal text-[#1f2d52]">Video Tutorial</p>
+              <p className="mt-[2px] text-[8.5px] font-normal text-[#68758d]">
                 Watch step-by-step guide.
               </p>
 
-              <button className="mt-[6px] inline-flex h-[26px] items-center gap-[5px] rounded-[4px] border border-[#dfe4e8] bg-white px-[8px] text-[8px] font-bold text-[#35445f]">
+              <button className="mt-[6px] inline-flex h-[26px] items-center gap-[5px] rounded-[4px] border border-[#dfe4e8] bg-white px-[8px] text-[8px] font-normal text-[#35445f]">
                 Watch Tutorial
                 <ExternalLink className="h-[9px] w-[9px]" />
               </button>

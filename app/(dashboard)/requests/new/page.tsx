@@ -607,11 +607,11 @@ export default function AddNewRequestPage() {
           <div className="flex h-[64px] w-[64px] items-center justify-center rounded-full bg-[#EBF7F0] text-[#005F2E]">
             <Check size={36} strokeWidth={3} />
           </div>
-          <h2 className="mt-[20px] text-[22px] font-[800] text-[#17234A]">
+          <h2 className="mt-[20px] text-[22px] font-normal text-[#17234A]">
             Sewa Help Request Submitted Successfully!
           </h2>
-          <p className="mt-[8px] max-w-[450px] text-[12px] font-[600] text-[#52607D]">
-            The help request for <span className="font-[800] text-[#17234A]">{form.requesterName || "Requester"}</span> has been recorded in the intake queue.
+          <p className="mt-[8px] max-w-[450px] text-[12px] font-normal text-[#52607D]">
+            The help request for <span className="font-normal text-[#17234A]">{form.requesterName || "Requester"}</span> has been recorded in the intake queue.
           </p>
           <div className="mt-[28px] flex items-center gap-[12px]">
             <button
@@ -622,7 +622,7 @@ export default function AddNewRequestPage() {
                 setAttachments([]);
                 setSuccess("");
               }}
-              className="inline-flex h-[38px] items-center gap-[8px] rounded-[6px] border border-[#DCE3EA] bg-white px-[18px] text-[11px] font-[700] text-[#24345E] hover:bg-slate-50 transition"
+              className="inline-flex h-[38px] items-center gap-[8px] rounded-[6px] border border-[#DCE3EA] bg-white px-[18px] text-[11px] font-normal text-[#24345E] hover:bg-slate-50 transition"
             >
               Add Another Request
             </button>
@@ -630,7 +630,7 @@ export default function AddNewRequestPage() {
             <button
               type="button"
               onClick={() => router.push("/requests")}
-              className="inline-flex h-[38px] items-center gap-[8px] rounded-[6px] bg-[#005F2E] px-[22px] text-[11px] font-[700] text-white shadow-sm hover:bg-[#004d25] transition"
+              className="inline-flex h-[38px] items-center gap-[8px] rounded-[6px] bg-[#005F2E] px-[22px] text-[11px] font-normal text-white shadow-sm hover:bg-[#004d25] transition"
             >
               Return to Help Requests Queue
             </button>
@@ -661,7 +661,7 @@ export default function AddNewRequestPage() {
         <h1
           className="
             text-[20px]
-            font-[800]
+            font-normal
             leading-[25px]
             tracking-[-0.3px]
             text-[#005E2E]
@@ -677,7 +677,7 @@ export default function AddNewRequestPage() {
             items-center
             gap-[7px]
             text-[9px]
-            font-[600]
+            font-normal
             text-[#314474]
           "
         >
@@ -723,7 +723,7 @@ export default function AddNewRequestPage() {
             px-[11px]
             py-[8px]
             text-[9px]
-            font-[600]
+            font-normal
 
             ${error
               ? "border-red-200 bg-red-50 text-red-700"
@@ -794,7 +794,7 @@ export default function AddNewRequestPage() {
                     bg-[#F4F5F6]
                     px-[10px]
                     text-[9px]
-                    font-[500]
+                    font-normal
                     text-[#9BA3B0]
                     outline-none
                   "
@@ -1129,7 +1129,7 @@ export default function AddNewRequestPage() {
                     px-[10px]
                     py-[8px]
                     text-[9px]
-                    font-[500]
+                    font-normal
                     text-[#26396F]
                     outline-none
                     placeholder:text-[#69758E]
@@ -1448,7 +1448,7 @@ export default function AddNewRequestPage() {
                 className="
                   mb-[6px]
                   text-[9px]
-                  font-[700]
+                  font-normal
                   text-[#192A65]
                 "
               >
@@ -1533,7 +1533,7 @@ export default function AddNewRequestPage() {
                             min-w-0
                             flex-1
                             text-[9px]
-                            font-[700]
+                            font-normal
                             leading-[11px]
                             text-[#28396E]
                           "
@@ -1602,7 +1602,7 @@ export default function AddNewRequestPage() {
                       py-[7px]
                       pr-[45px]
                       text-[9px]
-                      font-[500]
+                      font-normal
                       text-[#334575]
                       outline-none
                       placeholder:text-[#6A7690]
@@ -1615,7 +1615,7 @@ export default function AddNewRequestPage() {
                       bottom-[6px]
                       right-[7px]
                       text-[9px]
-                      font-[600]
+                      font-normal
                       text-[#6A7690]
                     "
                   >
@@ -1660,7 +1660,7 @@ export default function AddNewRequestPage() {
             <h2
               className="
                 text-[9px]
-                font-[800]
+                font-normal
                 text-[#175E39]
               "
             >
@@ -1699,7 +1699,7 @@ export default function AddNewRequestPage() {
                 className="
                   mt-[13px]
                   text-[10px]
-                  font-[800]
+                  font-normal
                   text-[#17603A]
                 "
               >
@@ -1711,7 +1711,7 @@ export default function AddNewRequestPage() {
                   mt-[8px]
                   max-w-[210px]
                   text-[9px]
-                  font-[500]
+                  font-normal
                   leading-[10px]
                   text-[#57637E]
                 "
@@ -1743,7 +1743,7 @@ export default function AddNewRequestPage() {
             <h2
               className="
                 text-[9px]
-                font-[800]
+                font-normal
                 text-[#175E39]
               "
             >
@@ -1856,7 +1856,7 @@ export default function AddNewRequestPage() {
                       bottom-[6px]
                       right-[7px]
                       text-[9px]
-                      font-[600]
+                      font-normal
                       text-[#6A7690]
                     "
                   >
@@ -1890,7 +1890,7 @@ export default function AddNewRequestPage() {
             <h2
               className="
                 text-[9px]
-                font-[800]
+                font-normal
                 text-[#175E39]
               "
             >
@@ -1898,7 +1898,7 @@ export default function AddNewRequestPage() {
               <span
                 className="
                   ml-[3px]
-                  font-[600]
+                  font-normal
                 "
               >
                 (Optional)
@@ -1948,7 +1948,7 @@ export default function AddNewRequestPage() {
                 className="
                   mt-[9px]
                   text-[9px]
-                  font-[800]
+                  font-normal
                   text-[#22613E]
                 "
               >
@@ -1961,7 +1961,7 @@ export default function AddNewRequestPage() {
                 className="
                   mt-[3px]
                   text-[9px]
-                  font-[600]
+                  font-normal
                   text-[#3E4E75]
                 "
               >
@@ -1972,7 +1972,7 @@ export default function AddNewRequestPage() {
                 className="
                   mt-[9px]
                   text-[9px]
-                  font-[500]
+                  font-normal
                   text-[#788196]
                 "
               >
@@ -1991,7 +1991,7 @@ export default function AddNewRequestPage() {
                   px-[13px]
                   py-[6px]
                   text-[9px]
-                  font-[700]
+                  font-normal
                   text-[#267247]
                 "
               >
@@ -2031,7 +2031,7 @@ export default function AddNewRequestPage() {
             bg-white
             px-[17px]
             text-[9px]
-            font-[700]
+            font-normal
             text-[#20336C]
           "
         >
@@ -2061,7 +2061,7 @@ export default function AddNewRequestPage() {
               bg-white
               px-[18px]
               text-[9px]
-              font-[700]
+              font-normal
               text-[#20336C]
             "
           >
@@ -2084,7 +2084,7 @@ export default function AddNewRequestPage() {
               bg-[#005F2E]
               px-[20px]
               text-[9px]
-              font-[700]
+              font-normal
               text-white
               shadow-[0_2px_5px_rgba(0,95,46,0.14)]
               disabled:opacity-60
@@ -2161,7 +2161,7 @@ function SectionTitle({
           rounded-full
           bg-[#075B35]
           text-[9px]
-          font-[800]
+          font-normal
           text-white
         "
       >
@@ -2171,7 +2171,7 @@ function SectionTitle({
       <h2
         className="
           text-[9.5px]
-          font-[800]
+          font-normal
           text-[#175E39]
         "
       >
@@ -2205,7 +2205,7 @@ function FormField({
         className="
           mb-[6px]
           text-[9px]
-          font-[700]
+          font-normal
           text-[#192A65]
         "
       >
@@ -2252,7 +2252,7 @@ const inputClass = `
   bg-white
   px-[10px]
   text-[9px]
-  font-[500]
+  font-normal
   text-[#26396F]
   outline-none
   placeholder:text-[#69758E]
@@ -2305,7 +2305,7 @@ function SelectBox({
           px-[10px]
           pr-[28px]
           text-[9px]
-          font-[600]
+          font-normal
           text-[#26396F]
           outline-none
         "
@@ -2454,7 +2454,7 @@ function RadioRow({
               items-center
               gap-[6px]
               text-[9px]
-              font-[600]
+              font-normal
               text-[#344574]
             "
           >

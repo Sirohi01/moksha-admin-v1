@@ -738,7 +738,7 @@ export default function AddVolunteerPage() {
         <h1
           className="
             text-[20px]
-            font-[800]
+            font-normal
             leading-[25px]
             tracking-[-0.35px]
             text-[#005E2E]
@@ -754,7 +754,7 @@ export default function AddVolunteerPage() {
             items-center
             gap-[6px]
             text-[10px]
-            font-[600]
+            font-normal
             text-[#44537D]
           "
         >
@@ -796,7 +796,7 @@ export default function AddVolunteerPage() {
             px-[12px]
             py-[8px]
             text-[10px]
-            font-[600]
+            font-normal
 
             ${error
               ? "border-red-200 bg-red-50 text-red-700"
@@ -919,7 +919,7 @@ export default function AddVolunteerPage() {
                   className="
                     mb-[6px]
                     text-[7.5px]
-                    font-[700]
+                    font-normal
                     text-[#192A65]
                   "
                 >
@@ -981,7 +981,7 @@ export default function AddVolunteerPage() {
                         className="
                           mt-[6px]
                           text-[7px]
-                          font-[700]
+                          font-normal
                           text-[#26396F]
                         "
                       >
@@ -992,7 +992,7 @@ export default function AddVolunteerPage() {
                         className="
                           mt-[3px]
                           text-[6px]
-                          font-[500]
+                          font-normal
                           text-[#64708B]
                         "
                       >
@@ -1466,7 +1466,7 @@ export default function AddVolunteerPage() {
                       py-[8px]
                       pr-[48px]
                       text-[7.3px]
-                      font-[500]
+                      font-normal
                       text-[#26396F]
                       outline-none
                       placeholder:text-[#6A7690]
@@ -1480,7 +1480,7 @@ export default function AddVolunteerPage() {
                       bottom-[7px]
                       right-[9px]
                       text-[6px]
-                      font-[600]
+                      font-normal
                       text-[#6A7690]
                     "
                   >
@@ -1646,7 +1646,7 @@ export default function AddVolunteerPage() {
                 className="
                   mb-[6px]
                   text-[7.5px]
-                  font-[700]
+                  font-normal
                   text-[#192A65]
                 "
               >
@@ -1654,7 +1654,7 @@ export default function AddVolunteerPage() {
                 <span
                   className="
                     ml-[3px]
-                    font-[500]
+                    font-normal
                   "
                 >
                   (Optional)
@@ -1704,7 +1704,7 @@ export default function AddVolunteerPage() {
                   <p
                     className="
                       text-[7.5px]
-                      font-[700]
+                      font-normal
                       text-[#33416D]
                     "
                   >
@@ -1717,7 +1717,7 @@ export default function AddVolunteerPage() {
                     className="
                       mt-[2px]
                       text-[6px]
-                      font-[500]
+                      font-normal
                       text-[#748097]
                     "
                   >
@@ -1809,7 +1809,7 @@ export default function AddVolunteerPage() {
               <h2
                 className="
                   text-[10px]
-                  font-[800]
+                  font-normal
                   text-[#17623A]
                 "
               >
@@ -1860,7 +1860,7 @@ export default function AddVolunteerPage() {
             <h2
               className="
                 text-[10px]
-                font-[800]
+                font-normal
                 text-[#17623A]
               "
             >
@@ -1926,7 +1926,7 @@ export default function AddVolunteerPage() {
                         <p
                           className="
                             text-[10px]
-                            font-[700]
+                            font-normal
                             text-[#253870]
                           "
                         >
@@ -1938,7 +1938,7 @@ export default function AddVolunteerPage() {
                             mt-[2px]
                             truncate
                             text-[7.5px]
-                            font-[500]
+                            font-normal
                             text-[#64718B]
                           "
                         >
@@ -1972,7 +1972,7 @@ export default function AddVolunteerPage() {
               <h2
                 className="
                   text-[10px]
-                  font-[800]
+                  font-normal
                   text-[#17623A]
                 "
               >
@@ -2041,7 +2041,7 @@ export default function AddVolunteerPage() {
                 <h2
                   className="
                     text-[10px]
-                    font-[800]
+                    font-normal
                     text-[#17623A]
                   "
                 >
@@ -2052,7 +2052,7 @@ export default function AddVolunteerPage() {
                   className="
                     mt-[5px]
                     text-[7.5px]
-                    font-[500]
+                    font-normal
                     text-[#4B597B]
                   "
                 >
@@ -2076,7 +2076,7 @@ export default function AddVolunteerPage() {
                   <span
                     className="
                       text-[10px]
-                      font-[800]
+                      font-normal
                       text-[#22733D]
                     "
                   >
@@ -2100,7 +2100,7 @@ export default function AddVolunteerPage() {
                   <span
                     className="
                       text-[10px]
-                      font-[700]
+                      font-normal
                       text-[#314276]
                     "
                   >
@@ -2141,7 +2141,7 @@ export default function AddVolunteerPage() {
             bg-white
             px-[16px]
             text-[10px]
-            font-[700]
+            font-normal
             text-[#20336C]
           "
         >
@@ -2171,7 +2171,7 @@ export default function AddVolunteerPage() {
               bg-white
               px-[18px]
               text-[10px]
-              font-[700]
+              font-normal
               text-[#20336C]
             "
           >
@@ -2194,7 +2194,7 @@ export default function AddVolunteerPage() {
               bg-[#005F2E]
               px-[20px]
               text-[10px]
-              font-[700]
+              font-normal
               text-white
               shadow-[0_2px_5px_rgba(0,95,46,0.15)]
               disabled:opacity-60
@@ -2284,7 +2284,7 @@ function SectionHeading({
       <h2
         className="
           text-[10.5px]
-          font-[800]
+          font-normal
           text-[#17603A]
         "
       >
@@ -2313,7 +2313,7 @@ function FormField({
         className="
           mb-[6px]
           text-[10px]
-          font-[700]
+          font-normal
           text-[#192A65]
         "
       >
@@ -2359,7 +2359,7 @@ const inputClass = `
   bg-white
   px-[10px]
   text-[10px]
-  font-[500]
+  font-normal
   text-[#253970]
   outline-none
   placeholder:text-[#6B7690]
@@ -2397,7 +2397,7 @@ function SelectBox({
           px-[10px]
           pr-[28px]
           text-[10px]
-          font-[600]
+          font-normal
           text-[#253970]
           outline-none
           focus:border-[#78B58F]
@@ -2469,7 +2469,7 @@ function PhoneField({
             px-[8px]
             pr-[20px]
             text-[10px]
-            font-[700]
+            font-normal
             text-[#253970]
             outline-none
           "
@@ -2558,7 +2558,7 @@ function MultiSelect({
         className="
           mb-[6px]
           text-[10px]
-          font-[700]
+          font-normal
           text-[#192A65]
         "
       >
@@ -2583,7 +2583,7 @@ function MultiSelect({
           bg-white
           px-[10px]
           text-[10px]
-          font-[600]
+          font-normal
           text-[#253970]
         "
       >
@@ -2639,7 +2639,7 @@ function MultiSelect({
                     py-[6px]
                     text-left
                     text-[10px]
-                    font-[600]
+                    font-normal
                     text-[#273A70]
                     hover:bg-[#F5F8F6]
                   "
@@ -2725,7 +2725,7 @@ function ConsentRow({
       <span
         className="
           text-[10px]
-          font-[600]
+          font-normal
           leading-[14px]
           text-[#334677]
         "
@@ -2805,7 +2805,7 @@ function TipRow({
       <p
         className="
           text-[7.5px]
-          font-[600]
+          font-normal
           leading-[11px]
           text-[#445379]
         "
@@ -2838,7 +2838,7 @@ function GuideRow({
       <span
         className="
           text-[7.5px]
-          font-[800]
+          font-normal
           text-[#273A70]
         "
       >
@@ -2848,7 +2848,7 @@ function GuideRow({
       <span
         className="
           text-[7.5px]
-          font-[600]
+          font-normal
           text-[#4D5B7E]
         "
       >

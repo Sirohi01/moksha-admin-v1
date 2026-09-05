@@ -589,13 +589,15 @@ function StatCard({
           />
         </div>
 
-        <div className="min-w-0">
+        <div className="min-w-0 overflow-hidden">
           <p
             className="
-              text-[10px]
-              font-[700]
+              break-words
+              text-[9px]
+              font-normal
               uppercase
               tracking-wider
+              leading-[11px]
               text-[#182A65]
             "
           >
@@ -607,7 +609,7 @@ function StatCard({
               mt-[2px]
               whitespace-nowrap
               text-2xl
-              font-[800]
+              font-normal
               leading-none
               text-[#152965]
             "
@@ -630,7 +632,7 @@ function StatCard({
         "
       >
         {change === "Live" ? (
-          <span className="rounded-[4px] bg-[#E4F5E8] px-[5px] py-[1px] text-[9px] font-bold text-[#238B4C]">
+          <span className="rounded-[4px] bg-[#E4F5E8] px-[5px] py-[1px] text-[9px] font-normal text-[#238B4C]">
             Live
           </span>
         ) : (
@@ -652,7 +654,7 @@ function StatCard({
             <span
               className={`
                 text-[9px]
-                font-[700]
+                font-normal
 
                 ${negative
                   ? "text-[#E44747]"
@@ -668,7 +670,7 @@ function StatCard({
         <span
           className="
             text-[9px]
-            font-[500]
+            font-normal
             text-[#596685]
           "
         >
@@ -714,7 +716,7 @@ function FilterSelect({
           px-[11px]
           pr-[30px]
           text-[10px]
-          font-[700]
+          font-normal
           text-[#182A65]
           outline-none
         "
@@ -806,7 +808,7 @@ function SidebarBar({
           className="
             truncate
             text-[10px]
-            font-[700]
+            font-normal
             text-[#334475]
           "
         >
@@ -844,7 +846,7 @@ function SidebarBar({
           whitespace-nowrap
           text-right
           text-[10px]
-          font-[600]
+          font-normal
           text-[#334475]
         "
       >
@@ -1264,7 +1266,7 @@ export default function GeneralEnquiriesPage() {
           <h1
             className="
               text-[20px]
-              font-[800]
+              font-normal
               leading-[25px]
               tracking-[-0.35px]
               text-[#005E2E]
@@ -1277,7 +1279,7 @@ export default function GeneralEnquiriesPage() {
             className="
               mt-[2px]
               text-[10px]
-              font-[500]
+              font-normal
               leading-[16px]
               text-[#344574]
             "
@@ -1310,7 +1312,7 @@ export default function GeneralEnquiriesPage() {
               bg-white
               px-[15px]
               text-[10px]
-              font-[700]
+              font-normal
               text-[#172762]
             "
           >
@@ -1331,7 +1333,7 @@ export default function GeneralEnquiriesPage() {
               bg-white
               px-[15px]
               text-[10px]
-              font-[700]
+              font-normal
               text-[#172762]
             "
           >
@@ -1350,7 +1352,7 @@ export default function GeneralEnquiriesPage() {
               bg-[#005F2E]
               px-[17px]
               text-[10px]
-              font-[700]
+              font-normal
               text-white
               shadow-[0_2px_5px_rgba(0,95,46,0.14)]
               hover:bg-[#004d25]
@@ -1376,7 +1378,7 @@ export default function GeneralEnquiriesPage() {
             px-[11px]
             py-[8px]
             text-[10px]
-            font-[600]
+            font-normal
             text-red-700
           "
         >
@@ -1401,7 +1403,7 @@ export default function GeneralEnquiriesPage() {
             LEFT
         ==================================================== */}
 
-        <main className="min-w-0 flex-1">
+        <main className="min-w-0 flex-1 overflow-hidden">
           {/* ==================================================
               STAT CARDS
           ================================================== */}
@@ -1519,7 +1521,7 @@ export default function GeneralEnquiriesPage() {
                   flex-1
                   bg-transparent
                   text-[10px]
-                  font-[600]
+                  font-normal
                   text-[#172762]
                   outline-none
                   placeholder:text-[#566483]
@@ -1634,7 +1636,7 @@ export default function GeneralEnquiriesPage() {
                 bg-white
                 px-[11px]
                 text-[10px]
-                font-[600]
+                font-normal
                 text-[#586480]
               "
             >
@@ -1664,7 +1666,7 @@ export default function GeneralEnquiriesPage() {
                   bg-transparent
                   pr-[21px]
                   text-[10px]
-                  font-[600]
+                  font-normal
                   text-[#586480]
                   outline-none
                 "
@@ -1721,7 +1723,7 @@ export default function GeneralEnquiriesPage() {
                 bg-white
                 px-[12px]
                 text-[10px]
-                font-[700]
+                font-normal
                 text-[#1C306A]
               "
             >
@@ -1815,35 +1817,35 @@ export default function GeneralEnquiriesPage() {
                     text-[#172762]
                   "
                 >
-                  <th className="px-[9px] text-[10px] font-[700] uppercase tracking-wider">
+                  <th className="px-[9px] text-[10px] font-normal uppercase tracking-wider">
                     ID
                   </th>
 
-                  <th className="px-[8px] text-[10px] font-[700] uppercase tracking-wider">
+                  <th className="px-[8px] text-[10px] font-normal uppercase tracking-wider">
                     Name
                   </th>
 
-                  <th className="px-[8px] text-[10px] font-[700] uppercase tracking-wider">
+                  <th className="px-[8px] text-[10px] font-normal uppercase tracking-wider">
                     Subject
                   </th>
 
-                  <th className="px-[7px] text-[10px] font-[700] uppercase tracking-wider">
+                  <th className="px-[7px] text-[10px] font-normal uppercase tracking-wider">
                     Category
                   </th>
 
-                  <th className="px-[7px] text-[10px] font-[700] uppercase tracking-wider">
+                  <th className="px-[7px] text-[10px] font-normal uppercase tracking-wider">
                     Source
                   </th>
 
-                  <th className="px-[7px] text-[10px] font-[700] uppercase tracking-wider">
+                  <th className="px-[7px] text-[10px] font-normal uppercase tracking-wider">
                     Status
                   </th>
 
-                  <th className="px-[7px] text-[10px] font-[700] uppercase tracking-wider">
+                  <th className="px-[7px] text-[10px] font-normal uppercase tracking-wider">
                     Date &amp; Time
                   </th>
 
-                  <th className="px-[6px] text-[10px] font-[700] uppercase tracking-wider">
+                  <th className="px-[6px] text-[10px] font-normal uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
@@ -1943,7 +1945,7 @@ export default function GeneralEnquiriesPage() {
                                 block
                                 truncate
                                 text-[10px]
-                                font-[700]
+                                font-normal
                                 text-[#14763F]
                               "
                             >
@@ -1965,7 +1967,7 @@ export default function GeneralEnquiriesPage() {
                               className="
                                 truncate
                                 text-[10px]
-                                font-[700]
+                                font-normal
                                 leading-[14px]
                                 text-[#192B66]
                               "
@@ -1979,7 +1981,7 @@ export default function GeneralEnquiriesPage() {
                                 mt-[3px]
                                 truncate
                                 text-[10px]
-                                font-[500]
+                                font-normal
                                 leading-[12px]
                                 text-[#52617F]
                               "
@@ -2003,7 +2005,7 @@ export default function GeneralEnquiriesPage() {
                               className="
                                 line-clamp-2
                                 text-[10px]
-                                font-[600]
+                                font-normal
                                 leading-[14px]
                                 text-[#314273]
                               "
@@ -2031,7 +2033,7 @@ export default function GeneralEnquiriesPage() {
                                 px-[8px]
                                 py-[4px]
                                 text-[10px]
-                                font-[700]
+                                font-normal
                                 leading-none
                               "
                               style={{
@@ -2084,7 +2086,7 @@ export default function GeneralEnquiriesPage() {
                                 className="
                                   truncate
                                   text-[10px]
-                                  font-[600]
+                                  font-normal
                                   text-[#324374]
                                 "
                               >
@@ -2110,7 +2112,7 @@ export default function GeneralEnquiriesPage() {
                                 px-[7px]
                                 py-[4px]
                                 text-[10px]
-                                font-[700]
+                                font-normal
                                 leading-none
                               "
                               style={{
@@ -2141,11 +2143,11 @@ export default function GeneralEnquiriesPage() {
 
                               return (
                                 <>
-                                  <p className="whitespace-nowrap text-[9px] font-[700] leading-[11px] text-[#26396D]">
+                                  <p className="whitespace-nowrap text-[9px] font-normal leading-[11px] text-[#26396D]">
                                     {parts[0]}
                                   </p>
                                   {parts[1] && (
-                                    <p className="mt-[1px] whitespace-nowrap text-[9px] font-[500] leading-[10px] text-[#556488]">
+                                    <p className="mt-[1px] whitespace-nowrap text-[9px] font-normal leading-[10px] text-[#556488]">
                                       {parts[1]}
                                     </p>
                                   )}
@@ -2232,7 +2234,7 @@ export default function GeneralEnquiriesPage() {
                           h-[150px]
                           text-center
                           text-xs
-                          font-[600]
+                          font-normal
                           text-[#667085]
                         "
                       >
@@ -2264,7 +2266,7 @@ export default function GeneralEnquiriesPage() {
                 className="
                   whitespace-nowrap
                   text-[10px]
-                  font-[600]
+                  font-normal
                   text-[#475A83]
                 "
               >
@@ -2342,7 +2344,7 @@ export default function GeneralEnquiriesPage() {
                           rounded-[4px]
                           border
                           text-[10px]
-                          font-[700]
+                          font-normal
 
                           ${safePage ===
                             number
@@ -2417,7 +2419,7 @@ export default function GeneralEnquiriesPage() {
                     px-[9px]
                     pr-[25px]
                     text-[10px]
-                    font-[700]
+                    font-normal
                     text-[#536180]
                     outline-none
                   "
@@ -2475,10 +2477,12 @@ export default function GeneralEnquiriesPage() {
           >
             <h2
               className="
-                text-[10px]
-                font-[800]
+                break-words
+                text-[9px]
+                font-normal
                 uppercase
                 tracking-wider
+                leading-[11px]
                 text-[#1D5E39]
               "
             >
@@ -2556,22 +2560,22 @@ export default function GeneralEnquiriesPage() {
                     bg-white
                   "
                 >
-                  <strong
+                  <span
                     className="
                       text-[12px]
-                      font-[800]
+                      font-normal
                       leading-none
                       text-[#141414]
                     "
                   >
                     {totalEnquiries}
-                  </strong>
+                  </span>
 
                   <span
                     className="
                       mt-[2px]
                       text-[10px]
-                      font-[700]
+                      font-normal
                       uppercase
                       tracking-wide
                       text-[#44537B]
@@ -2653,7 +2657,7 @@ export default function GeneralEnquiriesPage() {
                         className="
                           whitespace-nowrap
                           text-[9px]
-                          font-semibold
+                          font-normal
                           text-[#26386D]
                         "
                       >
@@ -2666,7 +2670,7 @@ export default function GeneralEnquiriesPage() {
                         whitespace-nowrap
                         text-left
                         text-[9px]
-                        font-semibold
+                        font-normal
                         text-[#26386D]
                       "
                     >
@@ -2699,10 +2703,12 @@ export default function GeneralEnquiriesPage() {
           >
             <h2
               className="
-                text-[10px]
-                font-[800]
+                break-words
+                text-[9px]
+                font-normal
                 uppercase
                 tracking-wider
+                leading-[11px]
                 text-[#1D5E39]
               "
             >
@@ -2767,7 +2773,7 @@ export default function GeneralEnquiriesPage() {
                     py-[15px]
                     text-center
                     text-[10px]
-                    font-medium
+                    font-normal
                     text-[#667085]
                   "
                   >
@@ -2793,10 +2799,12 @@ export default function GeneralEnquiriesPage() {
           >
             <h2
               className="
-                text-[10px]
-                font-[800]
+                break-words
+                text-[9px]
+                font-normal
                 uppercase
                 tracking-wider
+                leading-[11px]
                 text-[#1D5E39]
               "
             >
@@ -2851,7 +2859,7 @@ export default function GeneralEnquiriesPage() {
                     py-[15px]
                     text-center
                     text-[10px]
-                    font-medium
+                    font-normal
                     text-[#667085]
                   "
                   >
@@ -2882,10 +2890,12 @@ export default function GeneralEnquiriesPage() {
             >
               <h2
                 className="
-                  text-[10px]
-                  font-[800]
+                  break-words
+                  text-[9px]
+                  font-normal
                   uppercase
                   tracking-wider
+                  leading-[11px]
                   text-[#1D5E39]
                 "
               >
@@ -2943,7 +2953,7 @@ export default function GeneralEnquiriesPage() {
                       className="
                         whitespace-nowrap
                         text-[10px]
-                        font-[700]
+                        font-normal
                       "
                     >
                       {action.label}
@@ -3024,7 +3034,7 @@ export default function GeneralEnquiriesPage() {
                   px-2.5
                   py-1
                   text-[10px]
-                  font-semibold
+                  font-normal
                 "
                 style={{
                   backgroundColor:
@@ -3114,7 +3124,7 @@ export default function GeneralEnquiriesPage() {
               <p
                 className="
                   text-[10px]
-                  font-bold
+                  font-normal
                   uppercase
                   tracking-wide
                   text-text-muted
@@ -3141,7 +3151,7 @@ export default function GeneralEnquiriesPage() {
               <p
                 className="
                   text-[10px]
-                  font-bold
+                  font-normal
                   uppercase
                   tracking-wide
                   text-text-muted
@@ -3190,7 +3200,7 @@ export default function GeneralEnquiriesPage() {
                 className="
                   inline-flex
                   text-[10px]
-                  font-semibold
+                  font-normal
                   text-accent
                   hover:underline
                 "
@@ -3226,7 +3236,7 @@ function ModalField({
       <p
         className="
           text-[10px]
-          font-bold
+          font-normal
           uppercase
           tracking-wide
           text-text-muted

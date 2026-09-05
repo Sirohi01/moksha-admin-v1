@@ -483,7 +483,7 @@ export default function GoogleReviewsPage() {
             items-center
             gap-[8px]
             text-[13px]
-            font-[500]
+            font-normal
             text-[#66748c]
           "
         >
@@ -501,7 +501,7 @@ export default function GoogleReviewsPage() {
 
           <span
             className="
-              font-[700]
+              font-normal
               text-[#152957]
             "
           >
@@ -532,7 +532,7 @@ export default function GoogleReviewsPage() {
               bg-white
               px-[13px]
               text-[11px]
-              font-[700]
+              font-normal
               text-[#25375f]
               shadow-[0_1px_2px_rgba(25,45,75,0.03)]
             "
@@ -562,7 +562,7 @@ export default function GoogleReviewsPage() {
               bg-white
               px-[13px]
               text-[11px]
-              font-[700]
+              font-normal
               text-[#25375f]
               shadow-[0_1px_2px_rgba(25,45,75,0.03)]
             "
@@ -602,11 +602,11 @@ export default function GoogleReviewsPage() {
         >
           <GoogleLogo />
 
-          <div className="min-w-0">
+          <div className="min-w-0 overflow-hidden">
             <h1
               className="
                 text-[25px]
-                font-[700]
+                font-normal
                 leading-[1]
                 tracking-[-0.035em]
                 text-[#102554]
@@ -620,7 +620,7 @@ export default function GoogleReviewsPage() {
                 mt-[4px]
                 truncate
                 text-[11px]
-                font-[500]
+                font-normal
                 text-[#60708c]
               "
             >
@@ -688,7 +688,7 @@ export default function GoogleReviewsPage() {
                 rounded-[7px]
                 bg-[#00864a]
                 text-[12px]
-                font-[700]
+                font-normal
                 text-white
                 shadow-[0_3px_8px_rgba(0,134,74,0.16)]
                 transition
@@ -717,7 +717,7 @@ export default function GoogleReviewsPage() {
               gap-[15px]
               pr-[5px]
               text-[11px]
-              font-[500]
+              font-normal
               text-[#61718b]
             "
           >
@@ -747,7 +747,7 @@ export default function GoogleReviewsPage() {
                 syncReviews
               }
               className="
-                font-[700]
+                font-normal
                 text-[#2475c4]
               "
             >
@@ -1028,7 +1028,7 @@ export default function GoogleReviewsPage() {
                   flex-1
                   bg-transparent
                   text-[10px]
-                  font-[500]
+                  font-normal
                   text-[#2c3f68]
                   outline-none
                   placeholder:text-[#77849a]
@@ -1067,7 +1067,7 @@ export default function GoogleReviewsPage() {
                 bg-[#00864a]
                 px-[12px]
                 text-[10px]
-                font-[700]
+                font-normal
                 text-white
               "
             >
@@ -1260,7 +1260,7 @@ export default function GoogleReviewsPage() {
                       h-[150px]
                       text-center
                       text-[13px]
-                      font-[600]
+                      font-normal
                       text-[#718099]
                     "
                     >
@@ -1292,7 +1292,7 @@ export default function GoogleReviewsPage() {
           <p
             className="
               text-[11px]
-              font-[600]
+              font-normal
               text-[#63718b]
             "
           >
@@ -1358,7 +1358,7 @@ export default function GoogleReviewsPage() {
               className="
                 px-[4px]
                 text-[12px]
-                font-[700]
+                font-normal
                 text-[#62708b]
               "
             >
@@ -1387,7 +1387,7 @@ export default function GoogleReviewsPage() {
                 className="
                   whitespace-nowrap
                   text-[11px]
-                  font-[600]
+                  font-normal
                   text-[#66738a]
                 "
               >
@@ -1425,7 +1425,7 @@ export default function GoogleReviewsPage() {
                     px-[12px]
                     pr-[27px]
                     text-[11px]
-                    font-[700]
+                    font-normal
                     text-[#32446c]
                     outline-none
                   "
@@ -1514,7 +1514,7 @@ function ControlButton({
         bg-white
         px-[14px]
         text-[11px]
-        font-[700]
+        font-normal
         text-[#35456a]
         shadow-[0_1px_2px_rgba(25,45,75,0.03)]
         ${className}
@@ -1618,9 +1618,10 @@ function MetricCard({
       >
         <p
           className="
-            truncate
-            text-[13px]
-            font-[600]
+            break-words
+            text-[12px]
+            leading-[15px]
+            font-normal
             text-[#415170]
           "
         >
@@ -1636,24 +1637,24 @@ function MetricCard({
             gap-[10px]
           "
         >
-          <strong
+          <span
             className="
               text-[28px]
-              font-[600]
+              font-normal
               leading-none
               tracking-[-0.025em]
               text-[#102554]
             "
           >
             {value}
-          </strong>
+          </span>
 
           <span
             className="
               mb-[2px]
               whitespace-nowrap
               text-[12px]
-              font-[700]
+              font-normal
             "
             style={{
               color:
@@ -1669,7 +1670,7 @@ function MetricCard({
             mt-[7px]
             truncate
             text-[10px]
-            font-[500]
+            font-normal
             text-[#718099]
           "
         >
@@ -1730,7 +1731,7 @@ function OverallRatingCard() {
         <p
           className="
             text-[13px]
-            font-[600]
+            font-normal
             text-[#415170]
           "
         >
@@ -1745,17 +1746,17 @@ function OverallRatingCard() {
             gap-[8px]
           "
         >
-          <strong
+          <span
             className="
               text-[28px]
-              font-[600]
+              font-normal
               leading-none
               tracking-[-0.025em]
               text-[#102554]
             "
           >
             4.8
-          </strong>
+          </span>
 
           <Stars
             rating={5}
@@ -1769,7 +1770,7 @@ function OverallRatingCard() {
               px-[7px]
               py-[4px]
               text-[10px]
-              font-[600]
+              font-normal
               text-[#149355]
             "
           >
@@ -1781,7 +1782,7 @@ function OverallRatingCard() {
           className="
             mt-[7px]
             text-[10px]
-            font-[500]
+            font-normal
             text-[#718099]
           "
         >
@@ -1831,7 +1832,7 @@ function DashboardCard({
         <h2
           className="
             text-[14px]
-            font-[600]
+            font-normal
             text-[#20345e]
           "
         >
@@ -1878,7 +1879,7 @@ function RatingBreakdown() {
                 className="
                   text-right
                   text-[11px]
-                  font-[500]
+                  font-normal
                   text-[#50607c]
                 "
               >
@@ -1918,7 +1919,7 @@ function RatingBreakdown() {
                 className="
                   whitespace-nowrap
                   text-[11px]
-                  font-[600]
+                  font-normal
                   text-[#53617b]
                 "
               >
@@ -1945,19 +1946,19 @@ function RatingTrend() {
         <p
           className="
             text-[11px]
-            font-[500]
+            font-normal
             text-[#68758d]
           "
         >
           Avg. Rating:{" "}
 
-          <strong
+          <span
             className="
               text-[#20345e]
             "
           >
             4.8
-          </strong>
+          </span>
         </p>
       }
     >
@@ -2177,7 +2178,7 @@ function ReviewsByLocation() {
             items-center
             gap-[4px]
             text-[11px]
-            font-[700]
+            font-normal
             text-[#1681d0]
           "
         >
@@ -2214,7 +2215,7 @@ function ReviewsByLocation() {
                 className="
                   truncate
                   text-[10px]
-                  font-[700]
+                  font-normal
                   text-[#33456b]
                 "
               >
@@ -2225,7 +2226,7 @@ function ReviewsByLocation() {
                 className="
                   text-right
                   text-[11px]
-                  font-[600]
+                  font-normal
                   text-[#263a66]
                 "
               >
@@ -2244,7 +2245,7 @@ function ReviewsByLocation() {
                 className="
                   text-right
                   text-[10px]
-                  font-[500]
+                  font-normal
                   text-[#6c7990]
                 "
               >
@@ -2319,7 +2320,7 @@ function NegativeReviewAlerts() {
             className="
               whitespace-nowrap
               text-[11px]
-              font-[600]
+              font-normal
               text-[#a52236]
             "
           >
@@ -2336,7 +2337,7 @@ function NegativeReviewAlerts() {
             gap-[3px]
             whitespace-nowrap
             text-[9px]
-            font-[700]
+            font-normal
             text-[#1c76bd]
           "
         >
@@ -2383,7 +2384,7 @@ function NegativeReviewAlerts() {
                     rounded-[7px]
                     px-[5px]
                     text-[10px]
-                    font-[600]
+                    font-normal
                     text-white
 
                     ${alert.rating ===
@@ -2422,7 +2423,7 @@ function NegativeReviewAlerts() {
                       <h3
                         className="
                           text-[10px]
-                          font-[600]
+                          font-normal
                           text-[#2d3c60]
                         "
                       >
@@ -2433,7 +2434,7 @@ function NegativeReviewAlerts() {
                         className="
                           mt-[1px]
                           text-[8px]
-                          font-[500]
+                          font-normal
                           text-[#718099]
                         "
                       >
@@ -2445,7 +2446,7 @@ function NegativeReviewAlerts() {
                       className="
                         whitespace-nowrap
                         text-[8px]
-                        font-[500]
+                        font-normal
                         text-[#7d8799]
                       "
                     >
@@ -2457,7 +2458,7 @@ function NegativeReviewAlerts() {
                     className="
                       mt-[5px]
                       text-[9px]
-                      font-[500]
+                      font-normal
                       leading-[1.35]
                       text-[#40506d]
                     "
@@ -2480,7 +2481,7 @@ function NegativeReviewAlerts() {
                         bg-[#d8092d]
                         px-[10px]
                         text-[9px]
-                        font-[600]
+                        font-normal
                         text-white
                       "
                     >
@@ -2524,7 +2525,7 @@ function ReviewTabButton({
         rounded-[6px]
         px-[10px]
         text-[10px]
-        font-[700]
+        font-normal
         transition-colors
 
         ${active
@@ -2577,7 +2578,7 @@ function ToolbarButton({
         bg-white
         px-[11px]
         text-[10px]
-        font-[700]
+        font-normal
         text-[#32446c]
       "
     >
@@ -2602,7 +2603,7 @@ function TableHead({
       className="
         px-[10px]
         text-[10px]
-        font-[700]
+        font-normal
         text-[#4c5b76]
       "
     >
@@ -2680,7 +2681,7 @@ function ReviewRow({
               className="
                 truncate
                 text-[11px]
-                font-[600]
+                font-normal
                 text-[#233761]
               "
             >
@@ -2692,7 +2693,7 @@ function ReviewRow({
                 mt-[1px]
                 truncate
                 text-[9px]
-                font-[500]
+                font-normal
                 text-[#6c7890]
               "
             >
@@ -2729,7 +2730,7 @@ function ReviewRow({
           className="
             line-clamp-2
             text-[10px]
-            font-[500]
+            font-normal
             leading-[1.45]
             text-[#3c4b68]
           "
@@ -2766,7 +2767,7 @@ function ReviewRow({
             <p
               className="
                 text-[10px]
-                font-[600]
+                font-normal
                 text-[#3a4b6c]
               "
             >
@@ -2798,7 +2799,7 @@ function ReviewRow({
         <p
           className="
             text-[10px]
-            font-[600]
+            font-normal
             text-[#40506f]
           "
         >
@@ -2809,7 +2810,7 @@ function ReviewRow({
           className="
             mt-[1px]
             text-[9px]
-            font-[500]
+            font-normal
             text-[#718099]
           "
         >
@@ -2856,7 +2857,7 @@ function ReviewRow({
             className="
               truncate
               text-[10px]
-              font-[600]
+              font-normal
               text-[#3a4b6c]
             "
           >
@@ -2890,7 +2891,7 @@ function ReviewRow({
                 bg-[#00864a]
                 px-[10px]
                 text-[10px]
-                font-[700]
+                font-normal
                 text-white
               "
             >
@@ -2908,7 +2909,7 @@ function ReviewRow({
                 bg-white
                 px-[10px]
                 text-[10px]
-                font-[700]
+                font-normal
                 text-[#40506d]
               "
             >
@@ -3029,7 +3030,7 @@ function Avatar({
         rounded-full
         bg-gradient-to-br
         ${gradient}
-        font-[700]
+        font-normal
         text-white
         shadow-[0_1px_3px_rgba(21,40,70,0.15)]
 
@@ -3095,7 +3096,7 @@ function StatusBadge({
         px-[9px]
         py-[7px]
         text-[9px]
-        font-[700]
+        font-normal
 
         ${replied
           ? "bg-[#dcf5e7] text-[#138a4d]"
@@ -3135,7 +3136,7 @@ function PageButton({
         border
         px-[7px]
         text-[10px]
-        font-[700]
+        font-normal
 
         ${active
           ? "border-[#00864a] bg-[#00864a] text-white"

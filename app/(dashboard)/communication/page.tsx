@@ -462,13 +462,14 @@ function StatCard({
         </div>
 
         {/* TEXT */}
-        <div className="min-w-0 flex-1">
+        <div className="min-w-0 flex-1 overflow-hidden">
           <div
             className="
-              w-full
-              text-[10px]
-              font-[700]
-              leading-[13px]
+              max-w-[104px]
+              break-words
+              text-[9px]
+              font-normal
+              leading-[11px]
               text-[#172863]
               whitespace-normal
             "
@@ -481,7 +482,7 @@ function StatCard({
               mt-[2px]
               whitespace-nowrap
               text-[22px]
-              font-[800]
+              font-normal
               leading-[24px]
               text-[#00642F]
             "
@@ -511,7 +512,7 @@ function StatCard({
           className={`
             shrink-0
             text-[9px]
-            font-[700]
+            font-normal
             ${item.direction === "up"
               ? "text-[#169248]"
               : "text-[#F04438]"
@@ -526,7 +527,7 @@ function StatCard({
             shrink-0
             whitespace-nowrap
             text-[9px]
-            font-[600]
+            font-normal
             text-[#506083]
           "
         >
@@ -564,7 +565,7 @@ function Badge({
         px-[9px]
         py-[4px]
         text-[9px]
-        font-[700]
+        font-normal
         leading-none
       "
       style={{
@@ -621,7 +622,7 @@ function SelectFilter({
           bg-transparent
           pr-[18px]
           text-[10px]
-          font-[700]
+          font-normal
           text-[#172762]
           outline-none
         "
@@ -734,11 +735,11 @@ export default function CommunicationsFollowUps() {
       ====================================================== */}
 
       <div className="flex items-start justify-between gap-[20px]">
-        <div className="min-w-0">
+        <div className="min-w-0 overflow-hidden">
           <h1
             className="
               text-[20px]
-              font-[800]
+              font-normal
               leading-[25px]
               tracking-[-0.4px]
               text-[#005E2E]
@@ -751,7 +752,7 @@ export default function CommunicationsFollowUps() {
             className="
               mt-[2px]
               text-[9.5px]
-              font-[500]
+              font-normal
               leading-[14px]
               text-[#344574]
             "
@@ -782,7 +783,7 @@ export default function CommunicationsFollowUps() {
               bg-white
               px-[15px]
               text-[9px]
-              font-[700]
+              font-normal
               text-[#172762]
             "
           >
@@ -803,7 +804,7 @@ export default function CommunicationsFollowUps() {
               bg-white
               px-[15px]
               text-[9px]
-              font-[700]
+              font-normal
               text-[#172762]
             "
           >
@@ -822,7 +823,7 @@ export default function CommunicationsFollowUps() {
               bg-[#005F2E]
               px-[17px]
               text-[9px]
-              font-[700]
+              font-normal
               text-white
               shadow-[0_2px_5px_rgba(0,95,46,0.12)]
             "
@@ -852,7 +853,7 @@ export default function CommunicationsFollowUps() {
             LEFT
         ==================================================== */}
 
-        <main className="min-w-0">
+        <main className="min-w-0 overflow-hidden">
           {/* ==================================================
               TOP CARDS
           ================================================== */}
@@ -916,7 +917,7 @@ export default function CommunicationsFollowUps() {
                   flex-1
                   bg-transparent
                   text-[10px]
-                  font-[600]
+                  font-normal
                   text-[#172762]
                   outline-none
                   placeholder:text-[#536184]
@@ -1013,7 +1014,7 @@ export default function CommunicationsFollowUps() {
                   bg-transparent
                   pr-[18px]
                   text-[10px]
-                  font-[600]
+                  font-normal
                   text-[#536080]
                   outline-none
                 "
@@ -1056,7 +1057,7 @@ export default function CommunicationsFollowUps() {
                 bg-white
                 px-[7px]
                 text-[9px]
-                font-[700]
+                font-normal
                 text-[#172762]
                 hover:bg-[#F8FAFC]
               "
@@ -1112,39 +1113,39 @@ export default function CommunicationsFollowUps() {
                     text-white
                   "
                 >
-                  <th className="px-[6px] text-[9px] font-[700] whitespace-nowrap">
+                  <th className="px-[6px] text-[9px] font-normal whitespace-nowrap">
                     ID
                   </th>
 
-                  <th className="px-[6px] text-[9px] font-[700] whitespace-nowrap">
+                  <th className="px-[6px] text-[9px] font-normal whitespace-nowrap">
                     Contact / Organization
                   </th>
 
-                  <th className="px-[4px] text-[9px] font-[700] whitespace-nowrap text-center">
+                  <th className="px-[4px] text-[9px] font-normal whitespace-nowrap text-center">
                     Channel
                   </th>
 
-                  <th className="px-[6px] text-[9px] font-[700] whitespace-nowrap">
+                  <th className="px-[6px] text-[9px] font-normal whitespace-nowrap">
                     Subject / Conversation
                   </th>
 
-                  <th className="px-[5px] text-[9px] font-[700] whitespace-nowrap">
+                  <th className="px-[5px] text-[9px] font-normal whitespace-nowrap">
                     Enquiry Type
                   </th>
 
-                  <th className="px-[5px] text-[9px] font-[700] whitespace-nowrap">
+                  <th className="px-[5px] text-[9px] font-normal whitespace-nowrap">
                     Status
                   </th>
 
-                  <th className="px-[6px] text-[9px] font-[700] whitespace-nowrap">
+                  <th className="px-[6px] text-[9px] font-normal whitespace-nowrap">
                     Last Activity
                   </th>
 
-                  <th className="px-[6px] text-[9px] font-[700] whitespace-nowrap">
+                  <th className="px-[6px] text-[9px] font-normal whitespace-nowrap">
                     Next Follow-up
                   </th>
 
-                  <th className="px-[6px] text-[9px] font-[700] whitespace-nowrap text-center">
+                  <th className="px-[6px] text-[9px] font-normal whitespace-nowrap text-center">
                     Actions
                   </th>
                 </tr>
@@ -1159,7 +1160,7 @@ export default function CommunicationsFollowUps() {
                         h-[120px]
                         text-center
                         text-[9px]
-                        font-[600]
+                        font-normal
                         text-[#667085]
                       "
                     >
@@ -1190,7 +1191,7 @@ export default function CommunicationsFollowUps() {
                             className="
                               whitespace-nowrap
                               text-[9px]
-                              font-[700]
+                              font-normal
                               text-[#13763E]
                             "
                           >
@@ -1201,12 +1202,12 @@ export default function CommunicationsFollowUps() {
                         {/* CONTACT */}
 
                         <td className="min-w-0 px-[6px] align-middle">
-                          <div className="min-w-0">
+                          <div className="min-w-0 overflow-hidden">
                             <p
                               className="
                                 truncate
                                 text-[9px]
-                                font-[700]
+                                font-normal
                                 leading-[11px]
                                 text-[#192B66]
                               "
@@ -1264,7 +1265,7 @@ export default function CommunicationsFollowUps() {
                                 className="
                                   whitespace-nowrap
                                   text-[9px]
-                                  font-[600]
+                                  font-normal
                                   text-[#293B70]
                                 "
                               >
@@ -1311,7 +1312,7 @@ export default function CommunicationsFollowUps() {
                             {row.channel !== "Email" &&
                               row.channel !== "WhatsApp" &&
                               row.channel !== "Call" && (
-                                <span className="text-[9px] font-[700]">
+                                <span className="text-[9px] font-normal">
                                   {row.channel.slice(0, 2)}
                                 </span>
                               )}
@@ -1325,7 +1326,7 @@ export default function CommunicationsFollowUps() {
                             className="
                               truncate
                               text-[9px]
-                              font-[700]
+                              font-normal
                               leading-[11px]
                               text-[#192B66]
                             "
@@ -1338,7 +1339,7 @@ export default function CommunicationsFollowUps() {
                               mt-[2px]
                               truncate
                               text-[9px]
-                              font-[500]
+                              font-normal
                               leading-[10px]
                               text-[#304276]
                             "
@@ -1376,7 +1377,7 @@ export default function CommunicationsFollowUps() {
                             className="
                               whitespace-nowrap
                               text-[9px]
-                              font-[700]
+                              font-normal
                               leading-[11px]
                               text-[#26396D]
                             "
@@ -1389,7 +1390,7 @@ export default function CommunicationsFollowUps() {
                               mt-[1px]
                               whitespace-nowrap
                               text-[9px]
-                              font-[500]
+                              font-normal
                               leading-[10px]
                               text-[#556488]
                             "
@@ -1405,7 +1406,7 @@ export default function CommunicationsFollowUps() {
                             className="
                               whitespace-nowrap
                               text-[9px]
-                              font-[700]
+                              font-normal
                               leading-[11px]
                               text-[#26396D]
                             "
@@ -1419,7 +1420,7 @@ export default function CommunicationsFollowUps() {
                                 mt-[1px]
                                 whitespace-nowrap
                                 text-[9px]
-                                font-[500]
+                                font-normal
                                 leading-[10px]
                                 text-[#556488]
                               "
@@ -1502,7 +1503,7 @@ export default function CommunicationsFollowUps() {
                   shrink-0
                   whitespace-nowrap
                   text-[10px]
-                  font-[600]
+                  font-normal
                   text-[#475A83]
                 "
               >
@@ -1550,7 +1551,7 @@ export default function CommunicationsFollowUps() {
                         rounded-[4px]
                         border
                         text-[10px]
-                        font-[700]
+                        font-normal
                         ${safePage === number
                           ? "border-[#006132] bg-[#006132] text-white"
                           : "border-[#E3E7ED] bg-white text-[#334575]"
@@ -1618,7 +1619,7 @@ export default function CommunicationsFollowUps() {
                     bg-transparent
                     pr-[16px]
                     text-[10px]
-                    font-[700]
+                    font-normal
                     text-[#536180]
                     outline-none
                   "
@@ -1671,7 +1672,7 @@ export default function CommunicationsFollowUps() {
                 className="
                   whitespace-nowrap
                   text-[11px]
-                  font-[700]
+                  font-normal
                   text-[#1F2430]
                 "
               >
@@ -1685,7 +1686,7 @@ export default function CommunicationsFollowUps() {
                   items-center
                   gap-[3px]
                   text-[9px]
-                  font-[700]
+                  font-normal
                   text-[#167E48]
                 "
               >
@@ -1726,22 +1727,22 @@ export default function CommunicationsFollowUps() {
                     bg-white
                   "
                 >
-                  <strong
+                  <span
                     className="
                       text-[16px]
-                      font-[800]
+                      font-normal
                       leading-none
                       text-[#111]
                     "
                   >
                     562
-                  </strong>
+                  </span>
 
                   <span
                     className="
                       mt-[4px]
                       text-[8px]
-                      font-[600]
+                      font-normal
                       text-[#44537B]
                     "
                   >
@@ -1813,7 +1814,7 @@ export default function CommunicationsFollowUps() {
                           truncate
                           whitespace-nowrap
                           text-[8px]
-                          font-semibold
+                          font-normal
                           text-[#26386D]
                         "
                       >
@@ -1828,7 +1829,7 @@ export default function CommunicationsFollowUps() {
                         tabular-nums
                         whitespace-nowrap
                         text-[8px]
-                        font-semibold
+                        font-normal
                         text-[#26386D]
                       "
                     >
@@ -1859,7 +1860,7 @@ export default function CommunicationsFollowUps() {
             <h2
               className="
                 text-[10px]
-                font-[800]
+                font-normal
                 text-[#1F2430]
               "
             >
@@ -1909,7 +1910,7 @@ export default function CommunicationsFollowUps() {
                         className="
                           whitespace-nowrap
                           text-[9px]
-                          font-semibold
+                          font-normal
                           text-[#26376D]
                         "
                       >
@@ -1941,7 +1942,7 @@ export default function CommunicationsFollowUps() {
                         whitespace-nowrap
                         text-right
                         text-[9px]
-                        font-semibold
+                        font-normal
                         text-[#26376D]
                       "
                     >
@@ -1971,7 +1972,7 @@ export default function CommunicationsFollowUps() {
               <h2
                 className="
                   text-[10px]
-                  font-[800]
+                  font-normal
                   text-[#193775]
                 "
               >
@@ -2009,7 +2010,7 @@ export default function CommunicationsFollowUps() {
                       className="
                         whitespace-nowrap
                         text-[9px]
-                        font-semibold
+                        font-normal
                       "
                     >
                       {action.label}
@@ -2044,7 +2045,7 @@ export default function CommunicationsFollowUps() {
             <h2
               className="
                 text-[10px]
-                font-[800]
+                font-normal
                 text-[#08602E]
               "
             >
@@ -2055,7 +2056,7 @@ export default function CommunicationsFollowUps() {
               className="
                 mt-[7px]
                 text-[9px]
-                font-[500]
+                font-normal
                 text-[#44537C]
               "
             >
@@ -2072,7 +2073,7 @@ export default function CommunicationsFollowUps() {
                 className="
                   whitespace-nowrap
                   text-[9px]
-                  font-[800]
+                  font-normal
                   text-[#21713A]
                 "
               >
@@ -2098,7 +2099,7 @@ export default function CommunicationsFollowUps() {
                 className="
                   whitespace-nowrap
                   text-[10px]
-                  font-[700]
+                  font-normal
                   text-[#283C74]
                 "
               >

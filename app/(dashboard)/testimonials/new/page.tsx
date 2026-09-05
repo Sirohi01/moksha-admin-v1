@@ -36,10 +36,10 @@ function FieldLabel({
   optional?: boolean;
 }) {
   return (
-    <label className="mb-[6px] block text-[11px] font-bold text-[#24345e]">
+    <label className="mb-[6px] block text-[11px] font-normal text-[#24345e]">
       {children}
       {required ? <span className="ml-[2px] text-[#df3e3e]">*</span> : null}
-      {optional ? <span className="font-semibold text-[#63708a]"> (Optional)</span> : null}
+      {optional ? <span className="font-normal text-[#63708a]"> (Optional)</span> : null}
     </label>
   );
 }
@@ -168,11 +168,11 @@ export default function AddNewTestimonialPage() {
         {/* HEADER */}
         <header className="flex items-start justify-between gap-[16px]">
           <div>
-            <h1 className="text-[24px] font-semibold leading-none tracking-[-0.02em] text-[#075b33]">
+            <h1 className="text-[24px] font-normal leading-none tracking-[-0.02em] text-[#075b33]">
               Add New Testimonial
             </h1>
 
-            <nav className="mt-[9px] flex items-center gap-[8px] text-[10.5px] font-semibold text-[#1d2b58]">
+            <nav className="mt-[9px] flex items-center gap-[8px] text-[10.5px] font-normal text-[#1d2b58]">
               <span>Dashboard</span>
               <span className="text-[#7b8597]">›</span>
               <span>Testimonials</span>
@@ -185,7 +185,7 @@ export default function AddNewTestimonialPage() {
             <button
               type="button"
               onClick={() => router.push("/testimonials")}
-              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] border border-[#dfe3e7] bg-white px-[18px] text-[10.5px] font-bold text-[#273655] transition hover:bg-slate-50"
+              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] border border-[#dfe3e7] bg-white px-[18px] text-[10.5px] font-normal text-[#273655] transition hover:bg-slate-50"
             >
               <ArrowLeft className="h-[15px] w-[15px]" />
               Back to Testimonials
@@ -197,7 +197,7 @@ export default function AddNewTestimonialPage() {
                 alert("Testimonial Saved Successfully!");
                 router.push("/testimonials");
               }}
-              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] bg-[linear-gradient(180deg,#076636_0%,#03542c_100%)] px-[20px] text-[10.5px] font-bold text-white shadow-[0_7px_16px_rgba(5,94,49,.12)] transition hover:opacity-95"
+              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] bg-[linear-gradient(180deg,#076636_0%,#03542c_100%)] px-[20px] text-[10.5px] font-normal text-white shadow-[0_7px_16px_rgba(5,94,49,.12)] transition hover:opacity-95"
             >
               <Save className="h-[15px] w-[15px]" />
               Save Testimonial
@@ -211,10 +211,10 @@ export default function AddNewTestimonialPage() {
           <div className="space-y-[12px]">
             {/* TESTIMONIAL INFORMATION */}
             <section className="rounded-[9px] border border-[#e7e9ec] bg-white px-[18px] py-[16px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-              <h2 className="text-[14px] font-semibold text-[#17234a]">
+              <h2 className="text-[14px] font-normal text-[#17234a]">
                 Testimonial Information
               </h2>
-              <p className="mt-[4px] text-[10.5px] font-semibold text-[#66738b]">
+              <p className="mt-[4px] text-[10.5px] font-normal text-[#66738b]">
                 Add testimonial details as shared by the person.
               </p>
 
@@ -225,7 +225,7 @@ export default function AddNewTestimonialPage() {
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     placeholder="Enter full name"
-                    className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[13px] text-[11px] font-semibold text-[#2d3b58] outline-none placeholder:text-[#8d97aa]"
+                    className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[13px] text-[11px] font-normal text-[#2d3b58] outline-none placeholder:text-[#8d97aa]"
                   />
                 </div>
 
@@ -235,7 +235,7 @@ export default function AddNewTestimonialPage() {
                     value={role}
                     onChange={(e) => setRole(e.target.value)}
                     placeholder="e.g., Volunteer, Beneficiary, Donor, Partner (Optional)"
-                    className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[13px] text-[11px] font-semibold text-[#2d3b58] outline-none placeholder:text-[#8d97aa]"
+                    className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[13px] text-[11px] font-normal text-[#2d3b58] outline-none placeholder:text-[#8d97aa]"
                   />
                 </div>
 
@@ -245,7 +245,7 @@ export default function AddNewTestimonialPage() {
                     value={organization}
                     onChange={(e) => setOrganization(e.target.value)}
                     placeholder="Enter organization or affiliation"
-                    className="h-[40px] w-[50%] min-w-[320px] rounded-[6px] border border-[#dfe4e8] bg-white px-[13px] text-[11px] font-semibold text-[#2d3b58] outline-none placeholder:text-[#8d97aa]"
+                    className="h-[40px] w-[50%] min-w-[320px] rounded-[6px] border border-[#dfe4e8] bg-white px-[13px] text-[11px] font-normal text-[#2d3b58] outline-none placeholder:text-[#8d97aa]"
                   />
                 </div>
 
@@ -256,7 +256,7 @@ export default function AddNewTestimonialPage() {
                     <div className="flex min-h-[42px] flex-wrap items-center gap-[12px] border-b border-[#e7e9ec] px-[12px] text-[#2f3c56]">
                       <button
                         type="button"
-                        className="inline-flex items-center gap-[12px] text-[10.5px] font-semibold"
+                        className="inline-flex items-center gap-[12px] text-[10.5px] font-normal"
                       >
                         Paragraph
                         <ChevronDown className="h-[13px] w-[13px]" />
@@ -290,11 +290,11 @@ export default function AddNewTestimonialPage() {
                       value={message}
                       onChange={(e) => setMessage(e.target.value.slice(0, 1000))}
                       placeholder="Write the testimonial message here..."
-                      className="h-[118px] w-full resize-none bg-white px-[14px] py-[12px] text-[11px] font-semibold text-[#2d3b58] outline-none placeholder:text-[#8d97aa]"
+                      className="h-[118px] w-full resize-none bg-white px-[14px] py-[12px] text-[11px] font-normal text-[#2d3b58] outline-none placeholder:text-[#8d97aa]"
                     />
 
                     <div className="flex justify-end px-[12px] pb-[8px]">
-                      <span className="text-[9px] font-semibold text-[#6d7890]">
+                      <span className="text-[9px] font-normal text-[#6d7890]">
                         {message.length}/1000
                       </span>
                     </div>
@@ -309,7 +309,7 @@ export default function AddNewTestimonialPage() {
                       value={location}
                       onChange={(e) => setLocation(e.target.value)}
                       placeholder="e.g., Delhi, India"
-                      className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white pl-[36px] pr-[12px] text-[11px] font-semibold text-[#2d3b58] outline-none placeholder:text-[#8d97aa]"
+                      className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white pl-[36px] pr-[12px] text-[11px] font-normal text-[#2d3b58] outline-none placeholder:text-[#8d97aa]"
                     />
                   </div>
                 </div>
@@ -321,7 +321,7 @@ export default function AddNewTestimonialPage() {
                     <input
                       value={date}
                       onChange={(e) => setDate(e.target.value)}
-                      className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white pl-[36px] pr-[12px] text-[11px] font-semibold text-[#2d3b58] outline-none"
+                      className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white pl-[36px] pr-[12px] text-[11px] font-normal text-[#2d3b58] outline-none"
                     />
                   </div>
                 </div>
@@ -330,14 +330,14 @@ export default function AddNewTestimonialPage() {
                   <FieldLabel optional>Rating</FieldLabel>
                   <div className="flex items-center gap-[16px]">
                     <RatingStars rating={rating} setRating={setRating} size={21} />
-                    <span className="text-[10px] font-bold text-[#44516a]">
+                    <span className="text-[10px] font-normal text-[#44516a]">
                       {rating.toFixed(1)} out of 5
                     </span>
                   </div>
                 </div>
 
                 <div className="col-span-2">
-                  <p className="text-[11px] font-bold text-[#24345e]">
+                  <p className="text-[11px] font-normal text-[#24345e]">
                     Featured Testimonial
                   </p>
 
@@ -346,7 +346,7 @@ export default function AddNewTestimonialPage() {
                       checked={featured}
                       onChange={() => setFeatured((v) => !v)}
                     />
-                    <span className="text-[9.5px] font-semibold text-[#66738b]">
+                    <span className="text-[9.5px] font-normal text-[#66738b]">
                       Show this testimonial in the featured section on homepage.
                     </span>
                   </div>
@@ -356,10 +356,10 @@ export default function AddNewTestimonialPage() {
 
             {/* PROFILE PHOTO */}
             <section className="rounded-[9px] border border-[#e7e9ec] bg-white px-[18px] py-[16px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-              <h2 className="text-[14px] font-semibold text-[#17234a]">
+              <h2 className="text-[14px] font-normal text-[#17234a]">
                 Profile / Photo
               </h2>
-              <p className="mt-[4px] text-[10.5px] font-semibold text-[#66738b]">
+              <p className="mt-[4px] text-[10.5px] font-normal text-[#66738b]">
                 Upload profile photo of the person (Optional).
               </p>
 
@@ -378,16 +378,16 @@ export default function AddNewTestimonialPage() {
                   className="flex h-[96px] flex-col items-center justify-center rounded-[7px] border border-dashed border-[#d7dde5] bg-[#fffefc] transition hover:border-[#0b6a3b] hover:bg-[#f0f7f2]"
                 >
                   <Upload className="h-[22px] w-[22px] text-[#35435e]" />
-                  <span className="mt-[7px] text-[10px] font-semibold text-[#5d6981]">
+                  <span className="mt-[7px] text-[10px] font-normal text-[#5d6981]">
                     {photoPreview ? "Click to change photo" : "Click to upload or drag and drop"}
                   </span>
-                  <span className="mt-[5px] text-[9px] font-semibold text-[#8490a4]">
+                  <span className="mt-[5px] text-[9px] font-normal text-[#8490a4]">
                     PNG, JPG or WEBP (Max. 2MB)
                   </span>
                 </button>
 
                 <div>
-                  <p className="text-[11px] font-bold text-[#24345e]">
+                  <p className="text-[11px] font-normal text-[#24345e]">
                     Photo Preview
                   </p>
                   <div className="mt-[8px] grid h-[76px] w-[76px] place-items-center overflow-hidden rounded-full border border-[#dce1e7] bg-[#f1f3f6] text-[#b5becd]">
@@ -406,10 +406,10 @@ export default function AddNewTestimonialPage() {
           <div className="space-y-[12px]">
             {/* DISPLAY SETTINGS */}
             <section className="rounded-[9px] border border-[#e7e9ec] bg-white px-[18px] py-[16px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-              <h2 className="text-[14px] font-semibold text-[#17234a]">
+              <h2 className="text-[14px] font-normal text-[#17234a]">
                 Display Settings
               </h2>
-              <p className="mt-[4px] text-[10.5px] font-semibold text-[#66738b]">
+              <p className="mt-[4px] text-[10.5px] font-normal text-[#66738b]">
                 Control how this testimonial will appear.
               </p>
 
@@ -419,7 +419,7 @@ export default function AddNewTestimonialPage() {
                   <select
                     value={status}
                     onChange={(e) => setStatus(e.target.value)}
-                    className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10.5px] font-semibold text-[#2f3d58] outline-none"
+                    className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10.5px] font-normal text-[#2f3d58] outline-none"
                   >
                     <option>Published</option>
                     <option>Pending Review</option>
@@ -446,7 +446,7 @@ export default function AddNewTestimonialPage() {
                       return (
                         <label
                           key={String(label)}
-                          className="flex items-center gap-[10px] text-[10px] font-semibold text-[#46546d]"
+                          className="flex items-center gap-[10px] text-[10px] font-normal text-[#46546d]"
                         >
                           <button
                             type="button"
@@ -470,9 +470,9 @@ export default function AddNewTestimonialPage() {
                   <input
                     value={order}
                     onChange={(e) => setOrder(e.target.value)}
-                    className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10.5px] font-semibold text-[#2f3d58] outline-none"
+                    className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10.5px] font-normal text-[#2f3d58] outline-none"
                   />
-                  <p className="mt-[6px] text-[9px] font-semibold text-[#738097]">
+                  <p className="mt-[6px] text-[9px] font-normal text-[#738097]">
                     Lower numbers appear first.
                   </p>
                 </div>
@@ -483,9 +483,9 @@ export default function AddNewTestimonialPage() {
                     value={tags}
                     onChange={(e) => setTags(e.target.value)}
                     placeholder="Add tags and press Enter"
-                    className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10.5px] font-semibold text-[#2f3d58] outline-none placeholder:text-[#8d97aa]"
+                    className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10.5px] font-normal text-[#2f3d58] outline-none placeholder:text-[#8d97aa]"
                   />
-                  <p className="mt-[6px] text-[9px] font-semibold text-[#738097]">
+                  <p className="mt-[6px] text-[9px] font-normal text-[#738097]">
                     E.g. Compassion, Seva, Support, Impact
                   </p>
                 </div>
@@ -494,17 +494,17 @@ export default function AddNewTestimonialPage() {
 
             {/* PREVIEW */}
             <section className="rounded-[9px] border border-[#e7e9ec] bg-white px-[18px] py-[16px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-              <h2 className="text-[14px] font-semibold text-[#17234a]">
+              <h2 className="text-[14px] font-normal text-[#17234a]">
                 Testimonial Preview
               </h2>
-              <p className="mt-[4px] text-[10.5px] font-semibold text-[#66738b]">
+              <p className="mt-[4px] text-[10.5px] font-normal text-[#66738b]">
                 This is how the testimonial will appear on the website.
               </p>
 
               <div className="mt-[14px] rounded-[8px] border border-[#e3e7ea] bg-white px-[20px] py-[18px] text-center">
                 <Quote className="mx-auto h-[30px] w-[30px] fill-[#0b6a3b] text-[#0b6a3b]" />
 
-                <p className="mx-auto mt-[10px] max-w-[330px] text-[10.5px] font-semibold leading-[1.7] text-[#252d39]">
+                <p className="mx-auto mt-[10px] max-w-[330px] text-[10.5px] font-normal leading-[1.7] text-[#252d39]">
                   {previewMessage}
                 </p>
 
@@ -516,13 +516,13 @@ export default function AddNewTestimonialPage() {
                   </div>
 
                   <div className="text-left">
-                    <p className="text-[11px] font-semibold text-[#1a2646]">
+                    <p className="text-[11px] font-normal text-[#1a2646]">
                       {previewName}
                     </p>
-                    <p className="mt-[3px] text-[9px] font-bold text-[#178248]">
+                    <p className="mt-[3px] text-[9px] font-normal text-[#178248]">
                       {previewRole}
                     </p>
-                    <p className="mt-[3px] text-[9px] font-semibold text-[#6a768c]">
+                    <p className="mt-[3px] text-[9px] font-normal text-[#6a768c]">
                       {previewLocation}
                       <span className="mx-[5px]">•</span>
                       {date}
@@ -544,8 +544,8 @@ export default function AddNewTestimonialPage() {
             <div className="grid h-[24px] w-[24px] place-items-center rounded-full border border-[#cfe1d4] bg-white text-[#0d6b3e]">
               i
             </div>
-            <p className="text-[9.5px] font-semibold text-[#38654b]">
-              <strong className="font-semibold">Tip:</strong>{" "}
+            <p className="text-[9.5px] font-normal text-[#38654b]">
+              <span className="font-normal">Tip:</span>{" "}
               After saving, you can edit, reorder or feature this testimonial anytime.
             </p>
           </div>
@@ -554,7 +554,7 @@ export default function AddNewTestimonialPage() {
             <button
               type="button"
               onClick={() => router.push("/testimonials")}
-              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] border border-[#dfe3e7] bg-white px-[18px] text-[10px] font-bold text-[#273655] transition hover:bg-slate-50"
+              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] border border-[#dfe3e7] bg-white px-[18px] text-[10px] font-normal text-[#273655] transition hover:bg-slate-50"
             >
               <X className="h-[14px] w-[14px]" />
               Cancel
@@ -566,7 +566,7 @@ export default function AddNewTestimonialPage() {
                 alert("Saved as Draft!");
                 router.push("/testimonials");
               }}
-              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] border border-[#dfe3e7] bg-white px-[18px] text-[10px] font-bold text-[#273655] transition hover:bg-slate-50"
+              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] border border-[#dfe3e7] bg-white px-[18px] text-[10px] font-normal text-[#273655] transition hover:bg-slate-50"
             >
               <Bookmark className="h-[14px] w-[14px]" />
               Save as Draft
@@ -578,7 +578,7 @@ export default function AddNewTestimonialPage() {
                 alert("Testimonial Saved Successfully!");
                 router.push("/testimonials");
               }}
-              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] bg-[linear-gradient(180deg,#076636_0%,#03542c_100%)] px-[20px] text-[10px] font-bold text-white shadow-[0_7px_16px_rgba(5,94,49,.12)] transition hover:opacity-95"
+              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] bg-[linear-gradient(180deg,#076636_0%,#03542c_100%)] px-[20px] text-[10px] font-normal text-white shadow-[0_7px_16px_rgba(5,94,49,.12)] transition hover:opacity-95"
             >
               <Save className="h-[14px] w-[14px]" />
               Save Testimonial

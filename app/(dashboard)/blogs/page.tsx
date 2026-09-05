@@ -118,12 +118,12 @@ function MetricCard({
       </div>
 
       <div className="min-w-0">
-        <p className="text-[9.5px] font-extrabold text-[#34435e]">{label}</p>
+        <p className="text-[9.5px] font-normal text-[#34435e]">{label}</p>
         <div className="mt-[2px] flex items-baseline gap-[6px]">
-          <span className="text-[17px] font-extrabold leading-none tracking-[-0.03em] text-[#10204a]">
+          <span className="text-[17px] font-normal leading-none tracking-[-0.03em] text-[#10204a]">
             {value}
           </span>
-          <div className="truncate text-[8.5px] font-semibold text-[#66738b]">{lines}</div>
+          <div className="truncate text-[8.5px] font-normal text-[#66738b]">{lines}</div>
         </div>
       </div>
     </article>
@@ -151,11 +151,11 @@ export default function BlogAwarenessPage() {
       <div className="min-h-full w-full">
         <header className="flex items-start justify-between gap-[16px]">
           <div>
-            <h1 className="text-[28px] font-extrabold leading-none tracking-[-0.03em] text-[#075b33]">
+            <h1 className="text-[28px] font-normal leading-none tracking-[-0.03em] text-[#075b33]">
               Blog &amp; Awareness
             </h1>
 
-            <nav className="mt-[10px] flex items-center gap-[8px] text-[11px] font-semibold text-[#1d2b58]">
+            <nav className="mt-[10px] flex items-center gap-[8px] text-[11px] font-normal text-[#1d2b58]">
               <span
                 onClick={() => router.push("/")}
                 className="cursor-pointer transition hover:text-[#075b33]"
@@ -173,7 +173,7 @@ export default function BlogAwarenessPage() {
               onClick={(e) => {
                 setShowCategories(true);
               }}
-              className="inline-flex h-[42px] items-center gap-[9px] rounded-[7px] border border-[#dfe3e7] bg-white px-[20px] text-[10.5px] font-bold text-[#273655] hover:bg-slate-50 transition"
+              className="inline-flex h-[42px] items-center gap-[9px] rounded-[7px] border border-[#dfe3e7] bg-white px-[20px] text-[10.5px] font-normal text-[#273655] hover:bg-slate-50 transition"
             >
               <FolderClosed className="h-[15px] w-[15px]" />
               Manage Categories
@@ -182,7 +182,7 @@ export default function BlogAwarenessPage() {
             <button
               type="button"
               onClick={() => router.push("/blogs/new")}
-              className="inline-flex h-[42px] items-center gap-[9px] rounded-[7px] bg-[linear-gradient(180deg,#076636_0%,#03542c_100%)] px-[20px] text-[10.5px] font-bold text-white shadow-[0_7px_16px_rgba(5,94,49,.12)] transition hover:opacity-95"
+              className="inline-flex h-[42px] items-center gap-[9px] rounded-[7px] bg-[linear-gradient(180deg,#076636_0%,#03542c_100%)] px-[20px] text-[10.5px] font-normal text-white shadow-[0_7px_16px_rgba(5,94,49,.12)] transition hover:opacity-95"
             >
               <Plus className="h-[15px] w-[15px]" />
               Add New Post
@@ -210,7 +210,7 @@ export default function BlogAwarenessPage() {
             iconClass="bg-blue-50 text-blue-700"
             label="Total Views"
             value="24,580"
-            lines={<span className="font-bold text-emerald-700">+18.6%</span>}
+            lines={<span className="font-normal text-emerald-700">+18.6%</span>}
           />
 
           <MetricCard
@@ -239,8 +239,8 @@ export default function BlogAwarenessPage() {
         <section className="mt-[20px] grid items-start gap-[20px] xl:grid-cols-[minmax(0,1.48fr)_minmax(360px,0.98fr)]">
           <section className="overflow-hidden rounded-[10px] border border-[#e6e9ec] bg-white shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
             <div className="flex h-[54px] items-center justify-between border-b border-[#edf0f2] px-[20px]">
-              <h2 className="text-[14px] font-extrabold text-[#17234a]">Recent Blog Posts</h2>
-              <button className="inline-flex items-center gap-[8px] text-[10px] font-extrabold text-[#14683d]">
+              <h2 className="text-[14px] font-normal text-[#17234a]">Recent Blog Posts</h2>
+              <button className="inline-flex items-center gap-[8px] text-[10px] font-normal text-[#14683d]">
                 View All Posts
                 <ArrowRight className="h-[13px] w-[13px]" />
               </button>
@@ -249,7 +249,7 @@ export default function BlogAwarenessPage() {
             <div className="overflow-x-auto">
               <table className="w-full min-w-[760px] border-collapse text-left">
                 <thead>
-                  <tr className="h-[42px] border-b border-[#edf0f2] text-[8.5px] font-extrabold uppercase tracking-[0.04em] text-[#4a566d]">
+                  <tr className="h-[42px] border-b border-[#edf0f2] text-[8.5px] font-normal uppercase tracking-[0.04em] text-[#4a566d]">
                     <th className="px-[20px]">Title</th>
                     <th className="px-[10px]">Category</th>
                     <th className="px-[10px]">Status</th>
@@ -265,19 +265,19 @@ export default function BlogAwarenessPage() {
                       <td className="px-[20px]">
                         <div className="flex min-w-[285px] items-center gap-[12px]">
                           <img src={post.image} alt="" className="h-[42px] w-[66px] shrink-0 rounded-[6px] border border-[#e5e8eb] object-cover" />
-                          <p className="max-w-[270px] text-[10.5px] font-extrabold leading-[1.45] text-[#19274a]">{post.title}</p>
+                          <p className="max-w-[270px] text-[10.5px] font-normal leading-[1.45] text-[#19274a]">{post.title}</p>
                         </div>
                       </td>
 
                       <td className="px-[10px]">
-                        <span className={`inline-flex rounded-[5px] border px-[9px] py-[4px] text-[8px] font-bold ${categoryTone[post.category]}`}>
+                        <span className={`inline-flex rounded-[5px] border px-[9px] py-[4px] text-[8px] font-normal ${categoryTone[post.category]}`}>
                           {post.category}
                         </span>
                       </td>
 
                       <td className="px-[10px]">
                         <span
-                          className={`inline-flex rounded-[5px] border px-[9px] py-[4px] text-[8px] font-bold ${post.status === "Published"
+                          className={`inline-flex rounded-[5px] border px-[9px] py-[4px] text-[8px] font-normal ${post.status === "Published"
                               ? "border-emerald-200 bg-emerald-50 text-emerald-700"
                               : "border-amber-200 bg-amber-50 text-amber-700"
                             }`}
@@ -286,11 +286,11 @@ export default function BlogAwarenessPage() {
                         </span>
                       </td>
 
-                      <td className="px-[10px] text-[9.5px] font-bold text-[#34425e]">
+                      <td className="px-[10px] text-[9.5px] font-normal text-[#34425e]">
                         {post.views ? post.views.toLocaleString() : "—"}
                       </td>
 
-                      <td className="px-[10px] text-[9.5px] font-bold text-[#34425e]">
+                      <td className="px-[10px] text-[9.5px] font-normal text-[#34425e]">
                         {post.date ?? "—"}
                       </td>
 
@@ -303,7 +303,7 @@ export default function BlogAwarenessPage() {
               </table>
             </div>
 
-            <button className="flex h-[50px] w-full items-center justify-center gap-[8px] border-t border-[#edf0f2] text-[10px] font-extrabold text-[#14683d]">
+            <button className="flex h-[50px] w-full items-center justify-center gap-[8px] border-t border-[#edf0f2] text-[10px] font-normal text-[#14683d]">
               View all posts
               <ArrowRight className="h-[13px] w-[13px]" />
             </button>
@@ -311,8 +311,8 @@ export default function BlogAwarenessPage() {
 
           <section className="overflow-hidden rounded-[10px] border border-[#e6e9ec] bg-white shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
             <div className="flex h-[54px] items-center justify-between border-b border-[#edf0f2] px-[20px]">
-              <h2 className="text-[14px] font-extrabold text-[#17234a]">Awareness Campaigns</h2>
-              <button className="inline-flex items-center gap-[8px] text-[10px] font-extrabold text-[#14683d]">
+              <h2 className="text-[14px] font-normal text-[#17234a]">Awareness Campaigns</h2>
+              <button className="inline-flex items-center gap-[8px] text-[10px] font-normal text-[#14683d]">
                 View All
                 <ArrowRight className="h-[13px] w-[13px]" />
               </button>
@@ -329,12 +329,12 @@ export default function BlogAwarenessPage() {
                   </div>
 
                   <div className="min-w-0">
-                    <p className="truncate text-[10.5px] font-extrabold text-[#19274a]">{campaign.title}</p>
-                    <p className="mt-[4px] text-[9px] font-semibold text-[#68758d]">{campaign.date}</p>
+                    <p className="truncate text-[10.5px] font-normal text-[#19274a]">{campaign.title}</p>
+                    <p className="mt-[4px] text-[9px] font-normal text-[#68758d]">{campaign.date}</p>
                   </div>
 
                   <span
-                    className={`rounded-[5px] border px-[10px] py-[4px] text-[8px] font-bold ${campaign.status === "Active"
+                    className={`rounded-[5px] border px-[10px] py-[4px] text-[8px] font-normal ${campaign.status === "Active"
                         ? "border-emerald-200 bg-emerald-50 text-emerald-700"
                         : "border-slate-200 bg-slate-50 text-slate-600"
                       }`}
@@ -347,7 +347,7 @@ export default function BlogAwarenessPage() {
               ))}
             </div>
 
-            <button className="flex h-[50px] w-full items-center justify-center gap-[8px] border-t border-[#edf0f2] text-[10px] font-extrabold text-[#14683d]">
+            <button className="flex h-[50px] w-full items-center justify-center gap-[8px] border-t border-[#edf0f2] text-[10px] font-normal text-[#14683d]">
               Create New Campaign
               <ArrowRight className="h-[13px] w-[13px]" />
             </button>
@@ -356,7 +356,7 @@ export default function BlogAwarenessPage() {
 
         <section className="mt-[20px] grid items-stretch gap-[20px] xl:grid-cols-[minmax(380px,0.76fr)_minmax(0,1fr)]">
           <section className="rounded-[10px] border border-[#e6e9ec] bg-white px-[20px] py-[16px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-            <h2 className="text-[14px] font-extrabold text-[#17234a]">Quick Actions</h2>
+            <h2 className="text-[14px] font-normal text-[#17234a]">Quick Actions</h2>
 
             <div className="mt-[18px] grid grid-cols-5 gap-[18px]">
               {[
@@ -381,7 +381,7 @@ export default function BlogAwarenessPage() {
                     <div className="mx-auto grid h-[64px] w-[64px] place-items-center rounded-[10px] bg-[linear-gradient(180deg,#eef7f1_0%,#f7faf8_100%)] text-[#14683d]">
                       <ActionIcon className="h-[28px] w-[28px]" strokeWidth={1.8} />
                     </div>
-                    <span className="mt-[9px] block text-[8.5px] font-bold leading-[1.35] text-[#293854]">
+                    <span className="mt-[9px] block text-[8.5px] font-normal leading-[1.35] text-[#293854]">
                       {String(label)}
                     </span>
                   </button>
@@ -391,7 +391,7 @@ export default function BlogAwarenessPage() {
           </section>
 
           <section className="rounded-[10px] border border-[#e6e9ec] bg-white px-[20px] py-[16px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-            <h2 className="text-[14px] font-extrabold text-[#17234a]">Content Insights (This Month)</h2>
+            <h2 className="text-[14px] font-normal text-[#17234a]">Content Insights (This Month)</h2>
 
             <div className="mt-[18px] grid grid-cols-4 gap-[20px]">
               {[
@@ -430,9 +430,9 @@ export default function BlogAwarenessPage() {
                   </div>
 
                   <div className="min-w-0">
-                    <p className="text-[22px] font-extrabold leading-none text-[#10204a]">{item.value}</p>
-                    <p className="mt-[4px] text-[8.8px] font-bold leading-[1.3] text-[#34425e]">{item.label}</p>
-                    <p className="mt-[8px] text-[8px] font-extrabold text-emerald-700">{item.note}</p>
+                    <p className="text-[22px] font-normal leading-none text-[#10204a]">{item.value}</p>
+                    <p className="mt-[4px] text-[8.8px] font-normal leading-[1.3] text-[#34425e]">{item.label}</p>
+                    <p className="mt-[8px] text-[8px] font-normal text-emerald-700">{item.note}</p>
                   </div>
                 </div>
               ))}
@@ -445,8 +445,8 @@ export default function BlogAwarenessPage() {
             <Info className="h-[15px] w-[15px]" />
           </div>
 
-          <p className="text-[10px] font-semibold text-[#38654b]">
-            <strong className="font-extrabold">Tip:</strong>{" "}
+          <p className="text-[10px] font-normal text-[#38654b]">
+            <span className="font-normal">Tip:</span>{" "}
             Consistent blogging and awareness campaigns help increase trust, engagement and support for our mission.
           </p>
         </section>

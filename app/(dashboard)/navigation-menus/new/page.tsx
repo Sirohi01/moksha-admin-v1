@@ -44,11 +44,11 @@ function FieldLabel({
   optional?: boolean;
 }) {
   return (
-    <label className="mb-[6px] block text-[11px] font-bold text-[#24345e]">
+    <label className="mb-[6px] block text-[11px] font-normal text-[#24345e]">
       {children}
       {required ? <span className="ml-[2px] text-[#dc3c3c]">*</span> : null}
       {optional ? (
-        <span className="font-semibold text-[#66738b]"> (Optional)</span>
+        <span className="font-normal text-[#66738b]"> (Optional)</span>
       ) : null}
     </label>
   );
@@ -88,10 +88,10 @@ function Panel({
 }) {
   return (
     <section className="rounded-[9px] border border-[#e7e9ec] bg-white px-[18px] py-[16px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-      <h2 className="text-[14px] font-extrabold text-[#17234a]">{title}</h2>
+      <h2 className="text-[14px] font-normal text-[#17234a]">{title}</h2>
 
       {subtitle ? (
-        <p className="mt-[4px] text-[10.5px] font-semibold text-[#66738b]">
+        <p className="mt-[4px] text-[10.5px] font-normal text-[#66738b]">
           {subtitle}
         </p>
       ) : null}
@@ -150,11 +150,11 @@ export default function AddNewMenuPage() {
       <div className="min-h-full w-full">
         {/* HEADER */}
         <header>
-          <h1 className="text-[28px] font-extrabold leading-none tracking-[-0.03em] text-[#075b33]">
+          <h1 className="text-[28px] font-normal leading-none tracking-[-0.03em] text-[#075b33]">
             Add New Menu
           </h1>
 
-          <nav className="mt-[10px] flex items-center gap-[8px] text-[11px] font-semibold text-[#1d2b58]">
+          <nav className="mt-[10px] flex items-center gap-[8px] text-[11px] font-normal text-[#1d2b58]">
             <span
               onClick={() => router.push("/")}
               className="cursor-pointer transition hover:text-[#075b33]"
@@ -190,10 +190,10 @@ export default function AddNewMenuPage() {
                         setMenuName(event.target.value.slice(0, 100))
                       }
                       placeholder="Enter menu name (e.g., Primary Menu)"
-                      className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[13px] pr-[54px] text-[10.5px] font-semibold text-[#2d3b58] outline-none placeholder:text-[#8d97aa]"
+                      className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[13px] pr-[54px] text-[10.5px] font-normal text-[#2d3b58] outline-none placeholder:text-[#8d97aa]"
                     />
 
-                    <span className="absolute right-[10px] top-1/2 -translate-y-1/2 text-[8.5px] font-semibold text-[#6d7890]">
+                    <span className="absolute right-[10px] top-1/2 -translate-y-1/2 text-[8.5px] font-normal text-[#6d7890]">
                       {menuName.length}/100
                     </span>
                   </div>
@@ -207,7 +207,7 @@ export default function AddNewMenuPage() {
                   <select
                     value={menuLocation}
                     onChange={(event) => setMenuLocation(event.target.value)}
-                    className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10.5px] font-semibold text-[#2f3d58] outline-none"
+                    className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10.5px] font-normal text-[#2f3d58] outline-none"
                   >
                     <option value="">Select menu location</option>
                     <option>Header</option>
@@ -216,7 +216,7 @@ export default function AddNewMenuPage() {
                     <option>Top Bar</option>
                   </select>
 
-                  <p className="mt-[6px] text-[9px] font-semibold text-[#738097]">
+                  <p className="mt-[6px] text-[9px] font-normal text-[#738097]">
                     Choose where this menu will appear on your website.
                   </p>
                 </div>
@@ -230,16 +230,16 @@ export default function AddNewMenuPage() {
                       setDescription(event.target.value.slice(0, 200))
                     }
                     placeholder="Enter a short description for this menu..."
-                    className="h-[134px] w-full resize-none rounded-[6px] border border-[#dfe4e8] bg-white px-[13px] py-[11px] text-[10.5px] font-semibold text-[#2d3b58] outline-none placeholder:text-[#8d97aa]"
+                    className="h-[134px] w-full resize-none rounded-[6px] border border-[#dfe4e8] bg-white px-[13px] py-[11px] text-[10.5px] font-normal text-[#2d3b58] outline-none placeholder:text-[#8d97aa]"
                   />
 
                   <div className="mt-[6px] flex justify-end">
-                    <span className="text-[8.5px] font-semibold text-[#6d7890]">
+                    <span className="text-[8.5px] font-normal text-[#6d7890]">
                       {description.length}/200
                     </span>
                   </div>
 
-                  <p className="mt-[6px] text-[9px] font-semibold text-[#738097]">
+                  <p className="mt-[6px] text-[9px] font-normal text-[#738097]">
                     This is only for your reference and won&apos;t be displayed
                     on the website.
                   </p>
@@ -251,7 +251,7 @@ export default function AddNewMenuPage() {
                   <select
                     value={menuType}
                     onChange={(event) => setMenuType(event.target.value)}
-                    className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10.5px] font-semibold text-[#2f3d58] outline-none"
+                    className="h-[40px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] text-[10.5px] font-normal text-[#2f3d58] outline-none"
                   >
                     <option value="">Select menu type</option>
                     <option>Standard Menu</option>
@@ -259,7 +259,7 @@ export default function AddNewMenuPage() {
                     <option>Utility Menu</option>
                   </select>
 
-                  <p className="mt-[6px] text-[9px] font-semibold text-[#738097]">
+                  <p className="mt-[6px] text-[9px] font-normal text-[#738097]">
                     Choose the type of menu you want to create.
                   </p>
                 </div>
@@ -276,11 +276,11 @@ export default function AddNewMenuPage() {
                   <div className="text-center">
                     <ListTree className="mx-auto h-[30px] w-[30px] text-[#1f2937]" />
 
-                    <p className="mt-[8px] text-[10.5px] font-extrabold text-[#1e2b4d]">
+                    <p className="mt-[8px] text-[10.5px] font-normal text-[#1e2b4d]">
                       No menu items added yet
                     </p>
 
-                    <p className="mt-[6px] text-[9.5px] font-semibold text-[#68758d]">
+                    <p className="mt-[6px] text-[9.5px] font-normal text-[#68758d]">
                       Start building your menu by adding items from the right
                       panel.
                     </p>
@@ -293,10 +293,10 @@ export default function AddNewMenuPage() {
                         className="flex min-h-[40px] items-center justify-between rounded-[6px] border border-[#e3e7ea] bg-white px-[12px]"
                       >
                         <div className="flex items-center gap-[10px]">
-                          <span className="text-[9px] font-bold text-[#7b879a]">
+                          <span className="text-[9px] font-normal text-[#7b879a]">
                             {index + 1}
                           </span>
-                          <span className="text-[9.5px] font-bold text-[#2e3c58]">
+                          <span className="text-[9.5px] font-normal text-[#2e3c58]">
                             {item.label}
                           </span>
                         </div>
@@ -326,10 +326,10 @@ export default function AddNewMenuPage() {
               <div className="space-y-[10px]">
                 <div className="flex items-center justify-between gap-[16px]">
                   <div>
-                    <p className="text-[10.5px] font-extrabold text-[#213050]">
+                    <p className="text-[10.5px] font-normal text-[#213050]">
                       Enable Mega Menu
                     </p>
-                    <p className="mt-[3px] text-[9px] font-semibold text-[#6d7890]">
+                    <p className="mt-[3px] text-[9px] font-normal text-[#6d7890]">
                       Allow dropdown items to display in mega menu layout.
                     </p>
                   </div>
@@ -342,10 +342,10 @@ export default function AddNewMenuPage() {
 
                 <div className="flex items-center justify-between gap-[16px]">
                   <div>
-                    <p className="text-[10.5px] font-extrabold text-[#213050]">
+                    <p className="text-[10.5px] font-normal text-[#213050]">
                       Show Menu Icons
                     </p>
-                    <p className="mt-[3px] text-[9px] font-semibold text-[#6d7890]">
+                    <p className="mt-[3px] text-[9px] font-normal text-[#6d7890]">
                       Display icons next to menu items.
                     </p>
                   </div>
@@ -358,10 +358,10 @@ export default function AddNewMenuPage() {
 
                 <div className="flex items-center justify-between gap-[16px]">
                   <div>
-                    <p className="text-[10.5px] font-extrabold text-[#213050]">
+                    <p className="text-[10.5px] font-normal text-[#213050]">
                       Open Links in New Tab
                     </p>
-                    <p className="mt-[3px] text-[9px] font-semibold text-[#6d7890]">
+                    <p className="mt-[3px] text-[9px] font-normal text-[#6d7890]">
                       Open all external links in a new browser tab.
                     </p>
                   </div>
@@ -386,7 +386,7 @@ export default function AddNewMenuPage() {
                       key={tab}
                       type="button"
                       onClick={() => setSourceTab(tab)}
-                      className={`relative h-[38px] flex-1 text-[9.5px] font-bold ${sourceTab === tab
+                      className={`relative h-[38px] flex-1 text-[9.5px] font-normal ${sourceTab === tab
                           ? "text-[#075b33]"
                           : "text-[#5f6b82]"
                         }`}
@@ -408,7 +408,7 @@ export default function AddNewMenuPage() {
                       value={search}
                       onChange={(event) => setSearch(event.target.value)}
                       placeholder="Search pages..."
-                      className="h-[36px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] pr-[40px] text-[9.5px] font-semibold text-[#2f3d58] outline-none placeholder:text-[#8d97aa]"
+                      className="h-[36px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[12px] pr-[40px] text-[9.5px] font-normal text-[#2f3d58] outline-none placeholder:text-[#8d97aa]"
                     />
 
                     <Search className="absolute right-[12px] top-1/2 h-[14px] w-[14px] -translate-y-1/2 text-[#5d6b84]" />
@@ -437,11 +437,11 @@ export default function AddNewMenuPage() {
                             <Check className="h-[11px] w-[11px]" />
                           </button>
 
-                          <span className="truncate text-[9.5px] font-semibold text-[#44516a]">
+                          <span className="truncate text-[9.5px] font-normal text-[#44516a]">
                             {item.label}
                           </span>
 
-                          <span className="text-[8px] font-semibold text-[#7a8598]">
+                          <span className="text-[8px] font-normal text-[#7a8598]">
                             {item.meta ?? ""}
                           </span>
 
@@ -449,7 +449,7 @@ export default function AddNewMenuPage() {
                             type="button"
                             disabled={alreadyAdded}
                             onClick={() => addItem(item)}
-                            className={`inline-flex h-[28px] items-center justify-center gap-[5px] rounded-[5px] border px-[8px] text-[8.5px] font-bold ${alreadyAdded
+                            className={`inline-flex h-[28px] items-center justify-center gap-[5px] rounded-[5px] border px-[8px] text-[8.5px] font-normal ${alreadyAdded
                                 ? "cursor-default border-[#e3e6e9] bg-[#f5f6f7] text-[#9aa4b3]"
                                 : "border-[#dfe4e8] bg-white text-[#35445f]"
                               }`}
@@ -464,7 +464,7 @@ export default function AddNewMenuPage() {
 
                   <button
                     type="button"
-                    className="mt-[12px] flex w-full items-center justify-center gap-[8px] text-[8.8px] font-bold text-[#56637a]"
+                    className="mt-[12px] flex w-full items-center justify-center gap-[8px] text-[8.8px] font-normal text-[#56637a]"
                   >
                     View all pages
                     <ArrowRight className="h-[12px] w-[12px]" />
@@ -473,10 +473,10 @@ export default function AddNewMenuPage() {
               ) : (
                 <div className="mt-[14px] flex min-h-[270px] items-center justify-center rounded-[7px] border border-dashed border-[#e1e5e8] bg-[#fcfcfc] text-center">
                   <div>
-                    <p className="text-[10px] font-extrabold text-[#26344f]">
+                    <p className="text-[10px] font-normal text-[#26344f]">
                       {sourceTab}
                     </p>
-                    <p className="mt-[5px] text-[9px] font-semibold text-[#728096]">
+                    <p className="mt-[5px] text-[9px] font-normal text-[#728096]">
                       Add menu items from this source.
                     </p>
                   </div>
@@ -491,10 +491,10 @@ export default function AddNewMenuPage() {
                   <Info className="mt-[1px] h-[16px] w-[16px] shrink-0 text-[#2e7a53]" />
 
                   <div>
-                    <p className="text-[10px] font-extrabold text-[#2e3c58]">
+                    <p className="text-[10px] font-normal text-[#2e3c58]">
                       Your menu structure will appear here
                     </p>
-                    <p className="mt-[5px] text-[9px] font-semibold text-[#66738b]">
+                    <p className="mt-[5px] text-[9px] font-normal text-[#66738b]">
                       Add items from the panel above to see the preview.
                     </p>
                   </div>
@@ -507,7 +507,7 @@ export default function AddNewMenuPage() {
                         key={item.id}
                         className="flex h-[34px] items-center justify-between rounded-[5px] border border-[#dfe7ee] bg-white px-[10px]"
                       >
-                        <span className="text-[8.8px] font-bold text-[#34425e]">
+                        <span className="text-[8.8px] font-normal text-[#34425e]">
                           {item.label}
                         </span>
                         <ChevronRight className="h-[11px] w-[11px] text-[#7a8598]" />
@@ -524,7 +524,7 @@ export default function AddNewMenuPage() {
                 <Lightbulb className="mt-[1px] h-[22px] w-[22px] shrink-0 text-[#286c49]" />
 
                 <div>
-                  <h2 className="text-[13px] font-extrabold text-[#285039]">
+                  <h2 className="text-[13px] font-normal text-[#285039]">
                     Quick Tips
                   </h2>
 
@@ -540,7 +540,7 @@ export default function AddNewMenuPage() {
                           <Check className="h-[8px] w-[8px]" />
                         </span>
 
-                        <span className="text-[9px] font-semibold leading-[1.4] text-[#53627a]">
+                        <span className="text-[9px] font-normal leading-[1.4] text-[#53627a]">
                           {tip}
                         </span>
                       </div>
@@ -557,7 +557,7 @@ export default function AddNewMenuPage() {
           <button
             type="button"
             onClick={() => router.push("/navigation-menus")}
-            className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] border border-[#dfe3e7] bg-white px-[20px] text-[10px] font-bold text-[#273655] transition hover:bg-slate-50"
+            className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] border border-[#dfe3e7] bg-white px-[20px] text-[10px] font-normal text-[#273655] transition hover:bg-slate-50"
           >
             <X className="h-[14px] w-[14px]" />
             Cancel
@@ -567,7 +567,7 @@ export default function AddNewMenuPage() {
             <button
               type="button"
               onClick={() => router.push("/navigation-menus")}
-              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] border border-[#dfe3e7] bg-white px-[20px] text-[10px] font-bold text-[#273655] transition hover:bg-slate-50"
+              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] border border-[#dfe3e7] bg-white px-[20px] text-[10px] font-normal text-[#273655] transition hover:bg-slate-50"
             >
               <Save className="h-[14px] w-[14px]" />
               Save as Draft
@@ -576,7 +576,7 @@ export default function AddNewMenuPage() {
             <button
               type="button"
               onClick={() => router.push("/navigation-menus")}
-              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] bg-[linear-gradient(180deg,#076636_0%,#03542c_100%)] px-[22px] text-[10px] font-bold text-white shadow-[0_7px_16px_rgba(5,94,49,.12)] transition hover:opacity-95"
+              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] bg-[linear-gradient(180deg,#076636_0%,#03542c_100%)] px-[22px] text-[10px] font-normal text-white shadow-[0_7px_16px_rgba(5,94,49,.12)] transition hover:opacity-95"
             >
               <ArrowRight className="h-[14px] w-[14px]" />
               Create Menu

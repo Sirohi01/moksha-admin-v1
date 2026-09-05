@@ -55,12 +55,12 @@ function Panel({
 }) {
   return (
     <section className="rounded-[9px] border border-[#e7e9ec] bg-white px-[18px] py-[16px] shadow-[0_1px_3px_rgba(15,23,42,0.025)]">
-      <h2 className="text-[14px] font-semibold leading-tight tracking-[-0.01em] text-[#17234a]">
+      <h2 className="text-[14px] font-normal leading-tight tracking-[-0.01em] text-[#17234a]">
         {title}
       </h2>
 
       {subtitle ? (
-        <p className="mt-[4px] text-[10.5px] font-semibold text-[#66738b]">
+        <p className="mt-[4px] text-[10.5px] font-normal text-[#66738b]">
           {subtitle}
         </p>
       ) : null}
@@ -82,10 +82,10 @@ function SettingRow({
   return (
     <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-[14px] py-[6px]">
       <div className="min-w-0">
-        <p className="text-[10.5px] font-semibold leading-[1.25] text-[#213050]">
+        <p className="text-[10.5px] font-normal leading-[1.25] text-[#213050]">
           {title}
         </p>
-        <p className="mt-[3px] text-[9px] font-semibold leading-[1.35] text-[#6d7890]">
+        <p className="mt-[3px] text-[9px] font-normal leading-[1.35] text-[#6d7890]">
           {description}
         </p>
       </div>
@@ -107,7 +107,7 @@ function SelectBox({
   return (
     <select
       defaultValue={value}
-      className="h-[36px] rounded-[6px] border border-[#dfe4e8] bg-white px-[11px] text-[9.5px] font-semibold text-[#394760] outline-none"
+      className="h-[36px] rounded-[6px] border border-[#dfe4e8] bg-white px-[11px] text-[9.5px] font-normal text-[#394760] outline-none"
       style={{ width }}
     >
       {options.map((option) => (
@@ -173,11 +173,11 @@ export default function FAQSettingsPage() {
         {/* HEADER */}
         <header className="flex items-start justify-between gap-[16px]">
           <div>
-            <h1 className="text-[24px] font-semibold leading-none tracking-[-0.02em] text-[#075b33]">
+            <h1 className="text-[24px] font-normal leading-none tracking-[-0.02em] text-[#075b33]">
               FAQ Settings
             </h1>
 
-            <nav className="mt-[9px] flex items-center gap-[8px] text-[10.5px] font-semibold text-[#1d2b58]">
+            <nav className="mt-[9px] flex items-center gap-[8px] text-[10.5px] font-normal text-[#1d2b58]">
               <span>Dashboard</span>
               <span className="text-[#7b8597]">›</span>
               <span>FAQs</span>
@@ -189,7 +189,7 @@ export default function FAQSettingsPage() {
           <div className="flex items-center gap-[12px]">
             <button
               type="button"
-              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] bg-[linear-gradient(180deg,#076636_0%,#03542c_100%)] px-[20px] text-[10.5px] font-bold text-white shadow-[0_7px_16px_rgba(5,94,49,.12)]"
+              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] bg-[linear-gradient(180deg,#076636_0%,#03542c_100%)] px-[20px] text-[10.5px] font-normal text-white shadow-[0_7px_16px_rgba(5,94,49,.12)]"
             >
               <Save className="h-[15px] w-[15px]" />
               Save Changes
@@ -197,7 +197,7 @@ export default function FAQSettingsPage() {
 
             <button
               type="button"
-              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] border border-[#dfe3e7] bg-white px-[18px] text-[10.5px] font-bold text-[#273655]"
+              className="inline-flex h-[40px] items-center gap-[8px] rounded-[6px] border border-[#dfe3e7] bg-white px-[18px] text-[10.5px] font-normal text-[#273655]"
             >
               <RotateCcw className="h-[15px] w-[15px]" />
               Reset to Default
@@ -212,7 +212,7 @@ export default function FAQSettingsPage() {
               type="button"
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`relative h-[40px] shrink-0 px-[14px] text-[10px] font-bold transition ${activeTab === tab ? "text-[#0d6037]" : "text-[#29365d]"
+              className={`relative h-[40px] shrink-0 px-[14px] text-[10px] font-normal transition ${activeTab === tab ? "text-[#0d6037]" : "text-[#29365d]"
                 }`}
             >
               {tab}
@@ -245,49 +245,49 @@ export default function FAQSettingsPage() {
 
               <div className="grid grid-cols-[minmax(0,1fr)_180px] items-start gap-[14px] py-[6px]">
                 <div>
-                  <p className="text-[10.5px] font-semibold text-[#213050]">
+                  <p className="text-[10.5px] font-normal text-[#213050]">
                     FAQ Page Title
                   </p>
-                  <p className="mt-[3px] text-[9px] font-semibold text-[#6d7890]">
+                  <p className="mt-[3px] text-[9px] font-normal text-[#6d7890]">
                     Title shown on the FAQ page.
                   </p>
                 </div>
 
                 <input
                   defaultValue="Frequently Asked Questions"
-                  className="h-[36px] rounded-[6px] border border-[#dfe4e8] bg-white px-[11px] text-[9.5px] font-semibold text-[#394760] outline-none"
+                  className="h-[36px] rounded-[6px] border border-[#dfe4e8] bg-white px-[11px] text-[9.5px] font-normal text-[#394760] outline-none"
                 />
               </div>
 
               <div className="grid grid-cols-[minmax(0,1fr)_180px] items-start gap-[14px] py-[6px]">
                 <div>
-                  <p className="text-[10.5px] font-semibold text-[#213050]">
+                  <p className="text-[10.5px] font-normal text-[#213050]">
                     FAQ Page Subtitle
                   </p>
-                  <p className="mt-[3px] text-[9px] font-semibold text-[#6d7890]">
+                  <p className="mt-[3px] text-[9px] font-normal text-[#6d7890]">
                     Subtitle/description shown below the title.
                   </p>
                 </div>
 
                 <textarea
                   defaultValue={"Find answers to common questions\nabout Moksha Sewa\nservices and how we help."}
-                  className="h-[66px] resize-none rounded-[6px] border border-[#dfe4e8] bg-white px-[11px] py-[9px] text-[9px] font-semibold leading-[1.45] text-[#394760] outline-none"
+                  className="h-[66px] resize-none rounded-[6px] border border-[#dfe4e8] bg-white px-[11px] py-[9px] text-[9px] font-normal leading-[1.45] text-[#394760] outline-none"
                 />
               </div>
 
               <div className="grid grid-cols-[minmax(0,1fr)_180px] items-start gap-[14px] py-[6px]">
                 <div>
-                  <p className="text-[10.5px] font-semibold text-[#213050]">
+                  <p className="text-[10.5px] font-normal text-[#213050]">
                     FAQ Slug / URL
                   </p>
-                  <p className="mt-[3px] text-[9px] font-semibold text-[#6d7890]">
+                  <p className="mt-[3px] text-[9px] font-normal text-[#6d7890]">
                     URL slug for the FAQ page.
                   </p>
                 </div>
 
                 <input
                   defaultValue="faqs"
-                  className="h-[36px] rounded-[6px] border border-[#dfe4e8] bg-white px-[11px] text-[9.5px] font-semibold text-[#394760] outline-none"
+                  className="h-[36px] rounded-[6px] border border-[#dfe4e8] bg-white px-[11px] text-[9.5px] font-normal text-[#394760] outline-none"
                 />
               </div>
 
@@ -384,7 +384,7 @@ export default function FAQSettingsPage() {
                   className="h-[20px] w-[20px] shrink-0 text-[#0d6b3e]"
                   strokeWidth={2}
                 />
-                <p className="text-[9.5px] font-semibold leading-[1.4] text-[#37654a]">
+                <p className="text-[9.5px] font-normal leading-[1.4] text-[#37654a]">
                   These settings control the general behavior and visibility of
                   your FAQ section.
                 </p>
@@ -398,7 +398,7 @@ export default function FAQSettingsPage() {
             subtitle="Manage FAQ categories and their visibility."
           >
             <div>
-              <p className="mb-[9px] text-[10.5px] font-semibold text-[#213050]">
+              <p className="mb-[9px] text-[10.5px] font-normal text-[#213050]">
                 Manage Categories
               </p>
 
@@ -415,11 +415,11 @@ export default function FAQSettingsPage() {
                       style={{ backgroundColor: item.color }}
                     />
 
-                    <span className="truncate text-[9.5px] font-bold text-[#2d3b58]">
+                    <span className="truncate text-[9.5px] font-normal text-[#2d3b58]">
                       {item.name}
                     </span>
 
-                    <span className="grid h-[24px] min-w-[28px] place-items-center rounded-[4px] bg-[#f3f5f7] px-[5px] text-[8.5px] font-bold text-[#5d687d]">
+                    <span className="grid h-[24px] min-w-[28px] place-items-center rounded-[4px] bg-[#f3f5f7] px-[5px] text-[8.5px] font-normal text-[#5d687d]">
                       {item.count}
                     </span>
 
@@ -435,24 +435,24 @@ export default function FAQSettingsPage() {
 
               <button
                 type="button"
-                className="mt-[8px] flex h-[36px] w-full items-center justify-center gap-[8px] rounded-[6px] border border-[#e3e7ea] bg-white text-[9.5px] font-bold text-[#3c4a63]"
+                className="mt-[8px] flex h-[36px] w-full items-center justify-center gap-[8px] rounded-[6px] border border-[#e3e7ea] bg-white text-[9.5px] font-normal text-[#3c4a63]"
               >
                 <Plus className="h-[13px] w-[13px]" />
                 Add New Category
               </button>
 
               <div className="mt-[18px] space-y-[11px]">
-                <p className="text-[10.5px] font-semibold text-[#213050]">
+                <p className="text-[10.5px] font-normal text-[#213050]">
                   Category Settings
                 </p>
 
                 <div>
-                  <p className="mb-[6px] text-[9.5px] font-bold text-[#33415e]">
+                  <p className="mb-[6px] text-[9.5px] font-normal text-[#33415e]">
                     Default Category
                   </p>
                   <select
                     defaultValue="General"
-                    className="h-[36px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[11px] text-[9.5px] font-semibold text-[#394760] outline-none"
+                    className="h-[36px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[11px] text-[9.5px] font-normal text-[#394760] outline-none"
                   >
                     {categories.map((item) => (
                       <option key={item.name}>{item.name}</option>
@@ -461,12 +461,12 @@ export default function FAQSettingsPage() {
                 </div>
 
                 <div>
-                  <p className="mb-[6px] text-[9.5px] font-bold text-[#33415e]">
+                  <p className="mb-[6px] text-[9.5px] font-normal text-[#33415e]">
                     Empty Category Behavior
                   </p>
                   <select
                     defaultValue="Show empty categories"
-                    className="h-[36px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[11px] text-[9.5px] font-semibold text-[#394760] outline-none"
+                    className="h-[36px] w-full rounded-[6px] border border-[#dfe4e8] bg-white px-[11px] text-[9.5px] font-normal text-[#394760] outline-none"
                   >
                     <option>Show empty categories</option>
                     <option>Hide empty categories</option>
@@ -474,14 +474,14 @@ export default function FAQSettingsPage() {
                 </div>
 
                 <div>
-                  <p className="mb-[6px] text-[9.5px] font-bold text-[#33415e]">
+                  <p className="mb-[6px] text-[9.5px] font-normal text-[#33415e]">
                     Category Description
                   </p>
                   <textarea
                     placeholder="Display category description below category name."
-                    className="h-[72px] w-full resize-none rounded-[6px] border border-[#dfe4e8] bg-white px-[11px] py-[9px] text-[9px] font-semibold text-[#394760] outline-none placeholder:text-[#8b95a7]"
+                    className="h-[72px] w-full resize-none rounded-[6px] border border-[#dfe4e8] bg-white px-[11px] py-[9px] text-[9px] font-normal text-[#394760] outline-none placeholder:text-[#8b95a7]"
                   />
-                  <p className="mt-[6px] text-[9px] font-semibold text-[#6d7890]">
+                  <p className="mt-[6px] text-[9px] font-normal text-[#6d7890]">
                     Category descriptions will appear on the FAQ page.
                   </p>
                 </div>
@@ -498,10 +498,10 @@ export default function FAQSettingsPage() {
             >
               <div className="rounded-[8px] border border-[#e2e6ea] bg-white px-[16px] py-[16px]">
                 <div className="text-center">
-                  <h3 className="text-[17px] font-semibold tracking-[-0.02em] text-[#18234a]">
+                  <h3 className="text-[17px] font-normal tracking-[-0.02em] text-[#18234a]">
                     Frequently Asked Questions
                   </h3>
-                  <p className="mx-auto mt-[7px] max-w-[270px] text-[9px] font-semibold leading-[1.5] text-[#66738b]">
+                  <p className="mx-auto mt-[7px] max-w-[270px] text-[9px] font-normal leading-[1.5] text-[#66738b]">
                     Find answers to common questions about Moksha Sewa services
                     and how we help.
                   </p>
@@ -511,7 +511,7 @@ export default function FAQSettingsPage() {
                   <Search className="absolute left-[11px] top-1/2 h-[13px] w-[13px] -translate-y-1/2 text-[#7f8a9d]" />
                   <input
                     placeholder="Search questions..."
-                    className="h-[36px] w-full rounded-[6px] border border-[#dfe4e8] bg-white pl-[34px] pr-[11px] text-[9.5px] font-semibold outline-none placeholder:text-[#8b95a7]"
+                    className="h-[36px] w-full rounded-[6px] border border-[#dfe4e8] bg-white pl-[34px] pr-[11px] text-[9.5px] font-normal outline-none placeholder:text-[#8b95a7]"
                   />
                 </div>
 
@@ -521,7 +521,7 @@ export default function FAQSettingsPage() {
                       <button
                         key={item}
                         type="button"
-                        className={`h-[28px] shrink-0 rounded-[5px] px-[10px] text-[8px] font-bold ${index === 0
+                        className={`h-[28px] shrink-0 rounded-[5px] px-[10px] text-[8px] font-normal ${index === 0
                           ? "bg-[#075b33] text-white"
                           : "bg-[#f2f4f6] text-[#536078]"
                           }`}
@@ -551,7 +551,7 @@ export default function FAQSettingsPage() {
                       type="button"
                       className="flex h-[40px] w-full items-center justify-between border-b border-[#edf0f2] px-[10px] text-left last:border-b-0"
                     >
-                      <span className="text-[9.5px] font-bold text-[#293854]">
+                      <span className="text-[9.5px] font-normal text-[#293854]">
                         {question}
                       </span>
                       <ChevronDown className="h-[12px] w-[12px] text-[#536078]" />
@@ -629,8 +629,8 @@ export default function FAQSettingsPage() {
             <ShieldCheck className="h-[14px] w-[14px]" />
           </div>
 
-          <p className="text-[9.5px] font-semibold text-[#486251]">
-            <strong className="text-[#24345e]">Note:</strong>{" "}
+          <p className="text-[9.5px] font-normal text-[#486251]">
+            <span className="text-[#24345e]">Note:</span>{" "}
             Don&apos;t forget to click “Save Changes” after updating the
             settings.
           </p>

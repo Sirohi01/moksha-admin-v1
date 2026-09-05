@@ -576,13 +576,15 @@ function StatCard({
           />
         </div>
 
-        <div className="min-w-0 flex-1">
+        <div className="min-w-0 flex-1 overflow-hidden">
           <p
             className="
-              text-[10px]
-              font-[700]
+              break-words
+              text-[9px]
+              font-normal
               uppercase
               tracking-wider
+              leading-[11px]
               text-[#172762]
             "
           >
@@ -594,7 +596,7 @@ function StatCard({
               mt-[2px]
               whitespace-nowrap
               text-2xl
-              font-[800]
+              font-normal
               leading-none
               text-[#00632F]
             "
@@ -616,7 +618,7 @@ function StatCard({
         "
       >
         {change === "Live" || !change ? (
-          <span className="rounded-[4px] bg-[#E4F5E8] px-[5px] py-[1px] text-[9px] font-bold text-[#238B4C]">
+          <span className="rounded-[4px] bg-[#E4F5E8] px-[5px] py-[1px] text-[9px] font-normal text-[#238B4C]">
             Live
           </span>
         ) : (
@@ -627,13 +629,13 @@ function StatCard({
               className="shrink-0 text-[#179249]"
             />
 
-            <span className="text-[9px] font-[700] text-[#179249]">
+            <span className="text-[9px] font-normal text-[#179249]">
               {change}
             </span>
           </>
         )}
 
-        <span className="text-[9px] font-[500] text-[#536181]">
+        <span className="text-[9px] font-normal text-[#536181]">
           current data
         </span>
       </div>
@@ -679,7 +681,7 @@ function FilterSelect({
           px-[11px]
           pr-[29px]
           text-[10px]
-          font-[700]
+          font-normal
           text-[#172762]
           outline-none
         "
@@ -1108,11 +1110,11 @@ export default function EnquiriesPage() {
           gap-[20px]
         "
       >
-        <div className="min-w-0">
+        <div className="min-w-0 overflow-hidden">
           <h1
             className="
               text-[20px]
-              font-[800]
+              font-normal
               leading-[25px]
               tracking-[-0.35px]
               text-[#005E2E]
@@ -1133,7 +1135,7 @@ export default function EnquiriesPage() {
             className="
               mt-[2px]
               text-[9px]
-              font-[500]
+              font-normal
               leading-[14px]
               text-[#344574]
             "
@@ -1172,7 +1174,7 @@ export default function EnquiriesPage() {
               bg-white
               px-[15px]
               text-[9px]
-              font-[700]
+              font-normal
               text-[#172762]
             "
           >
@@ -1194,7 +1196,7 @@ export default function EnquiriesPage() {
               bg-white
               px-[15px]
               text-[9px]
-              font-[700]
+              font-normal
               text-[#172762]
             "
           >
@@ -1216,7 +1218,7 @@ export default function EnquiriesPage() {
               bg-[#005F2E]
               px-[17px]
               text-[9px]
-              font-[700]
+              font-normal
               text-white
               shadow-[0_2px_5px_rgba(0,95,46,0.13)]
               hover:bg-[#004d25]
@@ -1243,7 +1245,7 @@ export default function EnquiriesPage() {
             px-[11px]
             py-[8px]
             text-[9px]
-            font-[600]
+            font-normal
             text-red-700
           "
         >
@@ -1268,7 +1270,7 @@ export default function EnquiriesPage() {
             LEFT
         ==================================================== */}
 
-        <main className="min-w-0">
+        <main className="min-w-0 overflow-hidden">
           {/* ==================================================
               STATS
           ================================================== */}
@@ -1420,7 +1422,7 @@ export default function EnquiriesPage() {
                   flex-1
                   bg-transparent
                   text-[10px]
-                  font-[600]
+                  font-normal
                   text-[#172762]
                   outline-none
                   placeholder:text-[#566483]
@@ -1505,7 +1507,7 @@ export default function EnquiriesPage() {
                 bg-white
                 px-[11px]
                 text-[9px]
-                font-[600]
+                font-normal
                 text-[#56617F]
               "
             >
@@ -1535,7 +1537,7 @@ export default function EnquiriesPage() {
                   bg-transparent
                   pr-[22px]
                   text-[9px]
-                  font-[600]
+                  font-normal
                   text-[#56617F]
                   outline-none
                 "
@@ -1591,7 +1593,7 @@ export default function EnquiriesPage() {
                 bg-white
                 px-[7px]
                 text-[9px]
-                font-[700]
+                font-normal
                 text-[#172762]
               "
             >
@@ -1685,35 +1687,35 @@ export default function EnquiriesPage() {
                     text-white
                   "
                 >
-                  <th className="px-[8px] text-[9px] font-[700] uppercase tracking-wider">
+                  <th className="px-[8px] text-[9px] font-normal uppercase tracking-wider">
                     ID
                   </th>
 
-                  <th className="px-[8px] text-[9px] font-[700] uppercase tracking-wider">
+                  <th className="px-[8px] text-[9px] font-normal uppercase tracking-wider">
                     Organization / Contact
                   </th>
 
-                  <th className="px-[7px] text-[9px] font-[700] uppercase tracking-wider">
+                  <th className="px-[7px] text-[9px] font-normal uppercase tracking-wider">
                     Enquiry Type
                   </th>
 
-                  <th className="px-[8px] text-[9px] font-[700] uppercase tracking-wider">
+                  <th className="px-[8px] text-[9px] font-normal uppercase tracking-wider">
                     Purpose / Interest
                   </th>
 
-                  <th className="px-[7px] text-[9px] font-[700] uppercase tracking-wider">
+                  <th className="px-[7px] text-[9px] font-normal uppercase tracking-wider">
                     Status
                   </th>
 
-                  <th className="px-[7px] text-[9px] font-[700] uppercase tracking-wider">
+                  <th className="px-[7px] text-[9px] font-normal uppercase tracking-wider">
                     Priority
                   </th>
 
-                  <th className="px-[7px] text-[9px] font-[700] uppercase tracking-wider">
+                  <th className="px-[7px] text-[9px] font-normal uppercase tracking-wider">
                     Received On
                   </th>
 
-                  <th className="px-[7px] text-[9px] font-[700] uppercase tracking-wider">
+                  <th className="px-[7px] text-[9px] font-normal uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
@@ -1804,7 +1806,7 @@ export default function EnquiriesPage() {
                                 block
                                 truncate
                                 text-[9px]
-                                font-[700]
+                                font-normal
                                 text-[#13763E]
                               "
                               title={
@@ -1829,7 +1831,7 @@ export default function EnquiriesPage() {
                               className="
                                 truncate
                                 text-[9px]
-                                font-[700]
+                                font-normal
                                 leading-[14px]
                                 text-[#192B66]
                               "
@@ -1847,7 +1849,7 @@ export default function EnquiriesPage() {
                                   mt-[3px]
                                   truncate
                                   text-[9px]
-                                  font-[500]
+                                  font-normal
                                   leading-[12px]
                                   text-[#344576]
                                 "
@@ -1863,7 +1865,7 @@ export default function EnquiriesPage() {
                                 mt-[2px]
                                 truncate
                                 text-[9px]
-                                font-[500]
+                                font-normal
                                 leading-[12px]
                                 text-[#344576]
                               "
@@ -1893,7 +1895,7 @@ export default function EnquiriesPage() {
                                 px-[8px]
                                 py-[4px]
                                 text-[9px]
-                                font-[700]
+                                font-normal
                                 leading-none
                               "
                               style={{
@@ -1926,7 +1928,7 @@ export default function EnquiriesPage() {
                               className="
                                 line-clamp-2
                                 text-[9px]
-                                font-[600]
+                                font-normal
                                 leading-[11px]
                                 text-[#26396F]
                               "
@@ -1954,7 +1956,7 @@ export default function EnquiriesPage() {
                                 px-[8px]
                                 py-[4px]
                                 text-[9px]
-                                font-[700]
+                                font-normal
                                 leading-none
                               "
                               style={{
@@ -2011,7 +2013,7 @@ export default function EnquiriesPage() {
                                 className="
                                   whitespace-nowrap
                                   text-[9px]
-                                  font-[600]
+                                  font-normal
                                   text-[#344576]
                                 "
                               >
@@ -2028,10 +2030,10 @@ export default function EnquiriesPage() {
                               align-middle
                             "
                           >
-                            <p className="whitespace-nowrap text-[9px] font-[700] text-[#182A65]">
+                            <p className="whitespace-nowrap text-[9px] font-normal text-[#182A65]">
                               {formatDateTime(enquiry.createdAt).split(",")[0]}
                             </p>
-                            <p className="mt-[1px] whitespace-nowrap text-[9px] font-[500] text-[#556488]">
+                            <p className="mt-[1px] whitespace-nowrap text-[9px] font-normal text-[#556488]">
                               {formatDateTime(enquiry.createdAt).split(",")[1] || ""}
                             </p>
                           </td>
@@ -2127,7 +2129,7 @@ export default function EnquiriesPage() {
                           h-[150px]
                           text-center
                           text-[9px]
-                          font-[600]
+                          font-normal
                           text-[#667085]
                         "
                       >
@@ -2159,7 +2161,7 @@ export default function EnquiriesPage() {
                 className="
                   whitespace-nowrap
                   text-[9px]
-                  font-[600]
+                  font-normal
                   text-[#475A83]
                 "
               >
@@ -2239,7 +2241,7 @@ export default function EnquiriesPage() {
                           rounded-[4px]
                           border
                           text-[9px]
-                          font-[700]
+                          font-normal
 
                           ${safePage ===
                             number
@@ -2272,7 +2274,7 @@ export default function EnquiriesPage() {
                       border
                       px-[6px]
                       text-[9px]
-                      font-[700]
+                      font-normal
 
                       ${safePage ===
                         totalPages
@@ -2345,7 +2347,7 @@ export default function EnquiriesPage() {
                     px-[9px]
                     pr-[27px]
                     text-[9px]
-                    font-[700]
+                    font-normal
                     text-[#536180]
                     outline-none
                   "
@@ -2415,7 +2417,7 @@ export default function EnquiriesPage() {
                 className="
                   whitespace-nowrap
                   text-[11px]
-                  font-[700]
+                  font-normal
                   text-[#1E2430]
                 "
               >
@@ -2430,7 +2432,7 @@ export default function EnquiriesPage() {
                   gap-[3px]
                   whitespace-nowrap
                   text-[10px]
-                  font-[700]
+                  font-normal
                   text-[#16804B]
                 "
               >
@@ -2499,22 +2501,22 @@ export default function EnquiriesPage() {
                     bg-white
                   "
                 >
-                  <strong
+                  <span
                     className="
                       text-[18px]
-                      font-[800]
+                      font-normal
                       leading-none
                       text-[#111]
                     "
                   >
                     {totalEnquiries}
-                  </strong>
+                  </span>
 
                   <span
                     className="
                       mt-[4px]
                       text-[9px]
-                      font-[600]
+                      font-normal
                       text-[#44537B]
                     "
                   >
@@ -2569,7 +2571,7 @@ export default function EnquiriesPage() {
                           className="
                             whitespace-nowrap
                             text-[9px]
-                            font-[700]
+                            font-normal
                             text-[#26386D]
                           "
                         >
@@ -2581,7 +2583,7 @@ export default function EnquiriesPage() {
                         className="
                           whitespace-nowrap
                           text-[9px]
-                          font-[600]
+                          font-normal
                           text-[#26386D]
                         "
                       >
@@ -2620,7 +2622,7 @@ export default function EnquiriesPage() {
             <h2
               className="
                 text-[9px]
-                font-[700]
+                font-normal
                 text-[#1E2430]
               "
             >
@@ -2655,7 +2657,7 @@ export default function EnquiriesPage() {
                         className="
                           truncate
                           text-[9px]
-                          font-[700]
+                          font-normal
                           text-[#334375]
                         "
                         title={
@@ -2700,7 +2702,7 @@ export default function EnquiriesPage() {
                           whitespace-nowrap
                           text-right
                           text-[9px]
-                          font-[600]
+                          font-normal
                           text-[#334375]
                         "
                       >
@@ -2753,7 +2755,7 @@ export default function EnquiriesPage() {
               <h2
                 className="
                   text-[9.7px]
-                  font-[700]
+                  font-normal
                   text-[#1A3679]
                 "
               >
@@ -2826,7 +2828,7 @@ export default function EnquiriesPage() {
                       className="
                         whitespace-nowrap
                         text-[9px]
-                        font-[700]
+                        font-normal
                       "
                     >
                       {action.label}
@@ -2876,7 +2878,7 @@ export default function EnquiriesPage() {
               <h2
                 className="
                   text-[10px]
-                  font-[800]
+                  font-normal
                   text-[#0B6534]
                 "
               >
@@ -2888,7 +2890,7 @@ export default function EnquiriesPage() {
               className="
                 mt-[8px]
                 text-[9px]
-                font-[500]
+                font-normal
                 text-[#42537B]
               "
             >
@@ -2916,7 +2918,7 @@ export default function EnquiriesPage() {
                 className="
                   whitespace-nowrap
                   text-[9px]
-                  font-[800]
+                  font-normal
                   text-[#21713A]
                 "
               >
@@ -2944,7 +2946,7 @@ export default function EnquiriesPage() {
                 className="
                   whitespace-nowrap
                   text-[9px]
-                  font-[700]
+                  font-normal
                   text-[#283C74]
                 "
               >
@@ -2987,7 +2989,7 @@ export default function EnquiriesPage() {
               <div>
                 <p
                   className="
-                    font-semibold
+                    font-normal
                     uppercase
                     tracking-wide
                     text-text-muted
@@ -3006,7 +3008,7 @@ export default function EnquiriesPage() {
               <div>
                 <p
                   className="
-                    font-semibold
+                    font-normal
                     uppercase
                     tracking-wide
                     text-text-muted
@@ -3025,7 +3027,7 @@ export default function EnquiriesPage() {
                 <div>
                   <p
                     className="
-                      font-semibold
+                      font-normal
                       uppercase
                       tracking-wide
                       text-text-muted
@@ -3045,7 +3047,7 @@ export default function EnquiriesPage() {
               <div>
                 <p
                   className="
-                    font-semibold
+                    font-normal
                     uppercase
                     tracking-wide
                     text-text-muted
@@ -3083,7 +3085,7 @@ export default function EnquiriesPage() {
                     <div>
                       <p
                         className="
-                        font-semibold
+                        font-normal
                         uppercase
                         tracking-wide
                         text-text-muted
@@ -3104,7 +3106,7 @@ export default function EnquiriesPage() {
                     <div>
                       <p
                         className="
-                        font-semibold
+                        font-normal
                         uppercase
                         tracking-wide
                         text-text-muted
@@ -3125,7 +3127,7 @@ export default function EnquiriesPage() {
                     <div>
                       <p
                         className="
-                        font-semibold
+                        font-normal
                         uppercase
                         tracking-wide
                         text-text-muted
@@ -3146,7 +3148,7 @@ export default function EnquiriesPage() {
                     <div>
                       <p
                         className="
-                        font-semibold
+                        font-normal
                         uppercase
                         tracking-wide
                         text-text-muted
@@ -3165,7 +3167,7 @@ export default function EnquiriesPage() {
                     <div>
                       <p
                         className="
-                        font-semibold
+                        font-normal
                         uppercase
                         tracking-wide
                         text-text-muted
@@ -3187,7 +3189,7 @@ export default function EnquiriesPage() {
                     <div>
                       <p
                         className="
-                        font-semibold
+                        font-normal
                         uppercase
                         tracking-wide
                         text-text-muted
@@ -3210,7 +3212,7 @@ export default function EnquiriesPage() {
               <p
                 className="
                   text-[11px]
-                  font-semibold
+                  font-normal
                   uppercase
                   tracking-wide
                   text-text-muted
@@ -3235,7 +3237,7 @@ export default function EnquiriesPage() {
                 className="
                   inline-flex
                   text-xs
-                  font-semibold
+                  font-normal
                   text-accent
                   hover:underline
                 "

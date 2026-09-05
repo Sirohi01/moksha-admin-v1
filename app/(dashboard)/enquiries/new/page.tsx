@@ -653,11 +653,11 @@ function AddNewEnquiryContent() {
           <div className="flex h-[64px] w-[64px] items-center justify-center rounded-full bg-[#EBF7F0] text-[#005F2E]">
             <Check size={36} strokeWidth={3} />
           </div>
-          <h2 className="mt-[20px] text-[22px] font-[800] text-[#17234A]">
+          <h2 className="mt-[20px] text-[22px] font-normal text-[#17234A]">
             Enquiry Recorded Successfully!
           </h2>
-          <p className="mt-[8px] max-w-[450px] text-[12px] font-[600] text-[#52607D]">
-            The enquiry for <span className="font-[800] text-[#17234A]">{form.fullName}</span> ({form.category || "General"}) has been registered.
+          <p className="mt-[8px] max-w-[450px] text-[12px] font-normal text-[#52607D]">
+            The enquiry for <span className="font-normal text-[#17234A]">{form.fullName}</span> ({form.category || "General"}) has been registered.
           </p>
           <div className="mt-[28px] flex items-center gap-[12px]">
             <button
@@ -668,7 +668,7 @@ function AddNewEnquiryContent() {
                 setAttachment(null);
                 setSuccess("");
               }}
-              className="inline-flex h-[38px] items-center gap-[8px] rounded-[6px] border border-[#DCE3EA] bg-white px-[18px] text-[11px] font-[700] text-[#24345E] hover:bg-slate-50 transition"
+              className="inline-flex h-[38px] items-center gap-[8px] rounded-[6px] border border-[#DCE3EA] bg-white px-[18px] text-[11px] font-normal text-[#24345E] hover:bg-slate-50 transition"
             >
               Add Another Enquiry
             </button>
@@ -676,7 +676,7 @@ function AddNewEnquiryContent() {
             <button
               type="button"
               onClick={() => router.push("/general-enquiries")}
-              className="inline-flex h-[38px] items-center gap-[8px] rounded-[6px] bg-[#005F2E] px-[22px] text-[11px] font-[700] text-white shadow-sm hover:bg-[#004d25] transition"
+              className="inline-flex h-[38px] items-center gap-[8px] rounded-[6px] bg-[#005F2E] px-[22px] text-[11px] font-normal text-white shadow-sm hover:bg-[#004d25] transition"
             >
               Return to General Enquiries
             </button>
@@ -707,7 +707,7 @@ function AddNewEnquiryContent() {
         <h1
           className="
             text-[20px]
-            font-[800]
+            font-normal
             leading-[25px]
             tracking-[-0.35px]
             text-[#005E2E]
@@ -725,7 +725,7 @@ function AddNewEnquiryContent() {
             items-center
             gap-[6px]
             text-[9px]
-            font-[600]
+            font-normal
             text-[#46567D]
           "
         >
@@ -781,7 +781,7 @@ function AddNewEnquiryContent() {
             px-[12px]
             py-[8px]
             text-[9px]
-            font-[600]
+            font-normal
 
             ${error
               ? "border-red-200 bg-red-50 text-red-700"
@@ -1076,7 +1076,7 @@ function AddNewEnquiryContent() {
                       py-[8px]
                       pr-[52px]
                       text-[9px]
-                      font-[500]
+                      font-normal
                       text-[#26396F]
                       outline-none
                       placeholder:text-[#6B7690]
@@ -1090,7 +1090,7 @@ function AddNewEnquiryContent() {
                       bottom-[8px]
                       right-[9px]
                       text-[9px]
-                      font-[600]
+                      font-normal
                       text-[#6A7690]
                     "
                   >
@@ -1607,7 +1607,7 @@ function AddNewEnquiryContent() {
                       className="
                         truncate
                         text-[9px]
-                        font-[700]
+                        font-normal
                         text-[#33416D]
                       "
                     >
@@ -1620,7 +1620,7 @@ function AddNewEnquiryContent() {
                       className="
                         mt-[3px]
                         text-[9px]
-                        font-[500]
+                        font-normal
                         text-[#728099]
                       "
                     >
@@ -1668,7 +1668,7 @@ function AddNewEnquiryContent() {
               <h2
                 className="
                   text-[10px]
-                  font-[800]
+                  font-normal
                   text-[#175E39]
                 "
               >
@@ -1680,7 +1680,7 @@ function AddNewEnquiryContent() {
               className="
                 mt-[11px]
                 text-[9px]
-                font-[500]
+                font-normal
                 text-[#4C5978]
               "
             >
@@ -1766,7 +1766,7 @@ function AddNewEnquiryContent() {
             <h2
               className="
                 text-[10px]
-                font-[800]
+                font-normal
                 text-[#175E39]
               "
             >
@@ -1839,7 +1839,7 @@ function AddNewEnquiryContent() {
                           className="
                             truncate
                             text-[9px]
-                            font-[700]
+                            font-normal
                             text-[#273970]
                           "
                         >
@@ -1851,7 +1851,7 @@ function AddNewEnquiryContent() {
                             mt-[2px]
                             truncate
                             text-[9px]
-                            font-[500]
+                            font-normal
                             text-[#68758F]
                           "
                         >
@@ -1903,7 +1903,7 @@ function AddNewEnquiryContent() {
                 <h2
                   className="
                     text-[10px]
-                    font-[800]
+                    font-normal
                     text-[#243A78]
                   "
                 >
@@ -1914,7 +1914,7 @@ function AddNewEnquiryContent() {
                   className="
                     mt-[7px]
                     text-[9px]
-                    font-[500]
+                    font-normal
                     leading-[10px]
                     text-[#46567D]
                   "
@@ -1939,7 +1939,7 @@ function AddNewEnquiryContent() {
                     bg-white
                     px-[12px]
                     text-[9px]
-                    font-[800]
+                    font-normal
                     text-[#216C3D]
                   "
                 >
@@ -1954,7 +1954,7 @@ function AddNewEnquiryContent() {
                   className="
                     mt-[12px]
                     text-[9px]
-                    font-[600]
+                    font-normal
                     text-[#61708B]
                   "
                 >
@@ -1997,7 +1997,7 @@ function AddNewEnquiryContent() {
             bg-white
             px-[17px]
             text-[9px]
-            font-[700]
+            font-normal
             text-[#20336C]
           "
         >
@@ -2027,7 +2027,7 @@ function AddNewEnquiryContent() {
               bg-white
               px-[18px]
               text-[9px]
-              font-[700]
+              font-normal
               text-[#20336C]
             "
           >
@@ -2050,7 +2050,7 @@ function AddNewEnquiryContent() {
               bg-[#005F2E]
               px-[20px]
               text-[9px]
-              font-[700]
+              font-normal
               text-white
               shadow-[0_2px_5px_rgba(0,95,46,0.15)]
               disabled:cursor-not-allowed
@@ -2071,7 +2071,7 @@ function AddNewEnquiryContent() {
 
 export default function AddNewEnquiryPage() {
   return (
-    <Suspense fallback={<div className="p-4 text-[9px] font-[700] text-[#182A65]">Loading form...</div>}>
+    <Suspense fallback={<div className="p-4 text-[9px] font-normal text-[#182A65]">Loading form...</div>}>
       <AddNewEnquiryContent />
     </Suspense>
   );
@@ -2153,7 +2153,7 @@ function SectionHeading({
       <h2
         className="
           text-[10.5px]
-          font-[800]
+          font-normal
           text-[#17603A]
         "
       >
@@ -2187,7 +2187,7 @@ function FormField({
         className="
           mb-[6px]
           text-[9px]
-          font-[700]
+          font-normal
           text-[#192A65]
         "
       >
@@ -2224,7 +2224,7 @@ const inputClass = `
   bg-white
   px-[10px]
   text-[9px]
-  font-[500]
+  font-normal
   text-[#253970]
   outline-none
   placeholder:text-[#6B7690]
@@ -2277,7 +2277,7 @@ function SelectBox({
           px-[10px]
           pr-[28px]
           text-[9px]
-          font-[700]
+          font-normal
           text-[#182A65]
           outline-none
           focus:border-[#78B58F]
@@ -2381,7 +2381,7 @@ function PrioritySelect({
           pl-[28px]
           pr-[28px]
           text-[9px]
-          font-[700]
+          font-normal
           text-[#182A65]
           outline-none
         "
@@ -2472,7 +2472,7 @@ function PhoneField({
             px-[8px]
             pr-[20px]
             text-[9px]
-            font-[700]
+            font-normal
             text-[#182A65]
             outline-none
           "
@@ -2607,7 +2607,7 @@ function ContactMethodSelector({
                 border-r
                 border-[#DFE4EA]
                 text-[9px]
-                font-[700]
+                font-normal
                 last:border-r-0
 
                 ${selected
@@ -2667,7 +2667,7 @@ function RadioGroup({
               gap-[6px]
               whitespace-nowrap
               text-[9px]
-              font-[600]
+              font-normal
               text-[#354573]
             "
           >
@@ -2765,7 +2765,7 @@ function InfoPoint({
         <p
           className="
             text-[9px]
-            font-[500]
+            font-normal
             leading-[11px]
             text-[#46557A]
           "

@@ -205,7 +205,7 @@ function FieldLabel({
         mb-[7px]
         block
         text-[9px]
-        font-[700]
+        font-normal
         text-[#172762]
       "
     >
@@ -246,7 +246,7 @@ function SectionTitle({
           rounded-full
           bg-[#087A3D]
           text-[10px]
-          font-[800]
+          font-normal
           text-white
         "
       >
@@ -257,7 +257,7 @@ function SectionTitle({
         <h2
           className="
             text-[11px]
-            font-[800]
+            font-normal
             leading-[15px]
             text-[#14603A]
           "
@@ -269,7 +269,7 @@ function SectionTitle({
           className="
             mt-[2px]
             text-[9px]
-            font-[500]
+            font-normal
             text-[#43527D]
           "
         >
@@ -574,7 +574,7 @@ export default function AddNewsletterSubscriberPage() {
           <h1
             className="
               text-[20px]
-              font-[800]
+              font-normal
               leading-[25px]
               tracking-[-0.35px]
               text-[#005E2E]
@@ -592,7 +592,7 @@ export default function AddNewsletterSubscriberPage() {
               items-center
               gap-[6px]
               text-[9px]
-              font-[600]
+              font-normal
               text-[#48577F]
             "
           >
@@ -651,7 +651,7 @@ export default function AddNewsletterSubscriberPage() {
               bg-white
               px-[18px]
               text-[9px]
-              font-[700]
+              font-normal
               text-[#172762]
             "
           >
@@ -672,7 +672,7 @@ export default function AddNewsletterSubscriberPage() {
               bg-[#00612F]
               px-[19px]
               text-[9px]
-              font-[700]
+              font-normal
               text-white
               shadow-[0_2px_5px_rgba(0,97,47,0.16)]
               disabled:cursor-not-allowed
@@ -701,7 +701,7 @@ export default function AddNewsletterSubscriberPage() {
             px-[12px]
             py-[8px]
             text-[9px]
-            font-[600]
+            font-normal
 
             ${error
               ? "border-[#F6D3D3] bg-[#FFF4F4] text-[#C83A3A]"
@@ -788,7 +788,7 @@ export default function AddNewsletterSubscriberPage() {
                     bg-white
                     px-[12px]
                     text-[9px]
-                    font-[500]
+                    font-normal
                     text-[#172762]
                     outline-none
                     transition
@@ -824,7 +824,7 @@ export default function AddNewsletterSubscriberPage() {
                     bg-white
                     px-[12px]
                     text-[9px]
-                    font-[500]
+                    font-normal
                     text-[#172762]
                     outline-none
                     placeholder:text-[#697593]
@@ -872,7 +872,7 @@ export default function AddNewsletterSubscriberPage() {
                         px-[11px]
                         pr-[25px]
                         text-[9px]
-                        font-[700]
+                        font-normal
                         text-[#172762]
                         outline-none
                       "
@@ -926,7 +926,7 @@ export default function AddNewsletterSubscriberPage() {
                       bg-white
                       px-[12px]
                       text-[9px]
-                      font-[500]
+                      font-normal
                       text-[#172762]
                       outline-none
                       placeholder:text-[#697593]
@@ -963,7 +963,7 @@ export default function AddNewsletterSubscriberPage() {
                       px-[12px]
                       pr-[32px]
                       text-[9px]
-                      font-[600]
+                      font-normal
                       text-[#172762]
                       outline-none
                     "
@@ -1027,7 +1027,7 @@ export default function AddNewsletterSubscriberPage() {
                       px-[12px]
                       pr-[32px]
                       text-[9px]
-                      font-[600]
+                      font-normal
                       text-[#172762]
                       outline-none
                     "
@@ -1090,7 +1090,7 @@ export default function AddNewsletterSubscriberPage() {
                       px-[32px]
                       pr-[34px]
                       text-[9px]
-                      font-[700]
+                      font-normal
                       text-[#172762]
                       outline-none
                     "
@@ -1171,7 +1171,7 @@ export default function AddNewsletterSubscriberPage() {
               className="
                 mt-[16px]
                 text-[9px]
-                font-[700]
+                font-normal
                 text-[#172762]
               "
             >
@@ -1264,7 +1264,7 @@ export default function AddNewsletterSubscriberPage() {
                         <p
                           className="
                             text-[9px]
-                            font-[700]
+                            font-normal
                             leading-[11px]
                             text-[#1B2E68]
                           "
@@ -1276,7 +1276,7 @@ export default function AddNewsletterSubscriberPage() {
                           className="
                             mt-[4px]
                             text-[9px]
-                            font-[500]
+                            font-normal
                             leading-[9px]
                             text-[#566486]
                           "
@@ -1328,7 +1328,7 @@ export default function AddNewsletterSubscriberPage() {
               <p
                 className="
                   text-[9px]
-                  font-[700]
+                  font-normal
                   text-[#172762]
                 "
               >
@@ -1379,7 +1379,7 @@ export default function AddNewsletterSubscriberPage() {
                       <span
                         className="
                           text-[9px]
-                          font-[600]
+                          font-normal
                           text-[#26396F]
                         "
                       >
@@ -1442,7 +1442,7 @@ export default function AddNewsletterSubscriberPage() {
                     py-[10px]
                     pr-[55px]
                     text-[9px]
-                    font-[500]
+                    font-normal
                     text-[#172762]
                     outline-none
                     placeholder:text-[#697593]
@@ -1456,7 +1456,7 @@ export default function AddNewsletterSubscriberPage() {
                     bottom-[8px]
                     right-[10px]
                     text-[9px]
-                    font-[500]
+                    font-normal
                     text-[#60708E]
                   "
                 >
@@ -1540,7 +1540,7 @@ export default function AddNewsletterSubscriberPage() {
               <span
                 className="
                   text-[9px]
-                  font-[600]
+                  font-normal
                   leading-[13px]
                   text-[#263A70]
                 "
@@ -1595,7 +1595,7 @@ export default function AddNewsletterSubscriberPage() {
               <h2
                 className="
                   text-[11px]
-                  font-[800]
+                  font-normal
                   text-[#17683B]
                 "
               >
@@ -1646,7 +1646,7 @@ export default function AddNewsletterSubscriberPage() {
                   <p
                     className="
                       text-[10px]
-                      font-[500]
+                      font-normal
                       leading-[11px]
                       text-[#42527D]
                     "
@@ -1697,7 +1697,7 @@ export default function AddNewsletterSubscriberPage() {
             <h2
               className="
                 text-[10px]
-                font-[800]
+                font-normal
                 text-[#17643A]
               "
             >
@@ -1781,7 +1781,7 @@ export default function AddNewsletterSubscriberPage() {
                 <p
                   className="
                     text-[9px]
-                    font-[700]
+                    font-normal
                     text-[#1B2D68]
                   "
                 >
@@ -1792,7 +1792,7 @@ export default function AddNewsletterSubscriberPage() {
                   className="
                     mt-[5px]
                     text-[9px]
-                    font-[500]
+                    font-normal
                     leading-[11px]
                     text-[#586583]
                   "
@@ -1839,7 +1839,7 @@ export default function AddNewsletterSubscriberPage() {
                 <h2
                   className="
                     text-[11px]
-                    font-[800]
+                    font-normal
                     text-[#1C3477]
                   "
                 >
@@ -1850,7 +1850,7 @@ export default function AddNewsletterSubscriberPage() {
                   className="
                     mt-[7px]
                     text-[9px]
-                    font-[500]
+                    font-normal
                     text-[#40507A]
                   "
                 >
@@ -1884,7 +1884,7 @@ export default function AddNewsletterSubscriberPage() {
                     className="
                       whitespace-nowrap
                       text-[9px]
-                      font-[800]
+                      font-normal
                       text-[#21713A]
                     "
                   >
@@ -1912,7 +1912,7 @@ export default function AddNewsletterSubscriberPage() {
                     className="
                       whitespace-nowrap
                       text-[9px]
-                      font-[700]
+                      font-normal
                       text-[#263B74]
                     "
                   >
@@ -1953,7 +1953,7 @@ export default function AddNewsletterSubscriberPage() {
             bg-white
             px-[15px]
             text-[9px]
-            font-[700]
+            font-normal
             text-[#172762]
           "
         >
@@ -1983,7 +1983,7 @@ export default function AddNewsletterSubscriberPage() {
               bg-white
               px-[16px]
               text-[9px]
-              font-[700]
+              font-normal
               text-[#172762]
             "
           >
@@ -2004,7 +2004,7 @@ export default function AddNewsletterSubscriberPage() {
               bg-[#00612F]
               px-[17px]
               text-[9px]
-              font-[700]
+              font-normal
               text-white
               disabled:opacity-60
             "
@@ -2048,7 +2048,7 @@ function SummaryRow({
       <span
         className="
           text-[9px]
-          font-[700]
+          font-normal
           text-[#1B2D68]
         "
       >
@@ -2060,7 +2060,7 @@ function SummaryRow({
           min-w-0
           break-words
           text-[9px]
-          font-[600]
+          font-normal
           leading-[10px]
           text-[#27396E]
         "
