@@ -52,6 +52,13 @@ export interface SeoPageRow {
   imageCount: number;
   imagesMissingAlt: number;
   responseTimeMs: number | null;
+  keywordStatus: "ok" | "warning" | "not_available";
+  openGraphStatus: "valid" | "incomplete" | "not_available";
+  twitterStatus: "valid" | "incomplete" | "not_available";
+  consoleErrorCount: number;
+  failedRequestCount: number;
+  renderBlockingCount: number;
+  cdnStatus: "detected" | "likely" | "no_indicators" | "unable_to_determine";
   performance: {
     score: number | null;
     lcpMs: number | null;
@@ -204,7 +211,26 @@ export interface SeoPageDetail {
     ogTitle: string | null;
     ogDescription: string | null;
     ogImage: string | null;
+    ogType: string | null;
+    ogUrl: string | null;
     twitterCard: string | null;
+    twitterTitle: string | null;
+    twitterDescription: string | null;
+    twitterImage: string | null;
+    metaKeywords: string | null;
+    metaKeywordCount: number;
+    socialStatus: { openGraph: string; twitter: string };
+    keywordAnalysis: { available: boolean; targets: Array<{
+      keyword: string; source: string; presentInTitle: boolean; presentInMetaDescription: boolean;
+      presentInH1: boolean; presentInHeadings: boolean; presentInOpeningContent: boolean;
+      presentInImageAlt: boolean; presentInInternalAnchor: boolean; exactMentions: number;
+      totalWordCount: number; densityPercent: number;
+    }> };
+    browserHealth: Record<"consoleErrors" | "consoleWarnings" | "jsExceptions" | "failedRequests", Array<{
+      url: string; message: string; type: string; resourceUrl: string | null; resourceType: string | null;
+      statusCode: number | null; timestamp: string;
+    }>>;
+    cdn: { status: string; provider: string | null; evidence: string[]; cacheControl: string | null; server: string | null };
     lang: string | null;
     viewport: string | null;
     hreflang: Array<{ hreflang: string; href: string }>;
@@ -266,6 +292,7 @@ export interface SeoPageDetail {
       lab: Record<string, number | null>;
       field: { available: boolean; source: string | null } & Record<string, unknown>;
       opportunities: Array<{ id: string; title: string; savingsMs: number | null }>;
+      renderBlockingResources: Array<{ url: string | null; type: string; savingsMs: number | null; source: string }>;
       fetchedAt: string;
     }>;
     labNote: string;

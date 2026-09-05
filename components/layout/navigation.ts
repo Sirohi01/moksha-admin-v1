@@ -1,6 +1,7 @@
 import {
   Activity,
   BarChart3,
+  BellRing,
   BookOpenText,
   BriefcaseBusiness,
   ClipboardList,
@@ -93,7 +94,6 @@ export const NAV_SECTIONS: NavSection[] = [
       { label: "SEO Audit", href: "/seo", icon: SearchCheck, badge: "NEW" },
       { label: "Audited Pages", href: "/auditpage", icon: FileSearch },
       { label: "SEO Center", href: "/reports", icon: SearchCheck },
-      { label: "Google Reviews", href: "/google-reviews", icon: Star },
       { label: "Google Search Console", icon: BarChart3, disabled: true },
       { label: "Analytics Dashboard", icon: Gauge, disabled: true },
       { label: "Performance Center", icon: Activity, disabled: true },
@@ -101,6 +101,16 @@ export const NAV_SECTIONS: NavSection[] = [
       { label: "Schema Manager", icon: FileSearch, disabled: true },
       { label: "Redirects Manager", href: "/redirects", icon: Route },
       { label: "Internal Linking", icon: Link2, disabled: true },
+    ],
+  },
+  {
+    title: "Reputation Management",
+    items: [
+      { label: "Google Reviews", href: "/google-reviews", icon: Star, badge: "NEW" },
+      { label: "Review Analytics", icon: BarChart3, disabled: true },
+      { label: "Response Templates", icon: MessageSquare, disabled: true },
+      { label: "Review Alerts", icon: BellRing, disabled: true },
+      { label: "Reputation Settings", icon: Settings, disabled: true },
     ],
   },
   {

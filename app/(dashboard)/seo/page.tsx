@@ -8,6 +8,7 @@ import {
   ArrowUpRight,
   BellRing,
   Check,
+  Code2,
   FileCheck2,
   Gauge,
   Globe2,
@@ -80,6 +81,13 @@ function changeLabel(current: number, previous: number): string {
   return `${change >= 0 ? "+" : ""}${change.toFixed(1)}% vs previous`;
 }
 
+function formatElapsed(value: number): string {
+  const totalSeconds = Math.floor(value / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${minutes}m ${seconds.toString().padStart(2, "0")}s`;
+}
+
 export default function SeoDashboardPage() {
   const [overview, setOverview] = useState<SeoOverview | null>(null);
   const [score, setScore] = useState<SeoScoreExplanation | null>(null);
@@ -94,6 +102,7 @@ export default function SeoDashboardPage() {
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [now, setNow] = useState(() => Date.now());
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -124,7 +133,17 @@ export default function SeoDashboardPage() {
     void load();
   }, [load]);
 
+  useEffect(() => {
+    if (!overview?.runningCrawl) return;
+    const timer = window.setInterval(() => {
+      setNow(Date.now());
+      void load();
+    }, 10_000);
+    return () => window.clearInterval(timer);
+  }, [overview?.runningCrawl, load]);
+
   const runAudit = async () => {
+    if (overview?.runningCrawl) return;
     setBusy(true);
     try {
       await seoAuditApi.startAudit();
@@ -202,6 +221,13 @@ export default function SeoDashboardPage() {
         value: item.clicks,
       }))
     : [];
+  const runningStartedAt = overview?.runningCrawl?.startedAt
+    ? new Date(overview.runningCrawl.startedAt).getTime()
+    : null;
+  const elapsedMs = runningStartedAt ? Math.max(0, now - runningStartedAt) : 0;
+  const estimatedDurationMs = Math.max(12 * 60_000, (overview?.crawl?.durationMs ?? 8 * 60_000) * 2);
+  const estimatedEarly = runningStartedAt ? new Date(runningStartedAt + estimatedDurationMs) : null;
+  const estimatedLate = runningStartedAt ? new Date(runningStartedAt + estimatedDurationMs * 1.5) : null;
 
   return (
     <div className="h-full overflow-y-auto bg-surface-page p-3 lg:p-4">
@@ -218,6 +244,10 @@ export default function SeoDashboardPage() {
           </p>
         </div>
         <div className="flex gap-2">
+          <Button variant="secondary" size="sm" disabled title="Browser telemetry is enabled for every manual SEO audit">
+            <Code2 className="h-3.5 w-3.5" />
+            Browser audit: Enabled
+          </Button>
           <Link href="/auditpage" className="flex h-8 items-center gap-1.5 rounded-lg border border-surface-border bg-surface-card px-3 text-[11px] font-medium text-text-secondary hover:text-text-primary">
             <Search className="h-3.5 w-3.5" /> Audited pages
           </Link>
@@ -225,9 +255,9 @@ export default function SeoDashboardPage() {
             <RefreshCw className="h-3.5 w-3.5" />
             Refresh
           </Button>
-          <Button size="sm" onClick={() => void runAudit()} loading={busy}>
+          <Button size="sm" onClick={() => void runAudit()} loading={busy} disabled={busy || Boolean(overview?.runningCrawl)}>
             <Play className="h-3.5 w-3.5" />
-            Run audit
+            {overview?.runningCrawl ? "Audit running" : "Run audit"}
           </Button>
         </div>
       </div>
@@ -236,6 +266,21 @@ export default function SeoDashboardPage() {
         <div className="mb-3 flex items-center gap-2 rounded-lg border border-status-danger-text/30 bg-status-danger-bg px-3 py-2 text-[12px] text-status-danger-text">
           <AlertTriangle className="h-3.5 w-3.5" />
           {error}
+        </div>
+      )}
+
+      {overview?.runningCrawl && (
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#d9c28f] bg-[#fff9ea] px-4 py-3 text-[11px] text-[#6f531d] shadow-sm">
+          <div>
+            <p className="font-semibold text-[#49350f]">Mobile + desktop audit is running</p>
+            <p className="mt-0.5">Elapsed {formatElapsed(elapsedMs)} · Google PageSpeed response times can change the finish time.</p>
+          </div>
+          {estimatedEarly && estimatedLate && (
+            <div className="text-right">
+              <p className="font-semibold text-[#49350f]">Estimated completion</p>
+              <p>{formatDateTime(estimatedEarly.toISOString())} – {formatDateTime(estimatedLate.toISOString())}</p>
+            </div>
+          )}
         </div>
       )}
 

@@ -186,27 +186,27 @@ const RATING_BREAKDOWN = [
 
 const LOCATION_RATINGS = [
   {
-    name: "The Yogshala - Main Center",
+    name: "Moksha Sewa - Delhi",
     rating: "4.9",
     count: 642,
   },
   {
-    name: "The Yogshala - West Delhi",
+    name: "Moksha Sewa - Noida",
     rating: "4.7",
     count: 298,
   },
   {
-    name: "The Yogshala - South Delhi",
+    name: "Moksha Sewa - Ghaziabad",
     rating: "4.6",
     count: 184,
   },
   {
-    name: "The Yogshala - Noida",
+    name: "Moksha Sewa - Gurugram",
     rating: "4.8",
     count: 118,
   },
   {
-    name: "The Yogshala - Gurugram",
+    name: "Moksha Sewa - Faridabad",
     rating: "4.7",
     count: 42,
   },
@@ -501,7 +501,7 @@ export default function GoogleReviewsPage() {
 
           <span
             className="
-              font-[800]
+              font-[700]
               text-[#152957]
             "
           >
@@ -523,15 +523,15 @@ export default function GoogleReviewsPage() {
             type="button"
             className="
               flex
-              h-[39px]
+              h-[34px]
               items-center
               gap-[8px]
               rounded-[7px]
               border
               border-[#dae2ea]
               bg-white
-              px-[16px]
-              text-[12px]
+              px-[13px]
+              text-[11px]
               font-[700]
               text-[#25375f]
               shadow-[0_1px_2px_rgba(25,45,75,0.03)]
@@ -553,15 +553,15 @@ export default function GoogleReviewsPage() {
             type="button"
             className="
               flex
-              h-[39px]
+              h-[34px]
               items-center
               gap-[8px]
               rounded-[7px]
               border
               border-[#dae2ea]
               bg-white
-              px-[16px]
-              text-[12px]
+              px-[13px]
+              text-[11px]
               font-[700]
               text-[#25375f]
               shadow-[0_1px_2px_rgba(25,45,75,0.03)]
@@ -582,7 +582,7 @@ export default function GoogleReviewsPage() {
 
       <div
         className="
-          mt-[14px]
+          mt-[10px]
           flex
           min-w-0
           items-start
@@ -597,7 +597,7 @@ export default function GoogleReviewsPage() {
             flex
             min-w-0
             items-center
-            gap-[15px]
+            gap-[11px]
           "
         >
           <GoogleLogo />
@@ -605,8 +605,8 @@ export default function GoogleReviewsPage() {
           <div className="min-w-0">
             <h1
               className="
-                text-[31px]
-                font-[800]
+                text-[25px]
+                font-[700]
                 leading-[1]
                 tracking-[-0.035em]
                 text-[#102554]
@@ -617,9 +617,9 @@ export default function GoogleReviewsPage() {
 
             <p
               className="
-                mt-[8px]
+                mt-[4px]
                 truncate
-                text-[13px]
+                text-[11px]
                 font-[500]
                 text-[#60708c]
               "
@@ -656,7 +656,7 @@ export default function GoogleReviewsPage() {
                   size={16}
                 />
               }
-              className="w-[175px]"
+              className="w-[142px]"
             >
               All Locations
             </ControlButton>
@@ -667,7 +667,7 @@ export default function GoogleReviewsPage() {
                   size={16}
                 />
               }
-              className="w-[284px]"
+              className="w-[226px]"
             >
               01 Jan 2025 - 31 Dec
               2025
@@ -680,15 +680,15 @@ export default function GoogleReviewsPage() {
               }
               className="
                 flex
-                h-[43px]
-                w-[238px]
+                h-[37px]
+                w-[190px]
                 items-center
                 justify-center
                 gap-[10px]
                 rounded-[7px]
                 bg-[#00864a]
-                text-[14px]
-                font-[800]
+                text-[12px]
+                font-[700]
                 text-white
                 shadow-[0_3px_8px_rgba(0,134,74,0.16)]
                 transition
@@ -772,9 +772,9 @@ export default function GoogleReviewsPage() {
           mt-[20px]
           grid
           min-w-0
-          gap-[12px]
-          xl:grid-cols-[minmax(0,1fr)_320px]
-          2xl:grid-cols-[minmax(0,1fr)_390px]
+          gap-[8px]
+          xl:grid-cols-[minmax(0,1fr)_248px]
+          2xl:grid-cols-[minmax(0,1fr)_270px]
         "
       >
         {/* ========================================================
@@ -793,7 +793,7 @@ export default function GoogleReviewsPage() {
               grid
               min-w-0
               grid-cols-2
-              gap-[10px]
+              gap-[8px]
               lg:grid-cols-4
             "
           >
@@ -851,10 +851,10 @@ export default function GoogleReviewsPage() {
 
           <div
             className="
-              mt-[12px]
+              mt-[8px]
               grid
               min-w-0
-              gap-[10px]
+              gap-[8px]
               xl:grid-cols-[0.9fr_1.15fr_0.78fr]
             "
           >
@@ -899,11 +899,11 @@ export default function GoogleReviewsPage() {
             min-w-0
             items-center
             justify-between
-            gap-[14px]
+            gap-[8px]
             border-b
             border-[#e6eaf0]
             px-[5px]
-            py-[10px]
+            py-[6px]
           "
         >
           {/* TABS */}
@@ -913,7 +913,7 @@ export default function GoogleReviewsPage() {
               flex
               min-w-0
               items-center
-              gap-[7px]
+              gap-[5px]
             "
           >
             <ReviewTabButton
@@ -987,26 +987,26 @@ export default function GoogleReviewsPage() {
               flex
               shrink-0
               items-center
-              gap-[9px]
+              gap-[6px]
             "
           >
             <div
               className="
                 flex
-                h-[39px]
-                w-[315px]
+                h-[32px]
+                w-[240px]
                 items-center
                 rounded-[6px]
                 border
                 border-[#dce3ea]
                 bg-white
-                px-[13px]
+                px-[10px]
               "
             >
               <Search
-                size={16}
+                size={14}
                 className="
-                  mr-[9px]
+                  mr-[6px]
                   shrink-0
                   text-[#536584]
                 "
@@ -1027,7 +1027,7 @@ export default function GoogleReviewsPage() {
                   min-w-0
                   flex-1
                   bg-transparent
-                  text-[12px]
+                  text-[10px]
                   font-[500]
                   text-[#2c3f68]
                   outline-none
@@ -1060,14 +1060,14 @@ export default function GoogleReviewsPage() {
               type="button"
               className="
                 flex
-                h-[39px]
+                h-[32px]
                 items-center
                 gap-[8px]
                 rounded-[6px]
                 bg-[#00864a]
-                px-[16px]
-                text-[12px]
-                font-[800]
+                px-[12px]
+                text-[10px]
+                font-[700]
                 text-white
               "
             >
@@ -1158,7 +1158,7 @@ export default function GoogleReviewsPage() {
             <thead>
               <tr
                 className="
-                  h-[45px]
+                  h-[34px]
                   bg-[#f8fafc]
                   text-left
                 "
@@ -1285,8 +1285,8 @@ export default function GoogleReviewsPage() {
             gap-[16px]
             border-t
             border-[#e4e8ed]
-            px-[15px]
-            py-[12px]
+            px-[12px]
+            py-[8px]
           "
         >
           <p
@@ -1377,7 +1377,7 @@ export default function GoogleReviewsPage() {
 
             <div
               className="
-                ml-[22px]
+                ml-[12px]
                 flex
                 items-center
                 gap-[10px]
@@ -1415,8 +1415,8 @@ export default function GoogleReviewsPage() {
                     )
                   }
                   className="
-                    h-[34px]
-                    w-[65px]
+                    h-[28px]
+                    w-[58px]
                     appearance-none
                     rounded-[6px]
                     border
@@ -1471,8 +1471,8 @@ function GoogleLogo() {
     <div
       className="
         flex
-        h-[74px]
-        w-[74px]
+        h-[56px]
+        w-[56px]
         shrink-0
         items-center
         justify-center
@@ -1481,33 +1481,8 @@ function GoogleLogo() {
         shadow-[0_4px_14px_rgba(25,45,75,0.05)]
       "
     >
-      <svg
-        viewBox="0 0 48 48"
-        className="
-          h-[52px]
-          w-[52px]
-        "
-      >
-        <path
-          fill="#FFC107"
-          d="M43.6 20.1H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12 0-6.6 5.4-12 12-12 3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 15 4 7.3 9.1 3.5 16.6l6.6 5.1C11.9 16.1 17.4 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4Z"
-        />
-
-        <path
-          fill="#FF3D00"
-          d="M3.5 16.6 10.1 21.7C11.9 16.1 17.4 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 15 4 7.3 9.1 3.5 16.6Z"
-        />
-
-        <path
-          fill="#4CAF50"
-          d="M24 44c5.1 0 9.7-1.9 13.2-5.1l-6.1-5.2C29.1 35.2 26.7 36 24 36c-5.2 0-9.7-3.3-11.3-7.9l-6.6 5.1C9.9 39.5 16.4 44 24 44Z"
-        />
-
-        <path
-          fill="#1976D2"
-          d="M43.6 20.1H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.2 5.7l6.1 5.2C36.8 39.3 44 34 44 24c0-1.3-.1-2.6-.4-3.9Z"
-        />
-      </svg>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/google-g-logo.svg" alt="Google" className="h-[40px] w-[40px] object-contain" />
     </div>
   );
 }
@@ -1530,7 +1505,7 @@ function ControlButton({
       type="button"
       className={`
         flex
-        h-[43px]
+        h-[37px]
         items-center
         gap-[9px]
         rounded-[7px]
@@ -1538,7 +1513,7 @@ function ControlButton({
         border-[#dce3ea]
         bg-white
         px-[14px]
-        text-[12px]
+        text-[11px]
         font-[700]
         text-[#35456a]
         shadow-[0_1px_2px_rgba(25,45,75,0.03)]
@@ -1664,7 +1639,7 @@ function MetricCard({
           <strong
             className="
               text-[28px]
-              font-[800]
+              font-[600]
               leading-none
               tracking-[-0.025em]
               text-[#102554]
@@ -1678,7 +1653,7 @@ function MetricCard({
               mb-[2px]
               whitespace-nowrap
               text-[12px]
-              font-[800]
+              font-[700]
             "
             style={{
               color:
@@ -1773,7 +1748,7 @@ function OverallRatingCard() {
           <strong
             className="
               text-[28px]
-              font-[800]
+              font-[600]
               leading-none
               tracking-[-0.025em]
               text-[#102554]
@@ -1794,7 +1769,7 @@ function OverallRatingCard() {
               px-[7px]
               py-[4px]
               text-[10px]
-              font-[800]
+              font-[600]
               text-[#149355]
             "
           >
@@ -1856,7 +1831,7 @@ function DashboardCard({
         <h2
           className="
             text-[14px]
-            font-[800]
+            font-[600]
             text-[#20345e]
           "
         >
@@ -1903,7 +1878,7 @@ function RatingBreakdown() {
                 className="
                   text-right
                   text-[11px]
-                  font-[700]
+                  font-[500]
                   text-[#50607c]
                 "
               >
@@ -2250,7 +2225,7 @@ function ReviewsByLocation() {
                 className="
                   text-right
                   text-[11px]
-                  font-[800]
+                  font-[600]
                   text-[#263a66]
                 "
               >
@@ -2303,27 +2278,27 @@ function NegativeReviewAlerts() {
       <div
         className="
           flex
-          h-[53px]
+          h-[43px]
           items-center
           justify-between
           border-b
           border-[#f3d7db]
           bg-[#fff9fa]
-          px-[15px]
+          px-[10px]
         "
       >
         <div
           className="
             flex
             items-center
-            gap-[9px]
+            gap-[6px]
           "
         >
           <span
             className="
               flex
-              h-[31px]
-              w-[31px]
+              h-[25px]
+              w-[25px]
               items-center
               justify-center
               rounded-[7px]
@@ -2333,7 +2308,7 @@ function NegativeReviewAlerts() {
           >
             <span
               className="
-                text-[20px]
+                text-[15px]
               "
             >
               ♟
@@ -2342,8 +2317,9 @@ function NegativeReviewAlerts() {
 
           <h2
             className="
-              text-[14px]
-              font-[800]
+              whitespace-nowrap
+              text-[11px]
+              font-[600]
               text-[#a52236]
             "
           >
@@ -2358,7 +2334,8 @@ function NegativeReviewAlerts() {
             flex
             items-center
             gap-[3px]
-            text-[11px]
+            whitespace-nowrap
+            text-[9px]
             font-[700]
             text-[#1c76bd]
           "
@@ -2384,29 +2361,29 @@ function NegativeReviewAlerts() {
                 alert.id
               }
               className="
-                px-[16px]
-                py-[15px]
+                px-[10px]
+                py-[9px]
               "
             >
               <div
                 className="
                   flex
                   items-start
-                  gap-[11px]
+                  gap-[7px]
                 "
               >
                 <div
                   className={`
                     flex
-                    h-[30px]
-                    min-w-[40px]
+                    h-[24px]
+                    min-w-[32px]
                     shrink-0
                     items-center
                     justify-center
                     rounded-[7px]
-                    px-[7px]
-                    text-[12px]
-                    font-[800]
+                    px-[5px]
+                    text-[10px]
+                    font-[600]
                     text-white
 
                     ${alert.rating ===
@@ -2418,7 +2395,7 @@ function NegativeReviewAlerts() {
                 >
                   {alert.rating}
                   <Star
-                    size={12}
+                    size={10}
                     className="
                       ml-[2px]
                       fill-white
@@ -2438,14 +2415,14 @@ function NegativeReviewAlerts() {
                       flex
                       items-start
                       justify-between
-                      gap-[10px]
+                      gap-[5px]
                     "
                   >
                     <div>
                       <h3
                         className="
-                          text-[12px]
-                          font-[800]
+                          text-[10px]
+                          font-[600]
                           text-[#2d3c60]
                         "
                       >
@@ -2454,8 +2431,8 @@ function NegativeReviewAlerts() {
 
                       <p
                         className="
-                          mt-[3px]
-                          text-[10px]
+                          mt-[1px]
+                          text-[8px]
                           font-[500]
                           text-[#718099]
                         "
@@ -2467,7 +2444,7 @@ function NegativeReviewAlerts() {
                     <span
                       className="
                         whitespace-nowrap
-                        text-[9px]
+                        text-[8px]
                         font-[500]
                         text-[#7d8799]
                       "
@@ -2478,10 +2455,10 @@ function NegativeReviewAlerts() {
 
                   <p
                     className="
-                      mt-[9px]
-                      text-[10px]
+                      mt-[5px]
+                      text-[9px]
                       font-[500]
-                      leading-[1.5]
+                      leading-[1.35]
                       text-[#40506d]
                     "
                   >
@@ -2490,7 +2467,7 @@ function NegativeReviewAlerts() {
 
                   <div
                     className="
-                      mt-[9px]
+                      mt-[5px]
                       flex
                       justify-end
                     "
@@ -2498,12 +2475,12 @@ function NegativeReviewAlerts() {
                     <button
                       type="button"
                       className="
-                        h-[35px]
+                        h-[27px]
                         rounded-[6px]
                         bg-[#d8092d]
-                        px-[16px]
-                        text-[10px]
-                        font-[800]
+                        px-[10px]
+                        text-[9px]
+                        font-[600]
                         text-white
                       "
                     >
@@ -2540,13 +2517,13 @@ function ReviewTabButton({
       className={`
         relative
         flex
-        h-[40px]
+        h-[32px]
         items-center
         justify-center
         whitespace-nowrap
         rounded-[6px]
-        px-[14px]
-        text-[11px]
+        px-[10px]
+        text-[10px]
         font-[700]
         transition-colors
 
@@ -2562,7 +2539,7 @@ function ReviewTabButton({
         <span
           className="
             absolute
-            -bottom-[11px]
+            -bottom-[7px]
             left-[15%]
             right-[15%]
             h-[3px]
@@ -2591,15 +2568,15 @@ function ToolbarButton({
       type="button"
       className="
         flex
-        h-[39px]
+        h-[32px]
         items-center
         gap-[8px]
         rounded-[6px]
         border
         border-[#dae1e8]
         bg-white
-        px-[15px]
-        text-[11px]
+        px-[11px]
+        text-[10px]
         font-[700]
         text-[#32446c]
       "
@@ -2646,7 +2623,7 @@ function ReviewRow({
   return (
     <tr
       className="
-        h-[74px]
+        h-[56px]
         border-t
         border-[#e8ebef]
         bg-white
@@ -2685,7 +2662,7 @@ function ReviewRow({
             flex
             min-w-0
             items-center
-            gap-[10px]
+            gap-[7px]
           "
         >
           <Avatar
@@ -2703,7 +2680,7 @@ function ReviewRow({
               className="
                 truncate
                 text-[11px]
-                font-[800]
+                font-[600]
                 text-[#233761]
               "
             >
@@ -2712,7 +2689,7 @@ function ReviewRow({
 
             <p
               className="
-                mt-[3px]
+                mt-[1px]
                 truncate
                 text-[9px]
                 font-[500]
@@ -2736,7 +2713,7 @@ function ReviewRow({
           rating={
             review.rating
           }
-          size={14}
+          size={12}
         />
       </td>
 
@@ -2776,7 +2753,7 @@ function ReviewRow({
           "
         >
           <MapPin
-            size={20}
+            size={16}
             className="
               mt-[1px]
               shrink-0
@@ -2830,7 +2807,7 @@ function ReviewRow({
 
         <p
           className="
-            mt-[3px]
+            mt-[1px]
             text-[9px]
             font-[500]
             text-[#718099]
@@ -2865,7 +2842,7 @@ function ReviewRow({
           className="
             flex
             items-center
-            gap-[8px]
+            gap-[6px]
           "
         >
           <Avatar
@@ -2907,13 +2884,13 @@ function ReviewRow({
             <button
               type="button"
               className="
-                h-[37px]
-                min-w-[90px]
+                h-[29px]
+                min-w-[68px]
                 rounded-[6px]
                 bg-[#00864a]
-                px-[15px]
+                px-[10px]
                 text-[10px]
-                font-[800]
+                font-[700]
                 text-white
               "
             >
@@ -2923,13 +2900,13 @@ function ReviewRow({
             <button
               type="button"
               className="
-                h-[37px]
-                min-w-[90px]
+                h-[29px]
+                min-w-[68px]
                 rounded-[6px]
                 border
                 border-[#dce2e8]
                 bg-white
-                px-[15px]
+                px-[10px]
                 text-[10px]
                 font-[700]
                 text-[#40506d]
@@ -2943,8 +2920,8 @@ function ReviewRow({
             type="button"
             className="
               flex
-              h-[37px]
-              w-[42px]
+              h-[29px]
+              w-[32px]
               items-center
               justify-center
               rounded-[6px]
@@ -3052,13 +3029,13 @@ function Avatar({
         rounded-full
         bg-gradient-to-br
         ${gradient}
-        font-[800]
+        font-[700]
         text-white
         shadow-[0_1px_3px_rgba(21,40,70,0.15)]
 
         ${small
-          ? "h-[30px] w-[30px] text-[9px]"
-          : "h-[39px] w-[39px] text-[10px]"
+          ? "h-[24px] w-[24px] text-[8px]"
+          : "h-[30px] w-[30px] text-[9px]"
         }
       `}
     >
@@ -3110,9 +3087,10 @@ function StatusBadge({
     <span
       className={`
         inline-flex
-        min-w-[75px]
+        min-w-[82px]
         items-center
         justify-center
+        whitespace-nowrap
         rounded-[5px]
         px-[9px]
         py-[7px]
