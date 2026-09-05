@@ -233,6 +233,68 @@ function isCurrentMonth(dateValue?: string) {
   );
 }
 
+type DateRangeFilter =
+  | "ALL"
+  | "TODAY"
+  | "LAST_7_DAYS"
+  | "LAST_30_DAYS"
+  | "THIS_MONTH";
+
+function matchesDateRange(
+  value: string | undefined,
+  range: DateRangeFilter
+) {
+  if (range === "ALL") {
+    return true;
+  }
+
+  if (!value) {
+    return false;
+  }
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return false;
+  }
+
+  const now = new Date();
+  const startOfToday = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate()
+  );
+
+  if (range === "TODAY") {
+    return date >= startOfToday;
+  }
+
+  if (range === "THIS_MONTH") {
+    return (
+      date.getFullYear() ===
+      now.getFullYear() &&
+      date.getMonth() ===
+      now.getMonth()
+    );
+  }
+
+  const days =
+    range === "LAST_7_DAYS"
+      ? 7
+      : 30;
+
+  const startDate = new Date(
+    startOfToday
+  );
+
+  startDate.setDate(
+    startDate.getDate() -
+    (days - 1)
+  );
+
+  return date >= startDate;
+}
+
 /* ============================================================
    STAT CARD
 ============================================================ */
@@ -442,6 +504,11 @@ export default function NewsletterPage() {
 
   const [sourceFilter, setSourceFilter] =
     useState("All");
+
+  const [
+    dateRangeFilter,
+    setDateRangeFilter,
+  ] = useState<DateRangeFilter>("ALL");
 
   const [page, setPage] = useState(1);
 
@@ -685,6 +752,12 @@ export default function NewsletterPage() {
             sourceFilter
           );
         })
+        .filter((subscriber) =>
+          matchesDateRange(
+            subscriber.createdAt,
+            dateRangeFilter
+          )
+        )
         .sort((a, b) => {
           const first = new Date(
             a.createdAt
@@ -701,6 +774,7 @@ export default function NewsletterPage() {
       search,
       statusFilter,
       sourceFilter,
+      dateRangeFilter,
     ]);
 
   /* ==========================================================
@@ -738,6 +812,7 @@ export default function NewsletterPage() {
     setSearch("");
     setStatusFilter("All");
     setSourceFilter("All");
+    setDateRangeFilter("ALL");
     setPage(1);
   }
 
@@ -1155,9 +1230,9 @@ export default function NewsletterPage() {
               All Tags
             </FilterButton>
 
-            <button
-              type="button"
+            <div
               className="
+                relative
                 flex
                 h-[40px]
                 min-w-0
@@ -1181,10 +1256,62 @@ export default function NewsletterPage() {
                 "
               />
 
-              <span className="whitespace-nowrap">
-                Select Date Range
-              </span>
-            </button>
+              <select
+                value={dateRangeFilter}
+                onChange={(event) => {
+                  setDateRangeFilter(
+                    event.target
+                      .value as DateRangeFilter
+                  );
+
+                  setPage(1);
+                }}
+                className="
+                  h-full
+                  min-w-[128px]
+                  cursor-pointer
+                  appearance-none
+                  bg-transparent
+                  pr-[22px]
+                  text-[9px]
+                  font-[700]
+                  text-[#536080]
+                  outline-none
+                "
+              >
+                <option value="ALL">
+                  Select Date
+                </option>
+
+                <option value="TODAY">
+                  Today
+                </option>
+
+                <option value="LAST_7_DAYS">
+                  Last 7 Days
+                </option>
+
+                <option value="LAST_30_DAYS">
+                  Last 30 Days
+                </option>
+
+                <option value="THIS_MONTH">
+                  This Month
+                </option>
+              </select>
+
+              <ChevronDown
+                size={12}
+                className="
+                  pointer-events-none
+                  absolute
+                  right-[10px]
+                  top-1/2
+                  -translate-y-1/2
+                  text-[#213C79]
+                "
+              />
+            </div>
 
             <button
               type="button"

@@ -70,6 +70,74 @@ type Submission = {
   assignedTo: string;
 };
 
+type DateRangeFilter =
+  | "ALL"
+  | "TODAY"
+  | "LAST_7_DAYS"
+  | "LAST_30_DAYS"
+  | "THIS_MONTH";
+
+function parseSubmissionDate(value: string) {
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return null;
+  }
+
+  return date;
+}
+
+function matchesDateRange(
+  value: string,
+  range: DateRangeFilter
+) {
+  if (range === "ALL") {
+    return true;
+  }
+
+  const date = parseSubmissionDate(value);
+
+  if (!date) {
+    return false;
+  }
+
+  const now = new Date();
+  const startOfToday = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate()
+  );
+
+  if (range === "TODAY") {
+    return date >= startOfToday;
+  }
+
+  if (range === "THIS_MONTH") {
+    return (
+      date.getFullYear() ===
+      now.getFullYear() &&
+      date.getMonth() ===
+      now.getMonth()
+    );
+  }
+
+  const days =
+    range === "LAST_7_DAYS"
+      ? 7
+      : 30;
+
+  const startDate = new Date(
+    startOfToday
+  );
+
+  startDate.setDate(
+    startDate.getDate() -
+    (days - 1)
+  );
+
+  return date >= startDate;
+}
+
 /* ============================================================
    DATA
    Later tum API data se replace kar sakte ho.
@@ -384,6 +452,11 @@ export default function FormsSubmissionsPage() {
     setStatusFilter,
   ] = useState("");
 
+  const [
+    dateRangeFilter,
+    setDateRangeFilter,
+  ] = useState<DateRangeFilter>("ALL");
+
   const [page, setPage] =
     useState(1);
 
@@ -465,6 +538,15 @@ export default function FormsSubmissionsPage() {
             return false;
           }
 
+          if (
+            !matchesDateRange(
+              item.submittedDate,
+              dateRangeFilter
+            )
+          ) {
+            return false;
+          }
+
           if (!query) {
             return true;
           }
@@ -487,6 +569,7 @@ export default function FormsSubmissionsPage() {
       search,
       formFilter,
       statusFilter,
+      dateRangeFilter,
     ]);
 
   /* ==========================================================
@@ -898,9 +981,9 @@ export default function FormsSubmissionsPage() {
 
         {/* DATE */}
 
-        <button
-          type="button"
+        <div
           className="
+            relative
             flex
             h-[36px]
             min-w-0
@@ -922,24 +1005,61 @@ export default function FormsSubmissionsPage() {
             className="shrink-0"
           />
 
-          <span
+          <select
+            value={dateRangeFilter}
+            onChange={(event) => {
+              setDateRangeFilter(
+                event.target
+                  .value as DateRangeFilter
+              );
+
+              setPage(1);
+            }}
             className="
+              h-full
               min-w-0
-              truncate
+              cursor-pointer
+              appearance-none
+              bg-transparent
+              pr-[22px]
+              text-[9px]
+              font-[600]
+              text-[#334574]
+              outline-none
             "
           >
-            25 May 2026 - 31 May
-            2026
-          </span>
+            <option value="ALL">
+              Select Date
+            </option>
 
-          <CalendarDays
-            size={11}
+            <option value="TODAY">
+              Today
+            </option>
+
+            <option value="LAST_7_DAYS">
+              Last 7 Days
+            </option>
+
+            <option value="LAST_30_DAYS">
+              Last 30 Days
+            </option>
+
+            <option value="THIS_MONTH">
+              This Month
+            </option>
+          </select>
+
+          <ChevronDown
+            size={12}
             className="
-              ml-auto
-              shrink-0
+              pointer-events-none
+              absolute
+              right-[9px]
+              top-1/2
+              -translate-y-1/2
             "
           />
-        </button>
+        </div>
 
         <div />
 

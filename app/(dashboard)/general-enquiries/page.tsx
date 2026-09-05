@@ -73,6 +73,13 @@ type UiStatus =
   | "resolved"
   | "closed";
 
+type DateRangeFilter =
+  | "ALL"
+  | "TODAY"
+  | "LAST_7_DAYS"
+  | "LAST_30_DAYS"
+  | "THIS_MONTH";
+
 /* ============================================================
    HELPERS
 ============================================================ */
@@ -135,6 +142,57 @@ function normalizeStatus(
   }
 
   return "new";
+}
+
+function matchesDateRange(
+  value: string | undefined,
+  range: DateRangeFilter
+) {
+  if (range === "ALL") {
+    return true;
+  }
+
+  const date = parseDate(value);
+
+  if (!date) {
+    return false;
+  }
+
+  const now = new Date();
+  const startOfToday = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate()
+  );
+
+  if (range === "TODAY") {
+    return date >= startOfToday;
+  }
+
+  if (range === "THIS_MONTH") {
+    return (
+      date.getFullYear() ===
+      now.getFullYear() &&
+      date.getMonth() ===
+      now.getMonth()
+    );
+  }
+
+  const days =
+    range === "LAST_7_DAYS"
+      ? 7
+      : 30;
+
+  const startDate = new Date(
+    startOfToday
+  );
+
+  startDate.setDate(
+    startDate.getDate() -
+    (days - 1)
+  );
+
+  return date >= startDate;
 }
 
 function getStatusLabel(
@@ -830,6 +888,11 @@ export default function GeneralEnquiriesPage() {
     setSourceFilter,
   ] = useState("");
 
+  const [
+    dateRangeFilter,
+    setDateRangeFilter,
+  ] = useState<DateRangeFilter>("ALL");
+
   const [selected, setSelected] =
     useState<RuntimeEnquiry | null>(
       null
@@ -999,6 +1062,13 @@ export default function GeneralEnquiriesPage() {
         );
       })
 
+      .filter((item) =>
+        matchesDateRange(
+          item.createdAt,
+          dateRangeFilter
+        )
+      )
+
       .filter((item) => {
         if (!query) {
           return true;
@@ -1041,6 +1111,7 @@ export default function GeneralEnquiriesPage() {
     statusFilter,
     categoryFilter,
     sourceFilter,
+    dateRangeFilter,
   ]);
 
   /* ==========================================================
@@ -1158,6 +1229,7 @@ export default function GeneralEnquiriesPage() {
     setStatusFilter("");
     setCategoryFilter("");
     setSourceFilter("");
+    setDateRangeFilter("ALL");
     setPage(1);
   }
 
@@ -1548,9 +1620,9 @@ export default function GeneralEnquiriesPage() {
 
             {/* DATE */}
 
-            <button
-              type="button"
+            <div
               className="
+                relative
                 flex
                 h-[40px]
                 shrink-0
@@ -1574,10 +1646,62 @@ export default function GeneralEnquiriesPage() {
                 "
               />
 
-              <span className="whitespace-nowrap">
-                Select Date Range
-              </span>
-            </button>
+              <select
+                value={dateRangeFilter}
+                onChange={(event) => {
+                  setDateRangeFilter(
+                    event.target
+                      .value as DateRangeFilter
+                  );
+
+                  setPage(1);
+                }}
+                className="
+                  h-full
+                  min-w-[128px]
+                  cursor-pointer
+                  appearance-none
+                  bg-transparent
+                  pr-[21px]
+                  text-[10px]
+                  font-[600]
+                  text-[#586480]
+                  outline-none
+                "
+              >
+                <option value="ALL">
+                  Select Date
+                </option>
+
+                <option value="TODAY">
+                  Today
+                </option>
+
+                <option value="LAST_7_DAYS">
+                  Last 7 Days
+                </option>
+
+                <option value="LAST_30_DAYS">
+                  Last 30 Days
+                </option>
+
+                <option value="THIS_MONTH">
+                  This Month
+                </option>
+              </select>
+
+              <ChevronDown
+                size={12}
+                className="
+                  pointer-events-none
+                  absolute
+                  right-[10px]
+                  top-1/2
+                  -translate-y-1/2
+                  text-[#314578]
+                "
+              />
+            </div>
 
             {/* RESET */}
 

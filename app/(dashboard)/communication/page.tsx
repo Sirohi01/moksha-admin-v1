@@ -1018,7 +1018,7 @@ export default function CommunicationsFollowUps() {
                   outline-none
                 "
               >
-                <option value="ALL">Select Date Range</option>
+                <option value="ALL">Select Date</option>
                 <option value="TODAY">Today</option>
                 <option value="LAST_7_DAYS">Last 7 Days</option>
                 <option value="LAST_30_DAYS">Last 30 Days</option>
